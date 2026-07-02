@@ -1,0 +1,274 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1782956321342,
+  "projectRoot": "/Users/ahbin/Documents/projects/escape-log-web",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "next",
+        "version": "14.2.5",
+        "category": "fullstack"
+      },
+      {
+        "name": "react",
+        "version": "18.3.1",
+        "category": "frontend"
+      },
+      {
+        "name": "react-dom",
+        "version": "18.3.1",
+        "category": "frontend"
+      }
+    ],
+    "packageManager": "npm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "npm run build",
+    "testCommand": null,
+    "lintCommand": "npm run lint",
+    "devCommand": "npm run dev",
+    "scripts": {
+      "dev": "next dev",
+      "build": "next build",
+      "start": "next start",
+      "lint": "next lint"
+    }
+  },
+  "conventions": {
+    "namingStyle": "camelCase",
+    "importStyle": "ES modules",
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "app",
+      "components",
+      "lib"
+    ],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "app": {
+      "path": "app",
+      "purpose": "Application code",
+      "fileCount": 3,
+      "lastAccessed": 1782956321332,
+      "keyFiles": [
+        "globals.css",
+        "layout.tsx",
+        "page.tsx"
+      ]
+    },
+    "components": {
+      "path": "components",
+      "purpose": "UI components",
+      "fileCount": 6,
+      "lastAccessed": 1782956321332,
+      "keyFiles": [
+        "RecommendCard.tsx",
+        "RecordCard.tsx",
+        "RecordForm.tsx",
+        "SpoilerSlider.tsx",
+        "Stars.tsx"
+      ]
+    },
+    "lib": {
+      "path": "lib",
+      "purpose": "Library code",
+      "fileCount": 2,
+      "lastAccessed": 1782956321334,
+      "keyFiles": [
+        "catalog.ts",
+        "store.ts"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "app/quiz/page.tsx",
+      "accessCount": 39,
+      "lastAccessed": 1782972185167,
+      "type": "file"
+    },
+    {
+      "path": "app/layout.tsx",
+      "accessCount": 21,
+      "lastAccessed": 1782970447862,
+      "type": "file"
+    },
+    {
+      "path": "app/page.tsx",
+      "accessCount": 14,
+      "lastAccessed": 1782963201958,
+      "type": "file"
+    },
+    {
+      "path": "lib/store.ts",
+      "accessCount": 14,
+      "lastAccessed": 1782970450957,
+      "type": "file"
+    },
+    {
+      "path": "app/globals.css",
+      "accessCount": 12,
+      "lastAccessed": 1782970456165,
+      "type": "file"
+    },
+    {
+      "path": "components/RecordCard.tsx",
+      "accessCount": 8,
+      "lastAccessed": 1782960984433,
+      "type": "file"
+    },
+    {
+      "path": "components/RecordForm.tsx",
+      "accessCount": 8,
+      "lastAccessed": 1782963958610,
+      "type": "file"
+    },
+    {
+      "path": "lib/quiz.ts",
+      "accessCount": 8,
+      "lastAccessed": 1782972757137,
+      "type": "directory"
+    },
+    {
+      "path": "app/taste/page.tsx",
+      "accessCount": 7,
+      "lastAccessed": 1782961019249,
+      "type": "file"
+    },
+    {
+      "path": "components/RecommendCard.tsx",
+      "accessCount": 7,
+      "lastAccessed": 1782970436699,
+      "type": "file"
+    },
+    {
+      "path": "tailwind.config.ts",
+      "accessCount": 7,
+      "lastAccessed": 1782970448082,
+      "type": "file"
+    },
+    {
+      "path": "",
+      "accessCount": 6,
+      "lastAccessed": 1782971340053,
+      "type": "directory"
+    },
+    {
+      "path": "app/edit/[id]/page.tsx",
+      "accessCount": 5,
+      "lastAccessed": 1782958806447,
+      "type": "file"
+    },
+    {
+      "path": "components/Stats.tsx",
+      "accessCount": 5,
+      "lastAccessed": 1782960988967,
+      "type": "file"
+    },
+    {
+      "path": "lib/catalog.ts",
+      "accessCount": 4,
+      "lastAccessed": 1782956784921,
+      "type": "file"
+    },
+    {
+      "path": "components/Stars.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1782958683984,
+      "type": "file"
+    },
+    {
+      "path": "components/SpoilerSlider.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1782970451068,
+      "type": "file"
+    },
+    {
+      "path": "public/house.svg",
+      "accessCount": 4,
+      "lastAccessed": 1782971210588,
+      "type": "file"
+    },
+    {
+      "path": "public/bread.svg",
+      "accessCount": 3,
+      "lastAccessed": 1782967302951,
+      "type": "file"
+    },
+    {
+      "path": "public/footprint.svg",
+      "accessCount": 3,
+      "lastAccessed": 1782967307614,
+      "type": "file"
+    },
+    {
+      "path": "app/new/page.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1782956505402,
+      "type": "file"
+    },
+    {
+      "path": "public/house.png",
+      "accessCount": 2,
+      "lastAccessed": 1782970273262,
+      "type": "file"
+    },
+    {
+      "path": "lib/ai.ts",
+      "accessCount": 2,
+      "lastAccessed": 1782972401655,
+      "type": "file"
+    },
+    {
+      "path": "package.json",
+      "accessCount": 1,
+      "lastAccessed": 1782956403247,
+      "type": "file"
+    },
+    {
+      "path": "README.md",
+      "accessCount": 1,
+      "lastAccessed": 1782956404127,
+      "type": "file"
+    },
+    {
+      "path": "app/api/persona/route.ts",
+      "accessCount": 1,
+      "lastAccessed": 1782972378208,
+      "type": "file"
+    },
+    {
+      "path": ".env.local",
+      "accessCount": 1,
+      "lastAccessed": 1782972422311,
+      "type": "directory"
+    }
+  ],
+  "userDirectives": []
+}
