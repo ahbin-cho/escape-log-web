@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { GENRE_COLOR, GENRE_EMOJI, type Recommendation } from "@/lib/store";
+import { genreColorClass, genreEmoji, type Recommendation } from "@/lib/store";
 import SpoilerSlider from "./SpoilerSlider";
 
 export default function RecommendCard({ rec }: { rec: Recommendation }) {
@@ -41,11 +41,11 @@ export default function RecommendCard({ rec }: { rec: Recommendation }) {
           )}
         </div>
         <span
-          className={`shrink-0 rounded-lg border-2 border-edge px-2 py-0.5 text-xs font-bold ${
-            GENRE_COLOR[rec.genre]
-          }`}
+          className={`shrink-0 rounded-lg border-2 border-edge px-2 py-0.5 text-xs font-bold ${genreColorClass(
+            rec.genre
+          )}`}
         >
-          {GENRE_EMOJI[rec.genre]} {rec.genre}
+          {genreEmoji(rec.genre)} {rec.genre}
         </span>
       </div>
 

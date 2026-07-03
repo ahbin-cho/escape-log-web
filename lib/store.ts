@@ -59,6 +59,14 @@ export const GENRE_EMOJI: Record<Genre, string> = {
   기타: "🎲",
 };
 
+// 크롤링 등으로 기본 7종 외 장르가 들어와도 안전하게 표시(카탈로그용).
+export function genreEmoji(g: string): string {
+  return GENRE_EMOJI[g as Genre] ?? "🎲";
+}
+export function genreColorClass(g: string): string {
+  return GENRE_COLOR[g as Genre] ?? "bg-stone-100 text-stone-500";
+}
+
 export function emptyRecord(): EscapeRecord {
   return {
     id: "",
