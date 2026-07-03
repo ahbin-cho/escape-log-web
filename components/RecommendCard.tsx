@@ -32,7 +32,7 @@ export default function RecommendCard({ rec }: { rec: Recommendation }) {
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
           {brand && (
-            <span className="mb-1 inline-block rounded-md bg-candy/15 px-1.5 py-0.5 text-[11px] font-extrabold text-candy">
+            <span className="mb-1 inline-block rounded-md border-2 border-edge bg-candy px-2 py-0.5 text-[11px] font-extrabold text-white">
               {brand}
             </span>
           )}

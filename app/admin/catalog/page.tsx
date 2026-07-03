@@ -127,7 +127,7 @@ export default function AdminCatalog() {
               <div className="flex min-w-0 flex-1 items-start justify-between gap-2">
                 <div className="min-w-0">
                   {splitCafe(c.cafe).brand && (
-                    <span className="mb-1 inline-block rounded-md bg-candy/15 px-1.5 py-0.5 text-[11px] font-extrabold text-candy">
+                    <span className="mb-1 inline-block rounded-md border-2 border-edge bg-candy px-2 py-0.5 text-[11px] font-extrabold text-white">
                       {splitCafe(c.cafe).brand}
                     </span>
                   )}

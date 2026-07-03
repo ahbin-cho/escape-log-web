@@ -51,19 +51,23 @@ const REGION_KEYWORDS: Record<Region, string[]> = {
   제주: ["제주", "서귀포"],
 };
 
-export function inferRegion(record: EscapeRecord): Region | null {
-  // 1) 기록에 지역을 직접 선택했으면 그걸 확정으로 사용
-  if (record.region && (REGIONS as string[]).includes(record.region)) {
-    return record.region as Region;
-  }
-  // 2) 없으면 매장명·테마명 텍스트에서 키워드로 추측
-  const text = `${record.cafeName} ${record.themeName}`;
+// 임의 텍스트(매장명 등)에서 시/도 추론. 카탈로그 등에서도 재사용.
+export function regionFromText(text: string): Region | null {
   for (const region of REGIONS) {
     if (REGION_KEYWORDS[region].some((kw) => text.includes(kw))) {
       return region;
     }
   }
   return null;
+}
+
+export function inferRegion(record: EscapeRecord): Region | null {
+  // 1) 기록에 지역을 직접 선택했으면 그걸 확정으로 사용
+  if (record.region && (REGIONS as string[]).includes(record.region)) {
+    return record.region as Region;
+  }
+  // 2) 없으면 매장명·테마명 텍스트에서 키워드로 추측
+  return regionFromText(`${record.cafeName} ${record.themeName}`);
 }
 
 export interface RegionBucket {
