@@ -37,7 +37,7 @@ export default function FeedPreview() {
           <Link
             key={r.id}
             href="/feed"
-            className="flex w-44 shrink-0 snap-start flex-col gap-1 rounded-xl border-2 border-edge bg-panel p-3 transition active:scale-[0.98]"
+            className="flex w-44 shrink-0 snap-start flex-col gap-1 rounded-xl border-2 border-edge bg-panel p-3 shadow-cute transition active:scale-[0.98]"
           >
             <p className="truncate text-sm font-extrabold">
               {GENRE_EMOJI[r.genre]} {r.themeName}
