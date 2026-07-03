@@ -7,6 +7,10 @@ import SpoilerSlider from "./SpoilerSlider";
 export default function RecommendCard({ rec }: { rec: Recommendation }) {
   const [level, setLevel] = useState(0);
 
+  // "키이스케이프 우주라이크" → 브랜드 / 지점 분리 (브랜드를 강조)
+  const [brand, ...branchParts] = (rec.cafe || "").split(" ");
+  const branch = branchParts.join(" ");
+
   const meta = [
     rec.timeLimit ? `⏱️ ${rec.timeLimit}분` : "",
     rec.players ? `👥 ${rec.players}인` : "",
@@ -26,7 +30,12 @@ export default function RecommendCard({ rec }: { rec: Recommendation }) {
         />
       )}
       <div className="flex items-start justify-between gap-2">
-        <div>
+        <div className="min-w-0">
+          {brand && (
+            <span className="mb-1 inline-block rounded-md bg-candy/15 px-1.5 py-0.5 text-[11px] font-extrabold text-candy">
+              {brand}
+            </span>
+          )}
           <div className="flex items-center gap-2">
             <h3 className="font-extrabold leading-tight">{rec.name}</h3>
             {typeof rec.score === "number" && (
@@ -35,7 +44,9 @@ export default function RecommendCard({ rec }: { rec: Recommendation }) {
               </span>
             )}
           </div>
-          <p className="text-xs text-cream/60">{rec.cafe}</p>
+          {branch && (
+            <p className="text-xs font-bold text-cream/60">📍 {branch}</p>
+          )}
           {meta && (
             <p className="mt-0.5 text-xs font-bold text-cream/70">{meta}</p>
           )}

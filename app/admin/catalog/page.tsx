@@ -14,6 +14,12 @@ const field =
   "w-full rounded-xl border-2 border-edge bg-ink px-3 py-2 text-sm font-bold outline-none placeholder:text-cream/45 focus:border-candy";
 const label = "mb-1 block text-sm font-bold text-cream/70";
 
+// "키이스케이프 우주라이크" → { brand: '키이스케이프', branch: '우주라이크' }
+function splitCafe(cafe = "") {
+  const [brand, ...rest] = cafe.split(" ");
+  return { brand, branch: rest.join(" ") };
+}
+
 export default function AdminCatalog() {
   const [items, setItems] = useState<CandidateTheme[]>([]);
   const [ready, setReady] = useState(false);
@@ -120,8 +126,17 @@ export default function AdminCatalog() {
               )}
               <div className="flex min-w-0 flex-1 items-start justify-between gap-2">
                 <div className="min-w-0">
+                  {splitCafe(c.cafe).brand && (
+                    <span className="mb-1 inline-block rounded-md bg-candy/15 px-1.5 py-0.5 text-[11px] font-extrabold text-candy">
+                      {splitCafe(c.cafe).brand}
+                    </span>
+                  )}
                   <p className="truncate font-extrabold">{c.name}</p>
-                  <p className="truncate text-xs text-cream/60">{c.cafe}</p>
+                  {splitCafe(c.cafe).branch && (
+                    <p className="truncate text-xs font-bold text-cream/60">
+                      📍 {splitCafe(c.cafe).branch}
+                    </p>
+                  )}
                   <p className="mt-0.5 text-xs font-bold text-cream/55">
                     {c.timeLimit ? `${c.timeLimit}분` : ""}
                     {c.players ? ` · ${c.players}인` : ""}
