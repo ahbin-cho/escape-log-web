@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 
 // 배경색은 각 링크에서 지정(공용 base 에 bg 를 넣으면 bg-candy 등과 충돌해 색이 덮임)
@@ -11,7 +10,6 @@ const navBase =
 const navLink = `${navBase} bg-panel`;
 
 export default function SiteHeader() {
-  const router = useRouter();
   const [email, setEmail] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [ready, setReady] = useState(false);
@@ -45,8 +43,8 @@ export default function SiteHeader() {
   async function logout() {
     const supabase = createClient();
     await supabase.auth.signOut();
-    router.push("/");
-    router.refresh();
+    // 전체 새로고침으로 화면의 기록 상태까지 완전히 초기화(로그아웃 후 이전 기록 잔상 방지)
+    window.location.href = "/";
   }
 
   return (

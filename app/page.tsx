@@ -79,7 +79,15 @@ export default function HomePage() {
 
       <FeedPreview />
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+      <div className="space-y-3 border-t-2 border-edge/15 pt-5">
+        <div className="flex items-baseline justify-between">
+          <h2 className="text-lg font-extrabold">📓 내 기록</h2>
+          <span className="text-xs font-bold text-cream/60">
+            {records.length}개
+          </span>
+        </div>
+
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -100,6 +108,7 @@ export default function HomePage() {
               {g === "전체" ? "전체" : `${GENRE_EMOJI[g as Genre]} ${g}`}
             </button>
           ))}
+        </div>
         </div>
       </div>
 

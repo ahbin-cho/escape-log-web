@@ -54,6 +54,26 @@ a.rough::before {
   pointer-events: none;
 }
 
+/* 그림자(shadow-cute)는 버튼/버튼형 링크에만 남기고,
+   콘텐츠 카드(div·section·article·label·form)에서는 제거해 산만함을 줄인다.
+   카드 구분은 굵은 테두리로 충분함. (element+class 라 유틸리티보다 우선) */
+div.shadow-cute,
+section.shadow-cute,
+article.shadow-cute,
+label.shadow-cute,
+form.shadow-cute {
+  box-shadow: none;
+}
+
+/* 가로 스와이프 영역용 스크롤바 숨김 (스와이퍼 느낌) */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* 스포 슬라이더 */
 input[type="range"].candy-range {
   -webkit-appearance: none;

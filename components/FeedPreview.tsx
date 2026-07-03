@@ -32,12 +32,12 @@ export default function FeedPreview() {
           더보기 →
         </Link>
       </div>
-      <div className="-mx-1 flex gap-2.5 overflow-x-auto px-1 pb-1">
+      <div className="no-scrollbar -mx-1 flex snap-x snap-mandatory gap-2.5 overflow-x-auto scroll-smooth px-1 pb-1">
         {reviews.map((r) => (
           <Link
             key={r.id}
             href="/feed"
-            className="flex w-44 shrink-0 flex-col gap-1 rounded-xl border-2 border-edge bg-panel p-3 shadow-cute transition active:scale-[0.98]"
+            className="flex w-44 shrink-0 snap-start flex-col gap-1 rounded-xl border-2 border-edge bg-panel p-3 transition active:scale-[0.98]"
           >
             <p className="truncate text-sm font-extrabold">
               {GENRE_EMOJI[r.genre]} {r.themeName}
