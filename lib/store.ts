@@ -259,8 +259,7 @@ export async function getPublicFeed(limit = 60): Promise<PublicReview[]> {
   const { data, error } = await supabase
     .from("public_reviews")
     .select("*")
-    .order("played_at", { ascending: false, nullsFirst: false })
-    .order("created_at", { ascending: false })
+    .order("created_at", { ascending: false }) // 등록 최신순
     .limit(limit);
   if (error || !data) return [];
   const rows = data as RecordRow[];
