@@ -9,23 +9,39 @@ import {
   type EscapeRecord,
   type Genre,
 } from "@/lib/store";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import RecordCard from "@/components/RecordCard";
 import Stats from "@/components/Stats";
 import ImportBanner from "@/components/ImportBanner";
 import FeedPreview from "@/components/FeedPreview";
 import LoggedOutCTA from "@/components/LoggedOutCTA";
+import HomeRegionThemes from "@/components/HomeRegionThemes";
 
 export default function HomePage() {
   const [records, setRecords] = useState<EscapeRecord[]>([]);
   const [query, setQuery] = useState("");
   const [genre, setGenre] = useState<Genre | "전체">("전체");
   const [ready, setReady] = useState(false);
+  const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
 
   useEffect(() => {
     getRecords().then((r) => {
       setRecords(r);
       setReady(true);
     });
+  }, []);
+
+  useEffect(() => {
+    if (!isSupabaseConfigured()) {
+      setLoggedIn(false);
+      return;
+    }
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => setLoggedIn(!!data.user));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) =>
+      setLoggedIn(!!s?.user)
+    );
+    return () => sub.subscription.unsubscribe();
   }, []);
 
   const filtered = useMemo(() => {
@@ -48,7 +64,11 @@ export default function HomePage() {
     <div className="space-y-6">
       <LoggedOutCTA />
       <ImportBanner />
-      <Stats records={records} />
+      {loggedIn === false ? (
+        <HomeRegionThemes />
+      ) : (
+        <Stats records={records} />
+      )}
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Link

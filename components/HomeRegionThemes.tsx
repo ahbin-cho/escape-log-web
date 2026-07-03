@@ -5,6 +5,25 @@ import Link from "next/link";
 import { getCatalog, genreEmoji, type CandidateTheme } from "@/lib/store";
 import { regionFromText, REGIONS, type Region } from "@/lib/region";
 
+// 브랜드별로 번갈아 뽑아 다양하게 섞기 (한 브랜드 쏠림 방지)
+function mixByBrand(themes: CandidateTheme[], limit: number): CandidateTheme[] {
+  const groups = new Map<string, CandidateTheme[]>();
+  for (const t of themes) {
+    const brand = (t.cafe || "").split(" ")[0] || "기타";
+    if (!groups.has(brand)) groups.set(brand, []);
+    groups.get(brand)!.push(t);
+  }
+  const lists = [...groups.values()];
+  const out: CandidateTheme[] = [];
+  let i = 0;
+  while (out.length < limit && lists.some((l) => l.length)) {
+    const l = lists[i % lists.length];
+    if (l.length) out.push(l.shift()!);
+    i++;
+  }
+  return out;
+}
+
 // 홈 위젯: 좌(지역 칩) / 우(그 지역 테마 미리보기) 반반 분할.
 export default function HomeRegionThemes() {
   const [catalog, setCatalog] = useState<CandidateTheme[]>([]);
@@ -34,10 +53,8 @@ export default function HomeRegionThemes() {
   // 카탈로그에 지역 잡히는 테마가 없으면 숨김
   if (!ready || regionsPresent.length === 0) return null;
 
-  const themes = byRegion
-    .filter((x) => x.r === region)
-    .map((x) => x.t)
-    .slice(0, 4);
+  const regionThemes = byRegion.filter((x) => x.r === region).map((x) => x.t);
+  const themes = mixByBrand(regionThemes, 4);
 
   return (
     <section className="rounded-2xl border-2 border-edge bg-panel p-4">
