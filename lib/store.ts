@@ -24,6 +24,9 @@ export interface EscapeRecord {
   hintCount: number;
   oneLiner: string; // 공개 · 무스포
   memo: string; // 비공개 · 스포 OK
+  region: string; // 시/도 (직접 선택, 빈 값이면 매장명으로 자동 추측)
+  photoUrl: string; // 인증샷 한 장 (Supabase Storage, 공개 시 함께 노출)
+  partySize: number; // 함께한 인원 (명), 0=미입력
   isPublic: boolean; // 공개 후기로 올릴지
   hidden: boolean; // 관리자 숨김
   createdAt: string; // ISO
@@ -71,6 +74,9 @@ export function emptyRecord(): EscapeRecord {
     hintCount: 0,
     oneLiner: "",
     memo: "",
+    region: "",
+    photoUrl: "",
+    partySize: 0,
     isPublic: false,
     hidden: false,
     createdAt: "",
@@ -93,6 +99,9 @@ type RecordRow = {
   hint_count: number;
   one_liner: string;
   memo: string;
+  region: string | null;
+  photo_url: string | null;
+  party_size: number | null;
   is_public: boolean;
   hidden: boolean;
   created_at: string;
@@ -113,6 +122,9 @@ function fromRow(r: RecordRow): EscapeRecord {
     hintCount: r.hint_count ?? 0,
     oneLiner: r.one_liner ?? "",
     memo: r.memo ?? "",
+    region: r.region ?? "",
+    photoUrl: r.photo_url ?? "",
+    partySize: r.party_size ?? 0,
     isPublic: !!r.is_public,
     hidden: !!r.hidden,
     createdAt: r.created_at ?? "",
@@ -134,6 +146,9 @@ function toRow(r: EscapeRecord, userId: string) {
     hint_count: r.hintCount,
     one_liner: r.oneLiner,
     memo: r.memo,
+    region: r.region || null,
+    photo_url: r.photoUrl || null,
+    party_size: Number(r.partySize) || 0,
     is_public: r.isPublic,
     hidden: r.hidden,
   };
@@ -201,21 +216,59 @@ export async function deleteRecord(id: string): Promise<void> {
   if (error) throw error;
 }
 
+// 기록 인증샷 업로드 → 공개 URL 반환 (Storage 버킷: photos)
+export async function uploadRecordPhoto(file: File): Promise<string> {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error("로그인이 필요합니다.");
+  const ext = file.name.split(".").pop() || "jpg";
+  const rand = Math.random().toString(36).slice(2, 10);
+  const path = `${user.id}/${rand}.${ext}`;
+  const { error } = await supabase.storage
+    .from("photos")
+    .upload(path, file, { cacheControl: "3600", upsert: false });
+  if (error) throw error;
+  const { data } = supabase.storage.from("photos").getPublicUrl(path);
+  return data.publicUrl;
+}
+
+// user_id 목록 → 닉네임 맵. (records↔profiles 직접 FK가 없어 조인 대신 별도 조회)
+export async function nicknamesFor(
+  userIds: (string | undefined)[]
+): Promise<Map<string, string>> {
+  const supabase = createClient();
+  const ids = Array.from(new Set(userIds.filter(Boolean))) as string[];
+  const map = new Map<string, string>();
+  if (ids.length === 0) return map;
+  const { data } = await supabase
+    .from("profiles")
+    .select("id, nickname")
+    .in("id", ids);
+  (data as { id: string; nickname: string }[] | null)?.forEach((p) =>
+    map.set(p.id, p.nickname || "익명")
+  );
+  return map;
+}
+
 // ── 공개 피드 (모두의 공개 후기) ────────────────────────────────
+// memo 등 비공개 컬럼이 빠진 안전 뷰(public_reviews)에서만 읽는다.
 export async function getPublicFeed(limit = 60): Promise<PublicReview[]> {
   const supabase = createClient();
   const { data, error } = await supabase
-    .from("records")
-    .select("*, profiles(nickname)")
-    .eq("is_public", true)
-    .eq("hidden", false)
+    .from("public_reviews")
+    .select("*")
     .order("played_at", { ascending: false, nullsFirst: false })
     .order("created_at", { ascending: false })
     .limit(limit);
   if (error || !data) return [];
-  return (data as (RecordRow & { profiles: { nickname: string } | null })[]).map(
-    (r) => ({ ...fromRow(r), nickname: r.profiles?.nickname || "익명" })
-  );
+  const rows = data as RecordRow[];
+  const nickById = await nicknamesFor(rows.map((r) => r.user_id));
+  return rows.map((r) => ({
+    ...fromRow(r),
+    nickname: nickById.get(r.user_id ?? "") || "익명",
+  }));
 }
 
 // ── 카탈로그 (추천 후보 · 어드민이 관리) ─────────────────────────
@@ -230,6 +283,11 @@ type CatalogRow = {
   teaser: string;
   hint: string;
   spoiler: string;
+  poster_url: string | null;
+  time_limit: number | null;
+  players: string | null;
+  reservation_url: string | null;
+  price: number | null;
 };
 
 function catalogFromRow(r: CatalogRow): CandidateTheme {
@@ -244,6 +302,11 @@ function catalogFromRow(r: CatalogRow): CandidateTheme {
     teaser: r.teaser ?? "",
     hint: r.hint ?? "",
     spoiler: r.spoiler ?? "",
+    posterUrl: r.poster_url ?? "",
+    timeLimit: r.time_limit ?? 0,
+    players: r.players ?? "",
+    reservationUrl: r.reservation_url ?? "",
+    price: r.price ?? 0,
   };
 }
 
@@ -321,9 +384,14 @@ export interface CandidateTheme {
   difficulty: number;
   fearLevel: number;
   tags: string[];
-  teaser: string;
+  teaser: string; // 줄거리/소개 (무스포)
   hint: string;
   spoiler: string;
+  posterUrl?: string; // 포스터 이미지 URL (Supabase Storage)
+  timeLimit?: number; // 제한시간(분), 0/미설정=미입력
+  players?: string; // 인원 (예: "2~4")
+  reservationUrl?: string; // 예약/상세 페이지 링크
+  price?: number; // 1인 가격(원), 0/미설정=미입력
 }
 
 export interface Recommendation extends CandidateTheme {

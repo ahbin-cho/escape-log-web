@@ -12,6 +12,8 @@ import {
 import RecordCard from "@/components/RecordCard";
 import Stats from "@/components/Stats";
 import ImportBanner from "@/components/ImportBanner";
+import FeedPreview from "@/components/FeedPreview";
+import LoggedOutCTA from "@/components/LoggedOutCTA";
 
 export default function HomePage() {
   const [records, setRecords] = useState<EscapeRecord[]>([]);
@@ -44,6 +46,7 @@ export default function HomePage() {
 
   return (
     <div className="space-y-6">
+      <LoggedOutCTA />
       <ImportBanner />
       <Stats records={records} />
 
@@ -73,6 +76,8 @@ export default function HomePage() {
           💞 친구 궁합
         </Link>
       </div>
+
+      <FeedPreview />
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <input

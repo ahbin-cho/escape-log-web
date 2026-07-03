@@ -39,6 +39,14 @@ export default function QuizPage() {
   const q = QUIZ[step];
   const progress = Math.round((step / QUIZ.length) * 100);
 
+  // 진행바 이미지를 마운트 즉시 미리 로드(단계 전환 시 깜빡임 방지)
+  useEffect(() => {
+    ["/bread.png", "/footprint.png", "/house.png"].forEach((src) => {
+      const img = new window.Image();
+      img.src = src;
+    });
+  }, []);
+
   function choose(optIdx: number) {
     const next = { ...answers, [q.id]: optIdx };
     setAnswers(next);
@@ -217,6 +225,7 @@ export default function QuizPage() {
                   alt={i < step ? "발자국" : "빵조각"}
                   width={32}
                   height={32}
+                  priority
                   className="pointer-events-none"
                 />
               </div>
@@ -263,6 +272,7 @@ export default function QuizPage() {
               alt="과자집"
               width={52}
               height={52}
+              priority
               className="pointer-events-none"
             />
           </div>

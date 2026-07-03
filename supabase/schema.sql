@@ -18,8 +18,15 @@ language plpgsql
 security definer set search_path = public
 as $$
 begin
+  -- 가입 시 넘어온 닉네임이 있으면 그걸, 없으면 이메일 앞부분을 기본값으로.
   insert into public.profiles (id, nickname)
-  values (new.id, split_part(new.email, '@', 1))
+  values (
+    new.id,
+    coalesce(
+      nullif(new.raw_user_meta_data ->> 'nickname', ''),
+      split_part(new.email, '@', 1)
+    )
+  )
   on conflict (id) do nothing;
   return new;
 end;
@@ -66,28 +73,48 @@ create table if not exists public.records (
   hint_count     int2 not null default 0,
   one_liner      text not null default '',
   memo           text not null default '',
+  region         text not null default '',
+  photo_url      text not null default '',
+  party_size     int2 not null default 0,
   is_public      bool not null default false,
   hidden         bool not null default false,
   created_at     timestamptz not null default now()
 );
+
+-- 이미 records 테이블을 만든 뒤 컬럼 추가하는 경우(재실행 안전)
+alter table public.records add column if not exists region     text not null default '';
+alter table public.records add column if not exists photo_url  text not null default '';
+alter table public.records add column if not exists party_size int2 not null default 0;
 
 create index if not exists records_user_idx   on public.records (user_id);
 create index if not exists records_public_idx on public.records (is_public, hidden);
 
 -- 4) 카탈로그 (추천 후보 테마 — 어드민이 관리)
 create table if not exists public.catalog (
-  id         uuid primary key default gen_random_uuid(),
-  name       text not null default '',
-  cafe       text not null default '',
-  genre      text not null default '기타',
-  difficulty int2 not null default 3,
-  fear_level int2 not null default 3,
-  tags       text[] not null default '{}',
-  teaser     text not null default '',
-  hint       text not null default '',
-  spoiler    text not null default '',
-  created_at timestamptz not null default now()
+  id              uuid primary key default gen_random_uuid(),
+  name            text not null default '',
+  cafe            text not null default '',
+  genre           text not null default '기타',
+  difficulty      int2 not null default 3,
+  fear_level      int2 not null default 3,
+  tags            text[] not null default '{}',
+  teaser          text not null default '',
+  hint            text not null default '',
+  spoiler         text not null default '',
+  poster_url      text not null default '',
+  time_limit      int2 not null default 0,
+  players         text not null default '',
+  reservation_url text not null default '',
+  price           int4 not null default 0,
+  created_at      timestamptz not null default now()
 );
+
+-- 기존 catalog 에 새 컬럼 추가(재실행 안전)
+alter table public.catalog add column if not exists poster_url      text not null default '';
+alter table public.catalog add column if not exists time_limit      int2 not null default 0;
+alter table public.catalog add column if not exists players         text not null default '';
+alter table public.catalog add column if not exists reservation_url text not null default '';
+alter table public.catalog add column if not exists price           int4 not null default 0;
 
 -- ─────────────────────────────────────────────────────────────
 -- RLS (Row Level Security)
@@ -106,12 +133,13 @@ drop policy if exists profiles_update on public.profiles;
 create policy profiles_update on public.profiles
   for update using (auth.uid() = id) with check (auth.uid() = id);
 
--- records: 본인 것 전부 / 공개+미숨김은 누구나 / 관리자는 전부
+-- records: 본인 것 전부 / 관리자는 전부.
+-- ⚠️ 공개 후기는 base 테이블을 직접 열지 않는다(그러면 memo 등 비공개 컬럼까지 노출).
+--    아래 public_reviews 뷰(안전 컬럼만)로만 외부에 공개한다.
 drop policy if exists records_select on public.records;
 create policy records_select on public.records
   for select using (
     auth.uid() = user_id
-    or (is_public = true and hidden = false)
     or public.is_admin()
   );
 
@@ -143,6 +171,21 @@ create policy admins_select on public.admins
   for select using (public.is_admin());
 
 -- ─────────────────────────────────────────────────────────────
+-- 공개 후기 안전 뷰: memo(비공개 메모) 등을 제외한 안전한 컬럼만 노출.
+-- 외부(anon/로그인 사용자)는 base records 를 직접 못 읽고 이 뷰로만 공개 후기를 본다.
+-- ─────────────────────────────────────────────────────────────
+-- 컬럼 구성이 바뀔 수 있어 create or replace 대신 drop 후 재생성.
+drop view if exists public.public_reviews;
+create view public.public_reviews as
+  select id, user_id, theme_name, cafe_name, played_at, genre,
+         difficulty, fear_level, rating, success, remaining_time,
+         hint_count, one_liner, region, photo_url, party_size, created_at
+  from public.records
+  where is_public = true and hidden = false;
+
+grant select on public.public_reviews to anon, authenticated;
+
+-- ─────────────────────────────────────────────────────────────
 -- 카탈로그 시드 (비어 있을 때만 1회 삽입)
 -- ─────────────────────────────────────────────────────────────
 insert into public.catalog (name, cafe, genre, difficulty, fear_level, tags, teaser, hint, spoiler)
@@ -157,3 +200,55 @@ select * from (values
   ('잊혀진 등대','파도소리 속초점','모험',4,2,array['모험','바다','장치'],'폭풍 치는 밤, 꺼진 등대에 다시 불을 밝혀야 합니다.','모스부호와 등대 점멸 패턴이 짝을 이룹니다.','모스부호 ''SOS''를 레버로 재현하면 등대에 불이 들어옵니다.')
 ) as seed
 where not exists (select 1 from public.catalog);
+
+-- ─────────────────────────────────────────────────────────────
+-- 포스터 이미지 저장소 (Storage 버킷: posters · 공개 읽기 / 관리자만 업로드)
+-- ─────────────────────────────────────────────────────────────
+insert into storage.buckets (id, name, public)
+values ('posters', 'posters', true)
+on conflict (id) do nothing;
+
+drop policy if exists "posters read" on storage.objects;
+create policy "posters read" on storage.objects
+  for select using (bucket_id = 'posters');
+
+drop policy if exists "posters admin insert" on storage.objects;
+create policy "posters admin insert" on storage.objects
+  for insert to authenticated
+  with check (bucket_id = 'posters' and public.is_admin());
+
+drop policy if exists "posters admin update" on storage.objects;
+create policy "posters admin update" on storage.objects
+  for update to authenticated
+  using (bucket_id = 'posters' and public.is_admin());
+
+drop policy if exists "posters admin delete" on storage.objects;
+create policy "posters admin delete" on storage.objects
+  for delete to authenticated
+  using (bucket_id = 'posters' and public.is_admin());
+
+-- ─────────────────────────────────────────────────────────────
+-- 기록 인증샷 저장소 (Storage 버킷: photos · 공개 읽기 / 로그인 사용자 업로드)
+-- ─────────────────────────────────────────────────────────────
+insert into storage.buckets (id, name, public)
+values ('photos', 'photos', true)
+on conflict (id) do nothing;
+
+drop policy if exists "photos read" on storage.objects;
+create policy "photos read" on storage.objects
+  for select using (bucket_id = 'photos');
+
+drop policy if exists "photos auth insert" on storage.objects;
+create policy "photos auth insert" on storage.objects
+  for insert to authenticated
+  with check (bucket_id = 'photos' and owner = auth.uid());
+
+drop policy if exists "photos owner update" on storage.objects;
+create policy "photos owner update" on storage.objects
+  for update to authenticated
+  using (bucket_id = 'photos' and owner = auth.uid());
+
+drop policy if exists "photos owner delete" on storage.objects;
+create policy "photos owner delete" on storage.objects
+  for delete to authenticated
+  using (bucket_id = 'photos' and owner = auth.uid());

@@ -6,6 +6,7 @@ import {
   saveCatalogItem,
   deleteCatalogItem,
   emptyCatalogItem,
+  uploadPoster,
   type CatalogInput,
 } from "@/lib/admin";
 
@@ -18,6 +19,24 @@ export default function AdminCatalog() {
   const [ready, setReady] = useState(false);
   const [editing, setEditing] = useState<CatalogInput | null>(null);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  async function handlePoster(file: File | undefined) {
+    if (!file) return;
+    setUploading(true);
+    try {
+      const url = await uploadPoster(file);
+      upd("posterUrl", url);
+    } catch (e) {
+      alert(
+        e instanceof Error
+          ? `포스터 업로드 실패: ${e.message}`
+          : "포스터 업로드 실패"
+      );
+    } finally {
+      setUploading(false);
+    }
+  }
 
   async function reload() {
     const c = await getCatalog();
@@ -90,14 +109,29 @@ export default function AdminCatalog() {
             key={c.id}
             className="rough flex flex-col gap-2 rounded-2xl border-2 border-edge bg-panel p-4 shadow-cute"
           >
-            <div className="flex items-start justify-between gap-2">
-              <div>
-                <p className="font-extrabold">{c.name}</p>
-                <p className="text-xs text-cream/60">{c.cafe}</p>
+            <div className="flex items-start gap-3">
+              {c.posterUrl && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={c.posterUrl}
+                  alt={c.name}
+                  className="h-20 w-16 shrink-0 rounded-lg border-2 border-edge object-cover"
+                />
+              )}
+              <div className="flex min-w-0 flex-1 items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <p className="truncate font-extrabold">{c.name}</p>
+                  <p className="truncate text-xs text-cream/60">{c.cafe}</p>
+                  <p className="mt-0.5 text-xs font-bold text-cream/55">
+                    {c.timeLimit ? `${c.timeLimit}분` : ""}
+                    {c.players ? ` · ${c.players}인` : ""}
+                    {c.price ? ` · ${c.price.toLocaleString()}원` : ""}
+                  </p>
+                </div>
+                <span className="shrink-0 rounded-lg bg-ink px-2 py-0.5 text-xs font-bold">
+                  {c.genre} · 난{c.difficulty} · 공{c.fearLevel}
+                </span>
               </div>
-              <span className="shrink-0 rounded-lg bg-ink px-2 py-0.5 text-xs font-bold">
-                {c.genre} · 난{c.difficulty} · 공{c.fearLevel}
-              </span>
             </div>
             {c.tags.length > 0 && (
               <p className="text-xs font-bold text-cream/60">
@@ -135,6 +169,45 @@ export default function AdminCatalog() {
             <h2 className="text-lg font-extrabold">
               {editing.id ? "테마 수정" : "새 테마"}
             </h2>
+
+            <div>
+              <label className={label}>포스터</label>
+              <div className="flex items-center gap-3">
+                {editing.posterUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={editing.posterUrl}
+                    alt="포스터 미리보기"
+                    className="h-24 w-[4.5rem] shrink-0 rounded-lg border-2 border-edge object-cover"
+                  />
+                ) : (
+                  <div className="flex h-24 w-[4.5rem] shrink-0 items-center justify-center rounded-lg border-2 border-dashed border-edge/40 text-2xl">
+                    🖼️
+                  </div>
+                )}
+                <div className="space-y-1.5">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handlePoster(e.target.files?.[0])}
+                    className="block w-full text-xs font-bold file:mr-2 file:rounded-lg file:border-2 file:border-edge file:bg-panel file:px-3 file:py-1.5 file:text-xs file:font-bold"
+                  />
+                  {uploading && (
+                    <p className="text-xs font-bold text-candy">업로드 중…</p>
+                  )}
+                  {editing.posterUrl && (
+                    <button
+                      type="button"
+                      onClick={() => upd("posterUrl", "")}
+                      className="text-xs font-bold text-red-500 underline"
+                    >
+                      포스터 제거
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
             <div>
               <label className={label}>테마명 *</label>
               <input
@@ -169,23 +242,23 @@ export default function AdminCatalog() {
               <div>
                 <label className={label}>난이도</label>
                 <input
-                  type="number"
-                  min={1}
-                  max={5}
+                  inputMode="numeric"
                   className={field}
-                  value={editing.difficulty}
-                  onChange={(e) => upd("difficulty", Number(e.target.value))}
+                  value={String(editing.difficulty)}
+                  onChange={(e) =>
+                    upd("difficulty", Number(e.target.value.replace(/[^0-9]/g, "")) || 0)
+                  }
                 />
               </div>
               <div>
                 <label className={label}>공포도</label>
                 <input
-                  type="number"
-                  min={1}
-                  max={5}
+                  inputMode="numeric"
                   className={field}
-                  value={editing.fearLevel}
-                  onChange={(e) => upd("fearLevel", Number(e.target.value))}
+                  value={String(editing.fearLevel)}
+                  onChange={(e) =>
+                    upd("fearLevel", Number(e.target.value.replace(/[^0-9]/g, "")) || 0)
+                  }
                 />
               </div>
             </div>
@@ -206,8 +279,51 @@ export default function AdminCatalog() {
                 placeholder="귀신, 몰입, 청각연출"
               />
             </div>
+            <div className="grid grid-cols-3 gap-3">
+              <div>
+                <label className={label}>제한시간(분)</label>
+                <input
+                  inputMode="numeric"
+                  className={field}
+                  value={editing.timeLimit ? String(editing.timeLimit) : ""}
+                  onChange={(e) =>
+                    upd("timeLimit", Number(e.target.value.replace(/[^0-9]/g, "")) || 0)
+                  }
+                />
+              </div>
+              <div>
+                <label className={label}>인원</label>
+                <input
+                  className={field}
+                  value={editing.players ?? ""}
+                  onChange={(e) => upd("players", e.target.value)}
+                  placeholder="예: 2~4"
+                />
+              </div>
+              <div>
+                <label className={label}>가격(1인)</label>
+                <input
+                  inputMode="numeric"
+                  className={field}
+                  value={editing.price ? String(editing.price) : ""}
+                  onChange={(e) =>
+                    upd("price", Number(e.target.value.replace(/[^0-9]/g, "")) || 0)
+                  }
+                  placeholder="원"
+                />
+              </div>
+            </div>
             <div>
-              <label className={label}>티저 (무스포)</label>
+              <label className={label}>예약/상세 링크</label>
+              <input
+                className={field}
+                value={editing.reservationUrl ?? ""}
+                onChange={(e) => upd("reservationUrl", e.target.value)}
+                placeholder="https://..."
+              />
+            </div>
+            <div>
+              <label className={label}>줄거리 / 소개 (무스포)</label>
               <textarea
                 rows={2}
                 className={field}

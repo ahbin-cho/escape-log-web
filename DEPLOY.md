@@ -49,14 +49,16 @@ insert into public.admins (email) values ('ahbin.cho@athometrip.com');
 - **Project URL** → `NEXT_PUBLIC_SUPABASE_URL`
 - **anon public** 키 → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
-## 5. 로그인 리다이렉트 주소 등록
+## 5. 이메일 확인 끄기 (중요 · 로그인 방식이 비밀번호라 필수)
 
-왼쪽 메뉴 → **Authentication → URL Configuration**:
+로그인은 **이메일 + 비밀번호** 방식이라 인증 메일을 안 보냅니다. 가입하자마자
+바로 로그인되게 하려면 이메일 확인을 꺼야 해요.
 
-- **Site URL**: `https://escape-log-web-eight.vercel.app`
-- **Redirect URLs** 에 두 개 추가:
-  - `https://escape-log-web-eight.vercel.app/auth/callback`
-  - `http://localhost:3000/auth/callback` (로컬 테스트용)
+왼쪽 메뉴 → **Authentication → Sign In / Providers → Email** →
+**"Confirm email"** 옵션을 **OFF** → 저장.
+
+> 이걸 안 끄면 회원가입 후 "이메일 확인이 필요하다"는 안내가 뜨고 로그인이 막힙니다.
+> (매직링크·구글 로그인 등으로 나중에 바꾸면 이 설정은 다시 조정하면 됩니다.)
 
 ## 6. 키를 앱에 넣기
 

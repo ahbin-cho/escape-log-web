@@ -5,8 +5,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 
-const navLink =
-  "rough rounded-xl border-2 border-edge bg-panel px-3 py-1.5 text-sm font-bold transition active:scale-[0.97]";
+// 배경색은 각 링크에서 지정(공용 base 에 bg 를 넣으면 bg-candy 등과 충돌해 색이 덮임)
+const navBase =
+  "rough rounded-xl border-2 border-edge px-3 py-1.5 text-sm font-bold transition active:scale-[0.97]";
+const navLink = `${navBase} bg-panel`;
 
 export default function SiteHeader() {
   const router = useRouter();
@@ -59,16 +61,16 @@ export default function SiteHeader() {
         </Link>
         <nav className="flex flex-wrap items-center justify-end gap-1.5 sm:gap-2">
           <Link href="/feed" className={navLink}>
-            피드
+            모두의 후기
           </Link>
           <Link href="/quiz" className={`${navLink} hidden sm:inline-block`}>
             취향 찾기
           </Link>
-          <Link href="/new" className={`${navLink} bg-candy text-white shadow-cute`}>
+          <Link href="/new" className={`${navBase} bg-candy text-white shadow-cute`}>
             기록 추가
           </Link>
           {isAdmin && (
-            <Link href="/admin" className={`${navLink} bg-grape text-white`}>
+            <Link href="/admin" className={`${navBase} bg-grape text-white`}>
               관리자
             </Link>
           )}

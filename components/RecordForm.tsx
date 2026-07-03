@@ -7,9 +7,11 @@ import {
   emptyRecord,
   saveRecord,
   deleteRecord,
+  uploadRecordPhoto,
   type EscapeRecord,
   type Genre,
 } from "@/lib/store";
+import { REGIONS } from "@/lib/region";
 
 type ScaleKey = "difficulty" | "fearLevel" | "rating";
 
@@ -74,7 +76,29 @@ export default function RecordForm({
     setForm((f) => ({ ...f, [name]: value }));
   }
 
+  // 힌트 수: 숫자만 입력(빈칸 허용), 옆의 "무한" 체크 시 -1 로 저장.
+  const [hintUnlimited, setHintUnlimited] = useState((initial?.hintCount ?? 0) < 0);
+  const [hintRaw, setHintRaw] = useState(
+    initial && initial.hintCount > 0 ? String(initial.hintCount) : ""
+  );
+
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  async function handlePhoto(file: File | undefined) {
+    if (!file) return;
+    setUploading(true);
+    try {
+      const url = await uploadRecordPhoto(file);
+      set("photoUrl", url);
+    } catch (err) {
+      alert(
+        err instanceof Error ? `사진 업로드 실패: ${err.message}` : "사진 업로드 실패"
+      );
+    } finally {
+      setUploading(false);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -89,7 +113,7 @@ export default function RecordForm({
         difficulty: Number(form.difficulty),
         fearLevel: Number(form.fearLevel),
         rating: Number(form.rating),
-        hintCount: Number(form.hintCount) || 0,
+        hintCount: hintUnlimited ? -1 : hintRaw === "" ? 0 : Number(hintRaw),
       });
       router.push("/");
       router.refresh();
@@ -139,6 +163,24 @@ export default function RecordForm({
         </div>
 
         <div>
+          <label className="mb-1.5 block text-sm font-bold text-cream/70">
+            지역 (시/도) <span className="font-normal text-cream/55">(선택)</span>
+          </label>
+          <select
+            className={field}
+            value={form.region}
+            onChange={(e) => set("region", e.target.value)}
+          >
+            <option value="">자동 (매장명으로 추측)</option>
+            {REGIONS.map((r) => (
+              <option key={r} value={r}>
+                {r}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
           <label className="mb-1.5 block text-sm font-bold text-cream/70">플레이 날짜</label>
           <input
             type="date"
@@ -161,6 +203,22 @@ export default function RecordForm({
               </option>
             ))}
           </select>
+        </div>
+
+        <div>
+          <label className="mb-1.5 block text-sm font-bold text-cream/70">
+            함께한 인원 <span className="font-normal text-cream/55">(명)</span>
+          </label>
+          <input
+            inputMode="numeric"
+            className={field}
+            value={form.partySize ? String(form.partySize) : ""}
+            onChange={(e) => {
+              const v = e.target.value.replace(/[^0-9]/g, "");
+              set("partySize", v === "" ? 0 : Number(v));
+            }}
+            placeholder="예: 3"
+          />
         </div>
 
         <div className="flex items-end gap-3">
@@ -194,13 +252,25 @@ export default function RecordForm({
         </div>
         <div>
           <label className="mb-1.5 block text-sm font-bold text-cream/70">사용 힌트 수</label>
-          <input
-            type="number"
-            min="0"
-            className={field}
-            value={form.hintCount}
-            onChange={(e) => set("hintCount", Number(e.target.value))}
-          />
+          <div className="flex items-center gap-3">
+            <input
+              inputMode="numeric"
+              className={`${field} flex-1`}
+              value={hintUnlimited ? "" : hintRaw}
+              onChange={(e) => setHintRaw(e.target.value.replace(/[^0-9]/g, ""))}
+              disabled={hintUnlimited}
+              placeholder={hintUnlimited ? "무한" : "예: 2"}
+            />
+            <label className="flex shrink-0 cursor-pointer items-center gap-2 text-sm font-bold text-cream/70">
+              <input
+                type="checkbox"
+                className="h-4 w-4 accent-mint"
+                checked={hintUnlimited}
+                onChange={(e) => setHintUnlimited(e.target.checked)}
+              />
+              무한
+            </label>
+          </div>
         </div>
       </div>
 
@@ -229,6 +299,46 @@ export default function RecordForm({
         />
       </div>
 
+      <div>
+        <label className="mb-1.5 block text-sm font-bold text-cream/70">
+          사진 <span className="font-normal text-cream/55">(인증샷 한 장, 선택)</span>
+        </label>
+        <div className="flex items-center gap-3">
+          {form.photoUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={form.photoUrl}
+              alt="첨부 사진"
+              className="h-24 w-24 shrink-0 rounded-xl border-2 border-edge object-cover"
+            />
+          ) : (
+            <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-edge/40 text-2xl">
+              📷
+            </div>
+          )}
+          <div className="space-y-1.5">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handlePhoto(e.target.files?.[0])}
+              className="block w-full text-xs font-bold file:mr-2 file:rounded-lg file:border-2 file:border-edge file:bg-panel file:px-3 file:py-1.5 file:text-xs file:font-bold"
+            />
+            {uploading && (
+              <p className="text-xs font-bold text-candy">업로드 중…</p>
+            )}
+            {form.photoUrl && (
+              <button
+                type="button"
+                onClick={() => set("photoUrl", "")}
+                className="text-xs font-bold text-red-500 underline"
+              >
+                사진 제거
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
       <label className="rough flex cursor-pointer items-start gap-3 rounded-xl border-2 border-edge bg-panel p-4 shadow-cute">
         <input
           type="checkbox"
@@ -239,8 +349,8 @@ export default function RecordForm({
         <span>
           <span className="block text-sm font-extrabold">🌏 공개 후기로 올리기</span>
           <span className="mt-0.5 block text-xs text-cream/60">
-            켜면 <b>한줄 후기</b>만 닉네임과 함께 피드에 공개돼요. 비공개 메모는
-            절대 노출되지 않아요.
+            켜면 <b>한줄 후기·사진</b>이 닉네임과 함께 피드에 공개돼요. 비공개
+            메모는 절대 노출되지 않아요.
           </span>
         </span>
       </label>

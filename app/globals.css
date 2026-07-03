@@ -29,12 +29,29 @@ h3 {
   font-family: "SBAggroB", "Pretendard", sans-serif;
 }
 
-/* 손그림 테두리 필터 */
-.rough {
-  filter: url(#rough);
-}
+/* 손그림 필터 — 기본은 끔(카드·본문 글자 또렷). */
+.rough,
 .rough-sm {
-  filter: url(#rough-sm);
+  filter: none;
+}
+
+/* 버튼/버튼형 링크: 요소 자체엔 필터를 안 걸어 "글자는 또렷".
+   대신 테두리 선만 그리는 ::before 레이어에만 rough 필터 → "선만 자글자글".
+   모든 rough 버튼은 border-2 border-edge(#1D1D1D) 로 통일돼 있음. */
+button.rough,
+a.rough {
+  position: relative;
+  border-color: transparent !important; /* 진짜 테두리는 감추고 자리는 유지 */
+}
+button.rough::before,
+a.rough::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px solid #1d1d1d;
+  border-radius: inherit;
+  filter: url(#rough);
+  pointer-events: none;
 }
 
 /* 스포 슬라이더 */

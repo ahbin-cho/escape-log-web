@@ -52,6 +52,14 @@ export default function FeedPage() {
               key={r.id}
               className="rough flex flex-col gap-2 rounded-2xl border-2 border-edge bg-panel p-4 shadow-cute"
             >
+              {r.photoUrl && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={r.photoUrl}
+                  alt={r.themeName}
+                  className="h-40 w-full rounded-xl border-2 border-edge object-cover"
+                />
+              )}
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <h2 className="font-extrabold leading-tight">{r.themeName}</h2>
@@ -75,6 +83,11 @@ export default function FeedPage() {
                 >
                   {r.success ? "탈출 성공" : "탈출 실패"}
                 </span>
+                {r.partySize > 0 && (
+                  <span className="text-xs font-bold text-cream/60">
+                    · {r.partySize}명
+                  </span>
+                )}
               </div>
 
               {r.oneLiner && (

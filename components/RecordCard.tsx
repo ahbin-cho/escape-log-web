@@ -58,11 +58,22 @@ export default function RecordCard({ record }: { record: EscapeRecord }) {
       >
         <div className="overflow-hidden">
           <div className="space-y-3 border-t-2 border-edge/20 pt-3">
+            {record.photoUrl && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={record.photoUrl}
+                alt={record.themeName}
+                className="max-h-64 w-full rounded-xl border-2 border-edge object-cover"
+              />
+            )}
             <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-cream/70">
               {record.remainingTime && (
                 <span>남은 시간 {record.remainingTime}</span>
               )}
-              <span>힌트 {record.hintCount}회</span>
+              <span>
+                힌트 {record.hintCount < 0 ? "무한" : `${record.hintCount}회`}
+              </span>
+              {record.partySize > 0 && <span>인원 {record.partySize}명</span>}
             </div>
 
             {record.memo && (

@@ -2,10 +2,12 @@
 // 여기서는 일반 브라우저 클라이언트를 그대로 쓴다(관리자가 아니면 서버가 거부).
 
 import { createClient } from "./supabase/client";
+import { nicknamesFor } from "./store";
 import type { Genre, PublicReview, CandidateTheme } from "./store";
 
 type RecordRow = {
   id: string;
+  user_id: string;
   theme_name: string;
   cafe_name: string;
   played_at: string | null;
@@ -18,10 +20,12 @@ type RecordRow = {
   hint_count: number;
   one_liner: string;
   memo: string;
+  region: string | null;
+  photo_url: string | null;
+  party_size: number | null;
   is_public: boolean;
   hidden: boolean;
   created_at: string;
-  profiles: { nickname: string } | null;
 };
 
 // 공개 후기 전체(숨김 포함) — 관리자만 hidden=true 도 볼 수 있음.
@@ -29,11 +33,13 @@ export async function adminListReviews(): Promise<PublicReview[]> {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("records")
-    .select("*, profiles(nickname)")
+    .select("*")
     .eq("is_public", true)
     .order("created_at", { ascending: false });
   if (error || !data) return [];
-  return (data as RecordRow[]).map((r) => ({
+  const rows = data as RecordRow[];
+  const nickById = await nicknamesFor(rows.map((r) => r.user_id));
+  return rows.map((r) => ({
     id: r.id,
     themeName: r.theme_name ?? "",
     cafeName: r.cafe_name ?? "",
@@ -47,10 +53,13 @@ export async function adminListReviews(): Promise<PublicReview[]> {
     hintCount: r.hint_count ?? 0,
     oneLiner: r.one_liner ?? "",
     memo: "", // 비공개 메모는 어드민 화면에도 노출하지 않음
+    region: r.region ?? "",
+    photoUrl: r.photo_url ?? "",
+    partySize: r.party_size ?? 0,
     isPublic: true,
     hidden: !!r.hidden,
     createdAt: r.created_at ?? "",
-    nickname: r.profiles?.nickname || "익명",
+    nickname: nickById.get(r.user_id) || "익명",
   }));
 }
 
@@ -82,6 +91,11 @@ export function emptyCatalogItem(): CatalogInput {
     teaser: "",
     hint: "",
     spoiler: "",
+    posterUrl: "",
+    timeLimit: 60,
+    players: "",
+    reservationUrl: "",
+    price: 0,
   };
 }
 
@@ -97,6 +111,11 @@ export async function saveCatalogItem(item: CatalogInput): Promise<void> {
     teaser: item.teaser,
     hint: item.hint,
     spoiler: item.spoiler,
+    poster_url: item.posterUrl ?? "",
+    time_limit: Number(item.timeLimit) || 0,
+    players: item.players ?? "",
+    reservation_url: item.reservationUrl ?? "",
+    price: Number(item.price) || 0,
   };
   if (item.id) {
     const { error } = await supabase.from("catalog").update(row).eq("id", item.id);
@@ -111,6 +130,20 @@ export async function deleteCatalogItem(id: string): Promise<void> {
   const supabase = createClient();
   const { error } = await supabase.from("catalog").delete().eq("id", id);
   if (error) throw error;
+}
+
+// 포스터 이미지 업로드 → 공개 URL 반환. (Storage 버킷: posters)
+export async function uploadPoster(file: File): Promise<string> {
+  const supabase = createClient();
+  const ext = file.name.split(".").pop() || "jpg";
+  const rand = Math.random().toString(36).slice(2, 10);
+  const path = `${rand}.${ext}`;
+  const { error } = await supabase.storage
+    .from("posters")
+    .upload(path, file, { cacheControl: "3600", upsert: false });
+  if (error) throw error;
+  const { data } = supabase.storage.from("posters").getPublicUrl(path);
+  return data.publicUrl;
 }
 
 // ── 대시보드 카운트 ────────────────────────────────────────────

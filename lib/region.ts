@@ -52,6 +52,11 @@ const REGION_KEYWORDS: Record<Region, string[]> = {
 };
 
 export function inferRegion(record: EscapeRecord): Region | null {
+  // 1) 기록에 지역을 직접 선택했으면 그걸 확정으로 사용
+  if (record.region && (REGIONS as string[]).includes(record.region)) {
+    return record.region as Region;
+  }
+  // 2) 없으면 매장명·테마명 텍스트에서 키워드로 추측
   const text = `${record.cafeName} ${record.themeName}`;
   for (const region of REGIONS) {
     if (REGION_KEYWORDS[region].some((kw) => text.includes(kw))) {
