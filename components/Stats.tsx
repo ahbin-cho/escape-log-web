@@ -22,7 +22,7 @@ export default function Stats({ records }: { records: EscapeRecord[] }) {
           className="rough rounded-2xl border-2 border-edge bg-panel px-3 py-4 text-center shadow-cute"
         >
           <div className="text-2xl font-extrabold">{it.value}</div>
-          <div className="mt-1 text-xs text-cream/40">{it.label}</div>
+          <div className="mt-1 text-xs text-cream/60">{it.label}</div>
         </div>
       ))}
     </div>

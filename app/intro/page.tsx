@@ -19,7 +19,7 @@ export default function IntroPage() {
           방 좀 깨봤어? <br className="sm:hidden" />
           취향 딱 짚어줄게
         </h1>
-        <p className="mt-3 text-sm text-cream/50">
+        <p className="mt-3 text-sm text-cream/70">
           {MASCOT.name}가 오지선다 6개로 네 방탈출 취향을 진단하고,
           <br className="hidden sm:block" /> 딱 맞는 방까지 추천해줄게. (무료!)
         </p>
@@ -46,8 +46,8 @@ export default function IntroPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b-2 border-edge bg-ink">
-                <th className="px-3 py-2 text-left font-bold text-cream/40"> </th>
-                <th className="px-3 py-2 text-left font-bold text-cream/40">그냥 앱</th>
+                <th className="px-3 py-2 text-left font-bold text-cream/60"> </th>
+                <th className="px-3 py-2 text-left font-bold text-cream/60">그냥 앱</th>
                 <th className="px-3 py-2 text-left font-extrabold text-candy">
                   {MASCOT.emoji} 우리
                 </th>
@@ -60,7 +60,7 @@ export default function IntroPage() {
                   className={i % 2 ? "bg-ink/40" : "bg-panel"}
                 >
                   <td className="px-3 py-2 font-bold">{row.label}</td>
-                  <td className="px-3 py-2 text-cream/40">{row.other}</td>
+                  <td className="px-3 py-2 text-cream/60">{row.other}</td>
                   <td className="px-3 py-2 font-bold text-candy">{row.ours}</td>
                 </tr>
               ))}
@@ -73,7 +73,7 @@ export default function IntroPage() {
       <section className="space-y-3">
         <h2 className="text-xl font-extrabold">이렇게 진단해줘</h2>
         <div className="rounded-2xl border-2 border-edge bg-panel p-6 shadow-cute">
-          <p className="text-xs text-cream/40">취향 진단 미리보기</p>
+          <p className="text-xs text-cream/60">취향 진단 미리보기</p>
           <p className="mt-2 flex items-center gap-2 text-lg font-extrabold">
             <span className="text-2xl">🗺️</span>
             스토리에 푹 빠지는 감성 탐험가
@@ -82,7 +82,7 @@ export default function IntroPage() {
             “흐흐, 딱 보니 감 오는구먼. 넌 무서운 건 살짝 사양하지만 이야기에
             깊게 빠지는 타입이야. 잔잔한 감성방에서 제일 빛나겠는걸…”
           </p>
-          <p className="mt-3 text-sm font-bold text-cream/40">
+          <p className="mt-3 text-sm font-bold text-cream/60">
             …나머지는 직접 해봐야 나와. 👻
           </p>
           <Link

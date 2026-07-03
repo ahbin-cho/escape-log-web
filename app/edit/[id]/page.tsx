@@ -12,17 +12,23 @@ export default function EditRecordPage() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (params?.id) setRecord(getRecord(params.id));
-    setReady(true);
+    if (params?.id) {
+      getRecord(params.id).then((r) => {
+        setRecord(r);
+        setReady(true);
+      });
+    } else {
+      setReady(true);
+    }
   }, [params?.id]);
 
   if (!ready) {
-    return <p className="py-20 text-center text-cream/30">불러오는 중…</p>;
+    return <p className="py-20 text-center text-cream/55">불러오는 중…</p>;
   }
 
   if (!record) {
     return (
-      <div className="py-20 text-center text-cream/40">
+      <div className="py-20 text-center text-cream/60">
         <p>기록을 찾을 수 없습니다</p>
         <Link href="/" className="mt-3 inline-block text-sm text-candy underline">
           목록으로

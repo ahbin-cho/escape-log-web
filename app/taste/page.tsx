@@ -4,34 +4,37 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   getRecords,
-  seedIfEmpty,
+  getCatalog,
   computeTaste,
   recommend,
   GENRE_EMOJI,
   GENRES,
   type EscapeRecord,
+  type CandidateTheme,
 } from "@/lib/store";
-import { CATALOG } from "@/lib/catalog";
 import RecommendCard from "@/components/RecommendCard";
 
 export default function TastePage() {
   const [records, setRecords] = useState<EscapeRecord[]>([]);
+  const [catalog, setCatalog] = useState<CandidateTheme[]>([]);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    seedIfEmpty();
-    setRecords(getRecords());
-    setReady(true);
+    Promise.all([getRecords(), getCatalog()]).then(([r, c]) => {
+      setRecords(r);
+      setCatalog(c);
+      setReady(true);
+    });
   }, []);
 
   const taste = useMemo(() => computeTaste(records), [records]);
   const recs = useMemo(
-    () => recommend(CATALOG, taste, records.map((r) => r.themeName)),
-    [records, taste]
+    () => recommend(catalog, taste, records.map((r) => r.themeName)),
+    [catalog, records, taste]
   );
 
   if (!ready) {
-    return <p className="py-20 text-center text-cream/30">불러오는 중…</p>;
+    return <p className="py-20 text-center text-cream/55">불러오는 중…</p>;
   }
 
   return (
@@ -40,7 +43,7 @@ export default function TastePage() {
         <h1 className="text-xl font-extrabold">취향 프로필</h1>
         {records.length === 0 ? (
           <div className="rounded-2xl border-2 border-dashed border-edge/40 bg-panel py-12 text-center">
-            <p className="text-sm text-cream/40">기록이 쌓이면 취향을 분석해드립니다</p>
+            <p className="text-sm text-cream/60">기록이 쌓이면 취향을 분석해드립니다</p>
             <Link
               href="/new"
               className="rough mt-3 inline-block rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-white shadow-cute transition active:scale-[0.97]"
@@ -63,7 +66,7 @@ export default function TastePage() {
               {GENRES.filter((g) => taste.genreCounts[g] > 0).map((g) => (
                 <span
                   key={g}
-                  className="rounded-lg border border-edge/30 bg-ink px-2.5 py-1 text-xs font-bold text-cream/50"
+                  className="rounded-lg border border-edge/30 bg-ink px-2.5 py-1 text-xs font-bold text-cream/70"
                 >
                   {GENRE_EMOJI[g]} {g} {taste.genreCounts[g]}
                 </span>
@@ -76,10 +79,10 @@ export default function TastePage() {
       <section className="space-y-3">
         <div className="flex items-baseline justify-between">
           <h2 className="text-xl font-extrabold">추천</h2>
-          <span className="text-xs text-cream/30">스포 수위는 카드마다 조절 가능</span>
+          <span className="text-xs text-cream/55">스포 수위는 카드마다 조절 가능</span>
         </div>
         {recs.length === 0 ? (
-          <p className="rounded-2xl border-2 border-dashed border-edge/40 bg-panel py-10 text-center text-sm text-cream/40">
+          <p className="rounded-2xl border-2 border-dashed border-edge/40 bg-panel py-10 text-center text-sm text-cream/60">
             추천할 새 방이 없습니다
           </p>
         ) : (
@@ -104,7 +107,7 @@ function Cell({
   return (
     <div className="text-center">
       <div className="text-lg font-extrabold">{value}</div>
-      <div className="mt-0.5 text-xs text-cream/40">{label}</div>
+      <div className="mt-0.5 text-xs text-cream/60">{label}</div>
     </div>
   );
 }

@@ -1,62 +1,100 @@
-# 방탈로그 — GitHub Pages 배포 가이드
+# 방탈로그 — Supabase 연결 & 배포 가이드
 
-이 앱은 서버가 필요 없는 **정적 사이트**라 GitHub Pages에 무료로 올릴 수 있어요.
-아래를 **내 맥 터미널**에서 순서대로 실행하면 됩니다. (Claude 작업 환경에서는 git이
-막혀 있어 직접 못 올려요. 내 컴퓨터에서는 정상 동작합니다.)
+이제 앱 데이터가 **Supabase(무료 DB)** 에 저장됩니다. 아래를 순서대로 하면
+로그인·공개 후기·어드민이 모두 켜집니다. **전부 무료 티어**입니다.
 
-## 1. 프로젝트 폴더로 이동 + 깃 초기화
+---
 
-방금 자동 세팅 중 만들어진 불완전한 `.git`이 있을 수 있으니 지우고 새로 시작합니다.
+## 0. 한눈에 (내가 쓸 링크들)
 
-```bash
-cd ~/Documents/projects/escape-log-web
-rm -rf .git
-git init
-git add -A
-git commit -m "방탈로그 MVP: 기록·취향 진단·추천·지역 분포"
-git branch -M main
+| 무엇 | 링크 |
+|---|---|
+| Supabase 대시보드 (프로젝트 관리) | https://supabase.com/dashboard |
+| 새 프로젝트 만들기 | https://supabase.com/dashboard/new |
+| 내 서비스(배포됨) | https://escape-log-web-eight.vercel.app |
+| Vercel 대시보드 (환경변수 설정) | https://vercel.com/dashboard |
+
+---
+
+## 1. Supabase 프로젝트 만들기 (5분)
+
+1. https://supabase.com 접속 → GitHub/구글로 무료 가입
+2. **New project** 클릭
+   - Name: `escape-log` (아무거나)
+   - Database Password: 아무거나 정하고 **어딘가 적어두기**
+   - Region: `Northeast Asia (Seoul)` 추천
+3. 프로젝트 생성까지 1~2분 기다림
+
+## 2. 테이블 만들기 (SQL 한 번 붙여넣기)
+
+1. 왼쪽 메뉴 → **SQL Editor** → **New query**
+2. 이 저장소의 **`supabase/schema.sql`** 파일 내용을 **통째로 복사**해서 붙여넣기
+3. 오른쪽 아래 **Run** 클릭 → "Success" 뜨면 끝
+   - 테이블(records/catalog/profiles/admins) + 권한(RLS) + 추천 테마 8개 시드가 한 번에 생성됩니다.
+
+## 3. 나를 관리자로 등록
+
+여전히 **SQL Editor** 에서 아래 한 줄 실행 (이메일은 **로그인에 쓸 이메일**):
+
+```sql
+insert into public.admins (email) values ('ahbin.cho@athometrip.com');
 ```
 
-## 2. GitHub 레포 만들고 푸시
+→ 이 이메일로 로그인하면 헤더에 **관리자** 버튼이 생기고 `/admin` 에 들어갈 수 있어요.
 
-**방법 A — gh CLI가 있으면 (한 줄):**
+## 4. 키 복사
 
-```bash
-gh repo create escape-log-web --public --source=. --remote=origin --push
-```
+왼쪽 메뉴 → **Project Settings**(톱니) → **API** 에서 두 값을 복사:
 
-**방법 B — 웹으로:**
-1. https://github.com/new 에서 레포 생성 (이름: `escape-log-web`, **Public**, README 체크 해제)
-2. 아래 실행:
+- **Project URL** → `NEXT_PUBLIC_SUPABASE_URL`
+- **anon public** 키 → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
-```bash
-git remote add origin https://github.com/ahbin-cho/escape-log-web.git
-git push -u origin main
-```
+## 5. 로그인 리다이렉트 주소 등록
 
-> ⚠️ 무료 GitHub Pages는 **Public 레포**에서만 됩니다. (Private은 Pro 필요)
+왼쪽 메뉴 → **Authentication → URL Configuration**:
 
-## 3. Pages 활성화 (딱 한 번)
+- **Site URL**: `https://escape-log-web-eight.vercel.app`
+- **Redirect URLs** 에 두 개 추가:
+  - `https://escape-log-web-eight.vercel.app/auth/callback`
+  - `http://localhost:3000/auth/callback` (로컬 테스트용)
 
-레포 → **Settings → Pages → Build and deployment → Source** 를 **"GitHub Actions"** 로 선택.
+## 6. 키를 앱에 넣기
 
-끝! 이미 들어있는 워크플로(`.github/workflows/deploy.yml`)가 push마다 자동으로
-빌드·배포합니다. Actions 탭에서 초록불 뜨면 완료.
-
-## 4. 접속 주소
+**로컬(내 맥):** 프로젝트 루트에 `.env.local` 파일 만들고:
 
 ```
-https://ahbin-cho.github.io/escape-log-web/
+NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOi...
 ```
 
-레포 이름을 다르게 지어도 괜찮아요 — 워크플로가 레포 이름을 자동으로 basePath에
-넣어주므로 주소만 `.../<레포이름>/` 로 바뀝니다.
+**Vercel(배포):** https://vercel.com/dashboard → 프로젝트 → **Settings → Environment
+Variables** 에 같은 두 값을 추가 → **Redeploy**.
 
-## 참고
+---
 
-- 데이터는 각 방문자의 브라우저(localStorage)에만 저장돼요. 사람마다 자기 기록을 봅니다.
-- AI 페르소나는 정적 배포에선 꺼지고(서버 없음) 규칙 기반으로 자동 폴백합니다.
-  나중에 진짜 LLM을 쓰려면 Vercel 등 서버 환경으로 옮기고 `next.config`의
-  `output: "export"`를 제거한 뒤 `app/api/persona/route.ts`를 POST 핸들러로 되돌리면 됩니다.
-- 업데이트는 그냥 `git add -A && git commit -m "..." && git push` 하면 자동 재배포됩니다.
-```
+## 7. 데이터는 어디서 보나? (제일 궁금해하신 부분)
+
+Supabase 대시보드 왼쪽 메뉴 **Table Editor** 에서 실제 데이터를 표로 봅니다:
+
+- **`records`** — 사람들이 남긴 모든 기록. `is_public=true` 가 공개 후기, `hidden=true` 는
+  관리자가 숨긴 것. `memo`(비공개 메모)도 여기 저장되지만 앱/피드/어드민 화면엔 노출 안 됩니다.
+- **`catalog`** — 추천 테마 목록. 앱의 **/admin/catalog** 화면에서 편집한 게 여기 반영돼요.
+- **`profiles`** — 로그인 사용자별 닉네임.
+- **`admins`** — 관리자 이메일 목록.
+
+> 앱 안에서 보고 싶으면: 로그인 후 헤더의 **관리자 → 대시보드/공개 후기/추천 카탈로그**.
+> Supabase 대시보드는 "DB 원본"을 직접 보는 곳, 어드민 화면은 "관리용 UI" 입니다.
+
+그 밖에 유용한 메뉴:
+- **Authentication → Users**: 가입한 사용자(이메일) 목록
+- **SQL Editor**: 직접 쿼리로 통계 뽑기 (예: `select count(*) from records;`)
+
+---
+
+## 참고 / 다음 단계
+
+- 매직링크 이메일은 Supabase 내장 발송을 쓰며 **시간당 몇 통** 제한이 있어요. 사용자가
+  늘면 **Authentication → Emails → SMTP** 에 Resend(무료 월 3,000통) 등을 연결하면 됩니다.
+- AI 페르소나를 진짜 LLM으로 켜려면 `.env.local`/Vercel 에 `OPENAI_API_KEY` 또는
+  `ANTHROPIC_API_KEY` 를 넣고 `app/api/persona/route.ts` 를 POST 핸들러로 되돌리면 됩니다.
+- 업데이트 배포는 `git push` → Vercel 자동 재배포.

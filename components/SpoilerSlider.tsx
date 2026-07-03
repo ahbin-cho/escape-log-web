@@ -17,7 +17,7 @@ export default function SpoilerSlider({
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between text-xs">
-        <span className="text-cream/40">스포일러 수위</span>
+        <span className="text-cream/60">스포일러 수위</span>
         <span className="text-grape">{SPOILER_LABELS[level]}</span>
       </div>
       <input

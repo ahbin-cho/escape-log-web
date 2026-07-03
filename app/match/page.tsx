@@ -77,7 +77,7 @@ export default function MatchPage() {
   }
 
   if (!ready) {
-    return <p className="py-20 text-center text-cream/30">불러오는 중…</p>;
+    return <p className="py-20 text-center text-cream/55">불러오는 중…</p>;
   }
 
   if (!me) {
@@ -102,7 +102,7 @@ export default function MatchPage() {
     <div className="space-y-8">
       <header className="space-y-1">
         <h1 className="text-2xl font-extrabold">👻 방탈출 취향 궁합</h1>
-        <p className="text-sm text-cream/50">
+        <p className="text-sm text-cream/70">
           친구들 취향을 넣으면 탈출귀가 궁합을 줄 세워줄게. (무료!)
         </p>
       </header>
@@ -111,7 +111,7 @@ export default function MatchPage() {
       <section className="rounded-2xl border-2 border-edge bg-panel p-5 shadow-cute">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-xs text-cream/40">내 취향</p>
+            <p className="text-xs text-cream/60">내 취향</p>
             <p className="font-bold">
               {me.genre ? `${GENRE_EMOJI[me.genre]} ${me.genre}` : "장르 미정"} · 공포 {me.fear}/5 · 난이도 {me.diff}/5
             </p>
@@ -123,10 +123,10 @@ export default function MatchPage() {
             {copied ? "복사됨!" : "내 코드 복사"}
           </button>
         </div>
-        <p className="mt-3 break-all rounded-lg border border-edge/20 bg-ink p-2 text-xs text-cream/40">
+        <p className="mt-3 break-all rounded-lg border border-edge/20 bg-ink p-2 text-xs text-cream/60">
           {myCode}
         </p>
-        <p className="mt-1 text-xs text-cream/40">
+        <p className="mt-1 text-xs text-cream/60">
           이 코드를 친구에게 보내면, 친구가 아래 “코드로 추가”에 넣어 궁합을 볼 수 있어.
         </p>
       </section>
@@ -154,7 +154,7 @@ export default function MatchPage() {
           </select>
           <div className="grid grid-cols-2 gap-3">
             <label className="text-sm">
-              <span className="mb-1 block font-bold text-cream/50">공포도 {fear}</span>
+              <span className="mb-1 block font-bold text-cream/70">공포도 {fear}</span>
               <input
                 type="range"
                 min={1}
@@ -165,7 +165,7 @@ export default function MatchPage() {
               />
             </label>
             <label className="text-sm">
-              <span className="mb-1 block font-bold text-cream/50">난이도 {diff}</span>
+              <span className="mb-1 block font-bold text-cream/70">난이도 {diff}</span>
               <input
                 type="range"
                 min={1}
@@ -186,7 +186,7 @@ export default function MatchPage() {
 
         <div className="space-y-3 rounded-2xl border-2 border-edge bg-panel p-5 shadow-cute">
           <h2 className="font-extrabold">코드로 추가</h2>
-          <p className="text-xs text-cream/40">
+          <p className="text-xs text-cream/60">
             친구가 보낸 취향 코드를 붙여넣어.
           </p>
           <textarea
@@ -209,7 +209,7 @@ export default function MatchPage() {
       <section className="space-y-3">
         <h2 className="text-xl font-extrabold">🏆 궁합 랭킹</h2>
         {ranked.length === 0 ? (
-          <p className="rounded-2xl border-2 border-dashed border-edge/50 py-10 text-center text-sm text-cream/40">
+          <p className="rounded-2xl border-2 border-dashed border-edge/50 py-10 text-center text-sm text-cream/60">
             친구를 추가하면 궁합 순위가 나와!
           </p>
         ) : (
@@ -219,18 +219,18 @@ export default function MatchPage() {
                 key={`${r.mate.name}-${i}`}
                 className="flex items-center gap-3 rounded-2xl border-2 border-edge bg-panel p-4 shadow-cute"
               >
-                <span className="w-6 text-center text-lg font-extrabold text-cream/40">
+                <span className="w-6 text-center text-lg font-extrabold text-cream/60">
                   {i + 1}
                 </span>
                 <span className="text-2xl">{r.emoji}</span>
                 <div className="min-w-0 flex-1">
                   <p className="font-bold">
                     {r.mate.name}{" "}
-                    <span className="text-xs font-normal text-cream/40">
+                    <span className="text-xs font-normal text-cream/60">
                       {r.mate.genre ? `${GENRE_EMOJI[r.mate.genre]} ${r.mate.genre}` : ""} · 공포 {r.mate.fear} · 난이도 {r.mate.diff}
                     </span>
                   </p>
-                  <p className="truncate text-xs text-cream/50">
+                  <p className="truncate text-xs text-cream/70">
                     {r.tier} · {r.comment}
                   </p>
                 </div>
@@ -245,7 +245,7 @@ export default function MatchPage() {
 
       <Link
         href="/quiz"
-        className="inline-block text-sm font-bold text-cream/40 transition hover:text-cream/60"
+        className="inline-block text-sm font-bold text-cream/60 transition hover:text-cream/60"
       >
         ← 취향 다시 찾기
       </Link>

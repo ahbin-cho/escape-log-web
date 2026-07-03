@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { getRecords, seedIfEmpty, type EscapeRecord } from "@/lib/store";
+import { getRecords, type EscapeRecord } from "@/lib/store";
 import {
   regionDistribution,
   recordsInRegion,
@@ -18,9 +18,10 @@ export default function RegionPage() {
   const [selected, setSelected] = useState<Selected>(null);
 
   useEffect(() => {
-    seedIfEmpty();
-    setRecords(getRecords());
-    setReady(true);
+    getRecords().then((r) => {
+      setRecords(r);
+      setReady(true);
+    });
   }, []);
 
   const dist = useMemo(() => regionDistribution(records), [records]);
@@ -33,21 +34,21 @@ export default function RegionPage() {
   );
 
   if (!ready) {
-    return <p className="py-20 text-center text-cream/30">불러오는 중…</p>;
+    return <p className="py-20 text-center text-cream/55">불러오는 중…</p>;
   }
 
   return (
     <div className="space-y-8">
       <header className="space-y-1">
         <h1 className="text-2xl font-extrabold">🗺️ 지역별 방탈출 분포</h1>
-        <p className="text-sm text-cream/50">
+        <p className="text-sm text-cream/70">
           내 기록을 지역(시·도)별로 모아봤어. 매장명에서 지역을 자동으로 찾아 분류해.
         </p>
       </header>
 
       {records.length === 0 ? (
         <div className="rounded-2xl border-2 border-dashed border-edge/40 bg-panel py-16 text-center">
-          <p className="text-sm text-cream/40">기록이 쌓이면 지역 분포가 그려져!</p>
+          <p className="text-sm text-cream/60">기록이 쌓이면 지역 분포가 그려져!</p>
           <Link
             href="/new"
             className="rough mt-3 inline-block rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-white shadow-cute"
@@ -59,10 +60,10 @@ export default function RegionPage() {
         <>
           {topRegion && (
             <div className="rough rounded-2xl border-2 border-edge bg-panel p-5 shadow-cute">
-              <p className="text-xs text-cream/40">가장 많이 간 지역</p>
+              <p className="text-xs text-cream/60">가장 많이 간 지역</p>
               <p className="mt-1 text-xl font-extrabold">
                 📍 {topRegion.region}{" "}
-                <span className="text-sm font-normal text-cream/50">
+                <span className="text-sm font-normal text-cream/70">
                   {topRegion.count}개 방
                 </span>
               </p>
@@ -106,7 +107,7 @@ export default function RegionPage() {
                 );
               })}
             </div>
-            <p className="text-xs text-cream/30">
+            <p className="text-xs text-cream/55">
               막대를 누르면 그 지역 기록만 볼 수 있어.
             </p>
           </section>
@@ -120,7 +121,7 @@ export default function RegionPage() {
                 </h2>
                 <button
                   onClick={() => setSelected(null)}
-                  className="text-sm font-bold text-cream/40 hover:text-cream/60"
+                  className="text-sm font-bold text-cream/60 hover:text-cream/60"
                 >
                   전체 보기
                 </button>
@@ -135,7 +136,7 @@ export default function RegionPage() {
         </>
       )}
 
-      <p className="text-xs text-cream/30">
+      <p className="text-xs text-cream/55">
         ※ 지역은 매장명 키워드로 자동 추정해요. 못 찾으면 “미분류”로 모여요.
       </p>
     </div>

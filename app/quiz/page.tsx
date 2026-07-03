@@ -5,11 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   getRecords,
+  getCatalog,
   recommend,
   saveQuiz,
   type Recommendation
 } from "@/lib/store";
-import { CATALOG } from "@/lib/catalog";
 import {
   QUIZ,
   quizToTaste,
@@ -54,8 +54,9 @@ export default function QuizPage() {
     const taste = quizToTaste(finalAnswers);
     const focusTags = focusTagsOf(finalAnswers);
     const rulePersona = buildPersona(finalAnswers);
-    const played = getRecords().map((r) => r.themeName);
-    const result = recommend(CATALOG, taste, played, 4, focusTags);
+    const [records, catalog] = await Promise.all([getRecords(), getCatalog()]);
+    const played = records.map((r) => r.themeName);
+    const result = recommend(catalog, taste, played, 4, focusTags);
 
     const labelOf = (id: string) => {
       const qq = QUIZ.find((x) => x.id === id);
@@ -142,7 +143,7 @@ export default function QuizPage() {
           ))}
         </div>
         <p className="text-base font-extrabold">{ANALYZING_MSGS[msgIdx]}</p>
-        <p className="text-sm text-cream/30">잠시만 기다려주세요</p>
+        <p className="text-sm text-cream/55">잠시만 기다려주세요</p>
       </div>
     );
   }
@@ -152,7 +153,7 @@ export default function QuizPage() {
     return (
       <div className="space-y-8">
         <section className="rough rounded-2xl border-2 border-edge bg-panel p-6 shadow-cute">
-          <p className="text-xs text-cream/40">취향 진단 결과</p>
+          <p className="text-xs text-cream/60">취향 진단 결과</p>
           <h1 className="mt-2 flex items-center gap-2 text-2xl font-extrabold">
             <span className="text-3xl">{persona.emoji}</span>
             {persona.title}
@@ -163,7 +164,7 @@ export default function QuizPage() {
         <section className="space-y-3">
           <div className="flex items-baseline justify-between">
             <h2 className="text-xl font-extrabold">추천 테마</h2>
-            <span className="text-xs text-cream/30">
+            <span className="text-xs text-cream/55">
               스포 수위는 카드마다 조절 가능
             </span>
           </div>
@@ -196,7 +197,7 @@ export default function QuizPage() {
   return (
     <div className="mx-auto max-w-xl space-y-6">
       <div>
-        <p className="mb-3 text-center text-xs text-cream/40">
+        <p className="mb-3 text-center text-xs text-cream/60">
           과자집까지 {QUIZ.length - step}걸음 남았어요
         </p>
         <div className="flex items-center justify-center gap-1">
@@ -233,7 +234,7 @@ export default function QuizPage() {
                     strokeWidth="2"
                     strokeDasharray="2 3"
                     strokeLinecap="round"
-                    className={i < step ? "text-cream/50" : "text-cream/15"}
+                    className={i < step ? "text-cream/70" : "text-cream/45"}
                   />
                 </svg>
               )}
@@ -247,7 +248,7 @@ export default function QuizPage() {
               strokeWidth="2"
               strokeDasharray="2 3"
               strokeLinecap="round"
-              className="text-cream/15"
+              className="text-cream/45"
             />
           </svg>
           <div
@@ -292,7 +293,7 @@ export default function QuizPage() {
       {step > 0 && (
         <button
           onClick={() => setStep(step - 1)}
-          className="text-sm font-bold text-cream/40 transition hover:text-cream/60"
+          className="text-sm font-bold text-cream/60 transition hover:text-cream/60"
         >
           ← 이전 질문
         </button>

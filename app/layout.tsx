@@ -1,6 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import Link from "next/link";
+import SiteHeader from "@/components/SiteHeader";
 
 export const metadata: Metadata = {
   title: "방탈로그",
@@ -51,37 +51,7 @@ export default function RootLayout({
           </defs>
         </svg>
 
-        <header className="sticky top-0 z-10 border-b-2 border-edge bg-ink/90 backdrop-blur-md">
-          <div className="mx-auto flex max-w-5xl items-center justify-between gap-2 px-4 py-3 sm:px-6">
-            <Link
-              href="/"
-              className="text-lg tracking-tight"
-              style={{ fontFamily: "'SBAggroB', sans-serif" }}
-            >
-              방탈로그
-            </Link>
-            <nav className="flex items-center gap-2">
-              <Link
-                href="/quiz"
-                className="rough rounded-xl border-2 border-edge bg-panel px-3 py-1.5 text-sm font-bold transition active:scale-[0.97]"
-              >
-                취향 찾기
-              </Link>
-              <Link
-                href="/taste"
-                className="rough rounded-xl border-2 border-edge bg-panel px-3 py-1.5 text-sm font-bold transition active:scale-[0.97]"
-              >
-                취향 분석
-              </Link>
-              <Link
-                href="/new"
-                className="rough rounded-xl border-2 border-edge bg-candy px-3 py-1.5 text-sm font-bold text-white shadow-cute transition active:scale-[0.97]"
-              >
-                기록 추가
-              </Link>
-            </nav>
-          </div>
-        </header>
+        <SiteHeader />
         <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8">
           {children}
         </main>

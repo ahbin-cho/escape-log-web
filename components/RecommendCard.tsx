@@ -19,7 +19,7 @@ export default function RecommendCard({ rec }: { rec: Recommendation }) {
               </span>
             )}
           </div>
-          <p className="text-xs text-cream/40">{rec.cafe}</p>
+          <p className="text-xs text-cream/60">{rec.cafe}</p>
         </div>
         <span
           className={`shrink-0 rounded-lg border-2 border-edge px-2 py-0.5 text-xs font-bold ${
@@ -56,7 +56,7 @@ export default function RecommendCard({ rec }: { rec: Recommendation }) {
         )}
         {level === 2 && (
           <p>
-            <span className="text-cream/40">힌트:</span> {rec.hint}
+            <span className="text-cream/60">힌트:</span> {rec.hint}
           </p>
         )}
         {level === 3 && (

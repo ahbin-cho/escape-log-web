@@ -18,7 +18,12 @@ http://localhost:3000 접속.
 - 별점·성공률·평균 별점 통계
 - 반응형 (모바일 1열 → 태블릿 2열 → 데스크톱 3열)
 
-데이터는 **브라우저 localStorage**에 저장됩니다(백엔드/비용 0). 처음 열면 예시 기록 2건이 들어갑니다.
+데이터는 **Supabase(Postgres, 무료 티어)** 에 저장됩니다. 로그인(이메일 매직링크) 후
+기록이 계정별로 서버에 쌓이고, "공개 후기"는 `/feed` 에서 서로 볼 수 있습니다.
+관리자는 `/admin` 에서 추천 카탈로그와 공개 후기를 관리합니다.
+
+▶ **처음 세팅(Supabase 연결·관리자 등록·데이터 보는 법)은 [`DEPLOY.md`](./DEPLOY.md) 참고.**
+환경변수(`.env.local`)가 없으면 로그인 기능이 꺼진 채로 화면만 뜹니다.
 
 ## 구조
 
@@ -39,13 +44,16 @@ lib/
 
 ## 다음 단계 (로드맵)
 
-1. **(현재) MVP** — 나만의 기록 앱
-2. 취향 프로필 + 추천 + 스포 수위 슬라이더
-3. 후기 공개 / 일정 공유
-4. 같이 갈 사람 매칭 (안전장치 먼저)
+1. MVP — 나만의 기록 앱 ✅
+2. 취향 프로필 + 추천 + 스포 수위 슬라이더 ✅
+3. **(현재) Supabase 전환 + 로그인 + 공개 후기 피드 + 어드민** ✅
+4. 팔로우 · 댓글 · 좋아요 · 카카오 로그인
+5. 같이 갈 사람 매칭 (안전장치 먼저)
 
-## 백엔드 전환
+## 백엔드 (Supabase)
 
-`lib/store.ts`의 `getRecords / getRecord / saveRecord / deleteRecord` 4개 함수만
-Supabase 등 API 호출로 바꾸면 화면 코드는 그대로 재사용됩니다.
-`EscapeRecord` 타입이 그대로 DB 스키마가 됩니다.
+- `lib/store.ts` — 기록 CRUD + 카탈로그 읽기 (Supabase 호출)
+- `lib/admin.ts` — 어드민용 카탈로그 CRUD · 후기 숨김/삭제
+- `lib/supabase/*` — 브라우저/서버 클라이언트
+- `supabase/schema.sql` — 테이블 + RLS + 트리거 + 시드 (SQL Editor에 붙여넣기)
+- 설계 문서: `docs/superpowers/specs/2026-07-03-supabase-admin-design.md`

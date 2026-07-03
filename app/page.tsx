@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   getRecords,
-  seedIfEmpty,
   GENRES,
   GENRE_EMOJI,
   type EscapeRecord,
@@ -12,6 +11,7 @@ import {
 } from "@/lib/store";
 import RecordCard from "@/components/RecordCard";
 import Stats from "@/components/Stats";
+import ImportBanner from "@/components/ImportBanner";
 
 export default function HomePage() {
   const [records, setRecords] = useState<EscapeRecord[]>([]);
@@ -20,9 +20,10 @@ export default function HomePage() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    seedIfEmpty();
-    setRecords(getRecords());
-    setReady(true);
+    getRecords().then((r) => {
+      setRecords(r);
+      setReady(true);
+    });
   }, []);
 
   const filtered = useMemo(() => {
@@ -38,11 +39,12 @@ export default function HomePage() {
   }, [records, query, genre]);
 
   if (!ready) {
-    return <p className="py-20 text-center text-cream/30">불러오는 중…</p>;
+    return <p className="py-20 text-center text-cream/55">불러오는 중…</p>;
   }
 
   return (
     <div className="space-y-6">
+      <ImportBanner />
       <Stats records={records} />
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -77,7 +79,7 @@ export default function HomePage() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="테마 · 매장 검색"
-          className="w-full rounded-xl border-2 border-edge bg-panel px-4 py-2.5 text-sm font-bold outline-none placeholder:text-cream/25 focus:border-candy"
+          className="w-full rounded-xl border-2 border-edge bg-panel px-4 py-2.5 text-sm font-bold outline-none placeholder:text-cream/45 focus:border-candy"
         />
         <div className="flex flex-wrap gap-1.5">
           {(["전체", ...GENRES] as const).map((g) => (
@@ -87,7 +89,7 @@ export default function HomePage() {
               className={`rough-sm rounded-full border px-3 py-1.5 text-sm font-bold transition active:scale-[0.97] ${
                 genre === g
                   ? "border-candy bg-candy/10 text-candy"
-                  : "border-edge/20 bg-panel text-cream/40 hover:border-edge/40"
+                  : "border-edge/20 bg-panel text-cream/60 hover:border-edge/40"
               }`}
             >
               {g === "전체" ? "전체" : `${GENRE_EMOJI[g as Genre]} ${g}`}
@@ -98,7 +100,7 @@ export default function HomePage() {
 
       {filtered.length === 0 ? (
         <div className="rounded-2xl border-2 border-dashed border-edge/40 bg-panel py-16 text-center">
-          <p className="text-sm text-cream/40">아직 기록이 없습니다</p>
+          <p className="text-sm text-cream/60">아직 기록이 없습니다</p>
           <Link
             href="/new"
             className="rough mt-3 inline-block rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-white shadow-cute transition active:scale-[0.97]"

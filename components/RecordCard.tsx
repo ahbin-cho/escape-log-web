@@ -26,7 +26,7 @@ export default function RecordCard({ record }: { record: EscapeRecord }) {
         </span>
       </div>
 
-      <div className="text-sm text-cream/40">
+      <div className="text-sm text-cream/60">
         {record.cafeName || "매장 미입력"}
         {record.playedAt ? ` · ${record.playedAt}` : ""}
       </div>
@@ -37,18 +37,18 @@ export default function RecordCard({ record }: { record: EscapeRecord }) {
           className={
             record.success
               ? "rounded-lg border border-mint bg-mint/10 px-2 py-0.5 text-xs font-bold text-mint"
-              : "rounded-lg border border-edge/30 bg-ink px-2 py-0.5 text-xs text-cream/40"
+              : "rounded-lg border border-edge/30 bg-ink px-2 py-0.5 text-xs text-cream/60"
           }
         >
           {record.success ? "탈출 성공" : "실패"}
         </span>
-        <span className="text-xs text-cream/40">
+        <span className="text-xs text-cream/60">
           난이도 {record.difficulty} · 공포 {record.fearLevel}
         </span>
       </div>
 
       {record.oneLiner ? (
-        <p className="line-clamp-2 text-sm text-cream/50">{record.oneLiner}</p>
+        <p className="line-clamp-2 text-sm text-cream/70">{record.oneLiner}</p>
       ) : null}
 
       {/* 확장 영역 */}
@@ -58,7 +58,7 @@ export default function RecordCard({ record }: { record: EscapeRecord }) {
       >
         <div className="overflow-hidden">
           <div className="space-y-3 border-t-2 border-edge/20 pt-3">
-            <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-cream/50">
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-cream/70">
               {record.remainingTime && (
                 <span>남은 시간 {record.remainingTime}</span>
               )}
