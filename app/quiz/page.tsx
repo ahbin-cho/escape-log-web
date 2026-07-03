@@ -14,6 +14,7 @@ import {
   QUIZ,
   quizToTaste,
   focusTagsOf,
+  quizPrefs,
   buildPersona,
   type QuizAnswers,
   type Persona
@@ -64,7 +65,8 @@ export default function QuizPage() {
     const rulePersona = buildPersona(finalAnswers);
     const [records, catalog] = await Promise.all([getRecords(), getCatalog()]);
     const played = records.map((r) => r.themeName);
-    const result = recommend(catalog, taste, played, 4, focusTags);
+    const prefs = quizPrefs(finalAnswers);
+    const result = recommend(catalog, taste, played, 4, focusTags, prefs);
 
     const labelOf = (id: string) => {
       const qq = QUIZ.find((x) => x.id === id);
@@ -105,7 +107,9 @@ export default function QuizPage() {
     ]);
 
     const finalPersona =
-      aiRes && aiRes.enabled && aiRes.persona ? aiRes.persona : rulePersona;
+      aiRes && aiRes.enabled && aiRes.persona
+        ? { ...aiRes.persona, brand: rulePersona.brand }
+        : rulePersona;
 
     saveQuiz({
       taste,
@@ -167,6 +171,16 @@ export default function QuizPage() {
             {persona.title}
           </h1>
           <p className="mt-3 leading-relaxed text-cream/60">{persona.blurb}</p>
+          {persona.brand && (
+            <div className="mt-4 flex items-center gap-2 rounded-xl border-2 border-edge bg-ink p-3">
+              <span className="shrink-0 rounded-md border-2 border-edge bg-candy px-2 py-0.5 text-xs font-extrabold text-white">
+                {persona.brand.name}
+              </span>
+              <span className="text-sm font-bold text-cream/70">
+                이 브랜드가 잘 맞아요 · {persona.brand.reason}
+              </span>
+            </div>
+          )}
         </section>
 
         <section className="space-y-3">
@@ -190,6 +204,12 @@ export default function QuizPage() {
           >
             다시 진단
           </button>
+          <Link
+            href="/region"
+            className="rough rounded-xl border-2 border-edge bg-panel px-4 py-2 text-sm font-bold transition active:scale-[0.97]"
+          >
+            🗺️ 지역별 테마
+          </Link>
           <Link
             href="/taste"
             className="rough rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-white shadow-cute transition active:scale-[0.97]"

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { genreColorClass, genreEmoji, type Recommendation } from "@/lib/store";
+import { regionFromText } from "@/lib/region";
 import SpoilerSlider from "./SpoilerSlider";
 
 export default function RecommendCard({ rec }: { rec: Recommendation }) {
@@ -10,6 +11,7 @@ export default function RecommendCard({ rec }: { rec: Recommendation }) {
   // "키이스케이프 우주라이크" → 브랜드 / 지점 분리 (브랜드를 강조)
   const [brand, ...branchParts] = (rec.cafe || "").split(" ");
   const branch = branchParts.join(" ");
+  const region = regionFromText(rec.cafe || "");
 
   const meta = [
     rec.timeLimit ? `⏱️ ${rec.timeLimit}분` : "",
@@ -45,7 +47,10 @@ export default function RecommendCard({ rec }: { rec: Recommendation }) {
             )}
           </div>
           {branch && (
-            <p className="text-xs font-bold text-cream/60">📍 {branch}</p>
+            <p className="text-xs font-bold text-cream/60">
+              📍 {branch}
+              {region ? ` · ${region}` : ""}
+            </p>
           )}
           {meta && (
             <p className="mt-0.5 text-xs font-bold text-cream/70">{meta}</p>

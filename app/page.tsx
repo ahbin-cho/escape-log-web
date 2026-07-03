@@ -38,9 +38,11 @@ export default function HomePage() {
     }
     const supabase = createClient();
     supabase.auth.getUser().then(({ data }) => setLoggedIn(!!data.user));
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) =>
-      setLoggedIn(!!s?.user)
-    );
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
+      setLoggedIn(!!s?.user);
+      // 로그인/로그아웃 시 내 기록 갱신(로그아웃하면 [] → 잔상 제거)
+      getRecords().then(setRecords);
+    });
     return () => sub.subscription.unsubscribe();
   }, []);
 

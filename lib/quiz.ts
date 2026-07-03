@@ -84,6 +84,18 @@ export const QUIZ: QuizQuestion[] = [
     ],
   },
   {
+    id: "players",
+    emoji: "👯‍♀️",
+    prompt: "보통 몇 명이서 가요?",
+    options: [
+      { emoji: "🧍", label: "혼자 (1인)", value: 1 },
+      { emoji: "👫", label: "둘이서 (2인)", value: 2 },
+      { emoji: "👨‍👩‍👧", label: "3~4명이서", value: 4 },
+      { emoji: "🎉", label: "5명 이상 왁자지껄", value: 5 },
+      { emoji: "🤷", label: "그때그때 달라", value: 0 },
+    ],
+  },
+  {
     id: "hint",
     emoji: "💡",
     prompt: "막히면 힌트, 쓰는 편?",
@@ -174,10 +186,55 @@ export function focusTagsOf(answers: QuizAnswers): string[] {
   return focus ? FOCUS_TAGS[focus] ?? [] : [];
 }
 
+// 추천 점수 보정용 선호값 (크롤 데이터의 timeLimit·players 매칭)
+export interface QuizPrefs {
+  timePref: number; // 선호 분(0 = 상관없음)
+  playersPref: number; // 선호 인원(0 = 상관없음)
+}
+export function quizPrefs(answers: QuizAnswers): QuizPrefs {
+  const timeVal = optValue("time", answers["time"]) as string | undefined;
+  const timeMap: Record<string, number> = {
+    short: 40,
+    normal: 60,
+    long: 75,
+    extra: 95,
+    any: 0,
+  };
+  const players = Number(optValue("players", answers["players"]) ?? 0) || 0;
+  return { timePref: timeVal ? timeMap[timeVal] ?? 0 : 0, playersPref: players };
+}
+
+// 취향 → 어울리는 브랜드 추천 (크롤한 4개 브랜드 성격 기반)
+const BRAND_STYLE: Record<string, string> = {
+  키이스케이프: "탄탄한 스토리와 완성도",
+  제로월드: "강렬한 공포·연출과 높은 난이도",
+  비트포비아: "활동적이고 몰입감 큰 모험",
+  셜록홈즈: "정통 추리와 두뇌 플레이",
+};
+export function brandAffinity(answers: QuizAnswers): { name: string; reason: string } {
+  const genre = (optValue("genre", answers["genre"]) as string) ?? "기타";
+  const fear = Number(optValue("fear", answers["fear"]) ?? 3);
+  const diff = Number(optValue("difficulty", answers["difficulty"]) ?? 3);
+  const activity = (optValue("activity", answers["activity"]) as string) ?? "";
+  const atmosphere = (optValue("atmosphere", answers["atmosphere"]) as string) ?? "";
+
+  let name = "키이스케이프";
+  if (genre === "공포" && (fear >= 4 || diff >= 4)) name = "제로월드";
+  else if (atmosphere === "grungy" || atmosphere === "dark") name = "제로월드";
+  else if (genre === "추리") name = "셜록홈즈";
+  else if (genre === "모험" || activity === "활동파" || activity === "돌격파")
+    name = "비트포비아";
+  else if (genre === "감성" || genre === "SF" || genre === "코믹")
+    name = "키이스케이프";
+
+  return { name, reason: BRAND_STYLE[name] };
+}
+
 export interface Persona {
   title: string; // 아키타입 이름
   emoji: string;
   blurb: string; // 자연어 진단
+  brand?: { name: string; reason: string }; // 어울리는 브랜드
 }
 
 // 서비스 마스코트 (사주유 '옥냥이'와 겹치지 않게 방탈출 유령 가이드)
@@ -289,12 +346,23 @@ export function buildPersona(answers: QuizAnswers): Persona {
   const style = playStyle(diff, hint);
   const mood = moodLine(atmosphere, genre);
   const partyMsg = partyLine(activity, party);
+  const brand = brandAffinity(answers);
+  const playersPref = Number(optValue("players", answers["players"]) ?? 0) || 0;
+  const playersLine =
+    playersPref === 1
+      ? "혼자서도 파고드는 스타일이라, "
+      : playersPref >= 5
+        ? "여럿이 왁자지껄 즐기는 걸 좋아하니, "
+        : playersPref === 2
+          ? "둘이서 오붓하게 즐기는 편이라, "
+          : "";
 
   const blurb =
     `흐흐, 딱 보니까 넌 ${style}이구만. ` +
     (mood ? `${mood} ` : "") +
     (partyMsg ? `${partyMsg} ` : "") +
+    `${playersLine}특히 ${brand.name} 같은 곳이 잘 맞아 — ${brand.reason} 덕분이지. ` +
     `그래서 ${GENRE_WORD[genre]} 테마 위주로 골라놨어. 따라와 봐. 👻`;
 
-  return { title, emoji, blurb };
+  return { title, emoji, blurb, brand };
 }

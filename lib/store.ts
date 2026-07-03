@@ -406,16 +406,31 @@ export interface Recommendation extends CandidateTheme {
   reason: string;
 }
 
+export interface RecommendPrefs {
+  timePref?: number; // 선호 분(0/미설정 = 무시)
+  playersPref?: number; // 선호 인원(0/미설정 = 무시)
+}
+
+// "2~4" → [2,4], "3" → [3,3], "" → null
+function parsePlayersRange(s: string): [number, number] | null {
+  const nums = (s.match(/\d+/g) || []).map(Number);
+  if (!nums.length) return null;
+  return [Math.min(...nums), Math.max(...nums)];
+}
+
 export function recommend(
   catalog: CandidateTheme[],
   taste: TasteProfile,
   playedNames: string[],
   limit = 4,
-  focusTags: string[] = []
+  focusTags: string[] = [],
+  prefs: RecommendPrefs = {}
 ): Recommendation[] {
   const played = new Set(playedNames.map((n) => n.trim()));
   const focus = new Set(focusTags);
-  const MAX = 120;
+  const useTime = !!prefs.timePref;
+  const usePlayers = !!prefs.playersPref;
+  const MAX = 120 + (useTime ? 15 : 0) + (usePlayers ? 15 : 0);
   return catalog
     .filter((c) => !played.has(c.name.trim()))
     .map((c) => {
@@ -436,6 +451,20 @@ export function recommend(
         score += 20;
         reasons.push(`#${hit} 태그 매칭`);
       }
+      // 플레이 시간대 매칭
+      if (useTime && c.timeLimit) {
+        const gap = Math.abs(c.timeLimit - prefs.timePref!);
+        score += Math.max(0, 15 - gap * 0.5);
+        if (gap <= 10) reasons.push("플레이 시간대가 잘 맞습니다");
+      }
+      // 인원 매칭
+      if (usePlayers && c.players) {
+        const range = parsePlayersRange(c.players);
+        if (range && prefs.playersPref! >= range[0] && prefs.playersPref! <= range[1]) {
+          score += 15;
+          reasons.push(`${prefs.playersPref}인 플레이에 맞습니다`);
+        }
+      }
       return {
         ...c,
         score: Math.round((score / MAX) * 100),
@@ -453,7 +482,12 @@ export function recommend(
 export interface SavedQuiz {
   taste: TasteProfile;
   focusTags: string[];
-  persona: { title: string; emoji: string; blurb: string };
+  persona: {
+    title: string;
+    emoji: string;
+    blurb: string;
+    brand?: { name: string; reason: string };
+  };
   answers: Record<string, number>;
   savedAt: string;
 }
