@@ -146,8 +146,8 @@ function toRow(r: EscapeRecord, userId: string) {
     hint_count: r.hintCount,
     one_liner: r.oneLiner,
     memo: r.memo,
-    region: r.region || null,
-    photo_url: r.photoUrl || null,
+    region: r.region || "", // NOT NULL 컬럼 → null 금지, 빈 문자열로
+    photo_url: r.photoUrl || "", // NOT NULL 컬럼 → null 금지, 빈 문자열로
     party_size: Number(r.partySize) || 0,
     is_public: r.isPublic,
     hidden: r.hidden,
