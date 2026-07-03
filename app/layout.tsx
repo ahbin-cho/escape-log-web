@@ -1,10 +1,18 @@
 import "./globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import SiteHeader from "@/components/SiteHeader";
 
 export const metadata: Metadata = {
   title: "방탈로그",
   description: "방탈출 경험을 기록하고 아카이빙"
+};
+
+// 모바일(특히 iOS 사파리) 포커스 자동 확대 방지
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false
 };
 
 export default function RootLayout({

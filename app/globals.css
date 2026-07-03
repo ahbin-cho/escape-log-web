@@ -65,6 +65,16 @@ form.shadow-cute {
   box-shadow: none;
 }
 
+/* iOS 사파리: 글자 16px 미만 입력칸 포커스 시 자동 확대되는 것 방지.
+   모바일에서만 폼 요소를 16px로 올림(핀치줌은 그대로 유지). */
+@media (max-width: 767px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
 /* 가로 스와이프 영역용 스크롤바 숨김 (스와이퍼 느낌) */
 .no-scrollbar {
   -ms-overflow-style: none;
