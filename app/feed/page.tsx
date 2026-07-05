@@ -68,7 +68,7 @@ export default function FeedPage() {
                   )}
                 </div>
                 <span
-                  className={`shrink-0 rounded-lg px-2 py-0.5 text-xs font-bold ${GENRE_COLOR[r.genre]}`}
+                  className={`shrink-0 rounded-lg border-2 border-edge px-2 py-0.5 text-xs font-bold ${GENRE_COLOR[r.genre]}`}
                 >
                   {GENRE_EMOJI[r.genre]} {r.genre}
                 </span>
