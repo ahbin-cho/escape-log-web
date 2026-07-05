@@ -14,13 +14,14 @@ import {
   type CandidateTheme,
 } from "@/lib/store";
 import { REGIONS, regionFromText } from "@/lib/region";
+import { ratingLabel, fearLabel } from "@/lib/terms";
 
 type ScaleKey = "difficulty" | "fearLevel" | "rating";
 
 const SCALE_ICON: Record<ScaleKey, [string, string]> = {
   difficulty: ["🔓", "🔒"],
   fearLevel: ["🤍", "👻"],
-  rating: ["☆", "★"],
+  rating: ["🥀", "🌸"],
 };
 
 function Scale({
@@ -28,17 +29,20 @@ function Scale({
   name,
   value,
   onChange,
+  hint,
 }: {
   label: string;
   name: ScaleKey;
   value: number;
   onChange: (name: ScaleKey, value: number) => void;
+  hint?: string;
 }) {
   const [empty, filled] = SCALE_ICON[name];
   return (
     <div>
       <label className="mb-1.5 block text-sm font-bold text-cream/70">
         {label}
+        {hint && <span className="ml-1.5 font-extrabold text-candy">{hint}</span>}
       </label>
       <div className="flex gap-1">
         {[1, 2, 3, 4, 5].map((n) => {
@@ -387,8 +391,15 @@ export default function RecordForm({
           name="fearLevel"
           value={form.fearLevel}
           onChange={set}
+          hint={fearLabel(form.fearLevel)}
         />
-        <Scale label="별점" name="rating" value={form.rating} onChange={set} />
+        <Scale
+          label="별점"
+          name="rating"
+          value={form.rating}
+          onChange={set}
+          hint={ratingLabel(form.rating)}
+        />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -428,6 +439,28 @@ export default function RecordForm({
               무한
             </label>
           </div>
+        </div>
+      </div>
+
+      <div>
+        <label className="mb-1.5 block text-sm font-bold text-cream/70">
+          테마 유형 <span className="font-normal text-cream/55">(선택)</span>
+        </label>
+        <div className="flex flex-wrap gap-1.5">
+          {["장치", "자물쇠", "문제", "혼합"].map((t) => (
+            <button
+              key={t}
+              type="button"
+              onClick={() => set("themeType", form.themeType === t ? "" : t)}
+              className={`rounded-full border-2 px-3 py-1.5 text-sm font-bold transition active:scale-[0.97] ${
+                form.themeType === t
+                  ? "border-edge bg-candy text-white"
+                  : "border-edge/20 bg-panel text-cream/60 hover:border-edge/40"
+              }`}
+            >
+              {t}방
+            </button>
+          ))}
         </div>
       </div>
 

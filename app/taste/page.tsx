@@ -12,6 +12,7 @@ import {
   type EscapeRecord,
   type CandidateTheme,
 } from "@/lib/store";
+import { inferRegion } from "@/lib/region";
 import RecommendCard from "@/components/RecommendCard";
 
 export default function TastePage() {
@@ -32,6 +33,58 @@ export default function TastePage() {
     () => recommend(catalog, taste, records.map((r) => r.themeName)),
     [catalog, records, taste]
   );
+
+  // 방탈 뱃지: 졸업(매장 전 테마 클리어) · 원정(주지역 밖) · 노힌트 · 인생테마
+  const badges = useMemo(() => {
+    const regionCount = new Map<string, number>();
+    records.forEach((r) => {
+      const rr = inferRegion(r);
+      if (rr) regionCount.set(rr, (regionCount.get(rr) ?? 0) + 1);
+    });
+    let home = "";
+    let max = 0;
+    regionCount.forEach((c, reg) => {
+      if (c > max) {
+        max = c;
+        home = reg;
+      }
+    });
+    const away = new Set<string>();
+    records.forEach((r) => {
+      const rr = inferRegion(r);
+      if (rr && rr !== home) away.add(rr);
+    });
+
+    // 졸업: 카탈로그 매장별 테마셋이 내 클리어 테마셋에 모두 포함
+    const catByCafe = new Map<string, Set<string>>();
+    catalog.forEach((t) => {
+      const c = (t.cafe || "").trim();
+      if (!catByCafe.has(c)) catByCafe.set(c, new Set());
+      catByCafe.get(c)!.add((t.name || "").trim());
+    });
+    const clearedByCafe = new Map<string, Set<string>>();
+    records
+      .filter((r) => r.success)
+      .forEach((r) => {
+        const c = (r.cafeName || "").trim();
+        if (!clearedByCafe.has(c)) clearedByCafe.set(c, new Set());
+        clearedByCafe.get(c)!.add((r.themeName || "").trim());
+      });
+    const graduated: string[] = [];
+    catByCafe.forEach((themes, cafe) => {
+      if (themes.size === 0) return;
+      const cleared = clearedByCafe.get(cafe);
+      if (cleared && [...themes].every((t) => cleared.has(t))) graduated.push(cafe);
+    });
+
+    return {
+      home,
+      away: away.size,
+      graduated,
+      noHint: records.filter((r) => r.success && r.hintCount === 0).length,
+      lifeThemes: records.filter((r) => Math.round(r.rating) === 5).length,
+    };
+  }, [records, catalog]);
 
   if (!ready) {
     return <p className="py-20 text-center text-cream/55">불러오는 중…</p>;
@@ -76,6 +129,23 @@ export default function TastePage() {
         )}
       </section>
 
+      {records.length > 0 && (
+        <section className="space-y-3">
+          <h2 className="text-xl font-extrabold">🎖️ 방탈 뱃지</h2>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <Badge emoji="🎓" value={badges.graduated.length} label="졸업 지점" />
+            <Badge emoji="✈️" value={badges.away} label="원정 지역" />
+            <Badge emoji="🚫" value={badges.noHint} label="노힌트 클리어" />
+            <Badge emoji="🏆" value={badges.lifeThemes} label="인생테마" />
+          </div>
+          {badges.graduated.length > 0 && (
+            <p className="text-xs font-bold text-cream/60">
+              🎓 졸업: {badges.graduated.join(" · ")}
+            </p>
+          )}
+        </section>
+      )}
+
       <section className="space-y-3">
         <div className="flex items-baseline justify-between">
           <h2 className="text-xl font-extrabold">추천</h2>
@@ -108,6 +178,29 @@ function Cell({
     <div className="text-center">
       <div className="text-lg font-extrabold">{value}</div>
       <div className="mt-0.5 text-xs text-cream/60">{label}</div>
+    </div>
+  );
+}
+
+function Badge({
+  emoji,
+  value,
+  label,
+}: {
+  emoji: string;
+  value: number;
+  label: string;
+}) {
+  const on = value > 0;
+  return (
+    <div
+      className={`rounded-2xl border-2 p-3 text-center ${
+        on ? "border-edge bg-panel" : "border-edge/20 bg-panel opacity-50"
+      }`}
+    >
+      <div className="text-2xl">{emoji}</div>
+      <div className="mt-1 text-lg font-extrabold text-candy">{value}</div>
+      <div className="text-[11px] font-bold text-cream/60">{label}</div>
     </div>
   );
 }

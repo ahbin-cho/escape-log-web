@@ -77,7 +77,7 @@ export default function RegionPage() {
   return (
     <div className="space-y-8">
       <header className="space-y-1">
-        <h1 className="text-2xl font-extrabold">🗺️ 지역별 방탈출</h1>
+        <h1 className="text-xl font-extrabold sm:text-2xl">🗺️ 지역별 방탈출</h1>
         <p className="text-sm text-cream/70">
           내 기록과 추천 테마를 지역(시·도)별로 모아봤어.
         </p>

@@ -43,7 +43,7 @@ export default function FeedPreview() {
               {GENRE_EMOJI[r.genre]} {r.themeName}
             </p>
             <p className="text-xs font-bold text-candy">
-              {"★".repeat(Math.round(r.rating))}
+              {"🌸".repeat(Math.round(r.rating))}
             </p>
             {r.oneLiner && (
               <p className="line-clamp-2 text-xs text-cream/70">“{r.oneLiner}”</p>

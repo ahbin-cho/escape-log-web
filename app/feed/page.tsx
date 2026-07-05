@@ -8,7 +8,7 @@ import {
   GENRE_COLOR,
   type PublicReview,
 } from "@/lib/store";
-import Stars from "@/components/Stars";
+import { ratingLabel, achievements } from "@/lib/terms";
 
 export default function FeedPage() {
   const [reviews, setReviews] = useState<PublicReview[]>([]);
@@ -28,7 +28,7 @@ export default function FeedPage() {
   return (
     <div className="space-y-6">
       <header className="space-y-1">
-        <h1 className="text-2xl font-extrabold">🌏 모두의 후기</h1>
+        <h1 className="text-xl font-extrabold sm:text-2xl">🌏 모두의 후기</h1>
         <p className="text-sm text-cream/70">
           다른 사람들이 공개한 방탈출 후기예요. 기록을 남길 때 “공개 후기로
           올리기”를 켜면 여기에 보여요.
@@ -74,8 +74,12 @@ export default function FeedPage() {
                 </span>
               </div>
 
-              <div className="flex items-center gap-2 text-sm">
-                <Stars value={r.rating} />
+              <div className="flex flex-wrap items-center gap-2 text-sm">
+                {ratingLabel(r.rating) && (
+                  <span className="rounded-md border-2 border-candy/50 bg-candy/10 px-2 py-0.5 text-xs font-extrabold text-candy">
+                    {ratingLabel(r.rating)}
+                  </span>
+                )}
                 <span
                   className={`text-xs font-bold ${
                     r.success ? "text-mint" : "text-cream/70"
@@ -88,6 +92,14 @@ export default function FeedPage() {
                     · {r.partySize}명
                   </span>
                 )}
+                {achievements(r).map((a) => (
+                  <span
+                    key={a}
+                    className="rounded-md border-2 border-edge bg-candy px-1.5 py-0.5 text-[11px] font-extrabold text-white"
+                  >
+                    {a}
+                  </span>
+                ))}
               </div>
 
               {r.oneLiner && (

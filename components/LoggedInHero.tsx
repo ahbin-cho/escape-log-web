@@ -7,9 +7,9 @@ function DoorIcon() {
     <Image
       src="/door-open.png"
       alt="열린 문"
-      width={22}
-      height={22}
-      className="inline-block h-5 w-5 shrink-0 object-contain align-[-3px]"
+      width={28}
+      height={28}
+      className="inline-block h-7 w-7 shrink-0 object-contain align-[-5px]"
     />
   );
 }
@@ -34,18 +34,18 @@ export default function LoggedInHero({ records }: { records: EscapeRecord[] }) {
       <div className="min-w-0">
         {empty ? (
           <>
-            <p className="flex items-center gap-1.5 text-base font-extrabold">
+            <h2 className="flex items-center gap-1.5 text-base font-extrabold">
               <DoorIcon /> 첫 탈출 기록을 남겨볼까요?
-            </p>
+            </h2>
             <p className="mt-0.5 text-sm text-cream/70">
               방 하나만 기록해도 취향 분석·추천이 시작돼요. 30초면 충분해요.
             </p>
           </>
         ) : (
           <>
-            <p className="flex items-center gap-1.5 text-base font-extrabold">
+            <h2 className="flex items-center gap-1.5 text-base font-extrabold">
               <DoorIcon /> 내 탈출 업적
-            </p>
+            </h2>
             <div className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm font-bold text-cream">
               <span>
                 플레이한 방{" "}
@@ -67,17 +67,27 @@ export default function LoggedInHero({ records }: { records: EscapeRecord[] }) {
           </>
         )}
       </div>
-      <Link
-        href="/new"
-        className="rough inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl border-2 border-edge bg-candy px-5 py-2.5 text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
-      >
+      <div className="flex shrink-0 gap-2">
         {!empty && (
-          <span className="text-lg leading-none" aria-hidden="true">
-            +
-          </span>
+          <Link
+            href="/records"
+            className="rough inline-flex items-center justify-center rounded-xl border-2 border-edge bg-panel px-4 py-2.5 text-sm font-extrabold shadow-cute transition active:scale-[0.97]"
+          >
+            내 기록 보기
+          </Link>
         )}
-        {empty ? "기록 시작하기" : "기록 추가하기"}
-      </Link>
+        <Link
+          href="/new"
+          className="rough inline-flex items-center justify-center gap-1.5 rounded-xl border-2 border-edge bg-candy px-5 py-2.5 text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
+        >
+          {!empty && (
+            <span className="text-lg leading-none" aria-hidden="true">
+              +
+            </span>
+          )}
+          {empty ? "기록 시작하기" : "기록 추가하기"}
+        </Link>
+      </div>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import type { Genre, TasteProfile } from "./store";
 import { GENRES } from "./store";
+import { fearTrait } from "./terms";
 
 // ─────────────────────────────────────────────────────────────
 // 오지선다 취향 찾기 퀴즈 (AI 추천 엔진 "느낌"의 입력)
@@ -263,7 +264,7 @@ const GENRE_WORD: Record<string, string> = {
   모험: "짜릿한 모험", SF: "신비로운 SF", 코믹: "유쾌한 코믹", 기타: "다채로운",
 };
 const GENRE_EMOJI: Record<string, string> = {
-  공포: "👻", 추리: "🕵️", 감성: "🌸", 모험: "🧭", SF: "🛸", 코믹: "🤹", 기타: "🎲",
+  공포: "👻", 추리: "🕵️", 감성: "🥹", 모험: "🧭", SF: "🛸", 코믹: "🤹", 기타: "🎲",
 };
 const FOCUS_WORD: Record<string, string> = {
   story: "스토리파", device: "장치파", staging: "연출파", coop: "협동파", cozy: "감성파",
@@ -445,8 +446,10 @@ export function buildPersona(answers: QuizAnswers): Persona {
           ? "둘이서 오붓하게 즐기는 편이라, "
           : "";
 
+  const trait = fearTrait(fear);
   const blurb =
     `흐흐, 딱 보니까 넌 ${style}이구만. ` +
+    (trait ? `공포 앞에선 완전 ${trait}고. ` : "") +
     (mood ? `${mood} ` : "") +
     (partyMsg ? `${partyMsg} ` : "") +
     (vibeLine ? `${vibeLine} ` : "") +

@@ -40,6 +40,12 @@ export default function MatchPage() {
         diff: Math.round(saved.taste.difficultyFit),
       });
     }
+    // 공유 링크(?c=코드)로 들어왔으면 보낸 친구를 자동으로 추가
+    const c = new URLSearchParams(window.location.search).get("c");
+    if (c) {
+      const t = decodeTaste(c);
+      if (t) setMates((m) => [...m, t]);
+    }
     setReady(true);
   }, []);
 
@@ -68,9 +74,17 @@ export default function MatchPage() {
     setCode("");
   }
 
-  function copyMyCode() {
-    if (!myCode) return;
-    navigator.clipboard?.writeText(myCode).then(() => {
+  const myLink = useMemo(
+    () =>
+      myCode && typeof window !== "undefined"
+        ? `${window.location.origin}/match?c=${myCode}`
+        : "",
+    [myCode]
+  );
+
+  function copyMyLink() {
+    if (!myLink) return;
+    navigator.clipboard?.writeText(myLink).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     });
@@ -101,7 +115,7 @@ export default function MatchPage() {
   return (
     <div className="space-y-8">
       <header className="space-y-1">
-        <h1 className="text-2xl font-extrabold">👻 방탈출 취향 궁합</h1>
+        <h1 className="text-xl font-extrabold sm:text-2xl">👻 방탈출 취향 궁합</h1>
         <p className="text-sm text-cream/70">
           친구들 취향을 넣으면 탈출귀가 궁합을 줄 세워줄게. (무료!)
         </p>
@@ -117,17 +131,18 @@ export default function MatchPage() {
             </p>
           </div>
           <button
-            onClick={copyMyCode}
+            onClick={copyMyLink}
             className="rounded-xl border-2 border-edge bg-grape px-3 py-2 text-sm font-bold text-white shadow-cute transition active:scale-[0.97]"
           >
-            {copied ? "복사됨!" : "내 코드 복사"}
+            {copied ? "복사됨! 📋" : "🔗 궁합 링크 복사"}
           </button>
         </div>
         <p className="mt-3 break-all rounded-lg border border-edge/20 bg-ink p-2 text-xs text-cream/60">
-          {myCode}
+          {myLink}
         </p>
         <p className="mt-1 text-xs text-cream/60">
-          이 코드를 친구에게 보내면, 친구가 아래 “코드로 추가”에 넣어 궁합을 볼 수 있어.
+          이 링크를 친구에게 보내면, 친구가 열자마자 우리 궁합이 바로 떠! (코드
+          붙여넣기 필요 없음)
         </p>
       </section>
 

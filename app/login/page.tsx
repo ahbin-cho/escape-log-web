@@ -80,7 +80,7 @@ export default function LoginPage() {
   return (
     <div className="mx-auto max-w-md space-y-6 py-8">
       <div className="text-center">
-        <h1 className="text-2xl font-extrabold">
+        <h1 className="text-xl font-extrabold sm:text-2xl">
           {mode === "signin" ? "로그인" : "회원가입"}
         </h1>
         <p className="mt-2 text-sm text-cream/70">

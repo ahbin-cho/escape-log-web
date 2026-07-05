@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { GENRE_COLOR, GENRE_EMOJI, type EscapeRecord } from "@/lib/store";
-import Stars from "./Stars";
+import { ratingLabel, fearLabel, achievements } from "@/lib/terms";
 
 export default function RecordCard({ record }: { record: EscapeRecord }) {
   const [expanded, setExpanded] = useState(false);
@@ -32,7 +32,11 @@ export default function RecordCard({ record }: { record: EscapeRecord }) {
       </div>
 
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
-        <Stars value={record.rating} />
+        {ratingLabel(record.rating) && (
+          <span className="rounded-md border-2 border-candy/50 bg-candy/10 px-2 py-0.5 text-xs font-extrabold text-candy">
+            {ratingLabel(record.rating)}
+          </span>
+        )}
         <span
           className={
             record.success
@@ -42,8 +46,17 @@ export default function RecordCard({ record }: { record: EscapeRecord }) {
         >
           {record.success ? "탈출 성공" : "실패"}
         </span>
+        {achievements(record).map((a) => (
+          <span
+            key={a}
+            className="rounded-lg border-2 border-edge bg-candy px-2 py-0.5 text-xs font-extrabold text-white"
+          >
+            {a}
+          </span>
+        ))}
         <span className="text-xs text-cream/60">
           난이도 {record.difficulty} · 공포 {record.fearLevel}
+          {fearLabel(record.fearLevel) ? ` (${fearLabel(record.fearLevel)})` : ""}
         </span>
       </div>
 
@@ -74,6 +87,7 @@ export default function RecordCard({ record }: { record: EscapeRecord }) {
                 힌트 {record.hintCount < 0 ? "무한" : `${record.hintCount}회`}
               </span>
               {record.partySize > 0 && <span>인원 {record.partySize}명</span>}
+              {record.themeType && <span>{record.themeType}방</span>}
             </div>
 
             {record.memo && (

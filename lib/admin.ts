@@ -56,6 +56,7 @@ export async function adminListReviews(): Promise<PublicReview[]> {
     region: r.region ?? "",
     photoUrl: r.photo_url ?? "",
     partySize: r.party_size ?? 0,
+    themeType: "",
     isPublic: true,
     hidden: !!r.hidden,
     createdAt: r.created_at ?? "",

@@ -27,6 +27,7 @@ export interface EscapeRecord {
   region: string; // 시/도 (직접 선택, 빈 값이면 매장명으로 자동 추측)
   photoUrl: string; // 인증샷 한 장 (Supabase Storage, 공개 시 함께 노출)
   partySize: number; // 함께한 인원 (명), 0=미입력
+  themeType: string; // 테마 유형: 장치/자물쇠/문제/혼합 ("" = 미입력)
   isPublic: boolean; // 공개 후기로 올릴지
   hidden: boolean; // 관리자 숨김
   createdAt: string; // ISO
@@ -53,7 +54,7 @@ export const GENRE_EMOJI: Record<Genre, string> = {
   공포: "👻",
   추리: "🔍",
   모험: "🗺️",
-  감성: "🌸",
+  감성: "🥹",
   코믹: "🤡",
   SF: "🛸",
   기타: "🎲",
@@ -85,6 +86,7 @@ export function emptyRecord(): EscapeRecord {
     region: "",
     photoUrl: "",
     partySize: 0,
+    themeType: "",
     isPublic: false,
     hidden: false,
     createdAt: "",
@@ -110,6 +112,7 @@ type RecordRow = {
   region: string | null;
   photo_url: string | null;
   party_size: number | null;
+  theme_type: string | null;
   is_public: boolean;
   hidden: boolean;
   created_at: string;
@@ -133,6 +136,7 @@ function fromRow(r: RecordRow): EscapeRecord {
     region: r.region ?? "",
     photoUrl: r.photo_url ?? "",
     partySize: r.party_size ?? 0,
+    themeType: r.theme_type ?? "",
     isPublic: !!r.is_public,
     hidden: !!r.hidden,
     createdAt: r.created_at ?? "",
@@ -157,6 +161,7 @@ function toRow(r: EscapeRecord, userId: string) {
     region: r.region || "", // NOT NULL 컬럼 → null 금지, 빈 문자열로
     photo_url: r.photoUrl || "", // NOT NULL 컬럼 → null 금지, 빈 문자열로
     party_size: Number(r.partySize) || 0,
+    theme_type: r.themeType || "",
     is_public: r.isPublic,
     hidden: r.hidden,
   };
