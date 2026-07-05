@@ -67,8 +67,10 @@ export default function LoginPage() {
         });
         if (error) throw error;
       }
-      router.push("/");
-      router.refresh();
+      const next =
+        new URLSearchParams(window.location.search).get("next") || "/";
+      // refresh 없이 부드럽게 이동(홈·헤더는 onAuthStateChange 로 상태 반영).
+      router.replace(next);
     } catch (err) {
       setBusy(false);
       setMessage(friendlyError(err));

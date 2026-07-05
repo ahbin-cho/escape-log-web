@@ -11,11 +11,12 @@ import {
 } from "@/lib/store";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import RecordCard from "@/components/RecordCard";
-import Stats from "@/components/Stats";
 import ImportBanner from "@/components/ImportBanner";
 import FeedPreview from "@/components/FeedPreview";
 import LoggedOutCTA from "@/components/LoggedOutCTA";
+import LoggedInHero from "@/components/LoggedInHero";
 import HomeRegionThemes from "@/components/HomeRegionThemes";
+import Loader from "@/components/Loader";
 
 export default function HomePage() {
   const [records, setRecords] = useState<EscapeRecord[]>([]);
@@ -59,18 +60,16 @@ export default function HomePage() {
   }, [records, query, genre]);
 
   if (!ready) {
-    return <p className="py-20 text-center text-cream/55">불러오는 중…</p>;
+    return <Loader />;
   }
 
   return (
     <div className="space-y-6">
       <LoggedOutCTA />
+      {loggedIn === true && <LoggedInHero records={records} />}
       <ImportBanner />
-      {loggedIn === false ? (
-        <HomeRegionThemes />
-      ) : (
-        <Stats records={records} />
-      )}
+      <HomeRegionThemes />
+      {/* {loggedIn === false && <HomeRegionThemes />} */}
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Link
@@ -110,27 +109,27 @@ export default function HomePage() {
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="테마 · 매장 검색"
-          className="w-full rounded-xl border-2 border-edge bg-panel px-4 py-2.5 text-sm font-bold outline-none placeholder:text-cream/45 focus:border-candy"
-        />
-        <div className="flex flex-wrap gap-1.5">
-          {(["전체", ...GENRES] as const).map((g) => (
-            <button
-              key={g}
-              onClick={() => setGenre(g)}
-              className={`rough-sm rounded-full border px-3 py-1.5 text-sm font-bold transition active:scale-[0.97] ${
-                genre === g
-                  ? "border-candy bg-candy/10 text-candy"
-                  : "border-edge/20 bg-panel text-cream/60 hover:border-edge/40"
-              }`}
-            >
-              {g === "전체" ? "전체" : `${GENRE_EMOJI[g as Genre]} ${g}`}
-            </button>
-          ))}
-        </div>
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="테마 · 매장 검색"
+            className="w-full rounded-xl border-2 border-edge bg-panel px-4 py-2.5 text-sm font-bold outline-none placeholder:text-cream/45 focus:border-candy"
+          />
+          <div className="flex flex-wrap gap-1.5">
+            {(["전체", ...GENRES] as const).map((g) => (
+              <button
+                key={g}
+                onClick={() => setGenre(g)}
+                className={`rough-sm rounded-full border px-3 py-1.5 text-sm font-bold transition active:scale-[0.97] ${
+                  genre === g
+                    ? "border-candy bg-candy/10 text-candy"
+                    : "border-edge/20 bg-panel text-cream/60 hover:border-edge/40"
+                }`}
+              >
+                {g === "전체" ? "전체" : `${GENRE_EMOJI[g as Genre]} ${g}`}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
