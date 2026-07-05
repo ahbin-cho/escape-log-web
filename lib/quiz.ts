@@ -143,6 +143,18 @@ export const QUIZ: QuizQuestion[] = [
       { emoji: "🤷", label: "시간은 상관없어", value: "any" },
     ],
   },
+  {
+    id: "vibe",
+    emoji: "🎉",
+    prompt: "방탈출 끝나고 당신은?",
+    options: [
+      { emoji: "🏆", label: "클리어 타임 인증샷부터", value: "성취형" },
+      { emoji: "🍜", label: "바로 근처 맛집 직행", value: "먹부림형" },
+      { emoji: "🗣️", label: "복기하며 수다 삼매경", value: "복기형" },
+      { emoji: "📸", label: "소품이랑 사진 찰칵", value: "기록형" },
+      { emoji: "🎟️", label: "다음 방 바로 예약각", value: "중독형" },
+    ],
+  },
 ];
 
 // 포커스 → 카탈로그 태그 매핑 (추천 보정용)
@@ -263,19 +275,87 @@ const ATMOSPHERE_WORD: Record<string, string> = {
   dark: "다크", bright: "라이트", grungy: "그런지", epic: "판타지", cute: "큐트",
 };
 
-// 장르×공포 조합 → 특수 아키타입
+// 장르×공포 조합 → 특수 아키타입 (커버리지 대폭 확장)
 const ARCHETYPE_COMBOS: Record<string, { title: string; emoji: string }> = {
+  // 공포
   "공포_5": { title: "공포 중독자", emoji: "💀" },
   "공포_4": { title: "겁 없는 호러 마니아", emoji: "🖤" },
+  "공포_3": { title: "담대한 공포 애호가", emoji: "😈" },
+  "공포_2": { title: "살금살금 공포 탐험러", emoji: "🕯️" },
   "공포_1": { title: "겁쟁이 호러 도전러", emoji: "🫣" },
-  "추리_4": { title: "집요한 탐정", emoji: "🔍" },
+  // 추리
   "추리_5": { title: "셜록급 추리왕", emoji: "🧐" },
+  "추리_4": { title: "집요한 탐정", emoji: "🔍" },
+  "추리_3": { title: "예리한 추리가", emoji: "🕵️" },
+  "추리_2": { title: "차분한 단서 수집가", emoji: "🔎" },
+  "추리_1": { title: "말랑말랑 추리 입문러", emoji: "🧩" },
+  // 감성
   "감성_1": { title: "따뜻한 힐링 여행자", emoji: "🌿" },
   "감성_2": { title: "감성 수집가", emoji: "🌙" },
+  "감성_3": { title: "잔잔한 무드메이커", emoji: "🍵" },
+  "감성_4": { title: "깊이 빠지는 감성러", emoji: "🌌" },
+  // 모험
   "모험_5": { title: "무모한 모험왕", emoji: "⚔️" },
   "모험_4": { title: "대담한 탐험가", emoji: "🗺️" },
-  "SF_4": { title: "차원을 넘는 여행자", emoji: "🌌" },
+  "모험_3": { title: "씩씩한 탐험가", emoji: "🧭" },
+  "모험_2": { title: "설레는 여행자", emoji: "🎒" },
+  "모험_1": { title: "안전제일 모험가", emoji: "🧳" },
+  // SF
   "SF_5": { title: "미지의 세계 개척자", emoji: "🚀" },
+  "SF_4": { title: "차원을 넘는 여행자", emoji: "🌌" },
+  "SF_3": { title: "우주 유영자", emoji: "🌠" },
+  "SF_2": { title: "호기심 SF 탐구자", emoji: "🔭" },
+  "SF_1": { title: "말랑 SF 입문러", emoji: "🪐" },
+  // 코믹
+  "코믹_1": { title: "깔깔 힐링러", emoji: "😄" },
+  "코믹_2": { title: "유쾌한 장난꾸러기", emoji: "🤪" },
+  "코믹_3": { title: "웃음 사냥꾼", emoji: "🎪" },
+  "코믹_4": { title: "짓궂은 코믹 마니아", emoji: "🤡" },
+};
+
+// 극단·특이 조합 → 희귀 페르소나 (일반 조합보다 우선 적용)
+function specialPersona(o: {
+  genre: string;
+  fear: number;
+  diff: number;
+  hint: string;
+  atmosphere: string;
+  activity: string;
+}): { title: string; emoji: string } | null {
+  const { genre, fear, diff, hint, atmosphere, activity } = o;
+  if (diff >= 5 && fear >= 5 && hint.includes("순수주의자"))
+    return { title: "극한의 노힌트 완파러", emoji: "🔥" };
+  if (diff >= 5 && hint.includes("순수주의자"))
+    return { title: "노힌트 하드코어러", emoji: "🧗" };
+  if (genre === "공포" && fear >= 5 && diff >= 4)
+    return { title: "공포+고난도 광인", emoji: "👹" };
+  if (genre === "감성" && fear <= 1 && diff <= 2 && atmosphere === "cute")
+    return { title: "완전체 힐링 요정", emoji: "🧚" };
+  if (diff <= 1 && hint.includes("낙천가"))
+    return { title: "마음 편한 산책러", emoji: "🍃" };
+  if (activity === "소통파" && atmosphere === "epic")
+    return { title: "세계관에 빙의하는 배우", emoji: "🎭" };
+  if (diff >= 4 && hint.includes("스피드러너"))
+    return { title: "하드코어 스피드러너", emoji: "⚡" };
+  return null;
+}
+
+// 끝나고 행동(vibe) → 한 줄
+const VIBE_LINE: Record<string, string> = {
+  성취형: "클리어하면 인증샷부터 남기는 성취파고,",
+  먹부림형: "끝나면 근처 맛집으로 직행하는 먹부림파고,",
+  복기형: "복기하면서 수다 떠는 걸 좋아하고,",
+  기록형: "소품이랑 사진 남기는 기록파고,",
+  중독형: "끝나자마자 다음 방 예약하는 찐 중독자고,",
+};
+
+// 시간 선호 → 한 줄
+const TIME_LINE: Record<string, string> = {
+  short: "짧고 굵게 후다닥 즐기는 편이고,",
+  normal: "60분 표준이 제일 맘 편하고,",
+  long: "넉넉한 70~80분에서 진가를 발휘하고,",
+  extra: "90분 풀코스도 마다 않는 진성이고,",
+  any: "",
 };
 
 // 난이도×힌트 조합 → 플레이 성격
@@ -327,26 +407,34 @@ export function buildPersona(answers: QuizAnswers): Persona {
   const activity = (optValue("activity", answers["activity"]) as string) ?? "";
   const atmosphere = (optValue("atmosphere", answers["atmosphere"]) as string) ?? "";
 
-  // 1) 타이틀: 장르×공포 특수 조합 → 없으면 포커스+장르 조합
-  const comboKey = `${genre}_${fear}`;
-  const combo = ARCHETYPE_COMBOS[comboKey];
+  // 1) 타이틀: 특수(희귀) → 장르×공포 조합 → 포커스+장르 조합
+  const special = specialPersona({ genre, fear, diff, hint, atmosphere, activity });
+  const combo = ARCHETYPE_COMBOS[`${genre}_${fear}`];
   let title: string;
   let emoji: string;
-  if (combo) {
+  if (special) {
+    title = special.title;
+    emoji = special.emoji;
+  } else if (combo) {
     title = combo.title;
     emoji = combo.emoji;
   } else {
     const focusPart = focus && FOCUS_WORD[focus] ? FOCUS_WORD[focus] + " " : "";
-    const activityPart = activity && ACTIVITY_WORD[activity] ? ACTIVITY_WORD[activity] + " " : "";
+    const activityPart =
+      activity && ACTIVITY_WORD[activity] ? ACTIVITY_WORD[activity] + " " : "";
     title = `${activityPart}${focusPart}${GENRE_WORD[genre]} 탐험가`;
     emoji = GENRE_EMOJI[genre] ?? "🎲";
   }
 
-  // 2) 본문: 조합별 맞춤 문장
+  // 2) 본문: 여러 축을 엮어 풍부하게
   const style = playStyle(diff, hint);
   const mood = moodLine(atmosphere, genre);
   const partyMsg = partyLine(activity, party);
   const brand = brandAffinity(answers);
+  const vibe = (optValue("vibe", answers["vibe"]) as string) ?? "";
+  const vibeLine = VIBE_LINE[vibe] ?? "";
+  const timeVal = optValue("time", answers["time"]) as string | undefined;
+  const timeLine = timeVal ? TIME_LINE[timeVal] ?? "" : "";
   const playersPref = Number(optValue("players", answers["players"]) ?? 0) || 0;
   const playersLine =
     playersPref === 1
@@ -361,6 +449,8 @@ export function buildPersona(answers: QuizAnswers): Persona {
     `흐흐, 딱 보니까 넌 ${style}이구만. ` +
     (mood ? `${mood} ` : "") +
     (partyMsg ? `${partyMsg} ` : "") +
+    (vibeLine ? `${vibeLine} ` : "") +
+    (timeLine ? `${timeLine} ` : "") +
     `${playersLine}특히 ${brand.name} 같은 곳이 잘 맞아 — ${brand.reason} 덕분이지. ` +
     `그래서 ${GENRE_WORD[genre]} 테마 위주로 골라놨어. 따라와 봐. 👻`;
 

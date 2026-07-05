@@ -39,11 +39,11 @@ export default function HomeRegionThemes() {
 
   const byRegion = useMemo(
     () => catalog.map((t) => ({ t, r: regionFromText(t.cafe) })),
-    [catalog]
+    [catalog],
   );
   const regionsPresent = useMemo(
     () => REGIONS.filter((r) => byRegion.some((x) => x.r === r)),
-    [byRegion]
+    [byRegion],
   );
 
   useEffect(() => {
@@ -98,12 +98,17 @@ export default function HomeRegionThemes() {
                 <p className="truncate text-sm font-extrabold">
                   {genreEmoji(t.genre)} {t.name}
                 </p>
-                <p className="truncate text-[11px] font-bold text-cream/60">
+                <p className="truncate text-xs font-bold text-cream/70">
                   {branch}
                   {branch ? " · " : ""}
                   {t.genre}
                   {t.timeLimit ? ` · ${t.timeLimit}분` : ""}
                 </p>
+                {t.teaser && (
+                  <p className="line-clamp-3 text-sm leading-snug text-cream/80 max-sm:hidden">
+                    {t.teaser}
+                  </p>
+                )}
               </div>
             );
             return t.reservationUrl ? (
