@@ -40,14 +40,6 @@ export default function QuizPage() {
   const q = QUIZ[step];
   const progress = Math.round((step / QUIZ.length) * 100);
 
-  // 진행바 이미지를 마운트 즉시 미리 로드(단계 전환 시 깜빡임 방지)
-  useEffect(() => {
-    ["/bread.png", "/footprint.png", "/house.png"].forEach((src) => {
-      const img = new window.Image();
-      img.src = src;
-    });
-  }, []);
-
   function choose(optIdx: number) {
     const next = { ...answers, [q.id]: optIdx };
     setAnswers(next);
@@ -224,78 +216,75 @@ export default function QuizPage() {
   // ── 퀴즈 ──
   return (
     <div className="mx-auto max-w-xl space-y-6">
-      <div>
-        <p className="mb-3 text-center text-xs text-cream/60">
-          과자집까지 {QUIZ.length - step}걸음 남았어요
-        </p>
-        <div className="flex items-center justify-center gap-1">
-          {QUIZ.map((_, i) => (
+      <div className="flex items-center justify-center gap-1 px-3 pb-6 pt-2">
+        {QUIZ.map((_, i) => {
+          const done = i < step;
+          const current = i === step;
+          return (
             <Fragment key={i}>
-              <div
-                className={`transition-all duration-300 ${
-                  i < step
-                    ? "scale-100 opacity-100"
-                    : i === step
-                      ? "animate-bounce opacity-100"
-                      : "scale-[0.85] opacity-25 grayscale"
-                }`}
-              >
-                <Image
-                  src={i < step ? "/footprint.png" : "/bread.png"}
-                  alt={i < step ? "발자국" : "빵조각"}
-                  width={32}
-                  height={32}
-                  priority
-                  className="pointer-events-none"
-                />
-              </div>
-              {i < QUIZ.length - 1 && (
-                <svg
-                  width="24"
-                  height="8"
-                  viewBox="0 0 24 8"
-                  className="mx-0.5"
-                >
-                  <path
-                    d="M0 4 Q6 0 12 4 Q18 8 24 4"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeDasharray="2 3"
-                    strokeLinecap="round"
-                    className={i < step ? "text-cream/70" : "text-cream/45"}
+              {/* 노드 — 현재 질문은 열쇠, 나머지는 링 */}
+              <div className="relative flex shrink-0 flex-col items-center">
+                {current ? (
+                  <Image
+                    src="/key.png"
+                    alt="현재 질문"
+                    width={44}
+                    height={44}
+                    priority
+                    className="pointer-events-none h-10 w-10 -rotate-12 object-contain drop-shadow-sm"
                   />
-                </svg>
+                ) : (
+                  <div
+                    className={`rounded-full bg-transparent transition-all duration-300 ${
+                      done
+                        ? "h-4 w-4 border-2 border-candy"
+                        : "h-3.5 w-3.5 border-2 border-cream/25"
+                    }`}
+                  />
+                )}
+                <span
+                  className={`absolute top-full mt-1 whitespace-nowrap text-[10px] font-bold ${
+                    current
+                      ? "text-candy"
+                      : done
+                        ? "text-candy/70"
+                        : "text-cream/35"
+                  }`}
+                >
+                  {current ? "현재 질문" : i + 1}
+                </span>
+              </div>
+
+              {/* 노드 뒤 진행선 — 지나온 길만 주황 */}
+              {i < QUIZ.length - 1 && (
+                <div
+                  className={`min-w-[10px] flex-1 transition-all duration-500 ${
+                    i < step
+                      ? "h-[2px] rounded-full bg-candy"
+                      : "border-t-2 border-dotted border-cream/25"
+                  }`}
+                />
               )}
             </Fragment>
-          ))}
-          <svg width="24" height="8" viewBox="0 0 24 8" className="mx-0.5">
-            <path
-              d="M0 4 Q6 0 12 4 Q18 8 24 4"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeDasharray="2 3"
-              strokeLinecap="round"
-              className="text-cream/45"
-            />
-          </svg>
-          <div
-            className={`transition-all duration-500 ${
-              step === QUIZ.length - 1
-                ? "scale-110 animate-pulse"
-                : "scale-90 opacity-40 grayscale"
+          );
+        })}
+
+        {/* 마지막 진행선 + 탈출문 */}
+        <div className="min-w-[10px] flex-1 border-t-2 border-dotted border-cream/25 transition-all duration-500" />
+        <div className="relative flex shrink-0 flex-col items-center">
+          <Image
+            src={step === QUIZ.length - 1 ? "/door-open.png" : "/door.png"}
+            alt="탈출문"
+            width={56}
+            height={56}
+            priority
+            className={`h-12 w-12 object-contain transition-all duration-500 ${
+              step === QUIZ.length - 1 ? "scale-110" : "scale-100"
             }`}
-          >
-            <Image
-              src="/house.png"
-              alt="과자집"
-              width={52}
-              height={52}
-              priority
-              className="pointer-events-none"
-            />
-          </div>
+          />
+          <span className="absolute top-full mt-1 whitespace-nowrap text-[10px] font-bold text-candy">
+            탈출 완료!
+          </span>
         </div>
       </div>
 
