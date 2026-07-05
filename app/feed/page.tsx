@@ -95,7 +95,7 @@ export default function FeedPage() {
                 {achievements(r).map((a) => (
                   <span
                     key={a}
-                    className="rounded-md border-2 border-edge bg-candy px-1.5 py-0.5 text-[11px] font-extrabold text-white"
+                    className="rounded-md border border-edge/25 bg-ink px-1.5 py-0.5 text-[11px] font-bold text-cream/65"
                   >
                     {a}
                   </span>

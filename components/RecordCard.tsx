@@ -49,7 +49,7 @@ export default function RecordCard({ record }: { record: EscapeRecord }) {
         {achievements(record).map((a) => (
           <span
             key={a}
-            className="rounded-lg border-2 border-edge bg-candy px-2 py-0.5 text-xs font-extrabold text-white"
+            className="rounded-md border border-edge/25 bg-ink px-1.5 py-0.5 text-[11px] font-bold text-cream/65"
           >
             {a}
           </span>
