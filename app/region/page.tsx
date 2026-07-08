@@ -18,6 +18,19 @@ import {
 import RecordCard from "@/components/RecordCard";
 import ThemeCard from "@/components/ThemeCard";
 
+// 결정론적 셔플 (같은 날이면 같은 순서 — 새로고침해도 안정적)
+function seededShuffle<T>(arr: T[]): T[] {
+  const copy = [...arr];
+  let seed = new Date().toISOString().slice(0, 10).replace(/-/g, "") as unknown as number;
+  seed = Number(seed);
+  for (let i = copy.length - 1; i > 0; i--) {
+    seed = (seed * 9301 + 49297) % 233280;
+    const j = Math.floor((seed / 233280) * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
 type Selected = Region | "미분류" | null;
 
 export default function RegionPage() {
@@ -25,6 +38,7 @@ export default function RegionPage() {
   const [catalog, setCatalog] = useState<CandidateTheme[]>([]);
   const [ready, setReady] = useState(false);
   const [selected, setSelected] = useState<Selected>(null);
+  const [brandFilter, setBrandFilter] = useState<string | null>(null);
 
   useEffect(() => {
     Promise.all([getRecords(), getCatalog()]).then(([r, c]) => {
@@ -43,30 +57,41 @@ export default function RegionPage() {
     [records, selected],
   );
 
-  // 카탈로그 테마를 지역별로
+  // 카탈로그 테마를 지역별로 + 셔플
   const themeRegions = useMemo(
     () =>
-      catalog.map((t) => ({ t, region: regionFromText(t.cafe) ?? "미분류" })),
+      seededShuffle(
+        catalog.map((t) => ({ t, region: regionFromText(t.cafe) ?? "미분류" })),
+      ),
     [catalog],
   );
   const regionsPresent = useMemo(
     () => REGIONS.filter((r) => themeRegions.some((x) => x.region === r)),
     [themeRegions],
   );
+  // 브랜드 목록 (cafe 첫 단어)
+  const brandOf = (cafe: string) => (cafe || "").split(" ")[0];
+  const brandsPresent = useMemo(() => {
+    const set = new Set(themeRegions.map(({ t }) => brandOf(t.cafe)));
+    return [...set].sort();
+  }, [themeRegions]);
+
   const filteredThemes = useMemo(
     () =>
-      themeRegions.filter(({ region }) =>
-        selected ? region === selected : true,
+      themeRegions.filter(
+        ({ t, region }) =>
+          (selected ? region === selected : true) &&
+          (brandFilter ? brandOf(t.cafe) === brandFilter : true),
       ),
-    [themeRegions, selected],
+    [themeRegions, selected, brandFilter],
   );
 
   // "더보기" 방식 (지역별 테마)
   const PAGE_SIZE = 12;
   const [visible, setVisible] = useState(PAGE_SIZE);
   useEffect(() => {
-    setVisible(PAGE_SIZE); // 지역 필터가 바뀌면 처음부터
-  }, [selected]);
+    setVisible(PAGE_SIZE); // 필터가 바뀌면 처음부터
+  }, [selected, brandFilter]);
   const pagedThemes = filteredThemes.slice(0, visible);
   const hasMore = visible < filteredThemes.length;
 
@@ -179,6 +204,25 @@ export default function RegionPage() {
             />
           ))}
         </div>
+
+        {/* 브랜드 필터 칩 */}
+        {brandsPresent.length > 1 && (
+          <div className="flex flex-wrap gap-1.5">
+            <Chip
+              label="브랜드 전체"
+              active={brandFilter === null}
+              onClick={() => setBrandFilter(null)}
+            />
+            {brandsPresent.map((b) => (
+              <Chip
+                key={b}
+                label={b}
+                active={brandFilter === b}
+                onClick={() => setBrandFilter(b)}
+              />
+            ))}
+          </div>
+        )}
 
         {filteredThemes.length === 0 ? (
           <p className="rounded-2xl border-2 border-dashed border-edge/40 bg-panel py-10 text-center text-sm text-cream/60">
