@@ -1,11 +1,8 @@
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import SiteHeader from "@/components/SiteHeader";
-
-// 사이트 URL: 커스텀 도메인이 생기면 NEXT_PUBLIC_SITE_URL 에 넣으면 됨.
-// 없으면 Vercel이 배포 때 자동으로 주는 프로덕션 주소를 사용.
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://escape-log-web-eight.vercel.app";
+import SiteFooter from "@/components/SiteFooter";
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -13,9 +10,11 @@ export const metadata: Metadata = {
     default: "방탈로그 — 방탈출 기록·취향 진단·추천",
     template: "%s · 방탈로그",
   },
-  description:
-    "방탈출 경험을 기록하고, 취향을 진단받고, 딱 맞는 테마를 추천받는 방탈러 아카이브. 친구와 취향 궁합도 무료로.",
-  applicationName: "방탈로그",
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  alternates: {
+    canonical: "/",
+  },
   keywords: [
     "방탈출",
     "방탈출 기록",
@@ -27,9 +26,19 @@ export const metadata: Metadata = {
     "방탈출 궁합",
     "방탈출 지도",
   ],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
     type: "website",
-    siteName: "방탈로그",
+    siteName: SITE_NAME,
     locale: "ko_KR",
     url: SITE_URL,
     title: "방탈로그 — 나만의 방탈출 아카이브",
@@ -49,6 +58,23 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  themeColor: "#F5F0E6",
+};
+
+// 검색엔진 리치 결과용 구조화 데이터 (JSON-LD)
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE_NAME,
+  alternateName: "Escape Log",
+  url: SITE_URL,
+  description: SITE_DESCRIPTION,
+  inLanguage: "ko-KR",
+  publisher: {
+    "@type": "Organization",
+    name: SITE_NAME,
+    url: SITE_URL,
+  },
 };
 
 export default function RootLayout({
@@ -59,6 +85,10 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         {[
           "/key.png",
           "/door-open.png",
@@ -69,7 +99,7 @@ export default function RootLayout({
           <link key={src} rel="preload" as="image" href={src} />
         ))}
       </head>
-      <body>
+      <body className="flex min-h-screen flex-col">
         {/* 손그림 SVG 필터 */}
         <svg className="absolute h-0 w-0">
           <defs>
@@ -107,9 +137,10 @@ export default function RootLayout({
         </svg>
 
         <SiteHeader />
-        <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8">
+        <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
           {children}
         </main>
+        <SiteFooter />
       </body>
     </html>
   );

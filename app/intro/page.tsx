@@ -1,5 +1,18 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { MASCOT } from "@/lib/quiz";
+
+export const metadata: Metadata = {
+  title: "방탈로그 소개 — 방탈러를 위한 올인원",
+  description:
+    "인기순 말고 내 취향 저격. 방탈출 기록·취향 진단·맞춤 추천·친구 궁합까지 무료로. 방탈러를 위한 올인원 서비스 방탈로그를 소개합니다.",
+  alternates: { canonical: "/intro" },
+  openGraph: {
+    title: "방탈로그 — 방 좀 깨봤어? 취향 딱 짚어줄게",
+    description:
+      "기록·취향 진단·맞춤 추천·친구 궁합까지. 방탈러를 위한 올인원, 무료.",
+  },
+};
 
 const COMPARE: { label: string; other: string; ours: string }[] = [
   { label: "추천 방식", other: "인기순 그대로", ours: "내 취향 저격" },

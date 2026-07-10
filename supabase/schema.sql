@@ -76,6 +76,7 @@ create table if not exists public.records (
   region         text not null default '',
   photo_url      text not null default '',
   party_size     int2 not null default 0,
+  theme_type     text not null default '',
   is_public      bool not null default false,
   hidden         bool not null default false,
   created_at     timestamptz not null default now()
@@ -85,6 +86,7 @@ create table if not exists public.records (
 alter table public.records add column if not exists region     text not null default '';
 alter table public.records add column if not exists photo_url  text not null default '';
 alter table public.records add column if not exists party_size int2 not null default 0;
+alter table public.records add column if not exists theme_type text not null default '';
 
 create index if not exists records_user_idx   on public.records (user_id);
 create index if not exists records_public_idx on public.records (is_public, hidden);

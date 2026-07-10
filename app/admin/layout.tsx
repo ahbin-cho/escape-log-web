@@ -1,6 +1,14 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { isCurrentUserAdmin } from "@/lib/supabase/server";
+import { NOINDEX } from "@/lib/site";
+
+// 관리자 전용 → 색인 제외
+export const metadata: Metadata = {
+  title: "관리자",
+  ...NOINDEX,
+};
 
 const tab =
   "rough rounded-xl border-2 border-edge bg-panel px-3 py-1.5 text-sm font-bold transition active:scale-[0.97]";
