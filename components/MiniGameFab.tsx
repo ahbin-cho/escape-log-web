@@ -12,7 +12,7 @@ export default function MiniGameFab() {
       rel="noopener noreferrer"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className="fixed bottom-6 right-[calc(50%-40rem)] z-30 flex flex-col items-center gap-3 active:scale-95"
+      className="fixed bottom-6 right-4 xl:right-[calc(50%-40rem)] z-30 flex flex-col items-center gap-3 active:scale-95"
       title="미니게임천국"
     >
       {/* 말풍선 */}
