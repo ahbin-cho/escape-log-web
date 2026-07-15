@@ -19,6 +19,15 @@ const config: Config = {
       boxShadow: {
         cute: "3px 3px 0px 0px #1D1D1D",
       },
+      animation: {
+        "bounce-slow": "bounce-slow 2s ease-in-out infinite",
+      },
+      keyframes: {
+        "bounce-slow": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-6px)" },
+        },
+      },
     },
   },
   plugins: [],
