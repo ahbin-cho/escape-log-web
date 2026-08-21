@@ -6,8 +6,10 @@ import { GENRE_EMOJI, type Genre } from "@/lib/store";
 import { regionFromText } from "@/lib/region";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
 
-// ISR: 1시간마다 재생성 (관리자가 테마를 추가/수정해도 반영됨)
-export const revalidate = 3600;
+// 순수 SSG: 배포 시 generateStaticParams 의 전 테마를 미리 구움.
+// 크롤링 데이터라 거의 안 바뀌므로 자동 재생성(ISR)은 안 씀 → 갱신은 재배포로.
+// dynamicParams(기본 true): 배포 후 새로 추가된 테마도 첫 요청 때 생성되어 캐시됨.
+export const dynamicParams = true;
 
 type ThemeRow = {
   id: string;
