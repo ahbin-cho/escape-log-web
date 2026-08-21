@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { genreColorClass, genreEmoji, type CandidateTheme } from "@/lib/store";
 
 // 카탈로그(크롤/등록) 테마를 둘러보기용으로 보여주는 카드.
@@ -37,7 +38,14 @@ export default function ThemeCard({
               {brand}
             </span>
           )}
-          <h3 className="font-extrabold leading-tight">{theme.name}</h3>
+          <h3 className="font-extrabold leading-tight">
+            <Link
+              href={`/theme/${theme.id}`}
+              className="transition hover:text-candy hover:underline"
+            >
+              {theme.name}
+            </Link>
+          </h3>
           <p className="text-xs font-bold text-cream/60">
             📍 {branch || theme.cafe}
             {region ? ` · ${region}` : ""}
