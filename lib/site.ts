@@ -1,9 +1,9 @@
 // 사이트 공통 상수 (metadata, sitemap, robots, OG 등에서 공유)
 // 커스텀 도메인이 생기면 NEXT_PUBLIC_SITE_URL 에 넣으면 됨.
-// 없으면 Vercel 프로덕션 주소를 사용.
+// ⚠️ VERCEL_URL 은 배포마다 바뀌는 임시 주소라 쓰면 안 됨(사이트맵/canonical 오염).
+//    고정 프로덕션 주소를 기본값으로 둔다.
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ||
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "") ||
   "https://escape-log-web-eight.vercel.app";
 
 export const SITE_NAME = "방탈로그";
