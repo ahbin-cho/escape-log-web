@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { MASCOT } from "@/lib/quiz";
+import Mascot from "@/components/Mascot";
 
 export const metadata: Metadata = {
   title: "방탈로그 소개 — 방탈러를 위한 올인원",
@@ -27,7 +28,7 @@ export default function IntroPage() {
     <div className="space-y-10">
       {/* Hero */}
       <section className="rounded-2xl border-2 border-edge bg-panel p-8 text-center shadow-cute">
-        <div className="text-5xl">{MASCOT.emoji}</div>
+        <Mascot className="mx-auto h-24 w-24" />
         <h1 className="mt-3 text-2xl font-extrabold sm:text-3xl">
           방 좀 깨봤어? <br className="sm:hidden" />
           취향 딱 짚어줄게

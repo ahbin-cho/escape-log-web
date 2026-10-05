@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import type { QuizValues, TypeId } from "@/lib/quiz/slots";
 import {
-  MASCOT,
   PLAYERS_LABEL,
   QUIZ_TYPES,
   TIME_LABEL,
@@ -14,6 +13,7 @@ import {
 import { fearTrait } from "@/lib/terms";
 import type { Recommendation } from "@/lib/store";
 import RecommendCard from "@/components/RecommendCard";
+import Mascot from "@/components/Mascot";
 
 function Bar({ label, value, note }: { label: string; value: number; note?: string }) {
   return (
@@ -73,12 +73,7 @@ export default function QuizResult({
         {/* 그림은 배경까지 그려진 정사각형 장면이라 둥근 틀에 꽉 채워 넣는다 */}
         <div className="mx-auto mt-4 aspect-square w-56 overflow-hidden rounded-2xl border-2 border-edge bg-candy/15 sm:w-64">
           {noImage ? (
-            <span
-              aria-hidden
-              className="flex h-full w-full items-center justify-center text-7xl"
-            >
-              {MASCOT.emoji}
-            </span>
+            <Mascot className="h-full w-full p-6" />
           ) : (
             <Image
               src={typeImage(typeId)}

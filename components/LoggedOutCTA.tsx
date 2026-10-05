@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { MASCOT } from "@/lib/quiz";
+import Mascot from "@/components/Mascot";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 
 // 로그인 안 한 신규 방문자에게만 보이는 홈 상단 히어로.
@@ -55,9 +56,9 @@ export default function LoggedOutCTA() {
       </div>
       <div
         aria-hidden="true"
-        className="flex h-16 w-16 shrink-0 -rotate-6 items-center justify-center rounded-full bg-candy/15 text-4xl sm:h-44 sm:w-44 sm:text-8xl"
+        className="flex h-20 w-20 shrink-0 -rotate-6 items-center justify-center rounded-full bg-candy/15 sm:h-44 sm:w-44"
       >
-        {MASCOT.emoji}
+        <Mascot className="h-full w-full scale-110" />
       </div>
     </section>
   );

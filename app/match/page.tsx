@@ -8,6 +8,7 @@ import {
   GENRE_EMOJI,
   type Genre,
 } from "@/lib/store";
+import Mascot from "@/components/Mascot";
 import {
   encodeTaste,
   decodeTaste,
@@ -97,7 +98,7 @@ export default function MatchPage() {
   if (!me) {
     return (
       <div className="rounded-2xl border-2 border-edge bg-panel p-8 text-center shadow-cute">
-        <p className="text-3xl">👻</p>
+        <Mascot className="mx-auto h-20 w-20" />
         <p className="mt-3 font-bold">먼저 내 취향부터 찾아야 궁합을 보지!</p>
         <Link
           href="/quiz"

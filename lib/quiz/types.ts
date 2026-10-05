@@ -4,6 +4,7 @@ import type { QuizValues, TypeId } from "./slots";
 export const MASCOT = {
   name: "탈출귀",
   emoji: "👻",
+  image: "/mascot.png", // 배경 투명 그림. 글자 사이에는 emoji 를 쓴다.
   tagline: "방 좀 깨본 유령이 취향 딱 짚어줄게",
 } as const;
 
