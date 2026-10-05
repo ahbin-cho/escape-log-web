@@ -1,112 +1,56 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import type { QuizValues, TypeId } from "@/lib/quiz/slots";
-import {
-  PLAYERS_LABEL,
-  QUIZ_TYPES,
-  TIME_LABEL,
-  typeImage,
-} from "@/lib/quiz/types";
-import { fearTrait } from "@/lib/terms";
+import type { SharedResult } from "@/lib/quiz/share";
 import type { Recommendation } from "@/lib/store";
 import RecommendCard from "@/components/RecommendCard";
-import Mascot from "@/components/Mascot";
-
-function Bar({ label, value, note }: { label: string; value: number; note?: string }) {
-  return (
-    <div className="flex items-center gap-3">
-      <dt className="w-20 shrink-0 text-sm font-bold text-cream/70">{label}</dt>
-      <dd className="flex flex-1 items-center gap-3">
-        <span className="flex gap-1" aria-hidden>
-          {[1, 2, 3, 4, 5].map((i) => (
-            <span
-              key={i}
-              className={`h-2.5 w-6 rounded-full border border-edge ${
-                i <= value ? "bg-candy" : "bg-ink"
-              }`}
-            />
-          ))}
-        </span>
-        <span className="text-xs font-bold text-cream/60">
-          <span className="sr-only">5단계 중 {value}단계. </span>
-          {note}
-        </span>
-      </dd>
-    </div>
-  );
-}
-
-function Text({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex items-center gap-3">
-      <dt className="w-20 shrink-0 text-sm font-bold text-cream/70">{label}</dt>
-      <dd className="text-sm font-extrabold">{value}</dd>
-    </div>
-  );
-}
-
-const HINT_NOTE = ["", "끝까지 버틴다", "웬만하면 버틴다", "적당히 쓴다", "막히면 쓴다", "바로 쓴다"];
+import TypeCard from "@/components/quiz/TypeCard";
+import TypeRarity from "@/components/quiz/TypeRarity";
+import ShareButton from "@/components/quiz/ShareButton";
+import FriendCompat from "@/components/quiz/FriendCompat";
 
 export default function QuizResult({
   typeId,
   values,
   brand,
   recs,
+  friend,
   onRestart,
 }: {
   typeId: TypeId;
   values: QuizValues;
   brand: { name: string; reason: string } | null;
   recs: Recommendation[];
+  friend: SharedResult | null; // 공유 링크로 들어와 퀴즈를 한 경우 그 친구
   onRestart: () => void;
 }) {
-  const type = QUIZ_TYPES[typeId];
-  const [noImage, setNoImage] = useState(false);
-
   return (
     <div className="space-y-8">
-      <section className="rounded-2xl border-2 border-edge bg-panel p-6 text-center sm:p-8">
-        <p className="text-xs font-bold text-cream/60">너의 방탈출 유형</p>
-        {/* 그림은 배경까지 그려진 정사각형 장면이라 둥근 틀에 꽉 채워 넣는다 */}
-        <div className="mx-auto mt-4 aspect-square w-56 overflow-hidden rounded-2xl border-2 border-edge bg-candy/15 sm:w-64">
-          {noImage ? (
-            <Mascot className="h-full w-full p-6" />
-          ) : (
-            <Image
-              src={typeImage(typeId)}
-              alt=""
-              width={512}
-              height={512}
-              priority
-              onError={() => setNoImage(true)}
-              className="h-full w-full object-cover"
-            />
-          )}
-        </div>
-        <h1 className="mt-4 text-2xl sm:text-3xl">{type.title}</h1>
-        <p className="mx-auto mt-2 max-w-md leading-relaxed text-cream/70 [word-break:keep-all]">
-          {type.tagline}
-        </p>
+      <TypeCard
+        eyebrow="너의 방탈출 유형"
+        typeId={typeId}
+        fear={values.fear}
+        difficulty={values.difficulty}
+        hint={values.hint}
+        players={values.players}
+        time={values.time}
+      >
+        <TypeRarity typeId={typeId} />
+        <ShareButton values={values} />
+      </TypeCard>
 
-        <dl className="mx-auto mt-6 max-w-sm space-y-2.5 text-left">
-          <Bar label="공포 내성" value={values.fear} note={fearTrait(values.fear)} />
-          <Bar label="난이도" value={values.difficulty} />
-          <Bar label="힌트" value={values.hint} note={HINT_NOTE[values.hint]} />
-          <Text label="인원" value={PLAYERS_LABEL[values.players] ?? "상관없음"} />
-          <Text label="시간" value={TIME_LABEL[values.time]} />
-        </dl>
-
-        {brand && (
-          <p className="mt-6 text-sm font-bold text-cream/70">
-            아래 추천 중엔{" "}
-            <span className="font-extrabold text-candy">{brand.name}</span> 방이
-            제일 많아.{brand.reason && ` ${brand.reason}.`}
-          </p>
-        )}
-      </section>
+      {friend && (
+        <FriendCompat
+          friend={friend}
+          me={{
+            name: "나",
+            genre: values.genre,
+            fear: values.fear,
+            diff: values.difficulty,
+          }}
+        />
+      )}
 
       <section className="space-y-3">
         <div className="flex items-baseline justify-between">
@@ -115,6 +59,13 @@ export default function QuizResult({
             <span className="text-xs text-cream/55">스포 수위는 카드마다 조절 가능</span>
           )}
         </div>
+        {brand && (
+          <p className="text-sm font-bold text-cream/70">
+            아래 추천 중엔{" "}
+            <span className="font-extrabold text-candy">{brand.name}</span> 방이
+            제일 많아.{brand.reason && ` ${brand.reason}.`}
+          </p>
+        )}
         {recs.length > 0 ? (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {recs.map((r) => (
@@ -143,7 +94,7 @@ export default function QuizResult({
         </Link>
         <Link
           href="/taste"
-          className="rough rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-white shadow-cute transition active:scale-[0.97]"
+          className="rough rounded-xl border-2 border-edge bg-panel px-4 py-2 text-sm font-bold transition active:scale-[0.97]"
         >
           취향 페이지로
         </Link>

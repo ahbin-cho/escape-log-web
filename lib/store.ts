@@ -5,7 +5,7 @@
 // (예전 MVP는 localStorage 기반이었고, 이 파일만 교체했습니다.)
 // ─────────────────────────────────────────────────────────────
 
-import { createClient } from "./supabase/client";
+import { createClient, isSupabaseConfigured } from "./supabase/client";
 import { CATALOG as LOCAL_CATALOG } from "./catalog";
 import type { QuizValues } from "./quiz/slots";
 
@@ -512,6 +512,22 @@ export function getSavedQuiz(): SavedQuiz | null {
   try {
     const raw = window.localStorage.getItem(QUIZ_KEY);
     return raw ? (JSON.parse(raw) as SavedQuiz) : null;
+  } catch {
+    return null;
+  }
+}
+
+// 유형별 완료 수(전체). 집계 함수가 아직 없거나 읽기에 실패하면 null → 화면은 비율을 숨긴다.
+export async function getTypeCounts(): Promise<Record<string, number> | null> {
+  if (!isSupabaseConfigured()) return null;
+  try {
+    const { data, error } = await createClient().rpc("quiz_type_counts");
+    if (error || !Array.isArray(data)) return null;
+    const counts: Record<string, number> = {};
+    for (const row of data as { type_id: string; count: number | string }[]) {
+      counts[row.type_id] = Number(row.count) || 0;
+    }
+    return counts;
   } catch {
     return null;
   }

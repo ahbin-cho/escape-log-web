@@ -15,14 +15,17 @@ import {
   loadLastVariants,
   pickQuestions,
   quizToTaste,
+  decodeShare,
   recommendForQuiz,
   saveLastVariants,
   toValues,
   type QuizAnswers,
   type QuizQuestion,
   type QuizValues,
+  type SharedResult,
   type TypeId,
 } from "@/lib/quiz";
+import { trackQuizCompletion } from "@/lib/track";
 import Loader from "@/components/Loader";
 import QuestionView from "@/components/quiz/QuestionView";
 import DoorProgress from "@/components/quiz/DoorProgress";
@@ -52,11 +55,15 @@ export default function QuizPage() {
   const [answers, setAnswers] = useState<QuizAnswers>({});
   const [result, setResult] = useState<Result | null>(null);
   const [msgIdx, setMsgIdx] = useState(0);
+  // 공유 링크(?from=코드)로 들어왔으면 끝난 뒤 그 친구와의 궁합을 보여 준다.
+  const [friend, setFriend] = useState<SharedResult | null>(null);
   const moved = useRef(false); // 첫 화면에서는 포커스를 건드리지 않는다
   const analyzing = useRef(false); // 마지막 문항 연타로 분석이 두 번 도는 것 방지
 
   useEffect(() => {
     setQuestions(pickQuestions(loadLastVariants()));
+    const from = new URLSearchParams(window.location.search).get("from");
+    if (from) setFriend(decodeShare(from));
   }, []);
 
   useEffect(() => {
@@ -125,6 +132,7 @@ export default function QuizPage() {
       // 저장 실패(저장소 차단)는 결과 표시를 막지 않는다.
     }
     saveLastVariants(asked.map((x) => x.id));
+    trackQuizCompletion(typeId);
 
     setResult({ typeId, values, brand, recs });
     setPhase("result");
@@ -161,7 +169,7 @@ export default function QuizPage() {
   }
 
   if (phase === "result" && result) {
-    return <QuizResult {...result} onRestart={restart} />;
+    return <QuizResult {...result} friend={friend} onRestart={restart} />;
   }
 
   return (

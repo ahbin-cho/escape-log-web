@@ -309,3 +309,40 @@ create view public.reservation_click_brand_stats
   group by split_part(cafe, ' ', 1);
 
 grant select on public.reservation_click_brand_stats to authenticated;
+
+-- ─────────────────────────────────────────────────────────────
+-- 취향 찾기 유형별 비율: 퀴즈를 끝낼 때 유형 ID만 기록한다.
+-- 누구나(비로그인 포함) 기록만 가능. 개별 행은 아무도 못 읽고,
+-- 유형별 개수만 quiz_type_counts() 로 공개한다. 재실행 안전.
+-- 개인정보는 저장하지 않는다(별명·답·누가 했는지 모름).
+-- ─────────────────────────────────────────────────────────────
+create table if not exists public.quiz_completions (
+  id         bigint generated always as identity primary key,
+  type_id    text not null
+             check (type_id ~ '^(thrill|brain|story|explore)-(rush|analyze|savor|team)$'),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists quiz_completions_type_id_idx
+  on public.quiz_completions (type_id);
+
+alter table public.quiz_completions enable row level security;
+
+drop policy if exists quiz_completions_insert on public.quiz_completions;
+create policy quiz_completions_insert on public.quiz_completions
+  for insert to anon, authenticated with check (true);
+
+grant insert on public.quiz_completions to anon, authenticated;
+
+-- 유형별 개수만 돌려주는 공개 집계. security definer 라 RLS(읽기 정책 없음)를 지나 센다.
+create or replace function public.quiz_type_counts()
+returns table (type_id text, count bigint)
+language sql
+stable
+security definer set search_path = public
+as $$
+  select type_id, count(*) from public.quiz_completions group by type_id;
+$$;
+
+revoke all on function public.quiz_type_counts() from public;
+grant execute on function public.quiz_type_counts() to anon, authenticated;
