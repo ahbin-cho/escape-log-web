@@ -7,6 +7,7 @@
 
 import { createClient } from "./supabase/client";
 import { CATALOG as LOCAL_CATALOG } from "./catalog";
+import type { QuizValues } from "./quiz/slots";
 
 export type Genre = "공포" | "추리" | "모험" | "감성" | "코믹" | "SF" | "기타";
 
@@ -493,7 +494,9 @@ export interface SavedQuiz {
     blurb: string;
     brand?: { name: string; reason: string };
   };
-  answers: Record<string, number>;
+  typeId?: string; // 유형 16개 중 하나. 개편 전 저장분에는 없다.
+  values?: QuizValues; // 슬롯별 값. 개편 전 저장분에는 없다.
+  answers?: Record<string, number>; // 개편 전 형식(문항 → 선택 번호). 새로 저장하지 않는다.
   savedAt: string;
 }
 

@@ -34,7 +34,7 @@ export default function LoggedOutCTA() {
           취향 딱 짚어줄게
         </h1>
         <p className="mt-3 max-w-md leading-relaxed text-cream/70 [word-break:keep-all]">
-          {MASCOT.name}가 6문항으로 방탈출 취향을 진단하고 딱 맞는 방까지 추천해줘.
+          {MASCOT.name}가 방탈출 취향을 진단하고 딱 맞는 방까지 추천해줘.
           다녀온 방은 기록해서 나만의 업적으로.{" "}
           <b className="font-extrabold text-cream">전부 무료.</b>
         </p>

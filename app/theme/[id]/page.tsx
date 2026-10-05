@@ -267,7 +267,7 @@ export default async function ThemePage({
       <section className="rough rounded-2xl border-2 border-dashed border-edge/30 bg-panel/60 p-5 text-center">
         <p className="text-sm font-bold">이 테마, 내 취향에 맞을까?</p>
         <p className="mt-1 text-sm text-cream/60">
-          6문항이면 방탈출 취향을 진단하고 딱 맞는 방을 추천받아요.
+          질문 몇 개로 방탈출 유형을 진단하고 딱 맞는 방을 추천받아요.
         </p>
         <Link
           href="/quiz"

@@ -33,7 +33,7 @@ export default function IntroPage() {
           취향 딱 짚어줄게
         </h1>
         <p className="mt-3 text-sm text-cream/70">
-          {MASCOT.name}가 오지선다 6개로 네 방탈출 취향을 진단하고,
+          {MASCOT.name}가 질문 몇 개로 네 방탈출 유형을 진단하고,
           <br className="hidden sm:block" /> 딱 맞는 방까지 추천해줄게. (무료!)
         </p>
         <div className="mt-5 flex flex-wrap justify-center gap-3">
