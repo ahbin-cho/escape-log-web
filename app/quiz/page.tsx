@@ -4,20 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import {
   getRecords,
   getCatalog,
-  recommend,
   saveQuiz,
   type Recommendation,
 } from "@/lib/store";
 import {
   MASCOT,
   QUIZ_TYPES,
-  brandAffinity,
   determineType,
   focusTagsOf,
   loadLastVariants,
   pickQuestions,
-  quizPrefs,
   quizToTaste,
+  recommendForQuiz,
   saveLastVariants,
   toValues,
   type QuizAnswers,
@@ -35,7 +33,7 @@ type Phase = "quiz" | "analyzing" | "result";
 interface Result {
   typeId: TypeId;
   values: QuizValues;
-  brand: { name: string; reason: string };
+  brand: { name: string; reason: string } | null;
   recs: Recommendation[];
 }
 
@@ -54,6 +52,7 @@ export default function QuizPage() {
   const [answers, setAnswers] = useState<QuizAnswers>({});
   const [result, setResult] = useState<Result | null>(null);
   const [msgIdx, setMsgIdx] = useState(0);
+  const moved = useRef(false); // 첫 화면에서는 포커스를 건드리지 않는다
   const analyzing = useRef(false); // 마지막 문항 연타로 분석이 두 번 도는 것 방지
 
   useEffect(() => {
@@ -76,6 +75,7 @@ export default function QuizPage() {
 
   function choose(answer: number) {
     if (!questions || analyzing.current) return;
+    moved.current = true;
     const next = { ...answers, [q.id]: answer };
     setAnswers(next);
     if (step < lastStep) setStep(step + 1);
@@ -91,19 +91,18 @@ export default function QuizPage() {
     const typeId = determineType(values);
     const taste = quizToTaste(values);
     const focusTags = focusTagsOf(values);
-    const brand = brandAffinity(values);
 
     // 추천을 못 불러와도 유형 결과는 보여 준다.
-    const loadRecs = async (): Promise<Recommendation[]> => {
+    const loadRecs = async () => {
       try {
         const [records, catalog] = await Promise.all([getRecords(), getCatalog()]);
         const played = records.map((r) => r.themeName);
-        return recommend(catalog, taste, played, 4, focusTags, quizPrefs(values));
+        return recommendForQuiz(catalog, values, played);
       } catch {
-        return [];
+        return { recs: [], brand: null };
       }
     };
-    const [recs] = await Promise.all([
+    const [{ recs, brand }] = await Promise.all([
       loadRecs(),
       new Promise((res) => setTimeout(res, ANALYZING_MS)),
     ]);
@@ -116,7 +115,7 @@ export default function QuizPage() {
           title: QUIZ_TYPES[typeId].title,
           emoji: MASCOT.emoji,
           blurb: QUIZ_TYPES[typeId].tagline,
-          brand,
+          brand: brand ?? undefined,
         },
         typeId,
         values,
@@ -133,6 +132,7 @@ export default function QuizPage() {
 
   function restart() {
     analyzing.current = false;
+    moved.current = false;
     setQuestions(pickQuestions(loadLastVariants()));
     setAnswers({});
     setStep(0);
@@ -171,11 +171,15 @@ export default function QuizPage() {
         key={q.id}
         question={q}
         initial={answers[q.id]}
+        focusOnMount={moved.current}
         onAnswer={choose}
       />
       {step > 0 && (
         <button
-          onClick={() => setStep(step - 1)}
+          onClick={() => {
+            moved.current = true;
+            setStep(step - 1);
+          }}
           className="rounded-lg px-1 py-2 text-sm font-bold text-cream/60 transition hover:text-cream"
         >
           ← 이전 질문

@@ -141,20 +141,3 @@ const TIME_MINUTES: Record<QuizValues["time"], number> = {
 export function quizPrefs(v: QuizValues): QuizPrefs {
   return { timePref: TIME_MINUTES[v.time], playersPref: v.players };
 }
-
-// 취향 → 어울리는 브랜드 추천 (크롤한 4개 브랜드 성격 기반)
-const BRAND_STYLE: Record<string, string> = {
-  키이스케이프: "탄탄한 스토리와 완성도",
-  제로월드: "강렬한 공포·연출과 높은 난이도",
-  비트포비아: "활동적이고 몰입감 큰 모험",
-  셜록홈즈: "정통 추리와 두뇌 플레이",
-};
-
-export function brandAffinity(v: QuizValues): { name: string; reason: string } {
-  let name = "키이스케이프";
-  if (v.genre === "공포" && (v.fear >= 4 || v.difficulty >= 4)) name = "제로월드";
-  else if (v.atmosphere === "grungy" || v.atmosphere === "dark") name = "제로월드";
-  else if (v.genre === "추리") name = "셜록홈즈";
-  else if (v.genre === "모험" || determinePlay(v) === "rush") name = "비트포비아";
-  return { name, reason: BRAND_STYLE[name] };
-}

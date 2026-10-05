@@ -385,7 +385,11 @@
 
 - `quizToTaste`, `focusTagsOf`, `quizPrefs`, `brandAffinity`는 인자가 `QuizAnswers`(문항 → 선택 번호)에서 `QuizValues`(슬롯 → 값)로 바뀐다. 반환 형태는 그대로라 `recommend()`는 수정하지 않는다.
 - 포커스 태그는 지금 `focus` 문항에서 오는데, 그 문항이 없어지므로 유형에서 파생한다: `thrill`·`explore` → `staging`, `brain` → `device`, `story` → `story`. 여기에 `team`이면 `coop`, `savor`면 `cozy`를 더한다. `FOCUS_TAGS` 표는 그대로 쓴다.
-- `brandAffinity`가 보던 "활동파/돌격파"는 `play === "rush"`로 바꾼다.
+- `brandAffinity`(브랜드 4개 고정 규칙)는 없앤다. 유형·추천 테마·어울리는 브랜드가 서로 어긋났기 때문이다(구현 후 운영자 지적). 대신 `lib/quiz/recommend.ts`의 `recommendForQuiz`가 셋을 한 번에 정한다.
+  - 유형이 가리키는 장르(스릴→공포, 두뇌→추리, 이야기→감성·코믹, 탐험→모험·SF)를 먼저 담고, 장르 답이 다른 쪽이면 두 장르를 번갈아 담는다.
+  - 한 브랜드는 추천 4개 중 2개까지.
+  - "어울리는 브랜드"는 추천 4개에 실제로 가장 많이 담긴 브랜드다.
+  - `recommend()` 자체는 수정하지 않고 결과를 골라 담기만 한다.
 - `buildPersona`와 페르소나 조합표(`ARCHETYPE_COMBOS`, `specialPersona`, `playStyle`, `moodLine`, `partyLine` 등)는 삭제한다.
 
 ### 저장

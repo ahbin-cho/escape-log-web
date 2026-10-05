@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import { DRAWS, PLAYS, QUIZ_GENRES, type QuizValues } from "./slots";
 import { QUESTIONS, type QuizAnswers } from "./questions";
 import {
-  brandAffinity,
   determineDraw,
   determinePlay,
   determineType,
@@ -176,13 +175,5 @@ describe("추천에 넘기는 값", () => {
     expect(new Set(storySavor).size).toBe(storySavor.length);
     expect(storySavor).toContain("스토리");
     expect(storySavor).toContain("아기자기");
-  });
-
-  it("brandAffinity 는 네 브랜드 중 하나와 이유를 돌려준다", () => {
-    expect(brandAffinity(v({ genre: "공포", fear: 5 })).name).toBe("제로월드");
-    expect(brandAffinity(v({ genre: "추리", atmosphere: "bright" })).name).toBe("셜록홈즈");
-    expect(brandAffinity(v({ genre: "모험", atmosphere: "bright" })).name).toBe("비트포비아");
-    expect(brandAffinity(v({ genre: "감성", atmosphere: "cute", play1: "savor", play2: "savor" })).name).toBe("키이스케이프");
-    expect(brandAffinity(v({ genre: "감성", atmosphere: "cute" })).reason).toBeTruthy();
   });
 });

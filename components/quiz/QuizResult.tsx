@@ -59,7 +59,7 @@ export default function QuizResult({
 }: {
   typeId: TypeId;
   values: QuizValues;
-  brand: { name: string; reason: string };
+  brand: { name: string; reason: string } | null;
   recs: Recommendation[];
   onRestart: () => void;
 }) {
@@ -99,10 +99,13 @@ export default function QuizResult({
           <Text label="시간" value={TIME_LABEL[values.time]} />
         </dl>
 
-        <p className="mt-6 text-sm font-bold text-cream/70">
-          <span className="font-extrabold text-candy">{brand.name}</span>
-          {" "}쪽이 잘 맞아. {brand.reason}.
-        </p>
+        {brand && (
+          <p className="mt-6 text-sm font-bold text-cream/70">
+            아래 추천 중엔{" "}
+            <span className="font-extrabold text-candy">{brand.name}</span> 방이
+            제일 많아.{brand.reason && ` ${brand.reason}.`}
+          </p>
+        )}
       </section>
 
       <section className="space-y-3">
