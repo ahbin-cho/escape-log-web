@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { CandidateTheme, Genre } from "../store";
 import type { QuizValues } from "./slots";
-import { recommendForQuiz } from "./recommend";
+import { recommendForQuiz, regionsIn } from "./recommend";
 
 let n = 0;
 const theme = (cafe: string, genre: Genre, over: Partial<CandidateTheme> = {}): CandidateTheme => ({
@@ -97,5 +97,98 @@ describe("recommendForQuiz", () => {
 
   it("카탈로그가 비면 추천도 브랜드도 없다", () => {
     expect(recommendForQuiz([], v({}), [])).toEqual({ recs: [], brand: null });
+  });
+});
+
+describe("지역·인원·이유·더 보기", () => {
+  const BUSAN = [
+    theme("비트포비아 서면점", "공포"),
+    theme("비트포비아 서면점", "공포"),
+    theme("룸즈에이 해운대점", "공포"),
+  ];
+  const ALL = [...CATALOG, ...BUSAN];
+
+  it("지역을 고르면 그 지역 방만 나온다", () => {
+    const { recs } = recommendForQuiz(ALL, v({}), [], { region: "부산" });
+    expect(recs).toHaveLength(3);
+    expect(recs.every((r) => /서면|해운대/.test(r.cafe))).toBe(true);
+  });
+
+  it("지역에 방이 없으면 빈 결과", () => {
+    expect(recommendForQuiz(ALL, v({}), [], { region: "제주" })).toEqual({ recs: [], brand: null });
+  });
+
+  it("지역을 안 고르면 전국에서 뽑는다", () => {
+    const { recs } = recommendForQuiz(ALL, v({}), []);
+    expect(recs).toHaveLength(4);
+  });
+
+  it("인원을 답했으면 그 인원이 못 들어가는 방은 뺀다", () => {
+    const cat = [
+      theme("룸즈에이 강남점", "공포", { players: "2~4" }),
+      theme("제로월드 홍대점", "공포", { players: "3~6" }),
+      theme("지구별 건대점", "공포", { players: "" }),
+      theme("상상의문 강남점", "공포", { players: "1~2" }),
+    ];
+    const names = (players: number) =>
+      recommendForQuiz(cat, v({ players }), []).recs.map((r) => r.cafe.split(" ")[0]).sort();
+    expect(names(1)).toEqual(["상상의문", "지구별"]);
+    expect(names(2)).toEqual(["룸즈에이", "상상의문", "지구별"]);
+    expect(names(4)).toEqual(["룸즈에이", "제로월드", "지구별"]); // 3~4명
+    expect(names(5)).toEqual(["제로월드", "지구별"]); // 5명 이상
+    expect(names(0)).toHaveLength(4); // 상관없음
+  });
+
+  it("추천마다 이유가 1~3개 붙고, 유형과 이어지는 이유가 맨 앞이다", () => {
+    const { recs } = recommendForQuiz(
+      CATALOG,
+      v({ draw1: "brain", draw2: "brain", genre: "공포" }),
+      []
+    );
+    for (const r of recs) {
+      expect(r.reasons.length).toBeGreaterThanOrEqual(1);
+      expect(r.reasons.length).toBeLessThanOrEqual(3);
+    }
+    expect(recs.find((r) => r.genre === "추리")!.reasons[0]).toBe("두뇌형이 좋아하는 추리");
+    expect(recs.find((r) => r.genre === "공포")!.reasons[0]).toBe("네가 고른 공포 장르");
+  });
+
+  it("공포 수위·난이도·인원·시간이 맞으면 이유에 들어간다", () => {
+    const cat = [theme("룸즈에이 강남점", "모험", { fearLevel: 3, difficulty: 3, players: "2~4", timeLimit: 60 })];
+    const { recs } = recommendForQuiz(cat, v({ players: 2, time: "normal" }), []);
+    // 장르가 유형·답 어느 쪽도 아니므로 나머지 이유가 앞에서부터 3개
+    expect(recs[0].reasons).toEqual(["공포 수위가 딱 맞아", "난이도가 딱 맞아", "2인이 하기 좋아"]);
+  });
+
+  it("맞는 게 하나도 없으면 '새로운 도전'", () => {
+    const cat = [theme("룸즈에이 강남점", "모험", { fearLevel: 1, difficulty: 1 })];
+    const { recs } = recommendForQuiz(cat, v({ fear: 5, difficulty: 5 }), []);
+    expect(recs[0].reasons).toEqual(["새로운 도전"]);
+  });
+
+  it("limit 을 늘리면 앞의 추천은 그대로 두고 뒤에 이어 붙인다", () => {
+    const four = recommendForQuiz(ALL, v({}), [], { limit: 4 }).recs.map((r) => r.id);
+    const eight = recommendForQuiz(ALL, v({}), [], { limit: 8 }).recs.map((r) => r.id);
+    expect(eight).toHaveLength(8);
+    expect(eight.slice(0, 4)).toEqual(four);
+  });
+
+  it("남은 방보다 limit 이 크면 있는 만큼만 준다", () => {
+    expect(recommendForQuiz(BUSAN, v({}), [], { limit: 8 }).recs).toHaveLength(3);
+  });
+});
+
+describe("regionsIn", () => {
+  it("카탈로그에 있는 지역만, 정해진 순서로, 개수와 함께 준다", () => {
+    const cat = [
+      theme("비트포비아 서면점", "공포"),
+      theme("룸즈에이 강남점", "공포"),
+      theme("제로월드 홍대점", "공포"),
+      theme("어딘지모름 본점", "공포"),
+    ];
+    expect(regionsIn(cat)).toEqual([
+      { region: "서울", count: 2 },
+      { region: "부산", count: 1 },
+    ]);
   });
 });

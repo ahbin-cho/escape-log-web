@@ -5,7 +5,7 @@ import {
   getRecords,
   getCatalog,
   saveQuiz,
-  type Recommendation,
+  type CandidateTheme,
 } from "@/lib/store";
 import {
   MASCOT,
@@ -36,8 +36,8 @@ type Phase = "quiz" | "analyzing" | "result";
 interface Result {
   typeId: TypeId;
   values: QuizValues;
-  brand: { name: string; reason: string } | null;
-  recs: Recommendation[];
+  catalog: CandidateTheme[]; // 못 불러왔으면 빈 배열
+  played: string[];
 }
 
 const ANALYZING_MSGS = [
@@ -99,21 +99,20 @@ export default function QuizPage() {
     const taste = quizToTaste(values);
     const focusTags = focusTagsOf(values);
 
-    // 추천을 못 불러와도 유형 결과는 보여 준다.
-    const loadRecs = async () => {
-      try {
-        const [records, catalog] = await Promise.all([getRecords(), getCatalog()]);
-        const played = records.map((r) => r.themeName);
-        return recommendForQuiz(catalog, values, played);
-      } catch {
-        return { recs: [], brand: null };
-      }
+    // 추천 재료를 못 불러와도 유형 결과는 보여 준다. 기록만 실패하면 카탈로그는 살린다.
+    const load = async () => {
+      const [records, catalog] = await Promise.all([
+        getRecords().catch(() => []),
+        getCatalog().catch(() => [] as CandidateTheme[]),
+      ]);
+      return { catalog, played: records.map((r) => r.themeName) };
     };
-    const [{ recs, brand }] = await Promise.all([
-      loadRecs(),
+    const [{ catalog, played }] = await Promise.all([
+      load(),
       new Promise((res) => setTimeout(res, ANALYZING_MS)),
     ]);
 
+    const { brand } = recommendForQuiz(catalog, values, played);
     try {
       saveQuiz({
         taste,
@@ -134,7 +133,7 @@ export default function QuizPage() {
     saveLastVariants(asked.map((x) => x.id));
     trackQuizCompletion(typeId);
 
-    setResult({ typeId, values, brand, recs });
+    setResult({ typeId, values, catalog, played });
     setPhase("result");
   }
 

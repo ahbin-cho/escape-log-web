@@ -6,7 +6,13 @@ import { genreColorClass, genreEmoji, type Recommendation } from "@/lib/store";
 import { regionFromText } from "@/lib/region";
 import SpoilerSlider from "./SpoilerSlider";
 
-export default function RecommendCard({ rec }: { rec: Recommendation }) {
+export default function RecommendCard({
+  rec,
+  reasons,
+}: {
+  rec: Recommendation;
+  reasons?: string[]; // 여러 줄 이유(퀴즈 추천). 없으면 rec.reason 한 줄.
+}) {
   const [level, setLevel] = useState(0);
 
   // "키이스케이프 우주라이크" → 브랜드 / 지점 분리 (브랜드를 강조)
@@ -77,9 +83,20 @@ export default function RecommendCard({ rec }: { rec: Recommendation }) {
         ))}
       </div>
 
-      <div className="rounded-xl border border-mint/30 bg-mint/5 px-3 py-2 text-xs font-bold text-mint">
-        {rec.reason}
-      </div>
+      {reasons && reasons.length > 0 ? (
+        <ul className="space-y-1 rounded-xl border border-mint/30 bg-mint/5 px-3 py-2 text-xs font-bold text-mint">
+          {reasons.map((r) => (
+            <li key={r} className="flex gap-1.5">
+              <span aria-hidden>✓</span>
+              {r}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div className="rounded-xl border border-mint/30 bg-mint/5 px-3 py-2 text-xs font-bold text-mint">
+          {rec.reason}
+        </div>
+      )}
 
       <SpoilerSlider level={level} onChange={setLevel} />
 
