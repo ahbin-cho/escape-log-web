@@ -30,3 +30,11 @@ supabase/*
 next-env.d.ts
 scripts/out
 .omc/*
+
+# AI 도구 로컬 상태 (ruflo / claude-flow / Claude Code 개인 설정)
+.swarm/
+.claude-flow/
+ruvector.db
+.claude/settings.local.json
+.claude/proven-config.json
+.claude/.proven-config-version
