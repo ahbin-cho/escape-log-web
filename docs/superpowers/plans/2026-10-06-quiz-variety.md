@@ -17,7 +17,7 @@
 - `binary` 형식은 `fear`·`difficulty`·`hint`·`time` 슬롯에만, `slider`는 `fear`·`difficulty`·`hint`에만 쓴다.
 - 유형 ID는 `<draw>-<play>` (예: `thrill-rush`). 16개 모두 유효.
 - 저장 키는 `escapelog:quiz:v1` 그대로. 직전 변형은 `escapelog:quiz:last-variants`.
-- 유형 그림 경로는 `public/types/<유형ID>.png`. 없으면 탈출귀 이모지로 대체.
+- 유형 그림 경로는 `public/types/<유형ID>.jpg`. 없으면 탈출귀 이모지로 대체.
 - `lib/ai.ts`, `app/api/persona/route.ts`, `recommend()`, `lib/match.ts`는 수정하지 않는다.
 - 문구는 탈출귀 반말. 색·테두리는 기존 토큰(`candy`, `edge`, `panel`, `ink`, `cream`)과 `rough`·`shadow-cute` 클래스를 쓴다.
 - `lib/quiz/` 안에서는 상대 경로로 import 한다(`../store`). vitest 가 `@/` 별칭 없이 돌 수 있게 하기 위해서다.
@@ -1198,7 +1198,7 @@ git commit -m "취향 찾기: 회차마다 다른 질문 뽑기 + 직전 변형 
   - `MASCOT` (기존 `lib/quiz.ts`의 것과 동일한 값)
   - `interface QuizType { title: string; tagline: string }`
   - `QUIZ_TYPES: Record<TypeId, QuizType>`
-  - `typeImage(id: TypeId): string` → `/types/<id>.png`
+  - `typeImage(id: TypeId): string` → `/types/<id>.jpg`
   - `PLAYERS_LABEL: Record<number, string>`, `TIME_LABEL: Record<QuizValues["time"], string>`
   - `interface Persona { title: string; emoji: string; blurb: string; brand?: { name: string; reason: string } }`
 
@@ -1226,8 +1226,8 @@ describe("유형 데이터", () => {
     expect(new Set(titles).size).toBe(16);
   });
 
-  it("그림 경로는 /types/<id>.png", () => {
-    expect(typeImage("thrill-rush")).toBe("/types/thrill-rush.png");
+  it("그림 경로는 /types/<id>.jpg", () => {
+    expect(typeImage("thrill-rush")).toBe("/types/thrill-rush.jpg");
   });
 
   it("인원·시간 값마다 표시 문구가 있다", () => {
@@ -1329,7 +1329,7 @@ export const QUIZ_TYPES: Record<TypeId, QuizType> = {
 
 // 운영자가 public/types/ 에 넣는 그림. 없으면 화면이 마스코트로 대체한다.
 export function typeImage(id: TypeId): string {
-  return `/types/${id}.png`;
+  return `/types/${id}.jpg`;
 }
 
 export const PLAYERS_LABEL: Record<number, string> = {
