@@ -254,3 +254,58 @@ drop policy if exists "photos owner delete" on storage.objects;
 create policy "photos owner delete" on storage.objects
   for delete to authenticated
   using (bucket_id = 'photos' and owner = auth.uid());
+
+-- ─────────────────────────────────────────────────────────────
+-- 예약 클릭 집계: "예약 페이지로" 버튼 클릭을 테마·매장별로 기록.
+-- 누구나(비로그인 포함) 기록만 가능, 조회는 관리자만. 재실행 안전.
+-- 개인정보는 저장하지 않는다(누가 눌렀는지 모름).
+-- ─────────────────────────────────────────────────────────────
+create table if not exists public.reservation_clicks (
+  id         bigint generated always as identity primary key,
+  theme_id   uuid,
+  theme_name text not null check (char_length(theme_name) <= 200),
+  cafe       text not null check (char_length(cafe) <= 200),
+  source     text not null check (source in ('theme','card','recommend','home')),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists reservation_clicks_created_at_idx
+  on public.reservation_clicks (created_at);
+
+alter table public.reservation_clicks enable row level security;
+
+drop policy if exists reservation_clicks_insert on public.reservation_clicks;
+create policy reservation_clicks_insert on public.reservation_clicks
+  for insert to anon, authenticated with check (true);
+
+drop policy if exists reservation_clicks_select on public.reservation_clicks;
+create policy reservation_clicks_select on public.reservation_clicks
+  for select using (public.is_admin());
+
+grant insert on public.reservation_clicks to anon, authenticated;
+grant select on public.reservation_clicks to authenticated;
+
+-- 관리자 화면용 집계 뷰. security_invoker 라 위 select 정책(관리자만)이 그대로 적용된다.
+drop view if exists public.reservation_click_stats;
+create view public.reservation_click_stats
+  with (security_invoker = true) as
+  select cafe,
+         theme_name,
+         count(*) filter (where created_at >= now() - interval '30 days')::int as clicks_30d,
+         count(*)::int as clicks_total
+  from public.reservation_clicks
+  group by cafe, theme_name;
+
+grant select on public.reservation_click_stats to authenticated;
+
+-- 브랜드(cafe 첫 단어)별 합계. 전체 행을 묶으므로 화면의 상위 N개 제한과 무관하게 정확하다.
+drop view if exists public.reservation_click_brand_stats;
+create view public.reservation_click_brand_stats
+  with (security_invoker = true) as
+  select split_part(cafe, ' ', 1) as brand,
+         count(*) filter (where created_at >= now() - interval '30 days')::int as clicks_30d,
+         count(*)::int as clicks_total
+  from public.reservation_clicks
+  group by split_part(cafe, ' ', 1);
+
+grant select on public.reservation_click_brand_stats to authenticated;

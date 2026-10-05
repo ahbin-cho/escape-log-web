@@ -168,3 +168,49 @@ export async function adminCounts(): Promise<{
     catalog: cat.count ?? 0,
   };
 }
+
+// 예약 버튼 클릭 집계(매장·테마별). reservation_click_stats 뷰는 관리자만 읽힌다.
+export type ClickStat = {
+  cafe: string;
+  themeName: string;
+  last30: number;
+  total: number;
+};
+
+export type BrandClickStat = { brand: string; last30: number; total: number };
+
+// 브랜드별 합계는 SQL 에서 전체를 묶는다(테마별 상위 N개만 더하면 과소 집계됨).
+export async function adminBrandClickStats(): Promise<BrandClickStat[] | null> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("reservation_click_brand_stats")
+    .select("brand,clicks_30d,clicks_total")
+    .order("clicks_30d", { ascending: false });
+  if (error || !data) return null;
+  return (
+    data as { brand: string; clicks_30d: number; clicks_total: number }[]
+  ).map((r) => ({ brand: r.brand, last30: r.clicks_30d, total: r.clicks_total }));
+}
+
+export async function adminClickStats(): Promise<ClickStat[] | null> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("reservation_click_stats")
+    .select("cafe,theme_name,clicks_30d,clicks_total")
+    .order("clicks_30d", { ascending: false })
+    .limit(200);
+  if (error || !data) return null; // 테이블 미생성 등
+  return (
+    data as {
+      cafe: string;
+      theme_name: string;
+      clicks_30d: number;
+      clicks_total: number;
+    }[]
+  ).map((r) => ({
+    cafe: r.cafe,
+    themeName: r.theme_name,
+    last30: r.clicks_30d,
+    total: r.clicks_total,
+  }));
+}

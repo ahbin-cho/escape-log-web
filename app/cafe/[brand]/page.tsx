@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ThemeList from "@/components/ThemeList";
+import OwnerCTA from "@/components/OwnerCTA";
 import { branchOf } from "@/lib/cafe";
 import {
   decodeParam,
@@ -183,6 +184,8 @@ export default async function BrandPage({ params }: Props) {
           🔮 취향 찾기
         </Link>
       </section>
+
+      <OwnerCTA cafe={brand} />
     </article>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import ReserveLink from "@/components/ReserveLink";
 import { genreColorClass, genreEmoji, type CandidateTheme } from "@/lib/store";
 
 // 카탈로그(크롤/등록) 테마를 둘러보기용으로 보여주는 카드.
@@ -79,14 +80,16 @@ export default function ThemeCard({
       )}
 
       {theme.reservationUrl && (
-        <a
+        <ReserveLink
           href={theme.reservationUrl}
-          target="_blank"
-          rel="noopener noreferrer"
+          themeId={theme.id}
+          themeName={theme.name}
+          cafe={theme.cafe}
+          source="card"
           className="rough mt-auto rounded-xl border-2 border-edge bg-candy px-4 py-2 text-center text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
         >
           예약하러 가기 ↗
-        </a>
+        </ReserveLink>
       )}
     </div>
   );

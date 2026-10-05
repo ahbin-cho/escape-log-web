@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CONTACT_EMAIL } from "@/lib/site";
 
 export default function SiteFooter() {
   const year = new Date().getFullYear();
@@ -39,7 +40,7 @@ export default function SiteFooter() {
               기록 추가
             </Link>
             <a
-              href="mailto:coco.cho.bz@gmail.com?subject=%5B%EB%B0%A9%ED%83%88%EB%A1%9C%EA%B7%B8%5D%20%EC%82%AC%EC%97%85%20%EB%AC%B8%EC%9D%98"
+              href={`mailto:${CONTACT_EMAIL}?subject=%5B%EB%B0%A9%ED%83%88%EB%A1%9C%EA%B7%B8%5D%20%EC%82%AC%EC%97%85%20%EB%AC%B8%EC%9D%98`}
               className="hover:text-candy"
             >
               사업 문의

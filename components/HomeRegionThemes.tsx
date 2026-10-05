@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import ReserveLink from "@/components/ReserveLink";
 import { getCatalog, genreEmoji, type CandidateTheme } from "@/lib/store";
 import { regionFromText, REGIONS, type Region } from "@/lib/region";
 
@@ -112,15 +113,17 @@ export default function HomeRegionThemes() {
               </div>
             );
             return t.reservationUrl ? (
-              <a
+              <ReserveLink
                 key={`${t.cafe}-${t.name}`}
                 href={t.reservationUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+                themeId={t.id}
+                themeName={t.name}
+                cafe={t.cafe}
+                source="home"
                 className="transition active:scale-[0.98]"
               >
                 {inner}
-              </a>
+              </ReserveLink>
             ) : (
               <div key={`${t.cafe}-${t.name}`}>{inner}</div>
             );

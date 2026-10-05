@@ -39,6 +39,9 @@ export default async function AdminLayout({
         <Link href="/admin/reviews" className={tab}>
           공개 후기
         </Link>
+        <Link href="/admin/clicks" className={tab}>
+          예약 클릭
+        </Link>
       </div>
       {children}
     </div>

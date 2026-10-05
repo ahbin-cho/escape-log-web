@@ -8,6 +8,9 @@ export const SITE_URL =
 
 export const SITE_NAME = "방탈로그";
 
+// 사업·매장 문의 메일
+export const CONTACT_EMAIL = "coco.cho.bz@gmail.com";
+
 export const SITE_DESCRIPTION =
   "방탈출 경험을 기록하고, 취향을 진단받고, 딱 맞는 테마를 추천받는 방탈러 아카이브. 친구와 취향 궁합도 무료로.";
 

@@ -12,6 +12,7 @@ import {
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import RecordCard from "@/components/RecordCard";
 import ImportBanner from "@/components/ImportBanner";
+import HomeBanner from "@/components/HomeBanner";
 import FeedPreview from "@/components/FeedPreview";
 import LoggedOutCTA from "@/components/LoggedOutCTA";
 import LoggedInHero from "@/components/LoggedInHero";
@@ -67,6 +68,7 @@ export default function HomePage() {
     <div className="space-y-6">
       <LoggedOutCTA />
       {loggedIn === true && <LoggedInHero records={records} />}
+      <HomeBanner />
       <ImportBanner />
       <HomeRegionThemes />
       {/* {loggedIn === false && <HomeRegionThemes />} */}

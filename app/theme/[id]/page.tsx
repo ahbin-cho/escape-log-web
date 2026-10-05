@@ -5,6 +5,8 @@ import { publicClient } from "@/lib/supabase/public";
 import { GENRE_EMOJI } from "@/lib/store";
 import { regionFromText } from "@/lib/region";
 import { brandOf } from "@/lib/cafe";
+import ReserveLink from "@/components/ReserveLink";
+import OwnerCTA from "@/components/OwnerCTA";
 import {
   getAllThemes,
   listedBrands,
@@ -224,14 +226,17 @@ export default async function ThemePage({
       {/* 행동 유도 */}
       <div className="flex flex-col gap-2.5 sm:flex-row">
         {t.reservation_url && (
-          <a
+          <ReserveLink
             href={t.reservation_url}
-            target="_blank"
+            themeId={t.id}
+            themeName={t.name}
+            cafe={t.cafe}
+            source="theme"
             rel="noopener nofollow"
             className="rough flex-1 rounded-xl border-2 border-edge bg-candy px-5 py-3 text-center text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
           >
             🎟️ 예약 페이지로
-          </a>
+          </ReserveLink>
         )}
         <Link
           href="/new"
@@ -271,6 +276,8 @@ export default async function ThemePage({
           🔮 취향 찾기
         </Link>
       </section>
+
+      <OwnerCTA cafe={t.cafe} />
     </article>
   );
 }
