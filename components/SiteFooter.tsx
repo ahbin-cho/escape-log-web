@@ -9,8 +9,7 @@ export default function SiteFooter() {
         <div className="flex flex-col gap-6 sm:flex-row sm:justify-between">
           <div className="space-y-1.5">
             <p
-              className="text-lg tracking-tight"
-              style={{ fontFamily: "'SBAggroB', sans-serif" }}
+              className="font-display text-lg tracking-tight"
             >
               방탈로그
             </p>

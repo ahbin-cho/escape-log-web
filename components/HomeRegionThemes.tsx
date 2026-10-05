@@ -58,9 +58,9 @@ export default function HomeRegionThemes() {
   const themes = mixByBrand(regionThemes, 4);
 
   return (
-    <section className="rounded-2xl border-2 border-edge bg-panel p-4">
+    <section>
       <div className="flex items-baseline justify-between">
-        <h2 className="text-base font-extrabold">🗺️ 지역별 테마</h2>
+        <h2 className="text-xl">지역별 테마</h2>
         <Link href="/region" className="text-xs font-bold text-candy">
           지역 지도 →
         </Link>
@@ -73,10 +73,11 @@ export default function HomeRegionThemes() {
             <button
               key={r}
               onClick={() => setRegion(r)}
-              className={`shrink-0 rounded-lg border-2 px-3 py-1.5 text-sm font-bold transition active:scale-[0.97] ${
+              aria-pressed={region === r}
+              className={`shrink-0 rounded-full px-3.5 py-1.5 text-sm font-bold transition active:scale-[0.97] sm:text-left ${
                 region === r
-                  ? "border-edge bg-candy text-white"
-                  : "border-edge/20 bg-ink text-cream/70 hover:border-edge/40"
+                  ? "bg-edge text-panel"
+                  : "text-cream/70 hover:bg-edge/10 hover:text-cream"
               }`}
             >
               {r}
@@ -90,23 +91,23 @@ export default function HomeRegionThemes() {
             const [brand, ...rest] = (t.cafe || "").split(" ");
             const branch = rest.join(" ");
             const inner = (
-              <div className="flex h-full flex-col gap-1 rounded-xl border-2 border-edge bg-ink p-2.5">
+              <div className="flex h-full flex-col gap-1 rounded-xl border border-edge/15 bg-panel p-3.5 transition hover:border-edge">
                 {brand && (
-                  <span className="inline-block w-fit rounded border border-edge bg-candy px-1.5 text-[10px] font-extrabold text-white">
+                  <span className="text-xs font-extrabold text-candy">
                     {brand}
                   </span>
                 )}
                 <p className="truncate text-sm font-extrabold">
                   {genreEmoji(t.genre)} {t.name}
                 </p>
-                <p className="truncate text-xs font-bold text-cream/70">
+                <p className="truncate text-xs font-medium text-cream/60">
                   {branch}
                   {branch ? " · " : ""}
                   {t.genre}
                   {t.timeLimit ? ` · ${t.timeLimit}분` : ""}
                 </p>
                 {t.teaser && (
-                  <p className="line-clamp-3 text-sm leading-snug text-cream/80 max-sm:hidden">
+                  <p className="mt-1 line-clamp-2 text-sm leading-snug text-cream/70 max-sm:hidden">
                     {t.teaser}
                   </p>
                 )}

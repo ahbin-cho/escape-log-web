@@ -46,7 +46,7 @@ export default function LoggedInHero({ records }: { records: EscapeRecord[] }) {
             <h2 className="flex items-center gap-1.5 text-base font-extrabold">
               <DoorIcon /> 내 탈출 업적
             </h2>
-            <div className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm font-bold text-cream">
+            <div className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm font-bold tabular-nums text-cream">
               <span>
                 플레이한 방{" "}
                 <b className="text-lg font-extrabold text-candy">{total}</b>

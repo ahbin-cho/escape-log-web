@@ -56,9 +56,9 @@ export default function FeedPreview() {
   if (!ready || reviews.length === 0) return null;
 
   return (
-    <section className="space-y-2">
+    <section className="space-y-3">
       <div className="flex items-baseline justify-between">
-        <h2 className="text-base font-extrabold">🌏 모두의 후기</h2>
+        <h2 className="text-xl">모두의 후기</h2>
         <Link href="/feed" className="text-xs font-bold text-candy">
           더보기 →
         </Link>

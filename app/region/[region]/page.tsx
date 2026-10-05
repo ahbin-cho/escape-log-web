@@ -7,6 +7,7 @@ import {
   decodeParam,
   listedBrands,
   listedRegions,
+  staticParam,
   themesByRegion,
   type ThemeRow,
 } from "@/lib/catalog-server";
@@ -17,7 +18,7 @@ import { SITE_NAME, SITE_URL } from "@/lib/site";
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  return (await listedRegions()).map((r) => ({ region: r.key }));
+  return (await listedRegions()).map((r) => ({ region: staticParam(r.key) }));
 }
 
 type Props = { params: { region: string } };

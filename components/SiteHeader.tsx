@@ -8,7 +8,9 @@ import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 // 배경색은 각 링크에서 지정(공용 base 에 bg 를 넣으면 bg-candy 등과 충돌해 색이 덮임)
 const navBase =
   "rough rounded-xl border-2 border-edge px-3 py-1.5 text-sm font-bold transition active:scale-[0.97]";
-const navLink = `${navBase} bg-panel`;
+// 보조 메뉴는 테두리 없는 글자 링크로 두고, 버튼 모양은 "기록 추가" 하나만 쓴다.
+const navLink =
+  "rounded-lg px-2.5 py-1.5 text-sm font-bold text-cream/80 transition hover:bg-edge/10 hover:text-cream";
 
 export default function SiteHeader() {
   const router = useRouter();
@@ -55,19 +57,18 @@ export default function SiteHeader() {
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-2 px-4 py-3 sm:px-6">
         <Link
           href="/"
-          className="text-lg tracking-tight"
-          style={{ fontFamily: "'SBAggroB', sans-serif" }}
+          className="font-display text-lg tracking-tight"
         >
           방탈로그
         </Link>
-        <nav className="flex flex-wrap items-center justify-end gap-1.5 sm:gap-2">
+        <nav className="flex flex-wrap items-center justify-end gap-0.5 sm:gap-1.5">
           <Link href="/feed" className={navLink}>
             모두의 후기
           </Link>
           <Link href="/quiz" className={`${navLink} hidden sm:inline-block`}>
             취향 찾기
           </Link>
-          <Link href="/new" className={`${navBase} bg-candy text-white shadow-cute`}>
+          <Link href="/new" className={`${navBase} mx-1 bg-candy text-white shadow-cute`}>
             기록 추가
           </Link>
           {isAdmin && (

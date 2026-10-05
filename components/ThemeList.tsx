@@ -10,12 +10,13 @@ export default function ThemeList({ themes }: { themes: ThemeRow[] }) {
       {themes.map((t) => (
         <li
           key={t.id}
-          className="rounded-2xl border-2 border-edge bg-panel p-4"
+          className="group relative rounded-2xl border-2 border-edge bg-panel p-4 transition focus-within:bg-candy/10 hover:bg-candy/10 active:scale-[0.99]"
         >
           <h3 className="font-extrabold leading-tight">
+            {/* after 가 카드 전체를 덮어서 카드 어디를 눌러도 이동한다 */}
             <Link
               href={`/theme/${t.id}`}
-              className="transition hover:text-candy hover:underline"
+              className="transition after:absolute after:inset-0 after:rounded-2xl after:content-[''] focus-visible:outline-none focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-edge group-hover:text-candy group-hover:underline"
             >
               {t.name}
             </Link>

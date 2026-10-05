@@ -26,32 +26,38 @@ export default function LoggedOutCTA() {
   if (loggedIn !== false) return null; // 로딩 중이거나 로그인 상태면 숨김
 
   return (
-    <section className="rough rounded-2xl border-2 border-edge bg-candy/10 p-6 text-center shadow-cute sm:p-8">
-      <div className="text-4xl sm:text-5xl" aria-hidden="true">
-        {MASCOT.emoji}
+    <section className="flex flex-col-reverse items-start gap-4 pb-2 sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:py-6">
+      <div className="max-w-xl">
+        <h1 className="text-3xl leading-[1.15] sm:text-5xl sm:leading-[1.1]">
+          방 좀 깨봤어?
+          <br />
+          취향 딱 짚어줄게
+        </h1>
+        <p className="mt-3 max-w-md leading-relaxed text-cream/70 [word-break:keep-all]">
+          {MASCOT.name}가 6문항으로 방탈출 취향을 진단하고 딱 맞는 방까지 추천해줘.
+          다녀온 방은 기록해서 나만의 업적으로.{" "}
+          <b className="font-extrabold text-cream">전부 무료.</b>
+        </p>
+        <div className="mt-6 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-4">
+          <Link
+            href="/quiz"
+            className="rough rounded-xl border-2 border-edge bg-candy px-6 py-3 text-center text-sm font-extrabold text-white shadow-cute transition hover:-translate-y-0.5 active:scale-[0.97]"
+          >
+            취향 찾기 시작
+          </Link>
+          <Link
+            href="/new"
+            className="rounded-xl px-2 py-3 text-center text-sm font-extrabold underline decoration-2 underline-offset-4 transition hover:text-candy"
+          >
+            방탈출 기록하기
+          </Link>
+        </div>
       </div>
-      <h2 className="mt-2 text-xl font-extrabold leading-snug sm:text-2xl">
-        방 좀 깨봤어? <br className="sm:hidden" />
-        취향 딱 짚어줄게
-      </h2>
-      <p className="mx-auto mt-2 max-w-md text-sm text-cream/70">
-        {MASCOT.name}가 6문항으로 방탈출 취향을 진단하고 딱 맞는 방까지 추천해줘.
-        다녀온 방은 기록해서 나만의 업적으로.{" "}
-        <b className="font-extrabold text-candy">전부 무료!</b>
-      </p>
-      <div className="mt-5 flex flex-col gap-2.5 sm:flex-row sm:justify-center">
-        <Link
-          href="/quiz"
-          className="rough rounded-xl border-2 border-edge bg-candy px-6 py-3 text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
-        >
-          🔮 취향 찾기 시작
-        </Link>
-        <Link
-          href="/new"
-          className="rough rounded-xl border-2 border-edge bg-panel px-6 py-3 text-sm font-extrabold shadow-cute transition active:scale-[0.97] hover:border-candy"
-        >
-          🗝️ 방탈출 기록하기
-        </Link>
+      <div
+        aria-hidden="true"
+        className="flex h-16 w-16 shrink-0 -rotate-6 items-center justify-center rounded-full bg-candy/15 text-4xl sm:h-44 sm:w-44 sm:text-8xl"
+      >
+        {MASCOT.emoji}
       </div>
     </section>
   );

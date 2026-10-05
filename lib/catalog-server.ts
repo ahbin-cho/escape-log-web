@@ -81,6 +81,15 @@ export async function listedBrands(): Promise<Listed<string>[]> {
     .sort((a, b) => b.count - a.count || a.key.localeCompare(b.key, "ko"));
 }
 
+// generateStaticParams 용 경로 값. dev 서버는 dynamicParams = false 일 때
+// 요청 경로를 인코딩된 채로 비교해서, 한글 값을 그대로 주면 전부 404 가 된다.
+// 빌드(프로덕션)는 원래 값 그대로 써야 하므로 dev 에서만 인코딩한다.
+export function staticParam(value: string): string {
+  return process.env.NODE_ENV === "development"
+    ? encodeURIComponent(value)
+    : value;
+}
+
 // 한글 경로 파라미터 복원. 잘못 인코딩된 값은 null → 호출부에서 404.
 export function decodeParam(value: string): string | null {
   try {

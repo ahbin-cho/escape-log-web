@@ -27,6 +27,16 @@ h1,
 h2,
 h3 {
   font-family: "SBAggroB", "Pretendard", sans-serif;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+/* 키보드 포커스 표시. outline-none 을 직접 준 입력칸은 자체 포커스 스타일을 쓴다. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid #1d1d1d;
+    outline-offset: 2px;
+  }
 }
 
 /* 손그림 필터 — 기본은 끔(카드·본문 글자 또렷). */
@@ -47,7 +57,7 @@ button.rough::before,
 a.rough::before {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: -2px; /* 테두리 자리까지 덮어야 채움색이 선 밖으로 안 삐져나옴 */
   border: 2px solid #1d1d1d;
   border-radius: inherit;
   filter: url(#rough);

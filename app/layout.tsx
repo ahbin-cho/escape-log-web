@@ -63,12 +63,11 @@ export const metadata: Metadata = {
   }
 };
 
-// 모바일(특히 iOS 사파리) 포커스 자동 확대 방지
+// 핀치 줌은 막지 않는다(접근성). iOS 포커스 자동 확대는 globals.css 의
+// 모바일 입력칸 16px 규칙으로 방지.
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
   themeColor: "#F5F0E6"
 };
 
@@ -147,8 +146,17 @@ export default function RootLayout({
           </defs>
         </svg>
 
+        <a
+          href="#main"
+          className="sr-only rounded-lg bg-edge px-3 py-2 text-sm font-bold text-panel focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50"
+        >
+          본문으로 건너뛰기
+        </a>
         <SiteHeader />
-        <main className="relative mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
+        <main
+          id="main"
+          className="relative mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6 sm:py-8"
+        >
           {children}
         </main>
         <MiniGameFab />

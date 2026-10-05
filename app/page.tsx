@@ -65,13 +65,12 @@ export default function HomePage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 sm:space-y-10">
       <LoggedOutCTA />
       {loggedIn === true && <LoggedInHero records={records} />}
       <HomeBanner />
       <ImportBanner />
       <HomeRegionThemes />
-      {/* {loggedIn === false && <HomeRegionThemes />} */}
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Link
@@ -104,9 +103,9 @@ export default function HomePage() {
 
       <div className="space-y-3 border-t-2 border-edge/15 pt-5">
         <div className="flex items-baseline justify-between">
-          <h2 className="text-lg font-extrabold">📓 내 기록</h2>
+          <h2 className="text-xl">내 기록</h2>
           <div className="flex items-baseline gap-2">
-            <span className="text-xs font-bold text-cream/60">
+            <span className="text-xs font-bold tabular-nums text-cream/60">
               {records.length}개
             </span>
             <Link href="/records" className="text-xs font-bold text-candy">

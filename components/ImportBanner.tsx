@@ -13,7 +13,11 @@ import {
 export default function ImportBanner() {
   const [count, setCount] = useState(0);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [status, setStatus] = useState<"idle" | "importing" | "done">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "importing" | "imported" | "dismissed"
+  >("idle");
+  const [imported, setImported] = useState(0);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!isSupabaseConfigured()) return;
@@ -24,32 +28,58 @@ export default function ImportBanner() {
     supabase.auth.getUser().then(({ data }) => setLoggedIn(!!data.user));
   }, []);
 
-  if (!loggedIn || count === 0 || status === "done") return null;
+  if (!loggedIn || count === 0 || status === "dismissed") return null;
 
   async function doImport() {
     setStatus("importing");
+    setError("");
     try {
       const n = await importLegacyRecords(getLegacyLocalRecords());
       clearLegacyLocalRecords();
-      setStatus("done");
-      alert(`${n}개의 예전 기록을 계정으로 가져왔어요. 새로고침하면 보여요.`);
-      window.location.reload();
+      setImported(n);
+      setStatus("imported");
     } catch (e) {
       setStatus("idle");
-      alert(e instanceof Error ? e.message : "가져오기에 실패했어요.");
+      setError(e instanceof Error ? e.message : "가져오기에 실패했어요.");
     }
   }
 
   function dismiss() {
     clearLegacyLocalRecords();
-    setStatus("done");
+    setStatus("dismissed");
+  }
+
+  if (status === "imported") {
+    return (
+      <div
+        role="status"
+        className="flex flex-col gap-3 rounded-2xl border-2 border-edge bg-panel p-4 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <p className="text-sm font-bold text-cream/80">
+          예전 기록 <b>{imported}개</b>를 계정으로 가져왔어요.
+        </p>
+        <button
+          onClick={() => window.location.reload()}
+          className="rough rounded-xl border-2 border-edge bg-candy px-3 py-1.5 text-sm font-bold text-white shadow-cute transition active:scale-[0.97]"
+        >
+          새로고침해서 보기
+        </button>
+      </div>
+    );
   }
 
   return (
     <div className="rough flex flex-col gap-3 rounded-2xl border-2 border-edge bg-panel p-4 shadow-cute sm:flex-row sm:items-center sm:justify-between">
-      <p className="text-sm font-bold text-cream/80">
-        📦 이 브라우저에 저장된 예전 기록 <b>{count}개</b>를 계정으로 가져올까요?
-      </p>
+      <div>
+        <p className="text-sm font-bold text-cream/80">
+          📦 이 브라우저에 저장된 예전 기록 <b>{count}개</b>를 계정으로 가져올까요?
+        </p>
+        {error && (
+          <p role="alert" className="mt-1 text-sm font-bold text-red-700">
+            {error} 다시 시도해 주세요.
+          </p>
+        )}
+      </div>
       <div className="flex gap-2">
         <button
           onClick={dismiss}

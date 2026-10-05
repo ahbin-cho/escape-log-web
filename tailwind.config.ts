@@ -13,6 +13,9 @@ const config: Config = {
         mint: "#5A9E78",
         cream: "#1D1D1D",
       },
+      fontFamily: {
+        display: ["SBAggroB", "Pretendard", "sans-serif"],
+      },
       borderRadius: {
         "4xl": "1.25rem",
       },
