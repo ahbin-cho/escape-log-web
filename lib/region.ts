@@ -51,12 +51,30 @@ const REGION_KEYWORDS: Record<Region, string[]> = {
   제주: ["제주", "서귀포"],
 };
 
+// 매장명에 지역 단어가 없는 "이름형 매장" 보정표 (공식 사이트 주소 기준).
+// 키워드로 못 찾았을 때만 본다 — "키이스케이프 무비무드 전주"처럼 지역 단어가
+// 붙은 매장은 키워드가 먼저 잡아야 하기 때문.
+const CAFE_REGION_OVERRIDES: Record<string, Region> = {
+  "키이스케이프 후즈데어": "서울",
+  "키이스케이프 STATION": "서울",
+  "키이스케이프 LOG_IN": "서울",
+  "키이스케이프 메모리컴퍼니": "서울",
+  "키이스케이프 우주라이크": "서울",
+  "키이스케이프 더오름": "서울",
+  "키이스케이프 무비무드": "서울",
+  "키이스케이프 에버랜드": "경기",
+  "비트포비아 던전101": "서울",
+};
+
 // 임의 텍스트(매장명 등)에서 시/도 추론. 카탈로그 등에서도 재사용.
 export function regionFromText(text: string): Region | null {
   for (const region of REGIONS) {
     if (REGION_KEYWORDS[region].some((kw) => text.includes(kw))) {
       return region;
     }
+  }
+  for (const [cafe, region] of Object.entries(CAFE_REGION_OVERRIDES)) {
+    if (text.startsWith(cafe)) return region;
   }
   return null;
 }

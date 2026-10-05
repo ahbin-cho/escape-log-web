@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 import { publicClient } from "@/lib/supabase/public";
+import { listedBrands, listedRegions } from "@/lib/catalog-server";
 
 // 하루마다 사이트맵 재생성 (새 테마가 색인 대상에 자동 편입되도록)
 export const revalidate = 86400;
@@ -19,6 +20,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/quiz", priority: 0.9, changeFrequency: "monthly" },
     { path: "/feed", priority: 0.8, changeFrequency: "daily" },
     { path: "/region", priority: 0.7, changeFrequency: "weekly" },
+    { path: "/cafe", priority: 0.6, changeFrequency: "weekly" },
     { path: "/match", priority: 0.6, changeFrequency: "monthly" },
   ];
 
@@ -45,5 +47,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     themeEntries = [];
   }
 
-  return [...staticEntries, ...themeEntries];
+  // 지역·브랜드 목록 페이지 (실제로 생성되는 것만). 한글 경로는 인코딩해서 싣는다.
+  const [regions, brands] = await Promise.all([listedRegions(), listedBrands()]);
+  const listingEntries: MetadataRoute.Sitemap = [
+    ...regions.map((r) => `/region/${encodeURIComponent(r.key)}`),
+    ...brands.map((b) => `/cafe/${encodeURIComponent(b.key)}`),
+  ].map((path) => ({
+    url: `${SITE_URL}${path}`,
+    lastModified,
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  }));
+
+  return [...staticEntries, ...listingEntries, ...themeEntries];
 }

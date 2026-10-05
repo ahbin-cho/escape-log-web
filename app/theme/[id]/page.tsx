@@ -2,28 +2,21 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { publicClient } from "@/lib/supabase/public";
-import { GENRE_EMOJI, type Genre } from "@/lib/store";
+import { GENRE_EMOJI } from "@/lib/store";
 import { regionFromText } from "@/lib/region";
+import { brandOf } from "@/lib/cafe";
+import {
+  getAllThemes,
+  listedBrands,
+  listedRegions,
+  type ThemeRow,
+} from "@/lib/catalog-server";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
 
 // 순수 SSG: 배포 시 generateStaticParams 의 전 테마를 미리 구움.
 // 크롤링 데이터라 거의 안 바뀌므로 자동 재생성(ISR)은 안 씀 → 갱신은 재배포로.
 // dynamicParams(기본 true): 배포 후 새로 추가된 테마도 첫 요청 때 생성되어 캐시됨.
 export const dynamicParams = true;
-
-type ThemeRow = {
-  id: string;
-  name: string;
-  cafe: string;
-  genre: Genre;
-  difficulty: number;
-  fear_level: number;
-  tags: string[] | null;
-  teaser: string | null;
-  time_limit: number | null;
-  players: string | null;
-  reservation_url: string | null;
-};
 
 async function getTheme(id: string): Promise<ThemeRow | null> {
   try {
@@ -105,6 +98,24 @@ export default async function ThemePage({
   const region = regionFromText(t.cafe);
   const tags = t.tags ?? [];
 
+  // 목록 페이지(지역·브랜드)가 실제로 있을 때만 그쪽으로 링크
+  const [regions, brands, all] = await Promise.all([
+    listedRegions(),
+    listedBrands(),
+    getAllThemes(),
+  ]);
+  const regionHref =
+    region && regions.some((r) => r.key === region)
+      ? `/region/${region}`
+      : "/region";
+  const brand = brandOf(t.cafe);
+  const brandHref = brands.some((b) => b.key === brand)
+    ? `/cafe/${brand}`
+    : null;
+  const siblings = all
+    .filter((x) => x.cafe === t.cafe && x.id !== t.id)
+    .slice(0, 6);
+
   // 빵부스러기(BreadcrumbList) 구조화 데이터 — 검색결과 경로 표시
   const jsonLd = {
     "@context": "https://schema.org",
@@ -115,7 +126,7 @@ export default async function ThemePage({
         "@type": "ListItem",
         position: 2,
         name: `${region ?? "지역별"} 방탈출`,
-        item: `${SITE_URL}/region`,
+        item: `${SITE_URL}${regionHref}`,
       },
       { "@type": "ListItem", position: 3, name: t.name },
     ],
@@ -134,7 +145,7 @@ export default async function ThemePage({
           방탈로그
         </Link>
         <span aria-hidden>›</span>
-        <Link href="/region" className="hover:text-candy">
+        <Link href={regionHref} className="hover:text-candy">
           {region ? `${region} 방탈출` : "지역별 방탈출"}
         </Link>
         <span aria-hidden>›</span>
@@ -143,7 +154,14 @@ export default async function ThemePage({
 
       <header className="rough rounded-2xl border-2 border-edge bg-panel p-6 shadow-cute">
         <p className="text-sm font-bold text-cream/60">
-          {GENRE_EMOJI[t.genre] ?? "🎲"} {t.cafe}
+          {GENRE_EMOJI[t.genre] ?? "🎲"}{" "}
+          {brandHref ? (
+            <Link href={brandHref} className="hover:text-candy hover:underline">
+              {t.cafe}
+            </Link>
+          ) : (
+            t.cafe
+          )}
         </p>
         <h1 className="mt-1 text-2xl font-extrabold leading-tight sm:text-3xl">
           {t.name}
@@ -222,6 +240,24 @@ export default async function ThemePage({
           🗝️ 이 방 기록하기
         </Link>
       </div>
+
+      {siblings.length > 0 && (
+        <section className="space-y-2">
+          <h2 className="text-lg font-extrabold">🚪 같은 매장의 다른 테마</h2>
+          <ul className="flex flex-wrap gap-1.5">
+            {siblings.map((x) => (
+              <li key={x.id}>
+                <Link
+                  href={`/theme/${x.id}`}
+                  className="rough-sm inline-block rounded-full border border-edge/20 bg-panel px-3 py-1.5 text-sm font-bold text-cream/70 transition hover:border-candy hover:text-candy"
+                >
+                  {x.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <section className="rough rounded-2xl border-2 border-dashed border-edge/30 bg-panel/60 p-5 text-center">
         <p className="text-sm font-bold">이 테마, 내 취향에 맞을까?</p>
