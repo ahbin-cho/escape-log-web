@@ -15,10 +15,17 @@ import {
   rankMates,
   type MateTaste,
 } from "@/lib/match";
+import { decodeTeam } from "@/lib/team";
+import TeamPicks from "@/components/TeamPicks";
+
+// 팀 링크로 들어왔는데 아직 취향이 없으면, 취향 찾기 후 돌아왔을 때 팀을 되살린다.
+const PENDING_TEAM_KEY = "escapelog:pendingTeam";
 
 export default function MatchPage() {
   const [me, setMe] = useState<MateTaste | null>(null);
   const [mates, setMates] = useState<MateTaste[]>([]);
+  // 내 취향 없이 팀 링크로 들어온 경우의 팀 (팀 결과만 보여 주고 합류 유도)
+  const [linkTeam, setLinkTeam] = useState<MateTaste[]>([]);
   const [ready, setReady] = useState(false);
 
   // 친구 수동 추가 폼
@@ -33,19 +40,44 @@ export default function MatchPage() {
 
   useEffect(() => {
     const saved = getSavedQuiz();
+    let mine: MateTaste | null = null;
     if (saved) {
-      setMe({
+      mine = {
         name: "나",
         genre: saved.taste.topGenre,
         fear: Math.round(saved.taste.fearComfort),
         diff: Math.round(saved.taste.difficultyFit),
-      });
+      };
+      setMe(mine);
     }
     // 공유 링크(?c=코드)로 들어왔으면 보낸 친구를 자동으로 추가
     const c = new URLSearchParams(window.location.search).get("c");
     if (c) {
       const t = decodeTaste(c);
       if (t) setMates((m) => [...m, t]);
+    }
+    // 팀 링크(?t=코드.코드…). 취향 찾기 하러 갔다 돌아온 경우엔 저장해 둔 팀을 쓴다.
+    let teamParam = new URLSearchParams(window.location.search).get("t");
+    try {
+      if (!teamParam) teamParam = window.localStorage.getItem(PENDING_TEAM_KEY);
+      if (teamParam && mine) window.localStorage.removeItem(PENDING_TEAM_KEY);
+    } catch {
+      // 저장소를 못 쓰면 링크로 들어온 경우만 처리
+    }
+    if (teamParam) {
+      const team = decodeTeam(teamParam);
+      if (mine) {
+        // 팀 안에 이미 있는 "나"(같은 코드)는 빼고 나머지를 친구로 추가
+        const myCode = encodeTaste(mine);
+        setMates((m) => [...m, ...team.filter((x) => encodeTaste(x) !== myCode)]);
+      } else {
+        setLinkTeam(team);
+        try {
+          window.localStorage.setItem(PENDING_TEAM_KEY, teamParam);
+        } catch {
+          // 무시
+        }
+      }
     }
     setReady(true);
   }, []);
@@ -93,6 +125,33 @@ export default function MatchPage() {
 
   if (!ready) {
     return <p className="py-20 text-center text-cream/55">불러오는 중…</p>;
+  }
+
+  if (!me && linkTeam.length > 0) {
+    return (
+      <div className="space-y-6">
+        <header className="space-y-1">
+          <h1 className="text-xl font-extrabold sm:text-2xl">👥 우리 팀 방탈출 궁합</h1>
+          <p className="text-sm text-cream/70">
+            친구가 보낸 팀 결과야. 너도 취향을 찾으면 팀에 합류해서 다시 골라 줄게.
+          </p>
+        </header>
+        <TeamPicks members={linkTeam} />
+        <div className="rounded-2xl border-2 border-edge bg-panel p-6 text-center shadow-cute">
+          <Mascot className="mx-auto h-16 w-16" />
+          <p className="mt-2 font-bold">나도 이 팀에 끼워 줘!</p>
+          <p className="mt-1 text-sm text-cream/60">
+            1분이면 끝나. 끝나고 궁합 화면으로 오면 이 팀이 그대로 있어.
+          </p>
+          <Link
+            href="/quiz"
+            className="mt-4 inline-block rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-white shadow-cute"
+          >
+            내 취향 찾고 팀 합류하기
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   if (!me) {
@@ -258,6 +317,15 @@ export default function MatchPage() {
           </ol>
         )}
       </section>
+
+      {/* 우리 팀 궁합: 친구가 한 명 이상이면 다 같이 갈 방을 고른다 */}
+      {mates.length > 0 ? (
+        <TeamPicks members={[me, ...mates]} />
+      ) : (
+        <p className="rounded-2xl border-2 border-dashed border-edge/50 p-4 text-center text-sm text-cream/60">
+          👥 친구를 추가하면 <b>우리 팀 궁합</b>이랑 다 같이 갈 방도 골라 줄게!
+        </p>
+      )}
 
       <Link
         href="/quiz"
