@@ -14,6 +14,7 @@ import {
   type ThemeRow,
 } from "@/lib/catalog-server";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
+import { listedConditions } from "@/lib/best";
 
 // 순수 SSG: 배포 시 generateStaticParams 의 전 테마를 미리 구움.
 // 크롤링 데이터라 거의 안 바뀌므로 자동 재생성(ISR)은 안 씀 → 갱신은 재배포로.
@@ -117,6 +118,10 @@ export default async function ThemePage({
   const siblings = all
     .filter((x) => x.cafe === t.cafe && x.id !== t.id)
     .slice(0, 6);
+  // 이 테마가 들어가는 조건별 목록 (페이지가 실제로 있는 것만)
+  const conditions = listedConditions(all)
+    .map((x) => x.condition)
+    .filter((c) => c.match(t));
 
   // 빵부스러기(BreadcrumbList) 구조화 데이터 — 검색결과 경로 표시
   const jsonLd = {
@@ -257,6 +262,24 @@ export default async function ThemePage({
                   className="rough-sm inline-block rounded-full border border-edge/20 bg-panel px-3 py-1.5 text-sm font-bold text-cream/70 transition hover:border-candy hover:text-candy"
                 >
                   {x.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {conditions.length > 0 && (
+        <section className="space-y-2">
+          <h2 className="text-lg font-extrabold">🎯 이런 조건이라면 비슷한 방도</h2>
+          <ul className="flex flex-wrap gap-1.5">
+            {conditions.map((c) => (
+              <li key={c.slug}>
+                <Link
+                  href={`/best/${c.slug}`}
+                  className="rough-sm inline-block rounded-full border border-edge/20 bg-panel px-3 py-1.5 text-sm font-bold text-cream/70 transition hover:border-candy hover:text-candy"
+                >
+                  {c.emoji} {c.title}
                 </Link>
               </li>
             ))}

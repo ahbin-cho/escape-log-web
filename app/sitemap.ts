@@ -1,7 +1,12 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 import { publicClient } from "@/lib/supabase/public";
-import { listedBrands, listedRegions } from "@/lib/catalog-server";
+import {
+  getAllThemes,
+  listedBrands,
+  listedRegions,
+} from "@/lib/catalog-server";
+import { listedConditions } from "@/lib/best";
 
 // 하루마다 사이트맵 재생성 (새 테마가 색인 대상에 자동 편입되도록)
 export const revalidate = 86400;
@@ -21,6 +26,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/feed", priority: 0.8, changeFrequency: "daily" },
     { path: "/region", priority: 0.7, changeFrequency: "weekly" },
     { path: "/cafe", priority: 0.6, changeFrequency: "weekly" },
+    { path: "/best", priority: 0.7, changeFrequency: "weekly" },
     { path: "/match", priority: 0.6, changeFrequency: "monthly" },
   ];
 
@@ -47,11 +53,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     themeEntries = [];
   }
 
-  // 지역·브랜드 목록 페이지 (실제로 생성되는 것만). 한글 경로는 인코딩해서 싣는다.
-  const [regions, brands] = await Promise.all([listedRegions(), listedBrands()]);
+  // 지역·브랜드·조건 목록 페이지 (실제로 생성되는 것만). 한글 경로는 인코딩해서 싣는다.
+  const [regions, brands, all] = await Promise.all([
+    listedRegions(),
+    listedBrands(),
+    getAllThemes(),
+  ]);
   const listingEntries: MetadataRoute.Sitemap = [
     ...regions.map((r) => `/region/${encodeURIComponent(r.key)}`),
     ...brands.map((b) => `/cafe/${encodeURIComponent(b.key)}`),
+    ...listedConditions(all).map(
+      (x) => `/best/${encodeURIComponent(x.condition.slug)}`
+    ),
   ].map((path) => ({
     url: `${SITE_URL}${path}`,
     lastModified,

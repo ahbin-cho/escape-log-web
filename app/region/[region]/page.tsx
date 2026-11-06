@@ -3,8 +3,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ThemeList from "@/components/ThemeList";
 import { brandOf } from "@/lib/cafe";
+import { listedConditions } from "@/lib/best";
 import {
   decodeParam,
+  getAllThemes,
   listedBrands,
   listedRegions,
   staticParam,
@@ -66,7 +68,15 @@ export default async function RegionThemesPage({ params }: Props) {
   if (!data) notFound();
   const { region, themes, sections } = data;
 
-  const [regions, brands] = await Promise.all([listedRegions(), listedBrands()]);
+  const [regions, brands, all] = await Promise.all([
+    listedRegions(),
+    listedBrands(),
+    getAllThemes(),
+  ]);
+  // 이 지역 테마가 하나라도 걸리는 조건만 (링크가 해당 지역 섹션으로 바로 감)
+  const conditions = listedConditions(all).filter(({ condition: c }) =>
+    themes.some(c.match)
+  );
   const brandPages = new Set(brands.map((b) => b.key));
 
   const jsonLd = [
@@ -144,6 +154,24 @@ export default async function RegionThemesPage({ params }: Props) {
           <ThemeList themes={list} />
         </section>
       ))}
+
+      {conditions.length > 0 && (
+        <nav className="space-y-3 border-t-2 border-edge/15 pt-6">
+          <h2 className="text-lg font-extrabold">조건별로 찾기</h2>
+          <ul className="flex flex-wrap gap-1.5">
+            {conditions.map(({ condition: c }) => (
+              <li key={c.slug}>
+                <Link
+                  href={`/best/${c.slug}#${region}`}
+                  className="rough-sm inline-block rounded-full border border-edge/20 bg-panel px-3 py-1.5 text-sm font-bold text-cream/70 transition hover:border-candy hover:text-candy"
+                >
+                  {c.emoji} {region} {c.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
 
       <nav className="space-y-3 border-t-2 border-edge/15 pt-6">
         <h2 className="text-lg font-extrabold">다른 지역 방탈출</h2>

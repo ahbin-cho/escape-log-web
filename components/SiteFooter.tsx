@@ -32,6 +32,9 @@ export default function SiteFooter() {
             <Link href="/cafe" className="hover:text-candy">
               브랜드별 테마
             </Link>
+            <Link href="/best" className="hover:text-candy">
+              조건별 추천
+            </Link>
             <Link href="/match" className="hover:text-candy">
               친구 궁합
             </Link>
