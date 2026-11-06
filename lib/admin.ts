@@ -4,6 +4,8 @@
 import { createClient } from "./supabase/client";
 import { nicknamesFor } from "./store";
 import type { Genre, PublicReview, CandidateTheme } from "./store";
+import { brandOf } from "./cafe";
+import type { ClickRow } from "./report";
 
 type RecordRow = {
   id: string;
@@ -213,4 +215,38 @@ export async function adminClickStats(): Promise<ClickStat[] | null> {
     last30: r.clicks_30d,
     total: r.clicks_total,
   }));
+}
+
+// 브랜드 리포트용: 최근 30일 예약 클릭 원본 행. 집계는 lib/report.ts 에서.
+// type_id 열이 아직 없는 DB(마이그레이션 전)면 그 열 없이 다시 읽는다.
+export async function adminBrandClickRows(
+  brand: string
+): Promise<ClickRow[] | null> {
+  const supabase = createClient();
+  const since = new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString();
+  const PAGE = 1000;
+  const MAX = 20000;
+
+  async function readAll(cols: string): Promise<ClickRow[] | null> {
+    const out: ClickRow[] = [];
+    for (let from = 0; from < MAX; from += PAGE) {
+      const { data, error } = await supabase
+        .from("reservation_clicks")
+        .select(cols)
+        .like("cafe", `${brand.replace(/[%_\\]/g, "\\$&")}%`)
+        .gte("created_at", since)
+        .order("created_at", { ascending: true })
+        .range(from, from + PAGE - 1);
+      if (error || !data) return null;
+      out.push(...(data as unknown as ClickRow[]));
+      if (data.length < PAGE) break;
+    }
+    // like 는 접두어만 보므로 "브랜드A"가 "브랜드AB"까지 잡을 수 있다 → 정확히 거른다
+    return out.filter((r) => brandOf(r.cafe) === brand);
+  }
+
+  const rows =
+    (await readAll("theme_name,cafe,source,type_id,created_at")) ??
+    (await readAll("theme_name,cafe,source,created_at"));
+  return rows?.map((r) => ({ ...r, type_id: r.type_id ?? null })) ?? null;
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
   adminBrandClickStats,
@@ -44,8 +45,19 @@ export default function AdminClicksPage() {
       <section className="space-y-3">
         <h2 className="text-lg font-extrabold">브랜드별 예약 클릭</h2>
         <Table
-          head={["브랜드", "최근 30일", "누적"]}
-          rows={brands.map((b) => [b.brand, b.last30, b.total])}
+          head={["브랜드", "최근 30일", "누적", ""]}
+          rows={brands.map((b) => [
+            b.brand,
+            b.last30,
+            b.total,
+            <Link
+              key={b.brand}
+              href={`/admin/clicks/report?brand=${encodeURIComponent(b.brand)}`}
+              className="text-candy underline"
+            >
+              리포트
+            </Link>,
+          ])}
         />
       </section>
 
@@ -65,7 +77,7 @@ function Table({
   rows,
 }: {
   head: string[];
-  rows: (string | number)[][];
+  rows: (string | number | React.ReactNode)[][];
 }) {
   return (
     <div className="overflow-x-auto rounded-2xl border-2 border-edge bg-panel">
@@ -89,7 +101,7 @@ function Table({
                     typeof cell === "number" ? "font-extrabold tabular-nums" : "font-bold"
                   }`}
                 >
-                  {typeof cell === "number" ? cell.toLocaleString() : cell}
+                  {typeof cell === "number" ? cell.toLocaleString() : (cell as React.ReactNode)}
                 </td>
               ))}
             </tr>

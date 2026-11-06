@@ -31,6 +31,15 @@
 2. 이 저장소의 **`supabase/schema.sql`** 파일 내용을 **통째로 복사**해서 붙여넣기
 3. 오른쪽 아래 **Run** 클릭 → "Success" 뜨면 끝
    - 테이블(records/catalog/profiles/admins) + 권한(RLS) + 추천 테마 8개 시드가 한 번에 생성됩니다.
+   - **이미 만든 DB에 새 열만 추가할 때**: 예약 클릭의 취향 유형(`type_id`) 열은 아래만 실행해도 됩니다.
+     안 해도 클릭 기록은 계속 쌓이지만(유형 없이 저장), 매장 리포트의 "어떤 취향의 손님이 봤나"가 비어 있게 됩니다.
+
+     ```sql
+     alter table public.reservation_clicks add column if not exists type_id text;
+     alter table public.reservation_clicks drop constraint if exists reservation_clicks_type_id_check;
+     alter table public.reservation_clicks add constraint reservation_clicks_type_id_check
+       check (type_id is null or type_id ~ '^(thrill|brain|story|explore)-(rush|analyze|savor|team)$');
+     ```
 
 ## 3. 나를 관리자로 등록
 

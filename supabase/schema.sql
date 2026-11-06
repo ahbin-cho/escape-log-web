@@ -272,6 +272,13 @@ create table if not exists public.reservation_clicks (
 create index if not exists reservation_clicks_created_at_idx
   on public.reservation_clicks (created_at);
 
+-- 누른 사람의 취향 유형(취향 찾기를 한 경우만). 매장 리포트의 "어떤 손님이 봤나" 근거.
+-- 유형 ID만 남기고 누구인지는 여전히 모른다. 재실행 안전.
+alter table public.reservation_clicks add column if not exists type_id text;
+alter table public.reservation_clicks drop constraint if exists reservation_clicks_type_id_check;
+alter table public.reservation_clicks add constraint reservation_clicks_type_id_check
+  check (type_id is null or type_id ~ '^(thrill|brain|story|explore)-(rush|analyze|savor|team)$');
+
 alter table public.reservation_clicks enable row level security;
 
 drop policy if exists reservation_clicks_insert on public.reservation_clicks;
