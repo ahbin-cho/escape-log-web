@@ -36,7 +36,7 @@ export default async function HomeDiscover() {
                     {c.label}
                   </span>
                   <span className="block text-xs font-bold text-cream/50">
-                    테마 {count}곳
+                    테마 {count}개
                   </span>
                 </span>
               </Link>

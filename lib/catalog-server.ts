@@ -22,6 +22,7 @@ export type ThemeRow = {
   time_limit: number | null;
   players: string | null;
   reservation_url: string | null;
+  created_at?: string | null; // 새로 들어온 테마 정렬용(목록 조회에만 있음)
 };
 
 // 이보다 테마가 적은 지역·브랜드는 페이지를 만들지 않는다(얇은 페이지 방지).
@@ -33,7 +34,7 @@ export const getAllThemes = cache(async (): Promise<ThemeRow[]> => {
     const { data } = await publicClient()
       .from("catalog")
       .select(
-        "id,name,cafe,genre,difficulty,fear_level,tags,teaser,time_limit,players,reservation_url"
+        "id,name,cafe,genre,difficulty,fear_level,tags,teaser,time_limit,players,reservation_url,created_at"
       )
       .order("created_at", { ascending: true });
     return (data as ThemeRow[]) ?? [];
@@ -96,5 +97,25 @@ export function decodeParam(value: string): string | null {
     return decodeURIComponent(value);
   } catch {
     return null;
+  }
+}
+
+// 최근 N일 예약 페이지 이동이 많은 테마(id·횟수). 함수가 아직 없거나 실패하면 빈 배열.
+export async function popularThemes(
+  days = 7,
+  maxRows = 10
+): Promise<{ themeId: string; clicks: number }[]> {
+  try {
+    const { data, error } = await publicClient().rpc("popular_themes", {
+      days,
+      max_rows: maxRows,
+    });
+    if (error || !data) return [];
+    return (data as { theme_id: string; clicks: number }[]).map((r) => ({
+      themeId: r.theme_id,
+      clicks: Number(r.clicks),
+    }));
+  } catch {
+    return [];
   }
 }

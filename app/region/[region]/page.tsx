@@ -48,8 +48,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!data) return { title: "지역을 찾을 수 없어요", robots: { index: false } };
   const { region, themes, sections } = data;
   const brands = sections.slice(0, 4).map(([b]) => b).join(", ");
-  const title = `${region} 방탈출 추천 테마 ${themes.length}곳`;
-  const description = `${region} 지역 방탈출 테마 ${themes.length}곳을 브랜드별로 정리했어요. ${brands} 등 매장별 장르·난이도·플레이 시간을 한눈에 비교해 보세요.`;
+  const title = `${region} 방탈출 추천 테마 ${themes.length}개`;
+  const description = `${region} 지역 방탈출 테마 ${themes.length}개를 브랜드별로 정리했어요. ${brands} 등 매장별 장르·난이도·플레이 시간을 한눈에 비교해 보세요.`;
 
   return {
     title,
@@ -129,7 +129,7 @@ export default async function RegionThemesPage({ params }: Props) {
 
       <header className="space-y-1">
         <h1 className="text-xl font-extrabold sm:text-2xl">
-          📍 {region} 방탈출 테마 {themes.length}곳
+          📍 {region} 방탈출 테마 {themes.length}개
         </h1>
         <p className="text-sm text-cream/70">
           {region}에서 즐길 수 있는 방탈출 테마를 브랜드별로 모았어요. 테마를

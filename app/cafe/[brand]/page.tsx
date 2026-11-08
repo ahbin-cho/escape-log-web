@@ -46,9 +46,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const branches = sections.map(([b]) => b).filter(Boolean);
   const title =
     branches.length > 1
-      ? `${brand} 방탈출 테마 ${themes.length}곳 · 지점별 정리`
-      : `${brand} 방탈출 테마 ${themes.length}곳`;
-  const description = `${brand} 방탈출 테마 ${themes.length}곳의 장르·난이도·플레이 시간을 정리했어요.${
+      ? `${brand} 방탈출 테마 ${themes.length}개 · 지점별 정리`
+      : `${brand} 방탈출 테마 ${themes.length}개`;
+  const description = `${brand} 방탈출 테마 ${themes.length}개의 장르·난이도·플레이 시간을 정리했어요.${
     branches.length ? ` ${branches.slice(0, 5).join(", ")} 등 지점별로 비교해 보세요.` : ""
   }`;
 
@@ -122,7 +122,7 @@ export default async function BrandPage({ params }: Props) {
 
       <header className="space-y-1">
         <h1 className="text-xl font-extrabold sm:text-2xl">
-          🏠 {brand} 방탈출 테마 {themes.length}곳
+          🏠 {brand} 방탈출 테마 {themes.length}개
         </h1>
         <p className="text-sm text-cream/70">
           {brand}의 테마를 지점별로 모았어요. 테마를 누르면 줄거리와 예약

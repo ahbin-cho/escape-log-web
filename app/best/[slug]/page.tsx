@@ -62,10 +62,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .filter((r) => r !== OTHER)
     .slice(0, 4)
     .join("·");
-  const title = `${condition.title} ${themes.length}곳`;
+  const title = `${condition.title} 테마 ${themes.length}개`;
   // "(무서운 순)" 같은 정렬 설명은 빼고 기준만 넣는다
   const criteria = condition.criteria.replace(/\s*\(.*\)$/, "");
-  const description = `${criteria}만 골라 ${themes.length}곳을 정리했어요. ${regions} 지역별로 장르·난이도·인원을 한눈에 비교하고, 테마를 눌러 예약 정보를 확인하세요.`;
+  const description = `${criteria}만 골라 테마 ${themes.length}개를 정리했어요. ${regions} 지역별로 장르·난이도·인원을 한눈에 비교하고, 테마를 눌러 예약 정보를 확인하세요.`;
   const path = `/best/${condition.slug}`;
 
   return {
@@ -147,7 +147,7 @@ export default async function BestConditionPage({ params }: Props) {
 
       <header className="space-y-2">
         <h1 className="text-xl font-extrabold sm:text-2xl">
-          {condition.emoji} {condition.title} {themes.length}곳
+          {condition.emoji} {condition.title} · 테마 {themes.length}개
         </h1>
         <p className="text-sm leading-relaxed text-cream/70">{condition.intro}</p>
         <p className="text-xs font-bold text-cream/50">

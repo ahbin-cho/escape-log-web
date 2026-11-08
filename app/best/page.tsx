@@ -47,7 +47,7 @@ export default async function BestIndexPage() {
                   <span>
                     {c.emoji} {c.title}
                   </span>
-                  <span className="text-sm font-bold text-cream/50">{count}곳</span>
+                  <span className="text-sm font-bold text-cream/50">테마 {count}개</span>
                 </span>
                 <span className="mt-1 block text-xs text-cream/60">{c.criteria}</span>
               </Link>

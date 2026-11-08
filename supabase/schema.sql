@@ -323,6 +323,26 @@ create view public.reservation_click_brand_stats
 
 grant select on public.reservation_click_brand_stats to authenticated;
 
+-- 홈 "이번 주 많이 찾는 방": 최근 N일 테마별 예약 페이지 이동 수(개수만 공개).
+-- 원본 클릭 행은 여전히 관리자만 읽고, 이 함수는 테마 id 와 개수만 돌려준다. 재실행 안전.
+create or replace function public.popular_themes(days int default 7, max_rows int default 10)
+returns table (theme_id uuid, clicks bigint)
+language sql
+stable
+security definer set search_path = public
+as $$
+  select theme_id, count(*) as clicks
+  from public.reservation_clicks
+  where theme_id is not null
+    and created_at >= now() - make_interval(days => least(greatest(days, 1), 30))
+  group by theme_id
+  order by clicks desc, theme_id
+  limit least(greatest(max_rows, 1), 20);
+$$;
+
+revoke all on function public.popular_themes(int, int) from public;
+grant execute on function public.popular_themes(int, int) to anon, authenticated;
+
 -- ─────────────────────────────────────────────────────────────
 -- 취향 찾기 유형별 비율: 퀴즈를 끝낼 때 유형 ID만 기록한다.
 -- 누구나(비로그인 포함) 기록만 가능. 개별 행은 아무도 못 읽고,
