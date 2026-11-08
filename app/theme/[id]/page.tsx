@@ -244,7 +244,7 @@ export default async function ThemePage({
           </ReserveLink>
         )}
         <Link
-          href="/new"
+          href={`/new?theme=${t.id}`}
           className="rough flex-1 rounded-xl border-2 border-edge bg-panel px-5 py-3 text-center text-sm font-extrabold shadow-cute transition active:scale-[0.97] hover:border-candy"
         >
           🗝️ 이 방 기록하기

@@ -16,6 +16,7 @@ export const metadata: Metadata = {
 };
 
 const COMPARE: { label: string; other: string; ours: string }[] = [
+  { label: "기록", other: "메모장·엑셀", ours: "N번째 방 다이어리·연말 결산" },
   { label: "추천 방식", other: "인기순 그대로", ours: "내 취향 저격" },
   { label: "스포", other: "후기 열면 다 노출", ours: "수위 슬라이더로 조절" },
   { label: "진단 톤", other: "밋밋한 목록", ours: "탈출귀가 콕 짚어줌" },

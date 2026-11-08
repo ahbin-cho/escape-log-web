@@ -205,6 +205,12 @@ export default async function BestConditionPage({ params }: Props) {
             💞 친구 궁합
           </Link>
         </div>
+        <p className="mt-3 text-xs text-cream/60">
+          이미 다녀왔다면?{" "}
+          <Link href="/diary" className="font-bold text-candy underline">
+            방탈출 기록장에 남기기
+          </Link>
+        </p>
       </section>
 
       <section className="space-y-3">

@@ -141,6 +141,16 @@ export default function RecordForm({
       .slice(0, 40);
   }, [catalog, brandFilter, themeQuery]);
 
+  // 테마 상세의 "이 방 기록하기"(/new?theme=<id>)로 들어오면 그 테마로 채워 둔다
+  const [prefilled, setPrefilled] = useState(false);
+  useEffect(() => {
+    if (mode !== "new" || prefilled || catalog.length === 0) return;
+    setPrefilled(true);
+    const id = new URLSearchParams(window.location.search).get("theme");
+    if (id) applyTheme(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [catalog, mode, prefilled]);
+
   function applyTheme(id: string) {
     const t = catalog.find((c) => c.id === id);
     if (!t) return;
