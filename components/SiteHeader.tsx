@@ -68,6 +68,9 @@ export default function SiteHeader() {
           <Link href="/quiz" className={`${navLink} hidden sm:inline-block`}>
             취향 찾기
           </Link>
+          <Link href="/best" className={`${navLink} hidden sm:inline-block`}>
+            방 찾기
+          </Link>
           <Link href="/new" className={`${navBase} mx-1 bg-candy text-white shadow-cute`}>
             기록 추가
           </Link>
