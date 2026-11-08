@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import ReserveLink from "@/components/ReserveLink";
 import { genreColorClass, genreEmoji, type CandidateTheme } from "@/lib/store";
 
 // 카탈로그(크롤/등록) 테마를 둘러보기용으로 보여주는 카드.
@@ -41,7 +40,7 @@ export default function ThemeCard({
           )}
           <h3 className="font-extrabold leading-tight">
             <Link
-              href={`/theme/${theme.id}`}
+              href={`/theme/${theme.id}?from=card`}
               className="transition hover:text-candy hover:underline"
             >
               {theme.name}
@@ -79,18 +78,12 @@ export default function ThemeCard({
         </div>
       )}
 
-      {theme.reservationUrl && (
-        <ReserveLink
-          href={theme.reservationUrl}
-          themeId={theme.id}
-          themeName={theme.name}
-          cafe={theme.cafe}
-          source="card"
-          className="rough mt-auto rounded-xl border-2 border-edge bg-candy px-4 py-2 text-center text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
-        >
-          예약하러 가기 ↗
-        </ReserveLink>
-      )}
+      <Link
+        href={`/theme/${theme.id}?from=card`}
+        className="rough mt-auto rounded-xl border-2 border-edge bg-candy px-4 py-2 text-center text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
+      >
+        자세히 보고 예약하기 →
+      </Link>
     </div>
   );
 }

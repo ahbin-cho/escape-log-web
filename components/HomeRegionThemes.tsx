@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import ReserveLink from "@/components/ReserveLink";
 import { getCatalog, genreEmoji, type CandidateTheme } from "@/lib/store";
 import { regionFromText, REGIONS, type Region } from "@/lib/region";
 
@@ -113,20 +112,15 @@ export default function HomeRegionThemes() {
                 )}
               </div>
             );
-            return t.reservationUrl ? (
-              <ReserveLink
+            // 예약 사이트로 바로 보내지 않고 우리 테마 상세를 거친다(줄거리·후기 보고 예약)
+            return (
+              <Link
                 key={`${t.cafe}-${t.name}`}
-                href={t.reservationUrl}
-                themeId={t.id}
-                themeName={t.name}
-                cafe={t.cafe}
-                source="home"
+                href={`/theme/${t.id}?from=home`}
                 className="transition active:scale-[0.98]"
               >
                 {inner}
-              </ReserveLink>
-            ) : (
-              <div key={`${t.cafe}-${t.name}`}>{inner}</div>
+              </Link>
             );
           })}
         </div>

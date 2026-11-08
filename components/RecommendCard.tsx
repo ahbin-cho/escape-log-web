@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import ReserveLink from "@/components/ReserveLink";
+import Link from "next/link";
 import { genreColorClass, genreEmoji, type Recommendation } from "@/lib/store";
 import { regionFromText } from "@/lib/region";
 import SpoilerSlider from "./SpoilerSlider";
@@ -119,18 +119,12 @@ export default function RecommendCard({
         )}
       </div>
 
-      {rec.reservationUrl && (
-        <ReserveLink
-          href={rec.reservationUrl}
-          themeId={rec.id}
-          themeName={rec.name}
-          cafe={rec.cafe}
-          source="recommend"
-          className="rough rounded-xl border-2 border-edge bg-candy px-4 py-2 text-center text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
-        >
-          예약하러 가기 ↗
-        </ReserveLink>
-      )}
+      <Link
+        href={`/theme/${rec.id}?from=recommend`}
+        className="rough rounded-xl border-2 border-edge bg-candy px-4 py-2 text-center text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
+      >
+        자세히 보고 예약하기 →
+      </Link>
     </div>
   );
 }

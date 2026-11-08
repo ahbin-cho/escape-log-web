@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import ReserveLink from "@/components/ReserveLink";
 import { getCatalog, GENRE_EMOJI, type CandidateTheme } from "@/lib/store";
 import type { MateTaste } from "@/lib/match";
 import { encodeTeam, pickForTeam, teamProfile, teamTier } from "@/lib/team";
@@ -119,18 +118,12 @@ export default function TeamPicks({ members }: { members: MateTaste[] }) {
                       {t.players ? ` · ${t.players}인` : ""}
                     </p>
                   </div>
-                  {t.reservationUrl ? (
-                    <ReserveLink
-                      href={t.reservationUrl}
-                      themeId={t.id}
-                      themeName={t.name}
-                      cafe={t.cafe}
-                      source="recommend"
-                      className="shrink-0 rounded-lg border-2 border-edge bg-candy px-2.5 py-1 text-xs font-extrabold text-white"
-                    >
-                      예약
-                    </ReserveLink>
-                  ) : null}
+                  <Link
+                    href={`/theme/${t.id}?from=recommend`}
+                    className="shrink-0 rounded-lg border-2 border-edge bg-candy px-2.5 py-1 text-xs font-extrabold text-white"
+                  >
+                    보기 →
+                  </Link>
                 </div>
                 {t.reasons.length > 0 && (
                   <ul className="mt-1.5 space-y-0.5 text-xs text-cream/70">
