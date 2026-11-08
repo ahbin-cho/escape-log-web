@@ -41,6 +41,11 @@
        check (type_id is null or type_id ~ '^(thrill|brain|story|explore)-(rush|analyze|savor|team)$');
      ```
 
+### (선택) 예시 후기 넣기
+
+후기가 적어서 화면이 비어 보이면 `supabase/sample_reviews.sql` 의 안내대로 예시 후기를 넣을 수 있어요.
+닉네임 '방탈로그 예시'와 **'예시' 표시**가 붙고, 통계·첫 후기 배지에서는 빠져요. 파일 맨 아래 한 줄로 전부 지울 수 있어요.
+
 ## 3. 나를 관리자로 등록
 
 여전히 **SQL Editor** 에서 아래 한 줄 실행 (이메일은 **로그인에 쓸 이메일**):

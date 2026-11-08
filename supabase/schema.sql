@@ -32,6 +32,10 @@ begin
 end;
 $$;
 
+-- 예시 후기용 계정 표시. true 인 계정의 공개 후기는 화면에 '예시'로 표시되고
+-- 통계·첫 후기 배지에서 빠진다(supabase/sample_reviews.sql 참고). 재실행 안전.
+alter table public.profiles add column if not exists is_sample boolean not null default false;
+
 drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
@@ -179,11 +183,13 @@ create policy admins_select on public.admins
 -- 컬럼 구성이 바뀔 수 있어 create or replace 대신 drop 후 재생성.
 drop view if exists public.public_reviews;
 create view public.public_reviews as
-  select id, user_id, theme_name, cafe_name, played_at, genre,
-         difficulty, fear_level, rating, success, remaining_time,
-         hint_count, one_liner, region, photo_url, party_size, created_at
-  from public.records
-  where is_public = true and hidden = false;
+  select r.id, r.user_id, r.theme_name, r.cafe_name, r.played_at, r.genre,
+         r.difficulty, r.fear_level, r.rating, r.success, r.remaining_time,
+         r.hint_count, r.one_liner, r.region, r.photo_url, r.party_size, r.created_at,
+         coalesce(p.is_sample, false) as is_sample
+  from public.records r
+  left join public.profiles p on p.id = r.user_id
+  where r.is_public = true and r.hidden = false;
 
 grant select on public.public_reviews to anon, authenticated;
 

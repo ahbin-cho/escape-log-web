@@ -109,7 +109,7 @@ export default function FeedPage() {
               )}
 
               <p className="mt-auto pt-1 text-xs font-bold text-cream/60">
-                — {r.nickname}
+                — {r.nickname}{r.isSample ? " · 예시" : ""}
                 {r.playedAt && (
                   <span className="ml-1 font-normal text-cream/45">
                     · {r.playedAt}

@@ -588,7 +588,8 @@ export default function RecordForm({
           </span>
           <span className="mt-0.5 block text-xs text-cream/60">
             켜면 <b>한줄 후기·사진</b>이 닉네임과 함께 피드에 공개돼요. 비공개
-            메모는 절대 노출되지 않아요.
+            메모는 절대 노출되지 않아요. 아직 후기가 없는 방이면{" "}
+            <b>🥇 첫 후기 배지</b>가 붙어요.
           </span>
         </span>
       </label>

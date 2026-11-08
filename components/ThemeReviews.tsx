@@ -4,12 +4,13 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import {
   getMyThemeRecords,
+  getThemeOldestReviews,
   getThemePublicReviews,
   type EscapeRecord,
   type PublicReview,
 } from "@/lib/store";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
-import { isSameTheme, summarizeReviews } from "@/lib/reviews";
+import { isSameTheme, pickFirstReview, summarizeReviews } from "@/lib/reviews";
 import { ratingLabel } from "@/lib/terms";
 
 function hintText(n: number): string {
@@ -30,6 +31,7 @@ export default function ThemeReviews({
 }) {
   const [mine, setMine] = useState<EscapeRecord[]>([]);
   const [all, setAll] = useState<PublicReview[]>([]);
+  const [first, setFirst] = useState<PublicReview | null>(null);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -37,18 +39,25 @@ export default function ThemeReviews({
       setReady(true);
       return;
     }
-    Promise.all([getMyThemeRecords(themeName), getThemePublicReviews(themeName)]).then(
-      ([m, a]) => {
+    Promise.all([
+      getMyThemeRecords(themeName),
+      getThemePublicReviews(themeName),
+      getThemeOldestReviews(themeName),
+    ]).then(
+      ([m, a, o]) => {
         const theme = { name: themeName, cafe };
         setMine(m.filter((r) => isSameTheme(r, theme)));
         setAll(a.filter((r) => isSameTheme(r, theme)));
+        setFirst(pickFirstReview(o.filter((r) => !r.isSample && isSameTheme(r, theme))));
         setReady(true);
       },
       () => setReady(true)
     );
   }, [themeName, cafe]);
 
-  const summary = useMemo(() => summarizeReviews(all), [all]);
+  // 예시 후기는 보여 주되 통계·첫 후기 배지에는 넣지 않는다
+  const real = useMemo(() => all.filter((r) => !r.isSample), [all]);
+  const summary = useMemo(() => summarizeReviews(real), [real]);
   const recordHref = `/new?theme=${themeId}`;
 
   return (
@@ -91,6 +100,13 @@ export default function ThemeReviews({
           </Link>
         </div>
 
+        {first && (
+          <p className="text-sm font-bold">
+            🥇 이 방의 첫 후기는 <span className="text-candy">{first.nickname}</span>님
+            {mine.some((r) => r.id === first.id) ? " (바로 나!)" : ""}
+          </p>
+        )}
+
         {summary && (
           <p className="flex flex-wrap gap-x-3 gap-y-1 text-sm font-bold text-cream/70">
             <span>탈출 성공률 {summary.successRate}%</span>
@@ -99,13 +115,23 @@ export default function ThemeReviews({
           </p>
         )}
 
+        {ready && all.length > 0 && real.length === 0 && (
+          <p className="rounded-xl bg-candy/10 px-3 py-2 text-sm font-bold">
+            🥇 아직 진짜 후기가 없어요. 지금 남기면 첫 후기 배지가 붙어요!
+          </p>
+        )}
+
         {!ready ? (
           <p className="text-sm text-cream/55">후기 불러오는 중…</p>
         ) : all.length === 0 ? (
           <div className="rounded-2xl border-2 border-dashed border-edge/40 bg-panel p-5 text-center">
-            <p className="text-sm font-bold">아직 공개 후기가 없어요</p>
+            <p className="text-2xl" aria-hidden>
+              🥇
+            </p>
+            <p className="mt-1 text-sm font-extrabold">아직 아무도 후기를 안 남긴 방이에요</p>
             <p className="mt-1 text-sm text-cream/60">
-              다녀왔다면 첫 후기를 남겨 주세요. 스포 없이 한 줄이면 충분해요.
+              지금 공개 후기를 남기면 <b className="text-candy">첫 후기 배지</b>가 붙어요.
+              스포 없이 한 줄이면 충분해요.
             </p>
           </div>
         ) : (
@@ -115,6 +141,16 @@ export default function ThemeReviews({
                 <div className="min-w-0 flex-1">
                   <p className="flex flex-wrap items-center gap-1.5 text-xs font-bold">
                     <span className="font-extrabold">{r.nickname}</span>
+                    {r.isSample && (
+                      <span className="rounded-md border border-edge/40 px-1.5 py-0.5 text-[11px] font-extrabold text-cream/60">
+                        예시
+                      </span>
+                    )}
+                    {first?.id === r.id && (
+                      <span className="rounded-md bg-candy px-1.5 py-0.5 text-[11px] font-extrabold text-white">
+                        🥇 첫 후기
+                      </span>
+                    )}
                     <span className={r.success ? "text-mint" : "text-cream/55"}>
                       {r.success ? "탈출" : "실패"}
                     </span>
@@ -145,7 +181,11 @@ export default function ThemeReviews({
           href={recordHref}
           className="rough block rounded-xl border-2 border-edge bg-panel px-4 py-3 text-center text-sm font-extrabold transition hover:border-candy active:scale-[0.99]"
         >
-          {mine.length > 0 ? "✍️ 이 방 또 기록하기" : "✍️ 다녀왔다면 이 방 기록하기 (로그인 없이 가능)"}
+          {mine.length > 0
+            ? "✍️ 이 방 또 기록하기"
+            : real.length === 0
+              ? "🥇 첫 후기 남기기 (로그인 없이 가능)"
+              : "✍️ 다녀왔다면 이 방 기록하기 (로그인 없이 가능)"}
         </Link>
       </div>
     </section>

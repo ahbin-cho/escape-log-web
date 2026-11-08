@@ -26,3 +26,16 @@ describe("summarizeReviews", () => {
     ).toEqual({ count: 3, successRate: 67, avgRating: 3.7, noHint: 1 });
   });
 });
+
+describe("pickFirstReview", () => {
+  it("가장 먼저 올라온 후기, 없으면 null", async () => {
+    const { pickFirstReview } = await import("./reviews");
+    expect(pickFirstReview([])).toBeNull();
+    const list = [
+      { id: "b", createdAt: "2026-03-02T00:00:00Z" },
+      { id: "a", createdAt: "2026-03-01T00:00:00Z" },
+      { id: "c", createdAt: "2026-03-01T00:00:00Z" },
+    ];
+    expect(pickFirstReview(list)?.id).toBe("a");
+  });
+});

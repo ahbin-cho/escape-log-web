@@ -88,7 +88,7 @@ export default function FeedPreview() {
               <p className="line-clamp-2 text-xs text-cream/70">"{r.oneLiner}"</p>
             )}
             <p className="mt-auto truncate text-[11px] font-bold text-cream/60">
-              — {r.nickname}
+              — {r.nickname}{r.isSample ? " · 예시" : ""}
             </p>
           </Link>
         ))}

@@ -37,6 +37,7 @@ export interface EscapeRecord {
 // 공개 피드용: 기록 + 작성자 닉네임
 export interface PublicReview extends EscapeRecord {
   nickname: string;
+  isSample?: boolean; // 운영자가 넣은 예시 후기(화면에 '예시' 표시, 통계·배지 제외)
 }
 
 export const GENRES: Genre[] = ["공포", "추리", "모험", "감성", "코믹", "SF", "기타"];
@@ -97,6 +98,7 @@ export function emptyRecord(): EscapeRecord {
 // ── DB(snake_case) ↔ 앱(camelCase) 매핑 ────────────────────────
 type RecordRow = {
   id: string;
+  is_sample?: boolean; // public_reviews 뷰에만 있음
   user_id?: string;
   theme_name: string;
   cafe_name: string;
@@ -281,6 +283,7 @@ export async function getPublicFeed(limit = 60): Promise<PublicReview[]> {
   return rows.map((r) => ({
     ...fromRow(r),
     nickname: nickById.get(r.user_id ?? "") || "익명",
+    isSample: !!r.is_sample,
   }));
 }
 
@@ -630,6 +633,7 @@ export async function getThemePublicReviews(
   return rows.map((r) => ({
     ...fromRow(r),
     nickname: nickById.get(r.user_id ?? "") || "익명",
+    isSample: !!r.is_sample,
   }));
 }
 
@@ -647,4 +651,27 @@ export async function getMyThemeRecords(themeName: string): Promise<EscapeRecord
     .order("played_at", { ascending: false, nullsFirst: false });
   if (error || !data) return [];
   return (data as RecordRow[]).map(fromRow);
+}
+
+// 그 테마의 가장 오래된 공개 후기 후보들(첫 후기 배지용). 목록이 최신 30개만 읽어도
+// 첫 후기를 놓치지 않도록 오래된 순으로 따로 조금 읽는다.
+export async function getThemeOldestReviews(
+  themeName: string,
+  limit = 20
+): Promise<PublicReview[]> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("public_reviews")
+    .select("*")
+    .eq("theme_name", themeName.trim())
+    .order("created_at", { ascending: true })
+    .limit(limit);
+  if (error || !data) return [];
+  const rows = data as RecordRow[];
+  const nickById = await nicknamesFor(rows.map((r) => r.user_id));
+  return rows.map((r) => ({
+    ...fromRow(r),
+    nickname: nickById.get(r.user_id ?? "") || "익명",
+    isSample: !!r.is_sample,
+  }));
 }

@@ -35,3 +35,14 @@ export function summarizeReviews(list: EscapeRecord[]): ReviewSummary | null {
     noHint: list.filter((r) => r.success && r.hintCount === 0).length,
   };
 }
+
+// 그 테마의 첫 공개 후기: 가장 먼저 올라온 것(작성 시각 기준, 같으면 id 순).
+// 첫 후기 작성자가 나중에 비공개로 돌리거나 지우면 다음 후기가 첫 후기가 된다.
+export function pickFirstReview<T extends Pick<EscapeRecord, "id" | "createdAt">>(
+  list: T[]
+): T | null {
+  if (!list.length) return null;
+  return [...list].sort(
+    (a, b) => (a.createdAt || "").localeCompare(b.createdAt || "") || a.id.localeCompare(b.id)
+  )[0];
+}
