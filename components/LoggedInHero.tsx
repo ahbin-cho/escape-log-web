@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { EscapeRecord } from "@/lib/store";
+import { nextMilestone } from "@/lib/diary";
 
 function DoorIcon() {
   return (
@@ -28,6 +29,7 @@ export default function LoggedInHero({ records }: { records: EscapeRecord[] }) {
     : "0.0";
 
   const empty = total === 0;
+  const milestone = nextMilestone(total);
 
   return (
     <div className="rough flex flex-col gap-3 rounded-2xl border-2 border-edge bg-candy/10 p-4 shadow-cute sm:flex-row sm:items-center sm:justify-between">
@@ -64,6 +66,11 @@ export default function LoggedInHero({ records }: { records: EscapeRecord[] }) {
                 <b className="text-lg font-extrabold text-candy">{avgRating}</b>
               </span>
             </div>
+            {milestone && (
+              <p className="mt-1 text-xs font-bold text-cream/60">
+                🎯 {milestone.next}번째 방까지 {milestone.left}방 남았어요
+              </p>
+            )}
           </>
         )}
       </div>
@@ -73,7 +80,7 @@ export default function LoggedInHero({ records }: { records: EscapeRecord[] }) {
             href="/records"
             className="rough inline-flex items-center justify-center rounded-xl border-2 border-edge bg-panel px-4 py-2.5 text-sm font-extrabold shadow-cute transition active:scale-[0.97]"
           >
-            내 기록 보기
+            📓 다이어리
           </Link>
         )}
         <Link

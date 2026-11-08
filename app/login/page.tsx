@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
+import { hasGuestPending, importGuestRecords } from "@/lib/store";
 
 type Mode = "signin" | "signup";
 
@@ -17,6 +18,21 @@ export default function LoginPage() {
   const [message, setMessage] = useState("");
 
   const configured = isSupabaseConfigured();
+
+  // 비회원으로 쓴 기록이 이 기기에 있으면 안내하고 가입 탭을 먼저 연다
+  const [guestCount, setGuestCount] = useState(0);
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search);
+    if (q.get("mode") === "signup") setMode("signup");
+    if (hasGuestPending()) {
+      try {
+        const raw = window.localStorage.getItem("escapelog:records:v1");
+        setGuestCount(raw ? (JSON.parse(raw) as unknown[]).length : 0);
+      } catch {
+        setGuestCount(1);
+      }
+    }
+  }, []);
 
   // Supabase 원문 에러 → 사용자 친화 한글 안내로 변환
   function friendlyError(err: unknown): string {
@@ -67,6 +83,8 @@ export default function LoginPage() {
         });
         if (error) throw error;
       }
+      // 비회원으로 쓴 기록을 계정으로 옮긴 뒤 이동(실패해도 홈 배너에서 다시 시도)
+      await importGuestRecords();
       const next =
         new URLSearchParams(window.location.search).get("next") || "/";
       // refresh 없이 부드럽게 이동(홈·헤더는 onAuthStateChange 로 상태 반영).
@@ -87,6 +105,18 @@ export default function LoginPage() {
           이메일과 비밀번호로 간단하게 시작해요.
         </p>
       </div>
+
+      {guestCount > 0 && (
+        <div className="rounded-2xl border-2 border-candy/60 bg-candy/10 p-4 text-sm">
+          <p className="font-extrabold">
+            📓 방금 쓴 기록 {guestCount}개가 이 기기에 임시 저장됐어요
+          </p>
+          <p className="mt-1 text-cream/70">
+            브라우저를 지우거나 다른 폰으로 바꾸면 사라져요. 가입하면 바로 내
+            계정으로 옮겨지고, 취향 분석·다이어리·연말 결산까지 열려요.
+          </p>
+        </div>
+      )}
 
       {/* 로그인 / 회원가입 전환 탭 */}
       <div className="flex gap-2">

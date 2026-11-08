@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import {
@@ -8,11 +9,13 @@ import {
   importLegacyRecords,
 } from "@/lib/store";
 
-// 예전 브라우저(localStorage) 기록이 있고 로그인돼 있으면
-// "내 계정으로 가져오기"를 1회 제안하는 배너.
+// 이 브라우저(localStorage)에 기록이 있을 때:
+// - 로그인 상태면 "내 계정으로 가져오기"를 제안
+// - 비회원이면(로그인 없이 먼저 쓴 기록) "가입해서 지키기"로 가입을 유도
+//   이때는 지우는 버튼을 두지 않는다(실수로 기록을 잃지 않게).
 export default function ImportBanner() {
   const [count, setCount] = useState(0);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
   const [status, setStatus] = useState<
     "idle" | "importing" | "imported" | "dismissed"
   >("idle");
@@ -28,7 +31,29 @@ export default function ImportBanner() {
     supabase.auth.getUser().then(({ data }) => setLoggedIn(!!data.user));
   }, []);
 
-  if (!loggedIn || count === 0 || status === "dismissed") return null;
+  if (loggedIn === null || count === 0 || status === "dismissed") return null;
+
+  if (!loggedIn) {
+    return (
+      <div className="rough flex flex-col gap-3 rounded-2xl border-2 border-candy/60 bg-candy/10 p-4 shadow-cute sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-sm font-extrabold">
+            📓 이 기기에만 저장된 기록 {count}개가 있어요
+          </p>
+          <p className="mt-0.5 text-sm text-cream/70">
+            브라우저를 지우면 사라져요. 10초 가입하면 계정으로 옮기고 다이어리·취향
+            분석까지 열려요.
+          </p>
+        </div>
+        <Link
+          href="/login?mode=signup&guest=1&next=/records"
+          className="rough shrink-0 rounded-xl border-2 border-edge bg-candy px-4 py-2 text-center text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
+        >
+          가입하고 기록 지키기
+        </Link>
+      </div>
+    );
+  }
 
   async function doImport() {
     setStatus("importing");

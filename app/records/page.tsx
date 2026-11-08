@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   getRecords,
+  hasGuestPending,
   GENRES,
   GENRE_EMOJI,
   type EscapeRecord,
@@ -14,6 +15,12 @@ import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { RATING_LABELS } from "@/lib/terms";
 import RecordCard from "@/components/RecordCard";
 import Loader from "@/components/Loader";
+import DiaryView from "@/components/DiaryView";
+import YearRecapCard from "@/components/YearRecapCard";
+import { nextMilestone, playNumbers } from "@/lib/diary";
+
+type View = "diary" | "list";
+const VIEW_KEY = "escapelog:records:view";
 
 type Result = "전체" | "성공" | "실패";
 type ThemeType = "전체" | "장치" | "자물쇠" | "문제" | "혼합";
@@ -37,6 +44,24 @@ export default function RecordsPage() {
   const [themeType, setThemeType] = useState<ThemeType>("전체");
   const [rating, setRating] = useState(0); // 0=전체, 1~5=등급
   const [sort, setSort] = useState<Sort>("recent");
+  const [view, setView] = useState<View>("diary");
+
+  useEffect(() => {
+    try {
+      if (window.localStorage.getItem(VIEW_KEY) === "list") setView("list");
+    } catch {
+      // 기본값(다이어리) 유지
+    }
+  }, []);
+
+  function changeView(v: View) {
+    setView(v);
+    try {
+      window.localStorage.setItem(VIEW_KEY, v);
+    } catch {
+      // 무시
+    }
+  }
 
   useEffect(() => {
     async function load() {
@@ -46,7 +71,12 @@ export default function RecordsPage() {
           data: { user },
         } = await supabase.auth.getUser();
         if (!user) {
-          router.replace("/login?next=/records");
+          // 비회원으로 써 둔 기록이 있으면 가입 화면으로(가입하면 바로 옮겨짐)
+          router.replace(
+            hasGuestPending()
+              ? "/login?mode=signup&guest=1&next=/records"
+              : "/login?next=/records"
+          );
           return;
         }
       }
@@ -82,6 +112,10 @@ export default function RecordsPage() {
     return list;
   }, [records, query, genre, result, themeType, rating, sort]);
 
+  // 전체 기록 기준 번호(필터와 무관하게 "N번째 방"이 고정)
+  const numbers = useMemo(() => playNumbers(records), [records]);
+  const milestone = nextMilestone(records.length);
+
   if (!ready) return <Loader />;
 
   return (
@@ -91,6 +125,39 @@ export default function RecordsPage() {
         <span className="text-sm font-bold text-cream/60">
           {filtered.length}/{records.length}개
         </span>
+      </div>
+
+      {records.length > 0 && (
+        <>
+          <YearRecapCard records={records} />
+          {milestone && (
+            <p className="text-sm font-bold text-cream/70">
+              🎯 다음 기념까지 <b className="text-candy">{milestone.left}방</b>{" "}
+              남았어요 ({milestone.next}번째 방)
+            </p>
+          )}
+        </>
+      )}
+
+      <div className="flex gap-2" role="tablist" aria-label="보기 방식">
+        {(
+          [
+            ["diary", "📓 다이어리"],
+            ["list", "🗂️ 카드 목록"],
+          ] as [View, string][]
+        ).map(([v, label]) => (
+          <button
+            key={v}
+            role="tab"
+            aria-selected={view === v}
+            onClick={() => changeView(v)}
+            className={`rough flex-1 rounded-xl border-2 border-edge px-3 py-2 text-sm font-extrabold transition active:scale-[0.98] sm:flex-none ${
+              view === v ? "bg-candy text-white shadow-cute" : "bg-panel"
+            }`}
+          >
+            {label}
+          </button>
+        ))}
       </div>
 
       <input
@@ -143,6 +210,7 @@ export default function RecordsPage() {
           ))}
         </FilterRow>
 
+        {view === "list" && (
         <FilterRow label="정렬">
           {SORTS.map((s) => (
             <Chip key={s.key} on={sort === s.key} onClick={() => setSort(s.key)}>
@@ -150,6 +218,7 @@ export default function RecordsPage() {
             </Chip>
           ))}
         </FilterRow>
+        )}
       </div>
 
       {filtered.length === 0 ? (
@@ -166,6 +235,8 @@ export default function RecordsPage() {
             첫 기록 추가하기
           </Link>
         </div>
+      ) : view === "diary" ? (
+        <DiaryView records={filtered} numbers={numbers} />
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((r) => (

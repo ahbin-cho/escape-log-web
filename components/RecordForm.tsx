@@ -9,11 +9,13 @@ import {
   deleteRecord,
   uploadRecordPhoto,
   getCatalog,
+  saveGuestRecord,
   type EscapeRecord,
   type Genre,
   type CandidateTheme,
 } from "@/lib/store";
 import { REGIONS, regionFromText } from "@/lib/region";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { ratingLabel, fearLabel } from "@/lib/terms";
 
 type ScaleKey = "difficulty" | "fearLevel" | "rating";
@@ -94,6 +96,17 @@ export default function RecordForm({
 
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  // 비회원이면 저장 시 이 기기에 임시 저장 → 가입 화면으로. null = 확인 중
+  const [guest, setGuest] = useState<boolean | null>(null);
+  useEffect(() => {
+    if (!isSupabaseConfigured()) {
+      setGuest(false);
+      return;
+    }
+    createClient()
+      .auth.getUser()
+      .then(({ data }) => setGuest(!data.user));
+  }, []);
 
   // ── 카탈로그에서 브랜드/테마 골라 자동입력 (선택) ──
   const [catalog, setCatalog] = useState<CandidateTheme[]>([]);
@@ -169,21 +182,28 @@ export default function RecordForm({
       return;
     }
     setSaving(true);
+    const record = {
+      ...form,
+      difficulty: Number(form.difficulty),
+      fearLevel: Number(form.fearLevel),
+      rating: Number(form.rating),
+      hintCount: hintUnlimited ? -1 : hintRaw === "" ? 0 : Number(hintRaw),
+    };
+    if (guest && mode === "new") {
+      // 비회원: 이 기기에 먼저 저장하고, 가입하면 계정으로 옮긴다
+      saveGuestRecord(record);
+      router.push("/login?mode=signup&guest=1&next=/records");
+      return;
+    }
     try {
-      await saveRecord({
-        ...form,
-        difficulty: Number(form.difficulty),
-        fearLevel: Number(form.fearLevel),
-        rating: Number(form.rating),
-        hintCount: hintUnlimited ? -1 : hintRaw === "" ? 0 : Number(hintRaw),
-      });
+      await saveRecord(record);
       router.push("/");
       router.refresh();
     } catch (err) {
       setSaving(false);
       if (err instanceof Error && err.message.includes("로그인")) {
-        alert("기록을 저장하려면 로그인이 필요해요.");
-        router.push("/login");
+        saveGuestRecord(record);
+        router.push("/login?mode=signup&guest=1&next=/records");
         return;
       }
       alert(err instanceof Error ? err.message : "저장에 실패했어요.");
@@ -203,6 +223,12 @@ export default function RecordForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
+      {guest && mode === "new" && (
+        <p className="rounded-xl border-2 border-dashed border-candy/50 bg-candy/5 px-4 py-3 text-sm text-cream/80">
+          ✍️ 로그인 없이 먼저 써 보세요. 저장하면 이 기기에 보관되고,{" "}
+          <b>10초 가입</b>하면 계정으로 옮겨 드려요.
+        </p>
+      )}
       {mode === "new" && catalog.length > 0 && (
         <div className="space-y-2 rounded-xl border-2 border-edge bg-ink p-3">
           <p className="text-sm font-bold text-cream/70">
@@ -497,6 +523,11 @@ export default function RecordForm({
             (인증샷 한 장, 선택)
           </span>
         </label>
+        {guest ? (
+          <p className="text-xs text-cream/60">
+            📷 인증샷은 가입한 뒤에 올릴 수 있어요. (기록은 지금 저장돼요)
+          </p>
+        ) : (
         <div className="flex items-center gap-3">
           {form.photoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -531,6 +562,7 @@ export default function RecordForm({
             )}
           </div>
         </div>
+        )}
       </div>
 
       <label className="rough flex cursor-pointer items-start gap-3 rounded-xl border-2 border-edge bg-panel p-4 shadow-cute">
@@ -576,7 +608,7 @@ export default function RecordForm({
             disabled={saving}
             className="rough flex-1 rounded-xl border-2 border-edge bg-candy px-6 py-2 text-sm font-bold text-white shadow-cute transition active:scale-[0.97] disabled:opacity-50 sm:flex-none"
           >
-            {saving ? "저장 중…" : "저장"}
+            {saving ? "저장 중…" : guest && mode === "new" ? "저장하고 기록 지키기" : "저장"}
           </button>
         </div>
       </div>

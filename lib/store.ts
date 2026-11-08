@@ -570,3 +570,43 @@ export async function importLegacyRecords(records: EscapeRecord[]): Promise<numb
   if (error) throw error;
   return count ?? records.length;
 }
+
+// ─────────────────────────────────────────────────────────────
+// 비회원 기록: 로그인 없이 먼저 쓰고, 가입하면 계정으로 옮긴다.
+// 예전 로컬 기록과 같은 저장소(LEGACY_KEY)를 써서 기존 가져오기 흐름도 그대로 쓴다.
+// GUEST_PENDING_KEY 가 있으면 "가입하면 자동으로 옮길 기록"이라는 뜻.
+// ─────────────────────────────────────────────────────────────
+const GUEST_PENDING_KEY = "escapelog:guest-pending";
+
+export function saveGuestRecord(record: EscapeRecord): void {
+  if (typeof window === "undefined") return;
+  const list = getLegacyLocalRecords();
+  list.push({ ...record, id: "", createdAt: new Date().toISOString() });
+  window.localStorage.setItem(LEGACY_KEY, JSON.stringify(list));
+  window.localStorage.setItem(GUEST_PENDING_KEY, "1");
+}
+
+export function hasGuestPending(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    return (
+      window.localStorage.getItem(GUEST_PENDING_KEY) === "1" &&
+      getLegacyLocalRecords().length > 0
+    );
+  } catch {
+    return false;
+  }
+}
+
+// 로그인 직후 호출: 비회원으로 쓴 기록을 계정으로 옮긴다. 옮긴 개수(없거나 실패면 0).
+export async function importGuestRecords(): Promise<number> {
+  if (!hasGuestPending()) return 0;
+  try {
+    const n = await importLegacyRecords(getLegacyLocalRecords());
+    clearLegacyLocalRecords();
+    window.localStorage.removeItem(GUEST_PENDING_KEY);
+    return n;
+  } catch {
+    return 0; // 실패하면 로컬에 그대로 두고 홈 배너에서 다시 시도
+  }
+}
