@@ -21,10 +21,10 @@ import { PLAYERS_LABEL } from "./types";
 // ─────────────────────────────────────────────────────────────
 
 const DRAW_GENRES: Record<Draw, Genre[]> = {
-  thrill: ["공포"],
-  brain: ["추리"],
-  story: ["감성", "코믹"],
-  explore: ["모험", "SF"],
+  thrill: ["공포", "스릴러"],
+  brain: ["추리", "아케이드"],
+  story: ["감성", "코믹", "판타지"],
+  explore: ["모험", "SF", "판타지"],
 };
 
 const PAGE = 4; // 한 번에 보여 주는 개수("더 보기"마다 한 묶음씩)
@@ -131,10 +131,11 @@ export function recommendForQuiz(
     recommend(pool, { ...taste, topGenre: g }, playedNames, pool.length, focusTags, prefs);
   const ofGenre = (g: Genre) => ranked(g).filter((r) => r.genre === g);
 
-  // 장르 답이 유형 쪽이면 그 장르만, 아니면 유형 장르 → 장르 답 순서로 번갈아.
+  // 장르 답이 유형 쪽이면 그 장르만, 아니면 유형 대표 장르 → 장르 답 순서로 번갈아.
+  // 유형의 나머지 장르(스릴러·아케이드 등)는 그다음에 채운다.
   const main: Genre[] = typeGenres.includes(values.genre)
     ? [values.genre]
-    : [...typeGenres, values.genre];
+    : [typeGenres[0], values.genre];
   const siblings = typeGenres.filter((g) => !main.includes(g));
   const mainLists = main.map(ofGenre);
   const siblingLists = siblings.map(ofGenre);

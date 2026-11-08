@@ -192,3 +192,29 @@ describe("regionsIn", () => {
     ]);
   });
 });
+
+describe("새 장르 묶음", () => {
+  it("스릴형은 공포 다음으로 스릴러를 채운다", () => {
+    const cat = [
+      theme("룸즈에이 강남점", "공포"),
+      theme("제로월드 홍대점", "스릴러"),
+      theme("지구별 건대점", "스릴러"),
+      theme("상상의문 강남점", "감성"),
+    ];
+    const { recs } = recommendForQuiz(cat, v({}), []);
+    expect(recs.slice(0, 3).map((r) => r.genre)).toEqual(["공포", "스릴러", "스릴러"]);
+    expect(recs.find((r) => r.genre === "스릴러")!.reasons[0]).toBe("스릴형이 좋아하는 스릴러");
+  });
+
+  it("두뇌형인데 장르 답이 공포면 추리와 공포를 번갈아 담고 아케이드는 뒤로 미룬다", () => {
+    const cat = [
+      ...Array.from({ length: 3 }, () => theme("셜록홈즈 건대점", "추리")),
+      ...Array.from({ length: 3 }, () => theme("키이스케이프 강남점", "아케이드")),
+      ...Array.from({ length: 3 }, () => theme("제로월드 홍대점", "공포")),
+      ...Array.from({ length: 3 }, () => theme("룸즈에이 강남점", "추리")),
+      ...Array.from({ length: 3 }, () => theme("지구별 건대점", "공포")),
+    ];
+    const { recs } = recommendForQuiz(cat, v({ draw1: "brain", draw2: "brain", genre: "공포" }), []);
+    expect(recs.map((r) => r.genre).sort()).toEqual(["공포", "공포", "추리", "추리"]);
+  });
+});

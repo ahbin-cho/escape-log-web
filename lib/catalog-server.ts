@@ -1,6 +1,7 @@
 import { cache } from "react";
 import { publicClient } from "@/lib/supabase/public";
 import { brandOf } from "@/lib/cafe";
+import { normalizeGenre } from "@/lib/genre";
 import { regionFromText, REGIONS, type Region } from "@/lib/region";
 import type { Genre } from "@/lib/store";
 
@@ -37,7 +38,8 @@ export const getAllThemes = cache(async (): Promise<ThemeRow[]> => {
         "id,name,cafe,genre,difficulty,fear_level,tags,teaser,time_limit,players,reservation_url,created_at"
       )
       .order("created_at", { ascending: true });
-    return (data as ThemeRow[]) ?? [];
+    // 크롤링한 장르를 앱 장르로 묶는다(목록 페이지·테마 상세가 같은 기준을 쓰도록)
+    return ((data as ThemeRow[]) ?? []).map((t) => ({ ...t, genre: normalizeGenre(t.genre, t.tags) }));
   } catch {
     return [];
   }

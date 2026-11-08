@@ -9,8 +9,19 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient, isSupabaseConfigured } from "./supabase/client";
 import { CATALOG as LOCAL_CATALOG } from "./catalog";
 import type { QuizValues } from "./quiz/slots";
+import { normalizeGenre } from "./genre";
 
-export type Genre = "공포" | "추리" | "모험" | "감성" | "코믹" | "SF" | "기타";
+export type Genre =
+  | "공포"
+  | "스릴러"
+  | "추리"
+  | "아케이드"
+  | "감성"
+  | "코믹"
+  | "판타지"
+  | "모험"
+  | "SF"
+  | "기타";
 
 export interface EscapeRecord {
   id: string;
@@ -41,10 +52,24 @@ export interface PublicReview extends EscapeRecord {
   isSample?: boolean; // 운영자가 넣은 예시 후기(화면에 '예시' 표시, 통계·배지 제외)
 }
 
-export const GENRES: Genre[] = ["공포", "추리", "모험", "감성", "코믹", "SF", "기타"];
+export const GENRES: Genre[] = [
+  "공포",
+  "스릴러",
+  "추리",
+  "아케이드",
+  "감성",
+  "코믹",
+  "판타지",
+  "모험",
+  "SF",
+  "기타",
+];
 
 export const GENRE_COLOR: Record<Genre, string> = {
   공포: "bg-red-50 text-red-600",
+  스릴러: "bg-slate-100 text-slate-700",
+  아케이드: "bg-sky-50 text-sky-600",
+  판타지: "bg-fuchsia-50 text-fuchsia-600",
   추리: "bg-emerald-50 text-emerald-600",
   모험: "bg-amber-50 text-amber-600",
   감성: "bg-pink-50 text-pink-500",
@@ -55,6 +80,9 @@ export const GENRE_COLOR: Record<Genre, string> = {
 
 export const GENRE_EMOJI: Record<Genre, string> = {
   공포: "👻",
+  스릴러: "🕵️",
+  아케이드: "🎯",
+  판타지: "🧚",
   추리: "🔍",
   모험: "🗺️",
   감성: "🥹",
@@ -63,7 +91,7 @@ export const GENRE_EMOJI: Record<Genre, string> = {
   기타: "🎲",
 };
 
-// 크롤링 등으로 기본 7종 외 장르가 들어와도 안전하게 표시(카탈로그용).
+// 크롤링 등으로 앱 장르 외 값이 들어와도 안전하게 표시(카탈로그용).
 export function genreEmoji(g: string): string {
   return GENRE_EMOJI[g as Genre] ?? "🎲";
 }
@@ -315,7 +343,7 @@ function catalogFromRow(r: CatalogRow): CandidateTheme {
     id: r.id,
     name: r.name,
     cafe: r.cafe,
-    genre: r.genre,
+    genre: normalizeGenre(r.genre, r.tags),
     difficulty: r.difficulty,
     fearLevel: r.fear_level,
     tags: r.tags ?? [],
