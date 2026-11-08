@@ -43,12 +43,14 @@ export const metadata: Metadata = {
   },
   // Google Search Console 소유권 인증(HTML 태그 방식).
   // 콘솔에서 받은 코드를 Vercel 환경변수 NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION 에 넣으면
-  // <meta name="google-site-verification"> 이 자동으로 렌더됨. (네이버는 naver)
+  // <meta name="google-site-verification"> 이 자동으로 렌더됨.
+  // 네이버 서치어드바이저 인증 값은 공개 값이라 기본값으로 둔다(환경변수가 있으면 그게 우선).
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
     other: {
       "naver-site-verification":
-        process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION || []
+        process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION ||
+        "2423e6587d5f934d6eff91732b06cd1ae212fff5"
     }
   },
   openGraph: {
