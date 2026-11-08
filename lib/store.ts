@@ -610,3 +610,41 @@ export async function importGuestRecords(): Promise<number> {
     return 0; // 실패하면 로컬에 그대로 두고 홈 배너에서 다시 시도
   }
 }
+
+// ── 테마 상세: 그 테마의 공개 후기 / 내 기록 ───────────────────────
+// 이름으로 넓게 가져온 뒤 같은 브랜드인지 lib/reviews.ts 의 isSameTheme 으로 거른다.
+export async function getThemePublicReviews(
+  themeName: string,
+  limit = 30
+): Promise<PublicReview[]> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("public_reviews")
+    .select("*")
+    .eq("theme_name", themeName.trim())
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (error || !data) return [];
+  const rows = data as RecordRow[];
+  const nickById = await nicknamesFor(rows.map((r) => r.user_id));
+  return rows.map((r) => ({
+    ...fromRow(r),
+    nickname: nickById.get(r.user_id ?? "") || "익명",
+  }));
+}
+
+export async function getMyThemeRecords(themeName: string): Promise<EscapeRecord[]> {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return [];
+  const { data, error } = await supabase
+    .from("records")
+    .select("*")
+    .eq("user_id", user.id)
+    .eq("theme_name", themeName.trim())
+    .order("played_at", { ascending: false, nullsFirst: false });
+  if (error || !data) return [];
+  return (data as RecordRow[]).map(fromRow);
+}

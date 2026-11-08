@@ -7,6 +7,7 @@ import { regionFromText } from "@/lib/region";
 import { brandOf } from "@/lib/cafe";
 import ReserveLink from "@/components/ReserveLink";
 import OwnerCTA from "@/components/OwnerCTA";
+import ThemeReviews from "@/components/ThemeReviews";
 import {
   getAllThemes,
   listedBrands,
@@ -250,6 +251,8 @@ export default async function ThemePage({
           🗝️ 이 방 기록하기
         </Link>
       </div>
+
+      <ThemeReviews themeId={t.id} themeName={t.name} cafe={t.cafe} />
 
       {siblings.length > 0 && (
         <section className="space-y-2">
