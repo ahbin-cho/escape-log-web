@@ -10,12 +10,12 @@ import { GENRES, type Genre } from "./store";
 const RAW_TO_GENRE: Record<string, Genre> = {
   호러: "공포",
   잠입: "스릴러", 범죄: "스릴러", 탈옥: "스릴러", 서스펜스: "스릴러", 수사: "스릴러", 탈취: "스릴러",
-  탐문: "추리", 문제방: "추리", 미스터리: "추리",
+  탐문: "추리", 문제방: "추리", 미스터리: "추리", 미스테리: "추리", 퍼즐: "추리",
   미션: "아케이드", 타임어택: "아케이드", 대결: "아케이드",
   드라마: "감성", 일상드라마: "감성", 일상: "감성", 실화: "감성", 로맨스: "감성", 힐링: "감성", 사극: "감성", 역사: "감성",
   병맛: "코믹", 머니머니: "코믹",
-  동화: "판타지", 요정: "판타지", 설화: "판타지", 큐트: "판타지", 고양이: "판타지", 환상: "판타지",
-  어드벤처: "모험", 어드벤쳐: "모험", 여행: "모험", 히어로: "모험",
+  동화: "판타지", 다크판타지: "판타지", 요정: "판타지", 설화: "판타지", 큐트: "판타지", 고양이: "판타지", 환상: "판타지",
+  어드벤처: "모험", 어드벤쳐: "모험", 여행: "모험", 히어로: "모험", 액션: "모험",
   시간: "SF",
 };
 
@@ -32,7 +32,7 @@ const TAG_RULES: [Genre, string[]][] = [
   ["감성", ["감성", "힐링", "드라마", "로맨스"]],
   ["모험", ["모험", "어드벤처"]],
   ["SF", ["SF"]],
-  ["추리", ["추리", "미스터리", "수사"]],
+  ["추리", ["추리", "미스터리", "미스테리", "수사"]],
 ];
 
 const key = (s: string) => s.trim().replace(/\s*\(.*\)$/, "").toUpperCase();
@@ -43,7 +43,9 @@ export function normalizeGenre(raw: string | null | undefined, tags: string[] | 
   if (own && own !== "기타") return own;
   if (k in RAW_TO_GENRE) return RAW_TO_GENRE[k];
   const fallback = VAGUE[k] ?? "기타";
-  const tagKeys = new Set((tags ?? []).map(key));
+  // "동화 어드벤처", "호러/19세미만불가" 처럼 여러 단어면 각 단어도 태그로 본다.
+  const words = k.split(/[\s/,·]+/).filter(Boolean);
+  const tagKeys = new Set([...(tags ?? []).map(key), ...(words.length > 1 ? words : [])]);
   for (const [genre, words] of TAG_RULES) {
     if (words.some((w) => tagKeys.has(key(w)))) return genre;
   }
