@@ -14,7 +14,9 @@ export const metadata: Metadata = {
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
   alternates: {
-    canonical: "/"
+    canonical: "/",
+    // 새로 들어온 테마 RSS (브라우저·수집기가 찾을 수 있게 모든 페이지에 표시)
+    types: { "application/rss+xml": [{ url: "/rss.xml", title: "방탈로그 새로 들어온 테마" }] }
   },
   keywords: [
     "방탈출",
