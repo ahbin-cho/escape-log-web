@@ -54,7 +54,8 @@ export default function HomeRegionThemes() {
   if (!ready || regionsPresent.length === 0) return null;
 
   const regionThemes = byRegion.filter((x) => x.r === region).map((x) => x.t);
-  const themes = mixByBrand(regionThemes, 4);
+  // 데스크톱은 왼쪽 지역 칩 세로 목록 높이만큼(2열×4줄) 채운다.
+  const themes = mixByBrand(regionThemes, 8);
 
   return (
     <section>
@@ -84,9 +85,9 @@ export default function HomeRegionThemes() {
           ))}
         </div>
 
-        {/* 우: 테마 미리보기 */}
-        <div className="grid gap-2 sm:grid-cols-2">
-          {themes.map((t) => {
+        {/* 우: 테마 미리보기 (content-start: 칩 목록이 길어도 카드가 세로로 늘어나지 않게) */}
+        <div className="grid content-start gap-2 sm:grid-cols-2">
+          {themes.map((t, i) => {
             const [brand, ...rest] = (t.cafe || "").split(" ");
             const branch = rest.join(" ");
             const inner = (
@@ -117,12 +118,21 @@ export default function HomeRegionThemes() {
               <Link
                 key={`${t.cafe}-${t.name}`}
                 href={`/theme/${t.id}?from=home`}
-                className="transition active:scale-[0.98]"
+                // 모바일은 세로로 쌓여 길어지므로 4장까지만
+                className={`transition active:scale-[0.98] ${i >= 4 ? "max-sm:hidden" : ""}`}
               >
                 {inner}
               </Link>
             );
           })}
+          {regionThemes.length > themes.length && region && (
+            <Link
+              href={`/region/${region}`}
+              className="py-1 text-right text-xs font-bold text-candy sm:col-span-2"
+            >
+              {region} 테마 {regionThemes.length}개 전체 보기 →
+            </Link>
+          )}
         </div>
       </div>
     </section>
