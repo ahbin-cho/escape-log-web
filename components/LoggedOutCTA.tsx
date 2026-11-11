@@ -41,8 +41,8 @@ export default function LoggedOutCTA() {
         </h1>
         <p className="mt-3 max-w-md leading-relaxed text-cream/70 [word-break:keep-all]">
           {MASCOT.name}가 방탈출 취향을 진단하고 딱 맞는 방까지 추천해줘.
-          다녀온 방은 다이어리에 기록하면 몇 번째 방인지, 올해 결산까지
-          자동으로.{" "}
+          다녀온 방은 기록하면 달력이 포스터로 채워지고, 몇 번째 방인지, 올해
+          결산까지 자동으로.{" "}
           <b className="font-extrabold text-cream">전부 무료.</b>
         </p>
         <div className="mt-6 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-4">

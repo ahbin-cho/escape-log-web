@@ -4,7 +4,7 @@ import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 // 방탈출 기록장 공유 카드.
 export const runtime = "edge";
-export const alt = "방탈출 기록장 · 다이어리";
+export const alt = "방탈출 기록장 · 달력 다이어리";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -43,7 +43,7 @@ export default function DiaryImage() {
           >
             방탈출 기록장
           </div>
-          <div style={{ marginTop: 20, fontSize: 34, fontWeight: 600, opacity: 0.7 }}>몇 번째 방인지, 올해 결산까지</div>
+          <div style={{ marginTop: 20, fontSize: 34, fontWeight: 600, opacity: 0.7 }}>달력 다이어리 · 몇 번째 방 · 올해 결산</div>
           <div
             style={{
               marginTop: 36,

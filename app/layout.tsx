@@ -8,7 +8,7 @@ import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/site";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "방탈로그 — 방탈출 기록장·다이어리, 취향 진단·추천",
+    default: "방탈로그 — 방탈출 기록장·달력 다이어리, 취향 진단·추천",
     template: "%s · 방탈로그"
   },
   description: SITE_DESCRIPTION,
@@ -23,6 +23,9 @@ export const metadata: Metadata = {
     "방탈출 기록",
     "방탈출 기록장",
     "방탈출 다이어리",
+    "방탈출 달력",
+    "방탈출 캘린더",
+    "방탈출 기록 달력",
     "방탈출 기록 앱",
     "방탈출 결산",
     "방탈출 추천",

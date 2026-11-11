@@ -16,10 +16,12 @@ import { RATING_LABELS } from "@/lib/terms";
 import RecordCard from "@/components/RecordCard";
 import Loader from "@/components/Loader";
 import DiaryView from "@/components/DiaryView";
+import CalendarView from "@/components/CalendarView";
 import YearRecapCard from "@/components/YearRecapCard";
 import { nextMilestone, playNumbers } from "@/lib/diary";
 
-type View = "diary" | "list";
+type View = "calendar" | "diary" | "list";
+const VIEWS: View[] = ["calendar", "diary", "list"];
 const VIEW_KEY = "escapelog:records:view";
 
 type Result = "전체" | "성공" | "실패";
@@ -44,13 +46,14 @@ export default function RecordsPage() {
   const [themeType, setThemeType] = useState<ThemeType>("전체");
   const [rating, setRating] = useState(0); // 0=전체, 1~5=등급
   const [sort, setSort] = useState<Sort>("recent");
-  const [view, setView] = useState<View>("diary");
+  const [view, setView] = useState<View>("calendar");
 
   useEffect(() => {
     try {
-      if (window.localStorage.getItem(VIEW_KEY) === "list") setView("list");
+      const saved = window.localStorage.getItem(VIEW_KEY) as View | null;
+      if (saved && VIEWS.includes(saved)) setView(saved);
     } catch {
-      // 기본값(다이어리) 유지
+      // 기본값(달력) 유지
     }
   }, []);
 
@@ -142,6 +145,7 @@ export default function RecordsPage() {
       <div className="flex gap-2" role="tablist" aria-label="보기 방식">
         {(
           [
+            ["calendar", "📅 달력"],
             ["diary", "📓 다이어리"],
             ["list", "🗂️ 카드 목록"],
           ] as [View, string][]
@@ -235,6 +239,8 @@ export default function RecordsPage() {
             첫 기록 추가하기
           </Link>
         </div>
+      ) : view === "calendar" ? (
+        <CalendarView records={filtered} numbers={numbers} />
       ) : view === "diary" ? (
         <DiaryView records={filtered} numbers={numbers} />
       ) : (

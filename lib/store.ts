@@ -345,6 +345,23 @@ export async function getCatalog(): Promise<CandidateTheme[]> {
   }
 }
 
+// 기록 달력에 깔 포스터만 가볍게 (줄거리 등은 안 읽음)
+export async function getPosters(): Promise<
+  { name: string; cafe: string; posterUrl: string }[]
+> {
+  try {
+    const { data, error } = await createClient()
+      .from("catalog")
+      .select("name, cafe, poster_url")
+      .not("poster_url", "is", null)
+      .neq("poster_url", "");
+    if (error || !data) return [];
+    return data.map((r) => ({ name: r.name, cafe: r.cafe, posterUrl: r.poster_url ?? "" }));
+  } catch {
+    return [];
+  }
+}
+
 // ─────────────────────────────────────────────────────────────
 // 취향 프로필 (기록에서 자동 계산) — 순수 함수
 // ─────────────────────────────────────────────────────────────

@@ -16,7 +16,7 @@ export const DEFAULT_OG_IMAGE = { url: "/opengraph-image.png", width: 1200, heig
 export const CONTACT_EMAIL = "coco.cho.bz@gmail.com";
 
 export const SITE_DESCRIPTION =
-  "다녀온 방탈출을 기록하는 무료 기록장. 몇 번째 방인지 세 주는 다이어리와 연말 결산, 취향 진단과 딱 맞는 테마 추천, 친구 궁합까지.";
+  "다녀온 방탈출을 기록하는 무료 기록장. 포스터로 채워지는 달력 다이어리, 몇 번째 방인지와 연말 결산, 취향 진단과 딱 맞는 테마 추천, 친구 궁합까지.";
 
 // 로그인/회원 전용·개인 페이지에 붙이는 색인 제외 메타.
 // noindex 는 크롤을 막지 않고 "색인만 하지 마"라는 뜻이라, 검색엔진이

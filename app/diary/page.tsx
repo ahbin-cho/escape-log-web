@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
-// 공개 소개 페이지: "방탈출 기록장·다이어리" 검색어를 받는 곳.
+// 공개 소개 페이지: "방탈출 기록장·다이어리·달력" 검색어를 받는 곳.
 // 개인 기록 화면(/records, /new)은 색인 제외라 검색에 안 잡히므로,
 // 이 페이지가 "여기서 내 방탈출을 기록하는구나"를 알려 준다. 순수 정적 페이지.
 
-const TITLE = "방탈출 기록장 · 다이어리 — 몇 번째 방인지, 올해 결산까지";
+const TITLE = "방탈출 기록장 · 달력 다이어리 — 포스터로 채우는 내 방탈출 캘린더";
 const DESCRIPTION =
-  "다녀온 방탈출을 기록하는 무료 기록장. 탈출 성공·남은 시간·힌트·별점·한줄 후기를 남기면 'N번째 방' 다이어리와 연말 결산이 자동으로 만들어져요. 로그인 없이 바로 써 볼 수 있어요.";
+  "다녀온 방탈출을 기록하는 무료 기록장. 탈출 성공·남은 시간·힌트·별점·한줄 후기를 남기면 테마 포스터로 채워지는 달력, 'N번째 방' 다이어리, 연말 결산이 자동으로 만들어져요. 로그인 없이 바로 써 볼 수 있어요.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -18,17 +18,31 @@ export const metadata: Metadata = {
     "방탈출 기록",
     "방탈출 기록장",
     "방탈출 다이어리",
+    "방탈출 달력",
+    "방탈출 캘린더",
+    "방탈출 기록 달력",
     "방탈출 기록 앱",
     "방탈출 결산",
     "방탈출 일지",
     "방탈출 후기 기록",
   ],
   openGraph: {
-    title: `방탈출 기록장 · 다이어리 | ${SITE_NAME}`,
+    title: `방탈출 기록장 · 달력 다이어리 | ${SITE_NAME}`,
     description: DESCRIPTION,
     url: `${SITE_URL}/diary`,
   },
 };
+
+// 달력 예시 한 주 (실제 사용자 데이터 아님)
+const CAL_SAMPLE: { day: number; emoji?: string; tile?: string; more?: number }[] = [
+  { day: 16 },
+  { day: 17 },
+  { day: 18, emoji: "👻", tile: "bg-red-50" },
+  { day: 19 },
+  { day: 20 },
+  { day: 21, emoji: "🔍", tile: "bg-emerald-50", more: 1 },
+  { day: 22, emoji: "🥹", tile: "bg-pink-50" },
+];
 
 // 화면에 보여 줄 예시 기록 (실제 사용자 데이터 아님)
 const SAMPLE = [
@@ -95,6 +109,10 @@ const FAQ = [
     a: "한줄 후기와 비공개 메모를 따로 받아요. 스포가 담긴 메모는 나만 볼 수 있고, 공개 후기로 올릴 때도 절대 노출되지 않아요.",
   },
   {
+    q: "달력으로도 볼 수 있나요?",
+    a: "네. 기록하면 다녀온 날짜 칸이 테마 포스터로 채워지는 달력이 기본 화면이에요. 인증샷을 올리면 그 사진으로 채워지고, 하루에 여러 방을 했으면 +2처럼 표시돼요. 날짜를 누르면 그날 기록이 바로 펼쳐져요.",
+  },
+  {
     q: "몇 번째 방인지 자동으로 세 주나요?",
     a: "네. 다녀온 날짜 순으로 '#47'처럼 번호가 붙고, 10·30·50·100번째 방 같은 기념 숫자는 따로 표시돼요. 다음 기념까지 몇 방 남았는지도 알려 줘요.",
   },
@@ -156,8 +174,9 @@ export default function DiaryLandingPage() {
           다이어리로 남겨요
         </h1>
         <p className="max-w-xl leading-relaxed text-cream/70 [word-break:keep-all]">
-          탈출 성공, 남은 시간, 힌트, 별점, 한줄 후기만 적으면 끝. 몇 번째
-          방인지 자동으로 세고, 연말엔 나만의 방탈출 결산까지 만들어 줘요.{" "}
+          탈출 성공, 남은 시간, 힌트, 별점, 한줄 후기만 적으면 끝. 다녀온 날은
+          달력에 테마 포스터로 채워지고, 몇 번째 방인지 자동으로 세고, 연말엔
+          나만의 방탈출 결산까지 만들어 줘요.{" "}
           <b className="font-extrabold text-cream">로그인 없이 바로 시작.</b>
         </p>
         <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-4">
@@ -175,6 +194,44 @@ export default function DiaryLandingPage() {
           </Link>
         </div>
       </header>
+
+      {/* 달력 미리보기 */}
+      <section className="space-y-3">
+        <h2 className="text-xl font-extrabold">📅 달력으로 한눈에</h2>
+        <p className="text-sm text-cream/60">
+          예시 화면이에요. 다녀온 날짜 칸이 테마 포스터(또는 내 인증샷)로
+          채워져서, 이번 달 얼마나 달렸는지 한눈에 보여요.
+        </p>
+        <div className="rough mx-auto max-w-sm rounded-2xl border-2 border-edge bg-panel p-3">
+          <p className="mb-2 text-center text-sm font-extrabold">
+            11월 <span className="text-xs font-bold text-cream/55">· 4방 · 탈출 3</span>
+          </p>
+          <div className="grid grid-cols-7 gap-1.5 text-center text-[11px] font-extrabold">
+            {["일", "월", "화", "수", "목", "금", "토"].map((w) => (
+              <span key={w} className="text-cream/45">
+                {w}
+              </span>
+            ))}
+            {CAL_SAMPLE.map((c, i) => (
+              <div key={i} className="flex flex-col gap-1">
+                <span className={c.tile ? "text-cream" : "text-cream/35"}>{c.day}</span>
+                <span
+                  className={`relative flex aspect-[3/4] items-center justify-center rounded-md text-base ${
+                    c.tile ? `${c.tile} ring-1 ring-edge/15` : ""
+                  }`}
+                >
+                  {c.emoji}
+                  {c.more && (
+                    <span className="absolute bottom-0.5 right-0.5 rounded-full bg-edge/80 px-1 text-[9px] leading-3 text-panel">
+                      +{c.more}
+                    </span>
+                  )}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* 다이어리 미리보기 */}
       <section className="space-y-3">
@@ -287,7 +344,7 @@ export default function DiaryLandingPage() {
           {[
             ["1", "로그인 없이 바로 쓰기", "테마를 고르고 결과만 적으면 끝"],
             ["2", "10초 가입으로 지키기", "이메일만 있으면 기록이 계정으로"],
-            ["3", "다이어리·결산·추천", "쌓일수록 내 취향 추천이 정확해져요"],
+            ["3", "달력·결산·추천", "쌓일수록 내 취향 추천이 정확해져요"],
           ].map(([n, t, d]) => (
             <li key={n} className="rounded-2xl border-2 border-edge bg-panel p-4">
               <p className="text-2xl font-extrabold text-candy">{n}</p>

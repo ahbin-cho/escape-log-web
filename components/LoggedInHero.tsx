@@ -80,7 +80,7 @@ export default function LoggedInHero({ records }: { records: EscapeRecord[] }) {
             href="/records"
             className="rough inline-flex items-center justify-center rounded-xl border-2 border-edge bg-panel px-4 py-2.5 text-sm font-extrabold shadow-cute transition active:scale-[0.97]"
           >
-            📓 다이어리
+            📅 내 달력
           </Link>
         )}
         <Link
