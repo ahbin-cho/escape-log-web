@@ -9,7 +9,7 @@ import { SITE_URL } from "@/lib/site";
 
 // 인스타용 "오늘의 미스터리 방" 카드 (1080×1350, JPEG — 인스타 게시 API 는 JPEG 만 받음).
 // ?date=YYYY-MM-DD 로 다른 날 미리보기. 정답(테마 이름·매장)은 그리지 않는다.
-// 피드에서 0.5초 안에 멈추게: 큰 질문 → 짧게 끊은 줄거리 → 힌트 칩 → "정답은 프로필 링크".
+// 콘셉트 "사건 파일": 사이트의 크림 종이·먹선·딱딱한 그림자 그대로, 방 이름은 검은 줄로 가린 기밀 서류.
 // 글꼴: Pretendard (OFL, assets/fonts/Pretendard-LICENSE.txt)
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -17,13 +17,16 @@ export const dynamic = "force-dynamic";
 const W = 1080;
 const H = 1350;
 
+// 사이트와 같은 색(tailwind.config.ts): 크림 종이·진한 먹선·주황 도장
 const C = {
-  bg: "#17151C",
-  panel: "#24212B",
-  cream: "#F5F0E6",
-  dim: "#A9A3B3",
-  candy: "#F0A04B",
-  grape: "#9B8CE0",
+  bg: "#F5F0E6",
+  paper: "#FFFCF6",
+  ink: "#1D1D1D",
+  dim: "#6B6560",
+  candy: "#E49A4A",
+  stamp: "#D9682B",
+  grape: "#8B7EC8",
+  line: "#E8E0D2",
 };
 
 let fontsCache: Promise<{ name: string; data: Buffer; weight: 500 | 800 }[]> | null = null;
@@ -50,14 +53,12 @@ export async function GET(req: Request) {
   if (!t) return new Response("오늘 고를 테마가 없어요", { status: 404 });
 
   const region = regionFromText(t.cafe);
-  const chips = [
-    t.genre,
-    `난이도 ${"●".repeat(t.difficulty)}${"○".repeat(Math.max(0, 5 - t.difficulty))}`,
-    `공포도 ${"●".repeat(t.fear_level)}${"○".repeat(Math.max(0, 5 - t.fear_level))}`,
-    region ?? "",
-  ].filter(Boolean);
   const [, m, d] = kstDate(now).split("-");
   const origin = url.origin;
+
+  const nameLen = Math.min(9, Math.max(3, [...t.name.trim()].length));
+  const dots = (n: number) => `${"●".repeat(n)}${"○".repeat(Math.max(0, 5 - n))}`;
+  const fileNo = `NO. ${m}${d}`;
 
   const png = await new ImageResponse(
     (
@@ -66,117 +67,151 @@ export async function GET(req: Request) {
           width: "100%",
           height: "100%",
           display: "flex",
-          flexDirection: "column",
-          padding: "84px 84px 72px",
-          backgroundColor: C.bg,
-          color: C.cream,
-          fontFamily: "Pretendard",
           position: "relative",
+          backgroundColor: C.bg,
+          color: C.ink,
+          fontFamily: "Pretendard",
         }}
       >
-        {/* 배경의 큰 물음표 */}
+        {/* 서류 한 장: 사이트 버튼처럼 굵은 먹선 + 딱딱하게 밀린 그림자, 살짝 기울임 */}
         <div
           style={{
             position: "absolute",
-            right: -40,
-            top: 120,
-            fontSize: 900,
-            fontWeight: 800,
-            color: C.panel,
-            lineHeight: 1,
-          }}
-        >
-          ?
-        </div>
-
-        <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-          <div
-            style={{
-              display: "flex",
-              padding: "12px 26px",
-              borderRadius: 999,
-              backgroundColor: C.candy,
-              color: C.bg,
-              fontSize: 32,
-              fontWeight: 800,
-            }}
-          >
-            오늘의 미스터리 방
-          </div>
-          <div style={{ fontSize: 32, fontWeight: 500, color: C.dim }}>
-            {`${Number(m)}월 ${Number(d)}일`}
-          </div>
-        </div>
-
-        <div
-          style={{
-            marginTop: 56,
-            fontSize: 118,
-            fontWeight: 800,
-            lineHeight: 1.1,
-            letterSpacing: "-0.04em",
-          }}
-        >
-          이 방, 어디게?
-        </div>
-
-        {/* 줄거리: 바깥 상자는 세로로 쌓고, 글은 안쪽 상자에 넣어야 줄바꿈 높이가 제대로 잡힌다 */}
-        <div
-          style={{
-            marginTop: 56,
+            left: 70,
+            top: 90,
+            width: 940,
+            height: 1010,
             display: "flex",
             flexDirection: "column",
-            padding: "48px 52px",
-            borderRadius: 36,
-            backgroundColor: C.panel,
+            padding: "70px 64px 56px",
+            backgroundColor: C.paper,
+            border: `6px solid ${C.ink}`,
+            boxShadow: `16px 16px 0 0 ${C.ink}`,
+            transform: "rotate(-1.5deg)",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              fontSize: 46,
-              fontWeight: 500,
-              lineHeight: 1.55,
-              letterSpacing: "-0.02em",
-            }}
-          >
-            {`“${teaserPreview(t.teaser ?? "", 82)}”`}
+          {/* 머리: 서류 번호 + 분류 */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div style={{ fontSize: 30, fontWeight: 800, letterSpacing: "0.12em" }}>
+              방탈출 사건 파일
+            </div>
+            <div style={{ fontSize: 30, fontWeight: 500, color: C.dim, letterSpacing: "0.08em" }}>
+              {fileNo}
+            </div>
           </div>
-        </div>
+          <div style={{ marginTop: 22, height: 4, backgroundColor: C.ink, display: "flex" }} />
 
-        <div style={{ marginTop: 40, display: "flex", flexWrap: "wrap", gap: 16 }}>
-          {chips.map((c) => (
+          {/* 방 이름: 기밀 문서처럼 검은 줄로 가림 */}
+          <div style={{ marginTop: 46, display: "flex", alignItems: "center", gap: 22 }}>
+            <div style={{ fontSize: 40, fontWeight: 800 }}>방 이름</div>
             <div
-              key={c}
               style={{
                 display: "flex",
-                padding: "14px 26px",
-                borderRadius: 999,
-                border: `3px solid ${C.grape}`,
-                color: C.cream,
-                fontSize: 32,
-                fontWeight: 800,
+                width: nameLen * 60,
+                height: 62,
+                backgroundColor: C.ink,
+                transform: "rotate(-0.6deg)",
+              }}
+            />
+          </div>
+          <div style={{ marginTop: 14, fontSize: 28, fontWeight: 500, color: C.dim }}>
+            {`${region ?? "어딘가"}의 한 방탈출 · 정체 미확인`}
+          </div>
+
+          {/* 제보 내용 = 줄거리 */}
+          <div style={{ marginTop: 46, fontSize: 30, fontWeight: 800, color: C.stamp }}>제보 내용</div>
+          <div
+            style={{
+              marginTop: 16,
+              display: "flex",
+              flexDirection: "column",
+              borderTop: `3px dashed ${C.line}`,
+              borderBottom: `3px dashed ${C.line}`,
+              padding: "28px 0",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                fontSize: 42,
+                fontWeight: 500,
+                lineHeight: 1.6,
+                wordBreak: "keep-all",
               }}
             >
-              {c}
-            </div>
-          ))}
-        </div>
-
-        <div style={{ flex: 1 }} />
-
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: 50, fontWeight: 800, color: C.candy }}>
-              정답은 프로필 링크에서
-            </div>
-            <div style={{ marginTop: 10, fontSize: 32, fontWeight: 500, color: C.dim }}>
-              {`알 것 같으면 댓글로 · ${new URL(SITE_URL).host}`}
+              {teaserPreview(t.teaser ?? "", 78)}
             </div>
           </div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={`${origin}/mascot.png`} alt="" width={250} height={250} />
+
+          {/* 단서 */}
+          <div style={{ marginTop: 34, display: "flex", flexDirection: "column", gap: 14 }}>
+            {[
+              ["장르", t.genre],
+              ["난이도", dots(t.difficulty)],
+              ["공포도", dots(t.fear_level)],
+            ].map(([k, v]) => (
+              <div key={k} style={{ display: "flex", fontSize: 34 }}>
+                <div style={{ width: 150, fontWeight: 800 }}>{k}</div>
+                <div style={{ fontWeight: 500 }}>{v}</div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ flex: 1 }} />
+          <div style={{ display: "flex", justifyContent: "flex-end", fontSize: 28, fontWeight: 500, color: C.dim }}>
+            {new URL(SITE_URL).host}
+          </div>
         </div>
+
+        {/* 주황 잉크 도장 */}
+        <div
+          style={{
+            position: "absolute",
+            right: 120,
+            top: 240,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: "14px 26px",
+            border: `7px solid ${C.stamp}`,
+            borderRadius: 14,
+            color: C.stamp,
+            transform: "rotate(9deg)",
+            opacity: 0.9,
+          }}
+        >
+          <div style={{ fontSize: 44, fontWeight: 800, letterSpacing: "0.06em" }}>미스터리</div>
+          <div style={{ fontSize: 26, fontWeight: 800, letterSpacing: "0.2em" }}>{`${Number(m)}.${Number(d)} 오늘의 방`}</div>
+        </div>
+
+        {/* 탈출귀 + 말풍선 (반말) */}
+        <div
+          style={{
+            position: "absolute",
+            right: 230,
+            bottom: 70,
+            display: "flex",
+            flexDirection: "column",
+            padding: "18px 30px",
+            backgroundColor: C.paper,
+            border: `5px solid ${C.ink}`,
+            borderRadius: 28,
+            boxShadow: `8px 8px 0 0 ${C.ink}`,
+          }}
+        >
+          <div style={{ fontSize: 34, fontWeight: 800 }}>흐흐, 어딘지 알겠어? 댓글 ㄱㄱ</div>
+          <div style={{ marginTop: 6, fontSize: 30, fontWeight: 800, color: C.stamp }}>
+            정답은 프로필 링크에 있어
+          </div>
+        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={`${origin}/mascot.png`}
+          alt=""
+          width={230}
+          height={230}
+          style={{ position: "absolute", right: 30, bottom: 30, transform: "rotate(8deg)" }}
+        />
       </div>
     ),
     { width: W, height: H, fonts: await fonts() }
