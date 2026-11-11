@@ -56,7 +56,8 @@ export async function GET(req: Request) {
   const [, m, d] = kstDate(now).split("-");
   const origin = url.origin;
 
-  const nameLen = Math.min(9, Math.max(3, [...t.name.trim()].length));
+  // 가림 줄 길이로 이름 길이를 살짝 힌트. 도장과 겹치지 않게 최대 7칸(420px)
+  const nameLen = Math.min(7, Math.max(3, [...t.name.trim()].length));
   const dots = (n: number) => `${"●".repeat(n)}${"○".repeat(Math.max(0, 5 - n))}`;
   const fileNo = `NO. ${m}${d}`;
 
