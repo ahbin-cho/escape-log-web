@@ -72,3 +72,9 @@ export function alreadyPostedToday(
       (m.caption ?? "").includes("오늘의 미스터리 방")
   );
 }
+
+// 토큰 종류에 맞는 그래프 API 주소.
+// 인스타 로그인 방식 토큰(IGAA…)만 graph.instagram.com, 통합 로그인·시스템 사용자 토큰(EAA…)은 graph.facebook.com
+export function graphHost(token: string): string {
+  return token.startsWith("IG") ? "graph.instagram.com" : "graph.facebook.com";
+}

@@ -1,6 +1,6 @@
 import { getAllThemes } from "@/lib/catalog-server";
 import { dailyMystery, kstDate } from "@/lib/home-picks";
-import { alreadyPostedToday, mysteryCaption } from "@/lib/instagram";
+import { alreadyPostedToday, graphHost, mysteryCaption } from "@/lib/instagram";
 import { SITE_URL } from "@/lib/site";
 
 // 인스타 "오늘의 미스터리 방" 게시. Vercel Cron 이 하루 1번 부른다(vercel.json).
@@ -8,7 +8,9 @@ import { SITE_URL } from "@/lib/site";
 // 필요한 환경변수(Vercel 대시보드에만 넣고 코드·대화에 적지 않기):
 //   CRON_SECRET        이 주소를 아무나 못 부르게 하는 값(Vercel Cron 이 자동으로 같이 보냄)
 //   IG_USER_ID         인스타 프로페셔널 계정 ID
-//   IG_ACCESS_TOKEN    인스타 로그인 방식 API 의 장기 토큰(약 60일 유효 → 만료 전 갱신 필요)
+//   IG_ACCESS_TOKEN    게시 토큰. 두 종류 모두 된다:
+//                      - 통합 로그인(비즈니스용 Facebook 로그인)의 시스템 사용자 토큰(만료 없음) → graph.facebook.com
+//                      - 인스타 로그인 방식 토큰(IGAA 로 시작, 약 60일) → graph.instagram.com
 //   IG_API_VERSION     (선택) 기본 v21.0
 // IG_* 가 없거나 ?dry=1 이면 실제로 올리지 않고 올릴 내용만 돌려준다.
 export const runtime = "nodejs";
@@ -22,7 +24,8 @@ const json = (body: unknown, status = 200) =>
   });
 
 async function graph(path: string, init?: RequestInit) {
-  const base = `https://graph.instagram.com/${process.env.IG_API_VERSION || "v21.0"}`;
+  const token = process.env.IG_ACCESS_TOKEN ?? "";
+  const base = `https://${graphHost(token)}/${process.env.IG_API_VERSION || "v21.0"}`;
   const res = await fetch(`${base}${path}`, init);
   const body = await res.json().catch(() => ({}));
   if (!res.ok || body.error) {

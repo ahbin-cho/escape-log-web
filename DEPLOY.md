@@ -127,7 +127,7 @@ Vercel → 프로젝트 → Settings → Environment Variables 에 **직접** �
 |---|---|
 | `CRON_SECRET` | 아무 긴 무작위 문자열. 이게 없으면 게시 주소가 항상 거절됨 |
 | `IG_USER_ID` | 인스타 프로페셔널 계정 ID |
-| `IG_ACCESS_TOKEN` | 인스타 로그인 방식 API 장기 토큰 (약 60일 유효, 만료 전에 갱신) |
+| `IG_ACCESS_TOKEN` | 통합 로그인의 시스템 사용자 토큰(만료 없음, 권장) 또는 인스타 로그인 토큰(IGAA…, 약 60일) |
 
 - `IG_USER_ID`·`IG_ACCESS_TOKEN` 이 없으면 실제로 올리지 않고 올릴 내용만 돌려준다(시험용).
 - 같은 날 두 번 불려도 이미 올렸으면 건너뛴다.

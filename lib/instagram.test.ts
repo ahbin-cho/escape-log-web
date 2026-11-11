@@ -39,3 +39,11 @@ describe("alreadyPostedToday", () => {
     expect(alreadyPostedToday([{ caption: "다른 글", timestamp: "2026-11-12T01:00:00+0000" }], now)).toBe(false);
   });
 });
+
+describe("graphHost", () => {
+  it("토큰 종류로 주소를 고른다", async () => {
+    const { graphHost } = await import("./instagram");
+    expect(graphHost("IGAAxxxx")).toBe("graph.instagram.com");
+    expect(graphHost("EAAxxxx")).toBe("graph.facebook.com");
+  });
+});
