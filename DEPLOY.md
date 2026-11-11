@@ -114,3 +114,20 @@ Supabase 대시보드 왼쪽 메뉴 **Table Editor** 에서 실제 데이터를 
 - AI 페르소나를 진짜 LLM으로 켜려면 `.env.local`/Vercel 에 `OPENAI_API_KEY` 또는
   `ANTHROPIC_API_KEY` 를 넣고 `app/api/persona/route.ts` 를 POST 핸들러로 되돌리면 됩니다.
 - 업데이트 배포는 `git push` → Vercel 자동 재배포.
+
+
+## 인스타그램 자동 게시 (오늘의 미스터리 방)
+
+매일 한국 시간 낮 12시쯤 Vercel Cron 이 `/api/ig/publish` 를 불러 그날의 미스터리 방 카드를 올린다
+(`vercel.json`). 카드 이미지는 `/api/ig/mystery` (JPEG, `?date=YYYY-MM-DD` 로 미리보기).
+
+Vercel → 프로젝트 → Settings → Environment Variables 에 **직접** 넣는다(코드·대화에 적지 않기):
+
+| 이름 | 값 |
+|---|---|
+| `CRON_SECRET` | 아무 긴 무작위 문자열. 이게 없으면 게시 주소가 항상 거절됨 |
+| `IG_USER_ID` | 인스타 프로페셔널 계정 ID |
+| `IG_ACCESS_TOKEN` | 인스타 로그인 방식 API 장기 토큰 (약 60일 유효, 만료 전에 갱신) |
+
+- `IG_USER_ID`·`IG_ACCESS_TOKEN` 이 없으면 실제로 올리지 않고 올릴 내용만 돌려준다(시험용).
+- 같은 날 두 번 불려도 이미 올렸으면 건너뛴다.
