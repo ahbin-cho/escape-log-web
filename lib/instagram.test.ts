@@ -20,6 +20,10 @@ describe("mysteryCaption", () => {
     const tags = mysteryHashtags(t());
     expect(tags).toContain("#공포방탈출");
     expect(tags).toContain("#서울방탈출");
+    expect(tags[0]).toBe("#강남방탈출"); // 동네 태그가 맨 앞
+    expect(tags).toContain("#강남데이트");
+    expect(tags.some((x) => x.includes("키이스케이프"))).toBe(false); // 브랜드(정답) 태그 없음
+    expect(tags.length).toBeLessThanOrEqual(30);
     expect(tags).toContain("#방탈출입문");
     expect(new Set(tags).size).toBe(tags.length);
     expect(tags.every((x) => /^#[0-9A-Za-z가-힣_]+$/.test(x))).toBe(true);
@@ -45,5 +49,15 @@ describe("graphHost", () => {
     const { graphHost } = await import("./instagram");
     expect(graphHost("IGAAxxxx")).toBe("graph.instagram.com");
     expect(graphHost("EAAxxxx")).toBe("graph.facebook.com");
+  });
+});
+
+describe("districtFromText", () => {
+  it("매장명 속 동네 이름, 시도 이름은 제외", async () => {
+    const { districtFromText } = await import("./region");
+    expect(districtFromText("키이스케이프 강남점")).toBe("강남");
+    expect(districtFromText("비트포비아 서면던전")).toBe("서면");
+    expect(districtFromText("제로월드 홍익대점")).toBe("홍대");
+    expect(districtFromText("셜록홈즈 부산점")).toBeNull();
   });
 });

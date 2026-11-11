@@ -79,6 +79,16 @@ export function regionFromText(text: string): Region | null {
   return null;
 }
 
+// 매장명 속 동네·상권 이름(강남·홍대·서면 등). 시도 이름 자체(서울·부산)는 빼고, 없으면 null.
+// 인스타 해시태그(#강남방탈출)처럼 사람들이 실제로 찾는 단위에 쓴다.
+export function districtFromText(text: string): string | null {
+  for (const region of REGIONS) {
+    const kw = REGION_KEYWORDS[region].find((k) => k !== region && text.includes(k));
+    if (kw) return kw === "홍익" ? "홍대" : kw;
+  }
+  return null;
+}
+
 export function inferRegion(record: EscapeRecord): Region | null {
   // 1) 기록에 지역을 직접 선택했으면 그걸 확정으로 사용
   if (record.region && (REGIONS as string[]).includes(record.region)) {

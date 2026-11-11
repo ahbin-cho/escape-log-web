@@ -1,5 +1,5 @@
 import type { ThemeRow } from "./catalog-server";
-import { regionFromText } from "./region";
+import { districtFromText, regionFromText } from "./region";
 
 // ─────────────────────────────────────────────────────────────
 // 인스타그램 자동 게시: "오늘의 미스터리 방" 글(캡션)과 게시 순서.
@@ -14,20 +14,36 @@ function tag(s: string): string {
   return `#${s.replace(/[^0-9A-Za-z가-힣_]/g, "")}`;
 }
 
+// 해시태그: 큰 태그(묻히기 쉬움) + 중간 태그 + 좁은 태그(동네·조건, 여기서 눈에 띈다)를 섞는다.
+// 브랜드 태그(#키이스케이프 등)는 정답이 드러나므로 넣지 않는다.
 export function mysteryHashtags(t: ThemeRow): string[] {
   const region = regionFromText(t.cafe);
+  const district = districtFromText(t.cafe);
+  const playersMin = Number(((t.players ?? "").match(/\d+/) || [])[0]) || 0;
   const tags = [
-    "방탈출",
-    "방탈출추천",
-    "방탈출카페",
-    "방탈출후기",
-    "오늘의미스터리방",
-    "방탈로그",
-    `${t.genre}방탈출`,
+    // 좁은 태그: 지역·동네
+    district ? `${district}방탈출` : "",
     region ? `${region}방탈출` : "",
+    district ? `${district}데이트` : "",
+    // 조건
+    `${t.genre}방탈출`,
     t.fear_level <= 2 ? "안무서운방탈출" : "",
     t.fear_level >= 4 ? "공포방탈출" : "",
     t.difficulty <= 2 ? "방탈출입문" : "",
+    t.difficulty >= 4 ? "고난도방탈출" : "",
+    playersMin && playersMin <= 2 && t.fear_level <= 3 ? "데이트코스" : "",
+    // 중간 태그: 방탈출 커뮤니티
+    "방탈출추천",
+    "방탈출후기",
+    "방탈출카페",
+    "방탈러",
+    "방린이",
+    "방탈출스타그램",
+    // 큰 태그 + 우리 태그
+    "방탈출",
+    "이색데이트",
+    "오늘의미스터리방",
+    "방탈로그",
   ].filter(Boolean);
   return [...new Set(tags.map(tag))].slice(0, IG_HASHTAG_MAX);
 }
