@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import MiniGameFab from "@/components/MiniGameFab";
+import AttributionCapture from "@/components/AttributionCapture";
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -178,6 +179,7 @@ export default function RootLayout({
           {children}
         </main>
         <MiniGameFab />
+        <AttributionCapture />
         <SiteFooter />
       </body>
     </html>

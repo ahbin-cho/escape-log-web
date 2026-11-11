@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { hasGuestPending, importGuestRecords } from "@/lib/store";
+import { trackAttributionEvent } from "@/lib/track";
 
 type Mode = "signin" | "signup";
 
@@ -68,6 +69,7 @@ export default function LoginPage() {
           options: { data: { nickname: nickname.trim() } },
         });
         if (error) throw error;
+        trackAttributionEvent("signup");
         // 이메일 확인이 켜져 있으면 세션이 없음 → 안내
         if (!data.session) {
           setBusy(false);

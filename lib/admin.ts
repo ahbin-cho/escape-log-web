@@ -250,3 +250,49 @@ export async function adminBrandClickRows(
     (await readAll("theme_name,cafe,source,created_at"));
   return rows?.map((r) => ({ ...r, type_id: r.type_id ?? null })) ?? null;
 }
+
+// 유입 출처별 최근 30일 집계(attribution_stats 뷰, 관리자만 읽힘). 표가 없으면 null.
+export type AttributionStat = {
+  source: string;
+  medium: string;
+  campaign: string;
+  visitors: number;
+  quizDone: number;
+  recordSaved: number;
+  signup: number;
+  reserveClick: number;
+  lastSeen: string;
+};
+
+export async function adminAttributionStats(): Promise<AttributionStat[] | null> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("attribution_stats")
+    .select("*")
+    .order("visitors", { ascending: false })
+    .limit(300);
+  if (error || !data) return null;
+  return (
+    data as {
+      source: string;
+      medium: string;
+      campaign: string;
+      visitors: number;
+      quiz_done: number;
+      record_saved: number;
+      signup: number;
+      reserve_click: number;
+      last_seen: string;
+    }[]
+  ).map((r) => ({
+    source: r.source,
+    medium: r.medium,
+    campaign: r.campaign,
+    visitors: r.visitors,
+    quizDone: r.quiz_done,
+    recordSaved: r.record_saved,
+    signup: r.signup,
+    reserveClick: r.reserve_click,
+    lastSeen: r.last_seen,
+  }));
+}

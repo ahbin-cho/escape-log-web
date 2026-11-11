@@ -42,6 +42,9 @@ export default async function AdminLayout({
         <Link href="/admin/clicks" className={tab}>
           예약 클릭
         </Link>
+        <Link href="/admin/sources" className={tab}>
+          유입 출처
+        </Link>
       </div>
       {children}
     </div>

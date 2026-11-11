@@ -42,3 +42,11 @@ describe("cleanTag / isFresh / buildTrackedUrl", () => {
     expect([p.get("utm_source"), p.get("utm_medium"), p.get("utm_campaign")]).toEqual(["dcinside", "community", "첫_글"]);
   });
 });
+
+describe("rateLabel", () => {
+  it("방문자 대비 비율", async () => {
+    const { rateLabel } = await import("./attribution");
+    expect(rateLabel(1, 3)).toBe("33%");
+    expect(rateLabel(0, 0)).toBe("–");
+  });
+});

@@ -16,6 +16,7 @@ import {
 } from "@/lib/store";
 import { REGIONS, regionFromText } from "@/lib/region";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
+import { trackAttributionEvent } from "@/lib/track";
 import { ratingLabel, fearLabel } from "@/lib/terms";
 
 type ScaleKey = "difficulty" | "fearLevel" | "rating";
@@ -202,11 +203,13 @@ export default function RecordForm({
     if (guest && mode === "new") {
       // 비회원: 이 기기에 먼저 저장하고, 가입하면 계정으로 옮긴다
       saveGuestRecord(record);
+      if (mode === "new") trackAttributionEvent("record_saved");
       router.push("/login?mode=signup&guest=1&next=/records");
       return;
     }
     try {
       await saveRecord(record);
+      if (mode === "new") trackAttributionEvent("record_saved");
       router.push("/");
       router.refresh();
     } catch (err) {

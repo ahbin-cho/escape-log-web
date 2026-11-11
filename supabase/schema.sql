@@ -379,3 +379,57 @@ $$;
 
 revoke all on function public.quiz_type_counts() from public;
 grant execute on function public.quiz_type_counts() to anon, authenticated;
+
+-- ─────────────────────────────────────────────────────────────
+-- 유입 출처 추적: 커뮤니티·광고·검색에서 온 방문자가 무엇을 했는지.
+-- 출처(utm 꼬리표 또는 넘어온 사이트)가 있는 방문만 기록한다(직접 방문은 안 셈).
+-- visitor_id 는 브라우저에 만든 무작위 번호(중복 집계 방지용)일 뿐, 누구인지 알 수 없다.
+-- 누구나 기록만 가능, 조회는 관리자만. 재실행 안전.
+-- ─────────────────────────────────────────────────────────────
+create table if not exists public.attribution_events (
+  id         bigint generated always as identity primary key,
+  visitor_id uuid not null,
+  source     text not null check (char_length(source) between 1 and 50),
+  medium     text not null default '' check (char_length(medium) <= 50),
+  campaign   text not null default '' check (char_length(campaign) <= 50),
+  event      text not null
+             check (event in ('visit','quiz_done','record_saved','signup','reserve_click')),
+  path       text not null default '' check (char_length(path) <= 200),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists attribution_events_created_at_idx
+  on public.attribution_events (created_at);
+
+alter table public.attribution_events enable row level security;
+
+drop policy if exists attribution_events_insert on public.attribution_events;
+create policy attribution_events_insert on public.attribution_events
+  for insert to anon, authenticated with check (true);
+
+drop policy if exists attribution_events_select on public.attribution_events;
+create policy attribution_events_select on public.attribution_events
+  for select using (public.is_admin());
+
+grant insert on public.attribution_events to anon, authenticated;
+grant select on public.attribution_events to authenticated;
+
+-- 관리자 화면용: 출처·캠페인별 최근 30일 고유 방문자 수와 행동별 고유 방문자 수.
+-- security_invoker 라 위 select 정책(관리자만)이 그대로 적용된다.
+drop view if exists public.attribution_stats;
+create view public.attribution_stats
+  with (security_invoker = true) as
+  select source,
+         medium,
+         campaign,
+         count(distinct visitor_id) filter (where event = 'visit')::int         as visitors,
+         count(distinct visitor_id) filter (where event = 'quiz_done')::int     as quiz_done,
+         count(distinct visitor_id) filter (where event = 'record_saved')::int  as record_saved,
+         count(distinct visitor_id) filter (where event = 'signup')::int        as signup,
+         count(distinct visitor_id) filter (where event = 'reserve_click')::int as reserve_click,
+         max(created_at) as last_seen
+  from public.attribution_events
+  where created_at >= now() - interval '30 days'
+  group by source, medium, campaign;
+
+grant select on public.attribution_stats to authenticated;

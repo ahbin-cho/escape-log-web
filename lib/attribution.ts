@@ -117,3 +117,25 @@ export function buildTrackedUrl(
   if (c) url.searchParams.set("utm_campaign", c);
   return url.toString();
 }
+
+// 전환율 표시: 방문자 대비 비율(방문자가 없으면 "–")
+export function rateLabel(n: number, visitors: number): string {
+  if (!visitors) return "–";
+  return `${Math.round((n / visitors) * 100)}%`;
+}
+
+// 링크 만들기 도구의 출처 목록 [꼬리표, 화면 이름, medium]
+export const SOURCE_PRESETS: [string, string, string][] = [
+  ["dcinside", "디시 방탈출 갤러리", "community"],
+  ["naver_cafe", "네이버 카페", "community"],
+  ["theqoo", "더쿠", "community"],
+  ["daum_cafe", "다음 카페", "community"],
+  ["everytime", "에브리타임", "community"],
+  ["blind", "블라인드", "community"],
+  ["instagram", "인스타그램", "social"],
+  ["threads", "스레드", "social"],
+  ["x", "X(트위터)", "social"],
+  ["kakao", "카카오톡 공유", "social"],
+  ["naver_ads", "네이버 검색광고", "cpc"],
+  ["google_ads", "구글 Ads", "cpc"],
+];
