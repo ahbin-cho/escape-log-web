@@ -26,6 +26,7 @@ next-env.d.ts
 
 # 프로젝트 로컬 스크립트 / 슈파베이스 로컬 파일
 scripts/*
+!scripts/indexnow.mjs
 supabase/*
 !supabase/schema.sql
 !supabase/sample_reviews.sql
