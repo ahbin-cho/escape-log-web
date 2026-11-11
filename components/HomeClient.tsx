@@ -67,36 +67,9 @@ export default function HomeClient({ discover }: { discover: ReactNode }) {
       <LoggedOutCTA />
       {loggedIn === true && <LoggedInHero records={records} />}
       {discover}
+      <HomeRegionThemes />
       <HomeBanner />
       <ImportBanner />
-      <HomeRegionThemes />
-
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <Link
-          href="/quiz"
-          className="rough rounded-2xl border-2 border-edge bg-candy px-3 py-3 text-center text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
-        >
-          🔮 취향 찾기
-        </Link>
-        <Link
-          href="/region"
-          className="rough rounded-2xl border-2 border-edge bg-panel px-3 py-3 text-center text-sm font-extrabold shadow-cute transition active:scale-[0.97]"
-        >
-          🗺️ 지역 분포
-        </Link>
-        <Link
-          href="/taste"
-          className="rough rounded-2xl border-2 border-edge bg-panel px-3 py-3 text-center text-sm font-extrabold shadow-cute transition active:scale-[0.97]"
-        >
-          🎀 취향 분석
-        </Link>
-        <Link
-          href="/match"
-          className="rough rounded-2xl border-2 border-edge bg-panel px-3 py-3 text-center text-sm font-extrabold shadow-cute transition active:scale-[0.97]"
-        >
-          👥 친구·팀 궁합
-        </Link>
-      </div>
 
       <FeedPreview />
 

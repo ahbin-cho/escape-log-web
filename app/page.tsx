@@ -11,9 +11,9 @@ export default function HomePage() {
     <HomeClient
       discover={
         <>
-          <HomeMystery />
           <HomeDiscover />
           <HomeNewAndHot />
+          <HomeMystery />
         </>
       }
     />

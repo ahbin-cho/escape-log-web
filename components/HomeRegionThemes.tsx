@@ -24,7 +24,7 @@ function mixByBrand(themes: CandidateTheme[], limit: number): CandidateTheme[] {
   return out;
 }
 
-// 홈 위젯: 좌(지역 칩) / 우(그 지역 테마 미리보기) 반반 분할.
+// 홈 위젯: 위(지역 칩) / 아래(그 지역 테마 미리보기 8장).
 export default function HomeRegionThemes() {
   const [catalog, setCatalog] = useState<CandidateTheme[]>([]);
   const [ready, setReady] = useState(false);
@@ -54,87 +54,76 @@ export default function HomeRegionThemes() {
   if (!ready || regionsPresent.length === 0) return null;
 
   const regionThemes = byRegion.filter((x) => x.r === region).map((x) => x.t);
-  // 데스크톱은 왼쪽 지역 칩 세로 목록 높이만큼(2열×4줄) 채운다.
   const themes = mixByBrand(regionThemes, 8);
 
   return (
-    <section>
+    <section className="space-y-3">
       <div className="flex items-baseline justify-between">
         <h2 className="text-xl">지역별 테마</h2>
-        <Link href="/region" className="text-xs font-bold text-candy">
-          지역 지도 →
-        </Link>
+        <div className="flex items-baseline gap-3 text-xs font-bold text-candy">
+          <Link href="/cafe">브랜드별 →</Link>
+          <Link href="/region">지역 지도 →</Link>
+        </div>
       </div>
 
-      <div className="mt-3 grid gap-3 sm:grid-cols-[112px_1fr]">
-        {/* 좌: 지역 칩 (모바일 가로 스크롤 / 데스크톱 세로) */}
-        <div className="no-scrollbar flex gap-1.5 overflow-x-auto pb-1 sm:flex-col sm:overflow-visible sm:pb-0">
-          {regionsPresent.map((r) => (
-            <button
-              key={r}
-              onClick={() => setRegion(r)}
-              aria-pressed={region === r}
-              className={`shrink-0 rounded-full px-3.5 py-1.5 text-sm font-bold transition active:scale-[0.97] sm:text-left ${
-                region === r
-                  ? "bg-edge text-panel"
-                  : "text-cream/70 hover:bg-edge/10 hover:text-cream"
+      {/* 지역 칩: 모바일 가로 스크롤 / 데스크톱 한두 줄로 감김 */}
+      <div className="no-scrollbar flex gap-1.5 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible sm:pb-0">
+        {regionsPresent.map((r) => (
+          <button
+            key={r}
+            onClick={() => setRegion(r)}
+            aria-pressed={region === r}
+            className={`shrink-0 rounded-full px-3.5 py-1.5 text-sm font-bold transition active:scale-[0.97] ${
+              region === r
+                ? "bg-edge text-panel"
+                : "text-cream/70 hover:bg-edge/10 hover:text-cream"
+            }`}
+          >
+            {r}
+          </button>
+        ))}
+      </div>
+
+      {/* 테마 미리보기: 소개글 없이 이름·지점·장르만 (줄거리는 테마 상세에서) */}
+      <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
+        {themes.map((t, i) => {
+          const [brand, ...rest] = (t.cafe || "").split(" ");
+          const branch = rest.join(" ");
+          // 예약 사이트로 바로 보내지 않고 우리 테마 상세를 거친다(줄거리·후기 보고 예약)
+          return (
+            <Link
+              key={`${t.cafe}-${t.name}`}
+              href={`/theme/${t.id}?from=home`}
+              // 모바일은 4장까지만
+              className={`flex min-w-0 flex-col gap-0.5 rounded-xl border border-edge/15 bg-panel px-3.5 py-3 transition hover:border-edge active:scale-[0.98] ${
+                i >= 4 ? "max-sm:hidden" : ""
               }`}
             >
-              {r}
-            </button>
-          ))}
-        </div>
-
-        {/* 우: 테마 미리보기 (content-start: 칩 목록이 길어도 카드가 세로로 늘어나지 않게) */}
-        <div className="grid content-start gap-2 sm:grid-cols-2">
-          {themes.map((t, i) => {
-            const [brand, ...rest] = (t.cafe || "").split(" ");
-            const branch = rest.join(" ");
-            const inner = (
-              <div className="flex h-full flex-col gap-1 rounded-xl border border-edge/15 bg-panel p-3.5 transition hover:border-edge">
-                {brand && (
-                  <span className="text-xs font-extrabold text-candy">
-                    {brand}
-                  </span>
-                )}
-                <p className="truncate text-sm font-extrabold">
-                  {genreEmoji(t.genre)} {t.name}
-                </p>
-                <p className="truncate text-xs font-medium text-cream/60">
-                  {branch}
-                  {branch ? " · " : ""}
-                  {t.genre}
-                  {t.timeLimit ? ` · ${t.timeLimit}분` : ""}
-                </p>
-                {t.teaser && (
-                  <p className="mt-1 line-clamp-2 text-sm leading-snug text-cream/70 max-sm:hidden">
-                    {t.teaser}
-                  </p>
-                )}
-              </div>
-            );
-            // 예약 사이트로 바로 보내지 않고 우리 테마 상세를 거친다(줄거리·후기 보고 예약)
-            return (
-              <Link
-                key={`${t.cafe}-${t.name}`}
-                href={`/theme/${t.id}?from=home`}
-                // 모바일은 세로로 쌓여 길어지므로 4장까지만
-                className={`transition active:scale-[0.98] ${i >= 4 ? "max-sm:hidden" : ""}`}
-              >
-                {inner}
-              </Link>
-            );
-          })}
-          {regionThemes.length > themes.length && region && (
-            <Link
-              href={`/region/${region}`}
-              className="py-1 text-right text-xs font-bold text-candy sm:col-span-2"
-            >
-              {region} 테마 {regionThemes.length}개 전체 보기 →
+              {brand && (
+                <span className="truncate text-xs font-extrabold text-candy">{brand}</span>
+              )}
+              <span className="truncate text-sm font-extrabold">
+                {genreEmoji(t.genre)} {t.name}
+              </span>
+              <span className="truncate text-xs font-medium text-cream/60">
+                {branch}
+                {branch ? " · " : ""}
+                {t.genre}
+                {t.timeLimit ? ` · ${t.timeLimit}분` : ""}
+              </span>
             </Link>
-          )}
-        </div>
+          );
+        })}
       </div>
+
+      {regionThemes.length > themes.length && region && (
+        <Link
+          href={`/region/${region}`}
+          className="block text-right text-xs font-bold text-candy"
+        >
+          {region} 테마 {regionThemes.length}개 전체 보기 →
+        </Link>
+      )}
     </section>
   );
 }

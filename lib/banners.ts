@@ -12,23 +12,6 @@ export type Banner = {
   ad?: boolean;
 };
 
-export const BANNERS: Banner[] = [
-  {
-    id: "region-seoul",
-    art: "/footprint.png",
-    title: "서울 방탈출, 한 페이지에",
-    body: "강남·홍대·건대 매장 테마를 브랜드별로 모았어요.",
-    cta: "서울 테마 보기",
-    href: "/region/서울",
-    tone: "candy",
-  },
-  {
-    id: "brands",
-    art: "/house.png",
-    title: "브랜드별 전 지점 테마",
-    body: "키이스케이프, 제로월드, 지구별… 지점별 난이도까지 비교.",
-    cta: "브랜드 고르기",
-    href: "/cafe",
-    tone: "grape",
-  },
-];
+// 지금은 비워 둠(배열이 비면 홈에 배너 영역이 안 그려진다).
+// 서울·브랜드 진입은 홈 "지역별 테마" 제목 옆 링크로 옮김.
+export const BANNERS: Banner[] = [];
