@@ -13,6 +13,7 @@ import { SITE_URL } from "@/lib/site";
 //                      - 인스타 로그인 방식 토큰(IGAA 로 시작, 약 60일) → graph.instagram.com
 //   IG_API_VERSION     (선택) 기본 v21.0
 // IG_* 가 없거나 ?dry=1 이면 실제로 올리지 않고 올릴 내용만 돌려준다.
+// ?check=1 이면 올리지 않고 토큰으로 계정 이름만 읽어 연결이 맞는지 확인한다.
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 30;
@@ -49,7 +50,19 @@ export async function GET(req: Request) {
 
   const userId = process.env.IG_USER_ID;
   const token = process.env.IG_ACCESS_TOKEN;
-  const dry = new URL(req.url).searchParams.get("dry") === "1";
+  const params = new URL(req.url).searchParams;
+  if (params.get("check") === "1") {
+    if (!userId || !token) return json({ ok: false, reason: "IG 환경변수 없음" }, 400);
+    try {
+      const me = await graph(
+        `/${userId}?fields=username&access_token=${encodeURIComponent(token)}`
+      );
+      return json({ ok: true, username: me.username, host: graphHost(token) });
+    } catch (e) {
+      return json({ ok: false, host: graphHost(token), error: e instanceof Error ? e.message : "확인 실패" }, 500);
+    }
+  }
+  const dry = params.get("dry") === "1";
   if (dry || !userId || !token) {
     return json({ dryRun: true, reason: dry ? "dry=1" : "IG 환경변수 없음", imageUrl, caption });
   }
