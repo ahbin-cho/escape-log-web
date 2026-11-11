@@ -1,28 +1,18 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  getPublicFeed,
-  GENRE_EMOJI,
-  GENRE_COLOR,
-  type PublicReview,
-} from "@/lib/store";
+import { getPublicFeed, GENRE_EMOJI, GENRE_COLOR } from "@/lib/store";
+import { publicClient } from "@/lib/supabase/public";
 import { ratingLabel, achievements } from "@/lib/terms";
 
-export default function FeedPage() {
-  const [reviews, setReviews] = useState<PublicReview[]>([]);
-  const [ready, setReady] = useState(false);
+// 공개 후기는 서버에서 그려 검색엔진이 받는 HTML 에도 실리게 한다.
+// 새 후기가 배포 없이도 보이도록 10분마다 다시 만든다.
+export const revalidate = 600;
 
-  useEffect(() => {
-    getPublicFeed().then((r) => {
-      setReviews(r);
-      setReady(true);
-    });
-  }, []);
-
-  if (!ready) {
-    return <p className="py-20 text-center text-cream/60">불러오는 중…</p>;
+export default async function FeedPage() {
+  let reviews: Awaited<ReturnType<typeof getPublicFeed>> = [];
+  try {
+    reviews = await getPublicFeed(60, publicClient());
+  } catch {
+    reviews = []; // DB 못 읽으면 빈 목록(빌드는 통과)
   }
 
   return (

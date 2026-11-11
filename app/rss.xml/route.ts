@@ -1,5 +1,5 @@
 import { getAllThemes } from "@/lib/catalog-server";
-import { newestThemes } from "@/lib/home-picks";
+import { cleanTeaser, newestThemes } from "@/lib/home-picks";
 import { regionFromText } from "@/lib/region";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 
@@ -40,7 +40,8 @@ export async function GET() {
       ]
         .filter(Boolean)
         .join(" · ");
-      const desc = [(t.teaser ?? "").trim(), meta].filter(Boolean).join(" — ");
+      // 줄거리 전체(예약·이용 안내는 걷어냄)를 본문으로 싣는다(네이버 RSS 가이드: 본문 전체 포함)
+      const desc = [cleanTeaser(t.teaser ?? ""), meta].filter(Boolean).join(" — ");
       return `    <item>
       <title>${esc(`${t.name} — ${t.cafe} 방탈출${region ? ` (${region})` : ""}`)}</title>
       <link>${esc(url)}</link>

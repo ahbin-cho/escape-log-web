@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { cleanTeaser, teaserPreview } from "@/lib/home-picks";
 import { publicClient } from "@/lib/supabase/public";
 import { GENRE_EMOJI } from "@/lib/store";
 import { regionFromText } from "@/lib/region";
@@ -14,7 +15,7 @@ import {
   listedRegions,
   type ThemeRow,
 } from "@/lib/catalog-server";
-import { SITE_URL, SITE_NAME } from "@/lib/site";
+import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from "@/lib/site";
 import { listedConditions } from "@/lib/best";
 
 // 순수 SSG: 배포 시 generateStaticParams 의 전 테마를 미리 구움.
@@ -22,12 +23,12 @@ import { listedConditions } from "@/lib/best";
 // dynamicParams(기본 true): 배포 후 새로 추가된 테마도 첫 요청 때 생성되어 캐시됨.
 export const dynamicParams = true;
 
-async function getTheme(id: string): Promise<ThemeRow | null> {
+async function getTheme(id: string): Promise<(ThemeRow & { poster_url?: string | null }) | null> {
   try {
     const { data } = await publicClient()
       .from("catalog")
       .select(
-        "id,name,cafe,genre,difficulty,fear_level,tags,teaser,time_limit,players,reservation_url"
+        "id,name,cafe,genre,difficulty,fear_level,tags,teaser,time_limit,players,reservation_url,poster_url"
       )
       .eq("id", id)
       .maybeSingle();
@@ -64,7 +65,8 @@ export async function generateMetadata({
     t.players ? `${t.players}` : null,
   ].filter(Boolean);
   const description =
-    (t.teaser || "").trim().slice(0, 120) ||
+    // 크롤링 원문의 예약·이용 안내를 걷어낸 줄거리로 검색 결과 요약을 만든다
+    teaserPreview(cleanTeaser(t.teaser || ""), 120) ||
     `${t.cafe}의 방탈출 테마 '${t.name}'. ${bits.join(
       " · "
     )}. 방탈로그에서 취향 진단과 맞춤 추천을 받아보세요.`;
@@ -77,6 +79,7 @@ export async function generateMetadata({
       title: `${t.name} | ${SITE_NAME}`,
       description,
       url: `${SITE_URL}/theme/${t.id}`,
+      images: [t.poster_url ? { url: t.poster_url } : DEFAULT_OG_IMAGE],
     },
   };
 }

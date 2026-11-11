@@ -14,7 +14,7 @@ import {
   type ThemeRow,
 } from "@/lib/catalog-server";
 import { REGIONS, type Region } from "@/lib/region";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { SITE_NAME, SITE_URL, DEFAULT_OG_IMAGE } from "@/lib/site";
 
 // 순수 SSG: 테마가 충분한 시·도만 빌드 시 생성. 그 외 주소는 404.
 export const dynamicParams = false;
@@ -52,10 +52,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = `${region} 지역 방탈출 테마 ${themes.length}개를 브랜드별로 정리했어요. ${brands} 등 매장별 장르·난이도·플레이 시간을 한눈에 비교해 보세요.`;
 
   return {
-    title,
+    // region/layout 의 title 이 문자열이라 루트 템플릿("%s · 방탈로그")이 안 붙어 직접 붙인다
+    title: { absolute: `${title} · ${SITE_NAME}` },
     description,
     alternates: { canonical: `/region/${region}` },
     openGraph: {
+      images: [DEFAULT_OG_IMAGE],
       title: `${title} | ${SITE_NAME}`,
       description,
       url: `${SITE_URL}/region/${region}`,

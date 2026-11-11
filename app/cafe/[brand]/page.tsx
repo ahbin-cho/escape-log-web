@@ -13,7 +13,7 @@ import {
   type ThemeRow,
 } from "@/lib/catalog-server";
 import { regionFromText } from "@/lib/region";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { SITE_NAME, SITE_URL, DEFAULT_OG_IMAGE } from "@/lib/site";
 
 // 순수 SSG: 테마가 충분한 브랜드만 빌드 시 생성. 그 외 주소는 404.
 export const dynamicParams = false;
@@ -57,6 +57,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     alternates: { canonical: `/cafe/${brand}` },
     openGraph: {
+      images: [DEFAULT_OG_IMAGE],
       title: `${title} | ${SITE_NAME}`,
       description,
       url: `${SITE_URL}/cafe/${brand}`,

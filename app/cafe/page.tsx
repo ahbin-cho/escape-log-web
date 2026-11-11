@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { listedBrands } from "@/lib/catalog-server";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { SITE_NAME, SITE_URL, DEFAULT_OG_IMAGE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "방탈출 브랜드별 테마 모음",
@@ -9,6 +9,7 @@ export const metadata: Metadata = {
     "키이스케이프, 제로월드, 넥스트에디션 등 방탈출 브랜드별로 전 지점 테마를 정리했어요. 브랜드를 골라 지점별 테마와 난이도를 비교해 보세요.",
   alternates: { canonical: "/cafe" },
   openGraph: {
+    images: [DEFAULT_OG_IMAGE],
     title: `방탈출 브랜드별 테마 모음 | ${SITE_NAME}`,
     description: "방탈출 브랜드별 전 지점 테마 정리.",
     url: `${SITE_URL}/cafe`,

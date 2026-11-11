@@ -8,6 +8,10 @@ export const SITE_URL =
 
 export const SITE_NAME = "방탈로그";
 
+// 페이지가 openGraph 를 따로 지정하면 루트 opengraph-image 가 상속되지 않으므로
+// 그런 페이지는 이걸 images 에 넣는다(app/opengraph-image.png 기본 이미지).
+export const DEFAULT_OG_IMAGE = { url: "/opengraph-image.png", width: 1200, height: 630 };
+
 // 사업·매장 문의 메일
 export const CONTACT_EMAIL = "coco.cho.bz@gmail.com";
 

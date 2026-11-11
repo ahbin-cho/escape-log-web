@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { DEFAULT_OG_IMAGE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "방탈출 취향 찾기",
@@ -6,6 +7,7 @@ export const metadata: Metadata = {
     "질문에 답하면 나의 방탈출 유형을 진단하고, 딱 맞는 테마를 추천받아요. 내 방탈 유형은?",
   alternates: { canonical: "/quiz" },
   openGraph: {
+    images: [DEFAULT_OG_IMAGE],
     title: "내 방탈출 취향은? | 방탈로그",
     description: "질문 몇 개로 방탈 유형 진단 + 맞춤 테마 추천.",
   },

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { listedConditions } from "@/lib/best";
 import { getAllThemes } from "@/lib/catalog-server";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { SITE_NAME, SITE_URL, DEFAULT_OG_IMAGE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "조건별 방탈출 추천 — 안 무서운·입문·2인·단체",
@@ -10,6 +10,7 @@ export const metadata: Metadata = {
     "안 무서운 방탈출, 초보 입문, 2인 데이트, 단체 5인 이상, 공포, 고난도까지. 조건에 맞는 방탈출 테마만 골라 지역별로 정리했어요.",
   alternates: { canonical: "/best" },
   openGraph: {
+    images: [DEFAULT_OG_IMAGE],
     title: `조건별 방탈출 추천 | ${SITE_NAME}`,
     description: "안 무서운·입문·2인·단체·공포·고난도 방탈출을 조건별로.",
     url: `${SITE_URL}/best`,

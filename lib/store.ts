@@ -5,6 +5,7 @@
 // (예전 MVP는 localStorage 기반이었고, 이 파일만 교체했습니다.)
 // ─────────────────────────────────────────────────────────────
 
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient, isSupabaseConfigured } from "./supabase/client";
 import { CATALOG as LOCAL_CATALOG } from "./catalog";
 import type { QuizValues } from "./quiz/slots";
@@ -251,10 +252,11 @@ export async function uploadRecordPhoto(file: File): Promise<string> {
 }
 
 // user_id 목록 → 닉네임 맵. (records↔profiles 직접 FK가 없어 조인 대신 별도 조회)
+// supabase 를 넘기면 그 클라이언트로 읽는다(서버에서 그릴 때 익명 publicClient 사용).
 export async function nicknamesFor(
-  userIds: (string | undefined)[]
+  userIds: (string | undefined)[],
+  supabase: SupabaseClient = createClient()
 ): Promise<Map<string, string>> {
-  const supabase = createClient();
   const ids = Array.from(new Set(userIds.filter(Boolean))) as string[];
   const map = new Map<string, string>();
   if (ids.length === 0) return map;
@@ -270,8 +272,10 @@ export async function nicknamesFor(
 
 // ── 공개 피드 (모두의 공개 후기) ────────────────────────────────
 // memo 등 비공개 컬럼이 빠진 안전 뷰(public_reviews)에서만 읽는다.
-export async function getPublicFeed(limit = 60): Promise<PublicReview[]> {
-  const supabase = createClient();
+export async function getPublicFeed(
+  limit = 60,
+  supabase: SupabaseClient = createClient()
+): Promise<PublicReview[]> {
   const { data, error } = await supabase
     .from("public_reviews")
     .select("*")
@@ -279,7 +283,7 @@ export async function getPublicFeed(limit = 60): Promise<PublicReview[]> {
     .limit(limit);
   if (error || !data) return [];
   const rows = data as RecordRow[];
-  const nickById = await nicknamesFor(rows.map((r) => r.user_id));
+  const nickById = await nicknamesFor(rows.map((r) => r.user_id), supabase);
   return rows.map((r) => ({
     ...fromRow(r),
     nickname: nickById.get(r.user_id ?? "") || "익명",

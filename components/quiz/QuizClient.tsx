@@ -47,7 +47,7 @@ const ANALYZING_MSGS = [
 ];
 const ANALYZING_MS = 1500;
 
-export default function QuizPage() {
+export default function QuizClient() {
   // 질문은 마운트 뒤에 뽑는다(서버 렌더와 무작위 결과가 어긋나지 않게).
   const [questions, setQuestions] = useState<QuizQuestion[] | null>(null);
   const [phase, setPhase] = useState<Phase>("quiz");
