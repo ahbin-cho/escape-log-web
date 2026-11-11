@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { listedConditions } from "@/lib/best";
-import { getAllThemes } from "@/lib/catalog-server";
+import { getAllThemes, listedBrands } from "@/lib/catalog-server";
 
 // 홈 상단 "어떤 방 찾아?": 조건별 추천 진입 + 우리 팀 궁합 진입.
 // 서버 컴포넌트라 링크가 HTML 에 그대로 실려 검색엔진이 /best 페이지들을 따라간다.
 export default async function HomeDiscover() {
-  const conditions = listedConditions(await getAllThemes());
+  const [all, brands] = await Promise.all([getAllThemes(), listedBrands()]);
+  const conditions = listedConditions(all);
+  const topBrands = brands.slice(0, 12);
 
   return (
     <section className="space-y-3" aria-labelledby="home-discover">
@@ -43,6 +45,29 @@ export default async function HomeDiscover() {
             </li>
           ))}
         </ul>
+      )}
+
+      {topBrands.length > 0 && (
+        <div className="space-y-2 pt-1">
+          <div className="flex items-baseline justify-between">
+            <h3 className="text-base font-extrabold">🏠 브랜드로 찾기</h3>
+            <Link href="/cafe" className="text-xs font-bold text-candy">
+              전체 브랜드 {brands.length}개 →
+            </Link>
+          </div>
+          <ul className="no-scrollbar -mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1 sm:flex-wrap">
+            {topBrands.map((b) => (
+              <li key={b.key} className="shrink-0">
+                <Link
+                  href={`/cafe/${b.key}`}
+                  className="rough-sm inline-block whitespace-nowrap rounded-full border-2 border-edge/30 bg-panel px-3 py-1.5 text-sm font-bold transition hover:border-candy hover:text-candy"
+                >
+                  {b.key} <span className="text-cream/45">{b.count}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
 
       <Link

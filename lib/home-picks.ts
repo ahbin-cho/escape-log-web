@@ -1,4 +1,5 @@
 import type { ThemeRow } from "./catalog-server";
+import { brandOf } from "./cafe";
 
 // ─────────────────────────────────────────────────────────────
 // 홈의 "궁금증" 영역에서 쓰는 고르기 규칙. 순수 함수(테스트 대상).
@@ -19,9 +20,12 @@ function hash(s: string): number {
 export function mysteryCandidates(themes: ThemeRow[]): ThemeRow[] {
   return themes.filter((t) => {
     const teaser = cleanTeaser(t.teaser ?? "");
+    // 줄거리에 브랜드 이름이 나오면(예: "셜록홈즈 탐정소") 정답이 반쯤 드러나므로 뺀다
+    const brand = brandOf(t.cafe).trim();
     return (
       teaser.length >= 40 &&
       !teaser.includes(t.name.trim()) &&
+      !(brand.length >= 2 && teaser.includes(brand)) &&
       !/^제작자의\s*한\s*마디/.test(teaser)
     );
   });

@@ -16,6 +16,8 @@ describe("미스터리 방", () => {
     const short = t({ name: "짧음", teaser: "짧은 줄거리" });
     const spoil = t({ name: "낡은 편지", teaser: long });
     expect(mysteryCandidates([ok, short, spoil]).map((x) => x.name)).toEqual(["멈춘 시간"]);
+    const brandSpoil = t({ name: "납치", cafe: "셜록홈즈 강남점", teaser: `${long} 셜록홈즈 탐정소의 도움을 받아` });
+    expect(mysteryCandidates([brandSpoil])).toEqual([]);
   });
 
   it("'제작자의 한마디' 같은 안내글은 후보에서 뺀다", () => {

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import SearchButton from "@/components/SearchButton";
 import { useRouter } from "next/navigation";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 
@@ -57,12 +58,13 @@ export default function SiteHeader() {
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-2 px-4 py-3 sm:px-6">
         <Link
           href="/"
-          className="font-display text-lg tracking-tight"
+          className="shrink-0 whitespace-nowrap font-display text-lg tracking-tight"
         >
           방탈로그
         </Link>
         <nav className="flex flex-wrap items-center justify-end gap-0.5 sm:gap-1.5">
-          <Link href="/feed" className={navLink}>
+          <SearchButton />
+          <Link href="/feed" className={`${navLink} hidden sm:inline-block`}>
             모두의 후기
           </Link>
           <Link href="/quiz" className={`${navLink} hidden sm:inline-block`}>
