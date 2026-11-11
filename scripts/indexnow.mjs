@@ -23,7 +23,10 @@ const env = Object.fromEntries(
     .filter(Boolean)
     .map((m) => [m[1], m[2].trim().replace(/^["']|["']$/g, "")])
 );
-const SITE = env.NEXT_PUBLIC_SITE_URL || "https://escape-log-web-eight.vercel.app";
+const SITE =
+  env.NEXT_PUBLIC_SITE_URL && !env.NEXT_PUBLIC_SITE_URL.includes("vercel.app")
+    ? env.NEXT_PUBLIC_SITE_URL
+    : "https://bangtallog.com";
 
 async function sitemapUrls() {
   const xml = await (await fetch(`${SITE}/sitemap.xml`)).text();

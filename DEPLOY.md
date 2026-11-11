@@ -11,7 +11,7 @@
 |---|---|
 | Supabase 대시보드 (프로젝트 관리) | https://supabase.com/dashboard |
 | 새 프로젝트 만들기 | https://supabase.com/dashboard/new |
-| 내 서비스(배포됨) | https://escape-log-web-eight.vercel.app |
+| 내 서비스(배포됨) | https://bangtallog.com (예전 주소 escape-log-web-eight.vercel.app 은 자동으로 넘어옴) |
 | Vercel 대시보드 (환경변수 설정) | https://vercel.com/dashboard |
 
 ---
