@@ -46,6 +46,8 @@ export async function GET(req: Request) {
 
   // 오늘 올릴 것: ?set= 으로 지정했거나 일정(POST_SCHEDULE)에 있으면 그 묶음, 아니면 오늘의 미스터리 방
   const set = params.get("set") || scheduledSet(kstDate(now));
+  // 릴스를 직접 올리는 날: 자동 게시를 쉰다(하루 1개 유지)
+  if (set === "skip") return json({ skipped: true, reason: "일정상 쉬는 날(릴스 직접 게시)", label: "skip" });
   const themes = await getAllThemes();
   const resolved = set ? resolvePost(set, themes) : null;
   let caption: string;
