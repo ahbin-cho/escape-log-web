@@ -1,0 +1,49 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-Medium.woff);font-weight:500}
+html,body{margin:0;width:1080px;height:1920px;background:#050506;overflow:hidden;font-family:P}
+.stage{position:relative;width:1080px;height:1920px;background:radial-gradient(ellipse at 50% 115%,#6A0814 0%,#1C0407 45%,#050506 75%);animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.18)}}
+.flicker{position:absolute;inset:0;background:#000;animation:flick 1.6s steps(1) forwards;z-index:20}
+@keyframes flick{0%{opacity:1}12%{opacity:.2}18%{opacity:1}30%{opacity:.4}36%{opacity:1}55%{opacity:.1}62%{opacity:.8}100%{opacity:0}}
+.bar{position:absolute;left:0;top:0;width:1080px;height:46px;background:#8E0B1C}
+.drip{position:absolute;top:30px;background:#8E0B1C;border-radius:0 0 40px 40px;height:0;animation:drip ease-in forwards}
+@keyframes drip{to{height:var(--h)}}
+.grain{position:absolute;inset:-50%;background-image:repeating-radial-gradient(circle at 17% 32%,rgba(255,255,255,.035) 0 1px,transparent 1px 3px);animation:grain .4s steps(2) infinite;z-index:5;pointer-events:none}
+@keyframes grain{0%{transform:translate(0,0)}50%{transform:translate(-3%,2%)}100%{transform:translate(2%,-3%)}}
+.label{position:absolute;left:96px;top:300px;color:#D4182F;font-weight:800;font-size:40px;letter-spacing:.2em;opacity:0;animation:fade .6s 1.4s forwards}
+.lines{position:absolute;left:96px;right:170px;top:420px;word-break:keep-all;color:#EDE6E1;font-weight:800;font-size:92px;line-height:1.35;letter-spacing:-.04em}
+.lines div{opacity:0;transform:translateY(20px);animation:up .7s forwards}
+.lines .small{font-size:64px;color:#CFC6C0;margin-top:40px;line-height:1.45}
+@keyframes up{to{opacity:1;transform:none}}
+@keyframes fade{to{opacity:1}}
+.reveal{position:absolute;left:96px;right:170px;top:1030px;opacity:0;animation:fade .8s 6.2s forwards}
+.reveal .k{color:#D4182F;font-weight:800;font-size:36px;letter-spacing:.18em}
+.reveal .t{color:#fff;font-weight:800;font-size:84px;letter-spacing:-.04em;margin-top:14px;line-height:1.15}
+.reveal .c{color:#A9A09A;font-weight:800;font-size:44px;margin-top:14px}
+.cta{position:absolute;left:96px;right:170px;top:1440px;display:flex;align-items:center;gap:28px;opacity:0;animation:fade .7s 8.2s forwards}
+.cta .x{color:#D4182F;font-weight:800;font-size:54px}
+.cta .s{color:#8E8580;font-weight:500;font-size:34px;margin-top:10px}
+.chips{display:flex;gap:16px;margin-top:34px}
+.chip{border:4px solid #D4182F;border-radius:999px;padding:12px 26px;color:#EDE6E1;font-weight:800;font-size:34px}
+.shake{animation:shake .5s 4.6s 1}
+@keyframes shake{0%,100%{transform:none}20%{transform:translate(-8px,3px)}40%{transform:translate(7px,-4px)}60%{transform:translate(-5px,2px)}80%{transform:translate(4px,0)}}
+.stage{background:radial-gradient(ellipse at 50% 110%,#7A3A0A 0%,#2A0D06 45%,#070404 75%)}.bar,.drip{background:#A3121F}.label,.reveal .k{color:#E9A23B}.chip{border-color:#E9A23B}.lines{font-size:84px}</style></head><body><div class="stage shake" id="s">
+<div class="bar"></div>
+<div class="grain"></div>
+<div class="label">이 방의 이야기</div>
+<div class="lines">
+  <div style="animation-delay:1.8s">자네도</div>
+  <div style="animation-delay:2.7s">장원 급제를 위해서</div>
+  <div style="animation-delay:3.6s">이 춘화각을 찾았는가?</div>
+  <div class="small" style="animation-delay:4.6s">이쪽 끝방으로 들어가시게.</div>
+</div>
+<div class="reveal"><div class="k">상상의문 수원 2호점</div><div class="t">춘화각 :<br>피할 수 없는 저주</div>
+  <div class="chips"><div class="chip">공포</div><div class="chip">난이도 ●●●○○</div><div class="chip">공포도 ●●●●○</div></div></div>
+<div class="cta"><img src="../../../public/mascot.png" width="130" height="130"><div><div class="x">줄거리·후기 → 프로필 링크</div><div class="s">방탈로그 · bangtallog.com</div></div></div>
+<div class="flicker"></div>
+</div>
+<script>
+const s=document.getElementById('s');let seed=7;const r=()=>(seed=(seed*1103515245+12345)&0x7fffffff)/0x7fffffff;
+for(let i=0;i<12;i++){const d=document.createElement('div');d.className='drip';const w=22+r()*30;d.style.left=(i*92+r()*40)+'px';d.style.width=w+'px';d.style.setProperty('--h',(60+r()*150)+'px');d.style.animationDuration=(2+r()*3)+'s';d.style.animationDelay=(1+r()*2)+'s';s.appendChild(d);}
+</script></body></html>

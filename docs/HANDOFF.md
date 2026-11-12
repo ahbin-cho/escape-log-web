@@ -1,0 +1,66 @@
+# 인수인계 (2026-11-13 기준)
+
+다른 계정·새 세션이 이어서 할 수 있도록 지금 상태를 적어 둔다. 바뀌면 이 파일을 고칠 것.
+
+## 1. 계정·연결
+| 무엇 | 값 |
+|---|---|
+| 사이트 | https://bangtallog.com (예전 주소 escape-log-web-eight.vercel.app 은 301 로 넘김) |
+| 인스타 | @bangtal_log (프로페셔널 계정, Graph API 로 자동 게시) |
+| 배포 | Vercel. 환경변수: CRON_SECRET, IG_USER_ID, IG_ACCESS_TOKEN, Supabase 값 |
+| GitHub Secrets | CRON_SECRET (Vercel 과 같은 값) — "인스타 지금 올리기" 워크플로용 |
+| 검색 등록 | Google Search Console(주소 변경 신청함, 수주~수개월 걸림), 네이버 서치어드바이저, Bing 웹마스터 + IndexNow |
+| DB | Supabase. 스키마는 `supabase/schema.sql` (운영 DB 에 적용됨) |
+
+IG 토큰이 `IGAA…` 종류면 약 60일마다 만료된다. 게시가 갑자기 전부 실패하면 토큰부터 의심.
+
+## 2. 인스타 자동 게시
+- `vercel.json` 크론: 매일 03:00 UTC(낮 12시 KST) `/api/ig/publish`, 03:30 에 한 번 더(이미 올렸으면 건너뜀).
+- 무엇을 올릴지: `lib/instagram.ts` 의 `POST_SCHEDULE`. 없는 날은 "오늘의 미스터리 방".
+- set 종류: `intro` `record-story` `ad-diary` `ad-recap` · `collection:<지역>` · `cafes:yearend` ·
+  `story:<테마 id>` · `reel:<테마 id>`(public/reels) · `static:<이름>`(public/ig-static/<이름>/1.jpg…) · `skip`
+- `extra: true` 를 붙이면 그날 운영자가 직접 올린 게 있어도 올린다.
+- 바로 올리기: GitHub Actions "인스타 지금 올리기"(`ig-post.yml`) — set 입력, dry 체크 해제.
+- 묶음(여러 장)은 인스타 처리가 늦어 202(pending)가 나올 수 있고 워크플로가 이어서 부른다.
+
+### 현재 일정
+| 날짜 | 게시물 |
+|---|---|
+| 11/13 | static:suwon (제미나이 그림 수원 6장) |
+| 11/14 | record-story |
+| 11/15·16·17 | 릴스: 성지기숙학원 · 영안실 · 춘화각 (자동 릴스는 아직 실제 게시로 검증 안 됨 → 11/15 확인) |
+| 11/18 | cafes:yearend |
+| 12/1 | ad-recap |
+| 그 외 | 오늘의 미스터리 방 |
+
+## 3. 운영자가 직접 올리는 게시물 (만들어 둔 것)
+템플릿은 `tools/ig/templates/`, 만드는 법은 `tools/ig/README.md`.
+| 게시물 | 템플릿 | 상태 |
+|---|---|---|
+| 서비스 소개 6장 + 릴스 | in1~6 | 올림(고정). 문구는 "먼저 써 보고 10초 가입" 버전이 최신 |
+| 수능 수험생 이벤트 2장 | sp1b, sp2c | 11/18 저녁 올릴 예정. 확인된 곳: 도어이스케이프, 룸익스케이프 블랙/화이트, 강릉방탈출카페. 다음 주 업데이트판 예정 |
+| 방탈출 용어 사전 6장 | dict1~6 | 미게시 |
+| "어떤 소개에 더 끌려요?" 5장 | hk1~5 | 미게시(후킹 규칙 샘플) |
+| 방자전 2장(소개 + 시간표·가격) | bj1, bj2 | 미게시. 먼저 SQL 실행 필요(아래) |
+| ESCAPE SCHOOL 오픈 예고 | ed-school | 오픈일 확정되면 |
+| 시크릿 왕국의 스캔들·신데렐라 초대장 | (템플릿 미보관) | 미게시 |
+
+## 4. 남은 일
+- [ ] `docs/sql/catalog_add_escapeworld.sql` 을 Supabase SQL Editor 에서 실행(방자전·ESCAPE SCHOOL 추가). 운영자가 아직 실행 안 함.
+- [ ] 11/15 첫 자동 릴스가 올라가는지 확인. 실패하면 `app/api/ig/publish/route.ts` 의 REELS 분기 점검.
+- [ ] 다음 지역 모음(강남·홍대 등): 제미나이 그림 방식으로(스킬 ig-region-carousel).
+- [ ] 하이라이트 만들기: 📌시작하기 · 📍수원 · 🎟️수능 · 🔍미스터리 (운영자가 앱에서)
+- [ ] 가입 전에도 기록이 다이어리에 보이게 하기(지금은 가입해야 보임) — 제안만 함, 미착수
+- [ ] 미뤄 둔 것: 엑셀 기록 양식 페이지(통계 시트 B12 순환참조 고쳐야 함), 주간 트렌드 자동화, 커뮤니티 답글 초안
+- [ ] 매주: 인스타 인사이트, `/admin/sources`(유입 출처), Search Console·Bing 확인
+- [ ] GitHub Settings → Pages 를 None 으로(예전 Pages 배포 흔적, 운영자가 설정에서)
+
+## 5. 이번에 알게 된 것 (다시 겪지 않게)
+- 인스타 링크는 이 실행 환경에서 열리지 않는다 → 운영자에게 스크린샷을 부탁한다.
+- 캡션·댓글의 링크는 눌리지 않는다 → "프로필 링크" 또는 스토리 링크 스티커(UTM 붙이기).
+- 올린 게시물의 사진은 바꿀 수 없다 → 캡션 수정 + 고정 댓글 + 스토리로 보완.
+- 자동 게시로는 인스타 인기 음악을 못 붙인다(릴스에 직접 만든 배경음을 넣어 둠).
+- 운영자 취향: 투박한 도형 카드 ✕, 유아틱한 이모지 ✕. 제미나이 그림(위아래 비운 것) 위에 글자 얹기 ○,
+  사이트 소개는 실제 사이트 화면 ○. 지역 모음과 소개는 서로 다른 얼굴로.
+- next/og(Satori) 카드: 자식이 여럿이면 display:flex 필수, right/bottom 절대위치가 잘 안 먹는다.
+- 로컬에서 Supabase 를 읽으려면 `NODE_USE_ENV_PROXY=1 NODE_EXTRA_CA_CERTS=/root/.ccr/ca-bundle.crt` 가 필요했다(클라우드 세션).
