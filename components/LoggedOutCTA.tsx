@@ -43,7 +43,7 @@ export default function LoggedOutCTA() {
           {MASCOT.name}가 방탈출 취향을 진단하고 딱 맞는 방까지 추천해줘.
           다녀온 방은 기록하면 달력이 포스터로 채워지고, 몇 번째 방인지, 올해
           결산까지 자동으로.{" "}
-          <b className="font-extrabold text-cream">전부 무료.</b>
+          <b className="font-extrabold text-cream">1분이면 기록 끝.</b>
         </p>
         <div className="mt-6 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-4">
           <Link
@@ -56,7 +56,7 @@ export default function LoggedOutCTA() {
             href="/new"
             className="rounded-xl px-2 py-3 text-center text-sm font-extrabold underline decoration-2 underline-offset-4 transition hover:text-candy"
           >
-            로그인 없이 방탈출 기록하기
+            먼저 써 보고 기록하기
           </Link>
           <Link
             href="/diary"

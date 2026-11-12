@@ -184,8 +184,8 @@ export default function ThemeReviews({
           {mine.length > 0
             ? "✍️ 이 방 또 기록하기"
             : real.length === 0
-              ? "🥇 첫 후기 남기기 (로그인 없이 가능)"
-              : "✍️ 다녀왔다면 이 방 기록하기 (로그인 없이 가능)"}
+              ? "🥇 첫 후기 남기기"
+              : "✍️ 다녀왔다면 이 방 기록하기"}
         </Link>
       </div>
     </section>

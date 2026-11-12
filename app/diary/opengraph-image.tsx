@@ -57,7 +57,7 @@ export default function DiaryImage() {
               fontWeight: 800,
             }}
           >
-            로그인 없이 바로 기록
+            1분이면 기록 끝
           </div>
           <div style={{ marginTop: 32, fontSize: 30, fontWeight: 700, opacity: 0.6 }}>
             {SITE_NAME}

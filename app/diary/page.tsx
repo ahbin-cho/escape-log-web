@@ -8,7 +8,7 @@ import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 const TITLE = "방탈출 기록장 · 달력 다이어리 — 포스터로 채우는 내 방탈출 캘린더";
 const DESCRIPTION =
-  "다녀온 방탈출을 기록하는 무료 기록장. 탈출 성공·남은 시간·힌트·별점·한줄 후기를 남기면 테마 포스터로 채워지는 달력, 'N번째 방' 다이어리, 연말 결산이 자동으로 만들어져요. 로그인 없이 바로 써 볼 수 있어요.";
+  "다녀온 방탈출을 기록하는 무료 기록장. 탈출 성공·남은 시간·힌트·별점·한줄 후기를 남기면 테마 포스터로 채워지는 달력, 'N번째 방' 다이어리, 연말 결산이 자동으로 만들어져요. 가입 전에 먼저 써 볼 수 있어요.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -101,8 +101,8 @@ const FAQ = [
     a: "네, 전부 무료예요. 기록 개수 제한도 없어요.",
   },
   {
-    q: "로그인 없이도 기록할 수 있나요?",
-    a: "네. 먼저 써 보고 저장하면 지금 쓰는 기기에 보관돼요. 이메일로 10초 가입하면 계정으로 옮겨져서 폰을 바꿔도 남아요.",
+    q: "가입 안 하고도 기록할 수 있나요?",
+    a: "먼저 써 볼 수는 있어요. 저장하면 지금 쓰는 기기에 잠깐 보관되고, 이메일로 10초 가입하면 계정으로 옮겨져서 다이어리·달력·결산에서 볼 수 있어요. 가입 전에는 다른 기기나 브라우저에서 보이지 않아요.",
   },
   {
     q: "스포일러가 걱정돼요.",
@@ -177,7 +177,7 @@ export default function DiaryLandingPage() {
           탈출 성공, 남은 시간, 힌트, 별점, 한줄 후기만 적으면 끝. 다녀온 날은
           달력에 테마 포스터로 채워지고, 몇 번째 방인지 자동으로 세고, 연말엔
           나만의 방탈출 결산까지 만들어 줘요.{" "}
-          <b className="font-extrabold text-cream">로그인 없이 바로 시작.</b>
+          <b className="font-extrabold text-cream">먼저 써 보고, 10초 가입.</b>
         </p>
         <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-4">
           <Link
@@ -342,7 +342,7 @@ export default function DiaryLandingPage() {
         <h2 className="text-xl font-extrabold">🚀 30초면 시작</h2>
         <ol className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           {[
-            ["1", "로그인 없이 바로 쓰기", "테마를 고르고 결과만 적으면 끝"],
+            ["1", "가입 전에 먼저 써 보기", "테마를 고르고 결과만 적으면 끝"],
             ["2", "10초 가입으로 지키기", "이메일만 있으면 기록이 계정으로"],
             ["3", "달력·결산·추천", "쌓일수록 내 취향 추천이 정확해져요"],
           ].map(([n, t, d]) => (

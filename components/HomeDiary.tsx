@@ -37,7 +37,7 @@ export default function HomeDiary({
           <h2 className="text-lg">📓 내 방탈출 다이어리</h2>
           <p className="mt-1 text-sm text-cream/65">
             다녀온 방을 남기면 몇 번째 방인지 세 주고, 연말엔 결산까지 만들어 줘요.
-            로그인 없이 30초.
+            먼저 써 보고, 10초 가입하면 계속 보관돼요.
           </p>
         </div>
         <div className="flex shrink-0 gap-2">
