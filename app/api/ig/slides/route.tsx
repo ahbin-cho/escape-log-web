@@ -1,0 +1,219 @@
+import type { ReactNode } from "react";
+import { ED, jpegResponse } from "@/lib/og-card";
+
+// 서비스 소개 캐러셀(인스타 여러 장 게시용) ?n=1..6
+// 한 번 올리는 용도라 자동 게시하지 않는다: 이미지를 받아 폰에서 직접 올린다.
+// 미스터리 카드 시안 B 와 같은 에디토리얼 톤(크림 바탕·굵은 글자·얇은 선, 장식 없음).
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+const TOTAL = 6;
+
+function Frame({ n, children, origin }: { n: number; children: ReactNode; origin: string }) {
+  return (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        padding: "96px 92px 84px",
+        backgroundColor: ED.bg,
+        color: ED.ink,
+        fontFamily: "Pretendard",
+      }}
+    >
+      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 26, fontWeight: 800, letterSpacing: "0.22em" }}>
+        <div>BANGTALLOG</div>
+        <div style={{ color: ED.dim }}>{`0${n} / 0${TOTAL}`}</div>
+      </div>
+      <div style={{ marginTop: 26, height: 3, backgroundColor: ED.ink, display: "flex" }} />
+      <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>{children}</div>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{ fontSize: 28, fontWeight: 500, color: ED.dim }}>방탈로그 · bangtallog.com</div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={`${origin}/mascot.png`} alt="" width={110} height={110} />
+      </div>
+    </div>
+  );
+}
+
+const H1 = ({ children }: { children: ReactNode }) => (
+  <div style={{ display: "flex", flexDirection: "column", marginTop: 86, fontSize: 92, fontWeight: 800, lineHeight: 1.18, letterSpacing: "-0.045em" }}>
+    {children}
+  </div>
+);
+const Sub = ({ children }: { children: string }) => (
+  <div style={{ display: "flex", marginTop: 30, fontSize: 38, fontWeight: 500, lineHeight: 1.5, color: ED.dim, wordBreak: "keep-all" }}>
+    {children}
+  </div>
+);
+const Accent = ({ children }: { children: string }) => (
+  <span style={{ display: "flex", color: ED.accent }}>{children}</span>
+);
+
+function DiaryRow({ no, day, name, meta, result, hl }: { no: string; day: string; name: string; meta: string; result: string; hl?: boolean }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 30,
+        padding: "26px 32px",
+        borderRadius: 26,
+        border: `3px solid ${hl ? ED.accent : ED.ink}`,
+        backgroundColor: hl ? "#FBE9D7" : "#FFFCF6",
+      }}
+    >
+      <div style={{ display: "flex", width: 70, fontSize: 44, fontWeight: 800, justifyContent: "center" }}>{day}</div>
+      <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <div style={{ display: "flex", padding: "4px 14px", borderRadius: 10, backgroundColor: hl ? ED.accent : ED.panel, color: hl ? "#FFF" : ED.dim, fontSize: 24, fontWeight: 800 }}>{no}</div>
+          <div style={{ fontSize: 36, fontWeight: 800 }}>{name}</div>
+        </div>
+        <div style={{ marginTop: 8, fontSize: 26, fontWeight: 500, color: ED.dim }}>{meta}</div>
+      </div>
+      <div style={{ fontSize: 26, fontWeight: 800, color: ED.dim }}>{result}</div>
+    </div>
+  );
+}
+
+function slide(n: number, origin: string) {
+  switch (n) {
+    case 1:
+      return (
+        <Frame n={1} origin={origin}>
+          <div style={{ display: "flex", flexDirection: "column", flex: 1, justifyContent: "center" }}>
+            <div style={{ display: "flex", flexDirection: "column", fontSize: 128, fontWeight: 800, lineHeight: 1.12, letterSpacing: "-0.05em" }}>
+              <div>방탈출,</div>
+              <div>기록하고</div>
+              <div style={{ color: ED.accent }}>있어요?</div>
+            </div>
+            <Sub>다녀온 방은 다이어리로, 다음 방은 내 취향으로 고르는 곳.</Sub>
+          </div>
+        </Frame>
+      );
+    case 2:
+      return (
+        <Frame n={2} origin={origin}>
+          <H1>
+            <div>몇 번째 방이었는지</div>
+            <div style={{ display: "flex" }}>
+              <Accent>기억나요?</Accent>
+            </div>
+          </H1>
+          <Sub>남기면 순서대로 번호가 붙어요. 50번째, 100번째 방은 따로 축하해요.</Sub>
+          <div style={{ display: "flex", flexDirection: "column", gap: 20, marginTop: 56 }}>
+            <DiaryRow no="50번째 방" day="22" name="어느 폐가의 기록" meta="공포 · 강남 · 3명" result="탈출 8분 남김" hl />
+            <DiaryRow no="#49" day="15" name="은하수 배달부" meta="SF · 홍대 · 2명" result="노힌트" />
+            <DiaryRow no="#48" day="8" name="고양이 탐정 사무소" meta="추리 · 서면 · 4명" result="실패" />
+          </div>
+        </Frame>
+      );
+    case 3:
+      return (
+        <Frame n={3} origin={origin}>
+          <H1>
+            <div>연말엔,</div>
+            <div style={{ display: "flex" }}>
+              <Accent>나만의 결산</Accent>
+            </div>
+          </H1>
+          <Sub>그 해 기록으로 자동으로 정리돼요. 친구들한테 자랑은 버튼 하나.</Sub>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 20, marginTop: 56 }}>
+            {[
+              ["올해 플레이", "47방"],
+              ["탈출 성공률", "74%"],
+              ["노힌트 탈출", "16번"],
+              ["원정 지역", "3곳"],
+            ].map(([k, v]) => (
+              <div
+                key={k}
+                style={{ display: "flex", flexDirection: "column", width: 438, padding: "30px 34px", borderRadius: 26, border: `3px solid ${ED.ink}`, backgroundColor: "#FFFCF6" }}
+              >
+                <div style={{ fontSize: 28, fontWeight: 800, color: ED.dim }}>{k}</div>
+                <div style={{ marginTop: 6, fontSize: 76, fontWeight: 800, letterSpacing: "-0.03em" }}>{v}</div>
+              </div>
+            ))}
+          </div>
+        </Frame>
+      );
+    case 4:
+      return (
+        <Frame n={4} origin={origin}>
+          <H1>
+            <div>인기순 말고,</div>
+            <div style={{ display: "flex" }}>
+              <Accent>내 취향순</Accent>
+            </div>
+          </H1>
+          <Sub>질문 몇 개면 16가지 유형 중 내 유형이 나오고, 딱 맞는 방을 골라 줘요.</Sub>
+          <div
+            style={{ display: "flex", flexDirection: "column", marginTop: 56, padding: "40px 44px", borderRadius: 30, backgroundColor: ED.ink, color: ED.bg }}
+          >
+            <div style={{ fontSize: 26, fontWeight: 800, letterSpacing: "0.18em", color: ED.accent }}>나의 방탈출 유형</div>
+            <div style={{ marginTop: 14, fontSize: 70, fontWeight: 800, letterSpacing: "-0.04em" }}>과몰입 주인공</div>
+            <div style={{ display: "flex", marginTop: 14, fontSize: 32, fontWeight: 500, lineHeight: 1.5, color: "#CFC7BB", wordBreak: "keep-all" }}>
+              방에 들어가면 그 사람이 돼요. 엔딩에서 제일 오래 서 있는 타입.
+            </div>
+          </div>
+        </Frame>
+      );
+    case 5:
+      return (
+        <Frame n={5} origin={origin}>
+          <H1>
+            <div>겁 많은 친구도</div>
+            <div style={{ display: "flex" }}>
+              <Accent>다 같이</Accent>
+            </div>
+          </H1>
+          <Sub>우리 팀 궁합을 보고, 제일 겁 많은 친구도 들어갈 수 있는 방만 골라요.</Sub>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 56 }}>
+            {[
+              ["민지", "공포 4 · 난이도 4"],
+              ["준호", "공포 5 · 난이도 3"],
+              ["서연", "공포 2 · 난이도 2"],
+            ].map(([who, t]) => (
+              <div key={who} style={{ display: "flex", justifyContent: "space-between", padding: "22px 32px", borderRadius: 22, border: `3px solid ${ED.ink}`, backgroundColor: "#FFFCF6", fontSize: 34, fontWeight: 800 }}>
+                <div>{who}</div>
+                <div style={{ color: ED.dim, fontWeight: 500 }}>{t}</div>
+              </div>
+            ))}
+            <div style={{ display: "flex", marginTop: 10, padding: "26px 32px", borderRadius: 22, backgroundColor: ED.accent, color: "#FFF", fontSize: 34, fontWeight: 800 }}>
+              → 공포 2까지 · 난이도 3 근처 · 3명 가능한 방
+            </div>
+          </div>
+        </Frame>
+      );
+    default:
+      return (
+        <Frame n={6} origin={origin}>
+          <div style={{ display: "flex", flexDirection: "column", flex: 1, justifyContent: "center" }}>
+            <div style={{ display: "flex", flexDirection: "column", fontSize: 104, fontWeight: 800, lineHeight: 1.15, letterSpacing: "-0.05em" }}>
+              <div>지난 주말 간 방,</div>
+              <div style={{ display: "flex" }}>
+                <Accent>기억날 때</Accent>
+                <span style={{ marginLeft: 28 }}>남겨요</span>
+              </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 18, marginTop: 60 }}>
+              {["무료, 로그인 없이 바로 시작", "스포는 나만 보는 메모로 따로", "매일 오늘의 미스터리 방"].map((x) => (
+                <div key={x} style={{ display: "flex", alignItems: "center", gap: 20, fontSize: 40, fontWeight: 800 }}>
+                  <div style={{ display: "flex", width: 18, height: 18, borderRadius: 9, backgroundColor: ED.accent }} />
+                  {x}
+                </div>
+              ))}
+            </div>
+            <div style={{ display: "flex", marginTop: 70, fontSize: 44, fontWeight: 800 }}>프로필 링크 → bangtallog.com</div>
+          </div>
+        </Frame>
+      );
+  }
+}
+
+export async function GET(req: Request) {
+  const url = new URL(req.url);
+  const n = Math.min(TOTAL, Math.max(1, Number(url.searchParams.get("n")) || 1));
+  return jpegResponse(slide(n, url.origin), 86400);
+}

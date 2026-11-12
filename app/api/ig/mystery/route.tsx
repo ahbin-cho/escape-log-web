@@ -6,9 +6,11 @@ import { getAllThemes } from "@/lib/catalog-server";
 import { dailyMystery, kstDate, teaserPreview } from "@/lib/home-picks";
 import { regionFromText } from "@/lib/region";
 import { SITE_URL } from "@/lib/site";
+import { ED, jpegResponse } from "@/lib/og-card";
 
 // 인스타용 "오늘의 미스터리 방" 카드 (1080×1350, JPEG — 인스타 게시 API 는 JPEG 만 받음).
 // ?date=YYYY-MM-DD 로 다른 날 미리보기. 정답(테마 이름·매장)은 그리지 않는다.
+// ?style=b 는 장식을 뺀 에디토리얼(잡지 표지) 시안.
 // 콘셉트 "사건 파일": 사이트의 크림 종이·먹선·딱딱한 그림자 그대로, 방 이름은 검은 줄로 가린 기밀 서류.
 // 글꼴: Pretendard (OFL, assets/fonts/Pretendard-LICENSE.txt)
 export const runtime = "nodejs";
@@ -55,6 +57,18 @@ export async function GET(req: Request) {
   const region = regionFromText(t.cafe);
   const [, m, d] = kstDate(now).split("-");
   const origin = url.origin;
+
+  if (url.searchParams.get("style") === "b") {
+    return editorialCard({
+      teaser: teaserPreview(t.teaser ?? "", 96),
+      genre: t.genre,
+      difficulty: t.difficulty,
+      fear: t.fear_level,
+      region,
+      date: `${m}.${d}`,
+      origin,
+    });
+  }
 
   // 가림 줄 길이로 이름 길이를 살짝 힌트. 도장과 겹치지 않게 최대 7칸(420px)
   const nameLen = Math.min(7, Math.max(3, [...t.name.trim()].length));
@@ -226,4 +240,90 @@ export async function GET(req: Request) {
       "Cache-Control": "public, max-age=3600",
     },
   });
+}
+
+
+// 시안 B: 잡지 표지처럼 글자로만. 큰 따옴표 + 줄거리가 주인공, 단서는 얇은 선 아래 표로, 탈출귀는 서명처럼 작게.
+function editorialCard(p: {
+  teaser: string;
+  genre: string;
+  difficulty: number;
+  fear: number;
+  region: string | null;
+  date: string;
+  origin: string;
+}) {
+  const scale = (n: number) => `${"●".repeat(n)}${"○".repeat(Math.max(0, 5 - n))}`;
+  return jpegResponse(
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        padding: "96px 92px 84px",
+        backgroundColor: ED.bg,
+        color: ED.ink,
+        fontFamily: "Pretendard",
+      }}
+    >
+      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 26, fontWeight: 800, letterSpacing: "0.22em" }}>
+        <div>TODAY&apos;S MYSTERY ROOM</div>
+        <div style={{ color: ED.dim }}>{p.date}</div>
+      </div>
+      <div style={{ marginTop: 26, height: 3, backgroundColor: ED.ink, display: "flex" }} />
+
+      <div style={{ flex: 1 }} />
+      <div style={{ display: "flex", width: 96, height: 14, backgroundColor: ED.accent, marginBottom: 40 }} />
+      <div
+        style={{
+          display: "flex",
+          fontSize: 58,
+          fontWeight: 800,
+          lineHeight: 1.42,
+          letterSpacing: "-0.035em",
+          wordBreak: "keep-all",
+        }}
+      >
+        {p.teaser}
+      </div>
+
+      <div style={{ flex: 1 }} />
+
+      <div style={{ display: "flex", fontSize: 34, fontWeight: 500, color: ED.dim }}>
+        {`이 줄거리, ${p.region ? `${p.region}의 ` : ""}어느 방일까요?`}
+      </div>
+      <div style={{ marginTop: 28, height: 2, backgroundColor: ED.faint, display: "flex" }} />
+      <div style={{ marginTop: 30, display: "flex" }}>
+        {[
+          ["장르", p.genre],
+          ["난이도", scale(p.difficulty)],
+          ["공포도", scale(p.fear)],
+        ].map(([k, v], i) => (
+          <div
+            key={k}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              flex: 1,
+              paddingLeft: i ? 32 : 0,
+              borderLeft: i ? `2px solid ${ED.faint}` : "none",
+            }}
+          >
+            <div style={{ fontSize: 24, fontWeight: 800, color: ED.dim, letterSpacing: "0.1em" }}>{k}</div>
+            <div style={{ marginTop: 10, fontSize: 36, fontWeight: 800 }}>{v}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ marginTop: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ fontSize: 40, fontWeight: 800 }}>정답은 프로필 링크에서</div>
+          <div style={{ marginTop: 8, fontSize: 28, fontWeight: 500, color: ED.dim }}>방탈로그 · bangtallog.com</div>
+        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={`${p.origin}/mascot.png`} alt="" width={130} height={130} />
+      </div>
+    </div>
+  );
 }
