@@ -70,10 +70,33 @@ describe("게시 일정", () => {
     expect(setImagePaths("intro")).toHaveLength(6);
     expect(setImagePaths("ad-diary")).toEqual(["/api/ig/slides?ad=diary"]);
     expect(scheduledSet("2026-11-16")).toBe("record-story");
+    expect(scheduledSet("2026-11-18")).toBe("collection:수원");
     expect(setImagePaths("record-story")).toHaveLength(4);
     // 첫 줄이 서로 달라야 중복 확인이 된다
     const firsts = Object.values(SET_CAPTIONS).map((c) => c.split("\n")[0]);
     expect(new Set(firsts).size).toBe(firsts.length);
     expect(Object.values(SET_CAPTIONS).every((c) => c.length <= 2200)).toBe(true);
+  });
+});
+
+describe("resolvePost", () => {
+  it("지역 모음·이 방의 이야기 묶음을 만든다", async () => {
+    const { resolvePost } = await import("./instagram");
+    const th = (id: string, p: Partial<ThemeRow>): ThemeRow => ({
+      id, name: id, cafe: "상상의문 수원점", genre: "공포", difficulty: 3, fear_level: 4, tags: null,
+      teaser: "같은 기척, 같은 냄새, 같은 어둠.", time_limit: null, players: null, reservation_url: null, ...p,
+    });
+    const pool = [
+      th("a", {}), th("b", { cafe: "셜록홈즈 수원역점" }),
+      th("c", { genre: "코믹", fear_level: 1, difficulty: 2 }), th("d", { genre: "감성", fear_level: 1, cafe: "셜록홈즈 수원역점" }),
+    ];
+    const col = resolvePost("collection:수원", pool)!;
+    expect(col.imagePaths[0]).toContain("page=1");
+    expect(col.caption.split("\n")[0]).toContain("수원 방탈출");
+    const story = resolvePost("story:a", pool)!;
+    expect(story.imagePaths).toEqual(["/api/ig/story?id=a"]);
+    expect(story.caption).toContain("이 방의 이야기 · a");
+    expect(resolvePost("story:없음", pool)).toBeNull();
+    expect(resolvePost("이상한값", pool)).toBeNull();
   });
 });

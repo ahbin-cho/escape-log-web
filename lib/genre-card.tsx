@@ -247,6 +247,7 @@ export function genreCard(p: {
   origin: string;
   seed: number;
   bgUrl?: string | null; // public/ig-bg 의 배경 그림(있으면)
+  reveal?: { name: string; cafe: string }; // "이 방의 이야기": 이름을 공개하는 카드
 }) {
   const key = moodOf(p.genre);
   const m = MOODS[key];
@@ -296,8 +297,11 @@ export function genreCard(p: {
       </div>
 
       <div style={{ display: "flex", marginTop: 60, fontSize: 84, fontWeight: 800, lineHeight: 1.15, letterSpacing: "-0.045em", color: m.text }}>
-        {m.question}
+        {p.reveal ? p.reveal.name : m.question}
       </div>
+      {p.reveal && (
+        <div style={{ display: "flex", marginTop: 14, fontSize: 32, fontWeight: 800, color: m.dim }}>{p.reveal.cafe}</div>
+      )}
 
       <div style={{ flex: 1 }} />
 
@@ -329,7 +333,9 @@ export function genreCard(p: {
 
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 56 }}>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ fontSize: 40, fontWeight: 800, color: key === "pop" ? m.text : m.accent }}>정답은 프로필 링크에서</div>
+          <div style={{ fontSize: 40, fontWeight: 800, color: key === "pop" ? m.text : m.accent }}>
+            {p.reveal ? "줄거리·후기 → 프로필 링크" : "정답은 프로필 링크에서"}
+          </div>
           <div style={{ marginTop: 8, fontSize: 28, fontWeight: 500, color: m.dim }}>방탈로그 · bangtallog.com</div>
         </div>
         {/* eslint-disable-next-line @next/next/no-img-element */}

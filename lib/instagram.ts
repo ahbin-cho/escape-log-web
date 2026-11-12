@@ -1,5 +1,6 @@
 import type { ThemeRow } from "./catalog-server";
 import { districtFromText, regionFromText } from "./region";
+import { areaThemes, pickCollection } from "./collection";
 
 // ─────────────────────────────────────────────────────────────
 // 인스타그램 자동 게시: "오늘의 미스터리 방" 글(캡션)과 게시 순서.
@@ -101,14 +102,80 @@ export function graphHost(token: string): string {
 // ─────────────────────────────────────────────────────────────
 export type PostSet = "intro" | "record-story" | "ad-diary" | "ad-recap";
 
-export const POST_SCHEDULE: { date: string; set: PostSet }[] = [
+// set 은 고정 묶음(PostSet) 또는 "collection:<지역>"(지역 모음), "story:<테마 id>"(이 방의 이야기)
+export const POST_SCHEDULE: { date: string; set: string }[] = [
   { date: "2026-11-13", set: "intro" },
   { date: "2026-11-16", set: "record-story" },
+  { date: "2026-11-18", set: "collection:수원" },
+  { date: "2026-11-20", set: "story:b60b538b-618e-4102-ab57-06f369f56a4b" }, // 성지기숙학원 : 특수교정반
+  { date: "2026-11-23", set: "story:4451205b-df5a-462f-9f62-4461c59f9440" }, // 영안실
+  { date: "2026-11-26", set: "story:5bcecef5-c59b-41a4-bb31-dda03276f724" }, // 춘화각 : 피할 수 없는 저주
   { date: "2026-12-01", set: "ad-recap" },
 ];
 
-export function scheduledSet(kstDay: string): PostSet | null {
+export function scheduledSet(kstDay: string): string | null {
   return POST_SCHEDULE.find((p) => p.date === kstDay)?.set ?? null;
+}
+
+// 게시할 이미지 경로와 캡션. 알 수 없는 묶음·없는 테마면 null
+export function resolvePost(
+  set: string,
+  themes: ThemeRow[]
+): { imagePaths: string[]; caption: string } | null {
+  if (set in SET_CAPTIONS) {
+    return { imagePaths: setImagePaths(set as PostSet), caption: SET_CAPTIONS[set as PostSet] };
+  }
+  if (set.startsWith("collection:")) {
+    const area = set.slice("collection:".length);
+    const list = areaThemes(themes, area);
+    const sections = pickCollection(list);
+    if (sections.length === 0) return null;
+    const total = sections.length + 2;
+    const q = encodeURIComponent(area);
+    return {
+      imagePaths: Array.from({ length: total }, (_, i) => `/api/ig/collection?area=${q}&page=${i + 1}`),
+      caption: [
+        `${area} 방탈출, 어디 갈지 고민이라면 📍`,
+        "",
+        `${area} 테마 ${list.length}개를 조건별로 골라 봤어요.`,
+        sections.map((s) => `· ${s.title}`).join("\n"),
+        "",
+        "정보는 각 매장 공식 소개 기준이에요. 전체 목록·줄거리·후기 → 프로필 링크",
+        "",
+        `#${area}방탈출 #${area}데이트 #${area}놀거리 #경기방탈출 #방탈출추천 #방탈출 #방탈러 #방린이 #방탈출스타그램 #이색데이트 #방탈로그`,
+      ].join("\n"),
+    };
+  }
+  if (set.startsWith("story:")) {
+    const t = themes.find((x) => x.id === set.slice("story:".length));
+    if (!t || !t.teaser) return null;
+    const region = regionFromText(t.cafe);
+    const district = districtFromText(t.cafe);
+    return {
+      imagePaths: [`/api/ig/story?id=${t.id}`],
+      caption: [
+        `🕯️ 이 방의 이야기 · ${t.name}`,
+        "",
+        `“${t.teaser.trim().replace(/\s+/g, " ")}”`,
+        "",
+        `${t.cafe} · ${t.genre} · 난이도 ${t.difficulty}/5 · 공포도 ${t.fear_level}/5`,
+        "다녀왔다면 어땠는지 댓글로 알려 주세요. 기록은 프로필 링크에서.",
+        "",
+        "(줄거리는 매장 공식 소개 기준)",
+        "",
+        [
+          district ? `#${district}방탈출` : "",
+          region ? `#${region}방탈출` : "",
+          `#${t.genre}방탈출`,
+          t.fear_level >= 4 ? "#공포방탈출" : "",
+          "#방탈출 #방탈출추천 #방탈출후기 #방탈러 #방탈출스타그램 #이방의이야기 #방탈로그",
+        ]
+          .filter(Boolean)
+          .join(" "),
+      ].join("\n"),
+    };
+  }
+  return null;
 }
 
 // 묶음별 이미지(사이트 카드 생성기 주소)

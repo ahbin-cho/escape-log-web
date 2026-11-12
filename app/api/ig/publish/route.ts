@@ -1,13 +1,6 @@
 import { getAllThemes } from "@/lib/catalog-server";
 import { dailyMystery, kstDate } from "@/lib/home-picks";
-import {
-  graphHost,
-  mysteryCaption,
-  scheduledSet,
-  SET_CAPTIONS,
-  setImagePaths,
-  type PostSet,
-} from "@/lib/instagram";
+import { graphHost, mysteryCaption, resolvePost, scheduledSet } from "@/lib/instagram";
 import { SITE_URL } from "@/lib/site";
 
 // 인스타 "오늘의 미스터리 방" 게시. Vercel Cron 이 하루 1번 부른다(vercel.json).
@@ -52,18 +45,19 @@ export async function GET(req: Request) {
   const params = new URL(req.url).searchParams;
 
   // 오늘 올릴 것: ?set= 으로 지정했거나 일정(POST_SCHEDULE)에 있으면 그 묶음, 아니면 오늘의 미스터리 방
-  const forced = params.get("set") as PostSet | null;
-  const set: PostSet | null =
-    forced && forced in SET_CAPTIONS ? forced : scheduledSet(kstDate(now));
+  const set = params.get("set") || scheduledSet(kstDate(now));
+  const themes = await getAllThemes();
+  const resolved = set ? resolvePost(set, themes) : null;
   let caption: string;
   let imageUrls: string[];
   let label: string;
-  if (set) {
-    caption = SET_CAPTIONS[set];
-    imageUrls = setImagePaths(set).map((p) => `${SITE_URL}${p}`);
+  if (set && resolved) {
+    caption = resolved.caption;
+    imageUrls = resolved.imagePaths.map((p) => `${SITE_URL}${p}`);
     label = set;
   } else {
-    const theme = dailyMystery(await getAllThemes(), now);
+    // 일정이 없거나(혹은 묶음을 못 만들면) 오늘의 미스터리 방
+    const theme = dailyMystery(themes, now);
     if (!theme) return json({ error: "오늘 고를 테마가 없어요" }, 404);
     caption = mysteryCaption(theme);
     imageUrls = [`${SITE_URL}/api/ig/mystery?date=${kstDate(now)}`];
