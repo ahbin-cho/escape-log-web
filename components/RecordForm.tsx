@@ -17,7 +17,7 @@ import {
 import { REGIONS, regionFromText } from "@/lib/region";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { trackAttributionEvent } from "@/lib/track";
-import { fearLabel, RATING_LABELS, RATING_EMOJI } from "@/lib/terms";
+import { fearLabel, RATING_LABELS } from "@/lib/terms";
 
 // ── 작은 입력 부품: 굵은 테두리·이모지 대신 면(面)과 주황 포인트 하나로 ──
 const card = "rounded-2xl border border-edge/10 bg-panel p-4 sm:p-5";
@@ -35,12 +35,13 @@ function SectionTitle({ step, title, sub }: { step: string; title: string; sub?:
   );
 }
 
-// 별점: 단계마다 자기 아이콘(흙길 🟤 → 인생테마 🏆). 고른 칸만 크게, 나머지는 흐리게
+// 별점: 길 등급을 글자로. 고른 칸은 먹색으로 채우고, 그 아래 칸은 옅게
 function RatingPicker({ value, onChange }: { value: number; onChange: (v: number) => void }) {
   return (
-    <div className="grid grid-cols-5 gap-1.5" role="radiogroup" aria-label="별점">
+    <div className="grid grid-cols-5 overflow-hidden rounded-xl border border-edge/15" role="radiogroup" aria-label="별점">
       {[1, 2, 3, 4, 5].map((n) => {
         const on = n === value;
+        const under = value > 0 && n < value;
         return (
           <button
             key={n}
@@ -48,20 +49,12 @@ function RatingPicker({ value, onChange }: { value: number; onChange: (v: number
             role="radio"
             aria-checked={on}
             onClick={() => onChange(on ? 0 : n)}
-            className={`flex flex-col items-center gap-1 rounded-2xl py-3 transition active:scale-95 ${
-              on ? "bg-candy/15 ring-2 ring-candy" : "bg-edge/[0.04] hover:bg-edge/[0.07]"
+            className={`flex flex-col items-center gap-0.5 border-l border-edge/10 py-3 transition first:border-l-0 active:scale-[0.97] ${
+              on ? "bg-edge text-white" : under ? "bg-edge/[0.06]" : "hover:bg-edge/[0.04]"
             }`}
           >
-            <span
-              className={`text-[28px] leading-none transition ${
-                on ? "scale-110" : value && n > value ? "opacity-30 grayscale" : "opacity-80"
-              }`}
-            >
-              {RATING_EMOJI[n - 1]}
-            </span>
-            <span className={`text-[11px] font-extrabold ${on ? "text-candy" : "text-cream/45"}`}>
-              {RATING_LABELS[n - 1]}
-            </span>
+            <span className={`text-[11px] font-extrabold tabular-nums ${on ? "text-white/60" : "text-cream/35"}`}>{n}</span>
+            <span className={`text-[12px] font-extrabold ${on ? "" : "text-cream/70"}`}>{RATING_LABELS[n - 1]}</span>
           </button>
         );
       })}
@@ -69,7 +62,23 @@ function RatingPicker({ value, onChange }: { value: number; onChange: (v: number
   );
 }
 
-// 난이도·공포도: 기존 아이콘(🔒·👻)이 차오른다. 안 찬 칸은 흐린 흑백
+// 선 아이콘(단색). 채워진 칸은 먹색, 빈 칸은 옅은 선
+const ICONS = {
+  lock: (
+    <>
+      <rect x="5" y="11" width="14" height="9" rx="2" />
+      <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+    </>
+  ),
+  ghost: (
+    <>
+      <path d="M6 20V11a6 6 0 0 1 12 0v9l-2-1.5-2 1.5-2-1.5-2 1.5-2-1.5z" />
+      <circle cx="10" cy="11" r=".9" fill="currentColor" />
+      <circle cx="14" cy="11" r=".9" fill="currentColor" />
+    </>
+  ),
+};
+
 function IconMeter({
   label,
   icon,
@@ -78,18 +87,18 @@ function IconMeter({
   caption,
 }: {
   label: string;
-  icon: string;
+  icon: keyof typeof ICONS;
   value: number;
   onChange: (v: number) => void;
   caption: string;
 }) {
   return (
-    <div className="rounded-2xl bg-edge/[0.04] p-3.5">
-      <div className="mb-2 flex items-baseline justify-between">
+    <div className="rounded-xl border border-edge/10 px-3.5 pb-2.5 pt-3">
+      <div className="flex items-baseline justify-between">
         <span className="text-[13px] font-bold text-cream/60">{label}</span>
-        <span className="text-[13px] font-extrabold text-candy">{caption}</span>
+        <span className="text-[13px] font-extrabold">{caption}</span>
       </div>
-      <div className="flex justify-between" role="radiogroup" aria-label={label}>
+      <div className="mt-1.5 flex justify-between" role="radiogroup" aria-label={label}>
         {[1, 2, 3, 4, 5].map((n) => {
           const on = n <= value;
           return (
@@ -100,11 +109,13 @@ function IconMeter({
               aria-checked={n === value}
               aria-label={`${label} ${n}`}
               onClick={() => onChange(n === value ? 0 : n)}
-              className={`flex h-11 w-11 items-center justify-center rounded-full text-[22px] transition active:scale-90 ${
-                on ? "bg-panel shadow-sm" : "opacity-25 grayscale hover:opacity-40"
-              } ${n === value ? "scale-110" : ""}`}
+              className={`flex h-10 w-10 items-center justify-center rounded-lg transition active:scale-90 ${
+                on ? "text-edge" : "text-edge/20 hover:text-edge/35"
+              }`}
             >
-              {icon}
+              <svg viewBox="0 0 24 24" width="24" height="24" fill={on ? "currentColor" : "none"} fillOpacity={on ? 0.12 : 0} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                {ICONS[icon]}
+              </svg>
             </button>
           );
         })}
@@ -540,14 +551,14 @@ export default function RecordForm({
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <IconMeter
             label="난이도"
-            icon="🔒"
+            icon="lock"
             value={form.difficulty}
             onChange={(v) => set("difficulty", v)}
             caption={form.difficulty ? `${DIFFICULTY_WORDS[form.difficulty - 1]} · ${form.difficulty}/5` : ""}
           />
           <IconMeter
             label="공포도"
-            icon="👻"
+            icon="ghost"
             value={form.fearLevel}
             onChange={(v) => set("fearLevel", v)}
             caption={fearLabel(form.fearLevel)}
