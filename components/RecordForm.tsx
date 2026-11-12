@@ -19,59 +19,130 @@ import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { trackAttributionEvent } from "@/lib/track";
 import { ratingLabel, fearLabel } from "@/lib/terms";
 
-type ScaleKey = "difficulty" | "fearLevel" | "rating";
+// ── 작은 입력 부품: 굵은 테두리·이모지 대신 면(面)과 주황 포인트 하나로 ──
+const card = "rounded-2xl border border-edge/10 bg-panel p-4 sm:p-5";
+const field =
+  "w-full rounded-xl border border-edge/10 bg-ink/60 px-3.5 py-3 text-[15px] outline-none transition placeholder:text-cream/35 focus:border-candy focus:bg-panel";
+const labelCls = "mb-1.5 block text-[13px] font-bold text-cream/60";
 
-const SCALE_ICON: Record<ScaleKey, [string, string]> = {
-  difficulty: ["🔓", "🔒"],
-  fearLevel: ["🤍", "👻"],
-  rating: ["🥀", "🌸"],
-};
+function SectionTitle({ step, title, sub }: { step: string; title: string; sub?: string }) {
+  return (
+    <div className="mb-4 flex items-baseline gap-2">
+      <span className="text-[11px] font-extrabold tracking-[0.2em] text-candy">{step}</span>
+      <h2 className="text-base font-extrabold">{title}</h2>
+      {sub && <span className="text-xs text-cream/45">{sub}</span>}
+    </div>
+  );
+}
 
-function Scale({
+// 1~5 단계: 칸이 차오르는 막대. 같은 칸을 다시 누르면 0(미입력)
+function Meter({
   label,
-  name,
   value,
   onChange,
-  hint,
+  caption,
 }: {
   label: string;
-  name: ScaleKey;
   value: number;
-  onChange: (name: ScaleKey, value: number) => void;
-  hint?: string;
+  onChange: (v: number) => void;
+  caption?: string;
 }) {
-  const [empty, filled] = SCALE_ICON[name];
   return (
     <div>
-      <label className="mb-1.5 block text-sm font-bold text-cream/70">
-        {label}
-        {hint && <span className="ml-1.5 font-extrabold text-candy">{hint}</span>}
-      </label>
-      <div className="flex gap-1">
-        {[1, 2, 3, 4, 5].map((n) => {
-          const active = n <= Number(value);
-          return (
-            <button
-              key={n}
-              type="button"
-              onClick={() => onChange(name, n === value ? 0 : n)}
-              className={`flex h-10 flex-1 items-center justify-center rounded-lg border-2 text-lg transition active:scale-[0.9] ${
-                active
-                  ? "border-edge bg-candy/10"
-                  : "border-edge/20 bg-transparent hover:border-edge/40"
-              }`}
-            >
-              {active ? filled : empty}
-            </button>
-          );
-        })}
+      <div className="mb-1.5 flex items-baseline justify-between">
+        <span className="text-[13px] font-bold text-cream/60">{label}</span>
+        <span className="text-xs font-bold text-candy">{caption ?? (value ? `${value}/5` : "")}</span>
+      </div>
+      <div className="flex gap-1" role="radiogroup" aria-label={label}>
+        {[1, 2, 3, 4, 5].map((n) => (
+          <button
+            key={n}
+            type="button"
+            role="radio"
+            aria-checked={n === value}
+            aria-label={`${label} ${n}`}
+            onClick={() => onChange(n === value ? 0 : n)}
+            className={`h-9 flex-1 rounded-lg transition active:scale-[0.94] ${
+              n <= value ? "bg-candy" : "bg-edge/[0.07] hover:bg-edge/[0.12]"
+            }`}
+          />
+        ))}
       </div>
     </div>
   );
 }
 
-const field =
-  "w-full border-b-2 border-edge/30 bg-transparent px-1 py-2.5 text-sm outline-none placeholder:text-cream/45 focus:border-candy";
+function Stars({ value, onChange }: { value: number; onChange: (v: number) => void }) {
+  return (
+    <div className="flex gap-1.5" role="radiogroup" aria-label="별점">
+      {[1, 2, 3, 4, 5].map((n) => (
+        <button
+          key={n}
+          type="button"
+          role="radio"
+          aria-checked={n === value}
+          aria-label={`별점 ${n}`}
+          onClick={() => onChange(n === value ? 0 : n)}
+          className={`text-[40px] leading-none transition active:scale-90 ${
+            n <= value ? "text-candy" : "text-edge/15 hover:text-edge/25"
+          }`}
+        >
+          ★
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function Stepper({
+  value,
+  onChange,
+  unit,
+  min = 0,
+  max = 99,
+  disabled,
+}: {
+  value: number;
+  onChange: (v: number) => void;
+  unit: string;
+  min?: number;
+  max?: number;
+  disabled?: boolean;
+}) {
+  const btn =
+    "flex h-10 w-10 items-center justify-center rounded-full bg-edge/[0.06] text-lg font-bold transition active:scale-90 disabled:opacity-30";
+  return (
+    <div className={`flex items-center gap-3 ${disabled ? "opacity-40" : ""}`}>
+      <button type="button" className={btn} disabled={disabled || value <= min} onClick={() => onChange(value - 1)} aria-label="줄이기">
+        −
+      </button>
+      <span className="min-w-[3.5rem] text-center text-lg font-extrabold tabular-nums">
+        {value}
+        <span className="ml-0.5 text-xs font-bold text-cream/45">{unit}</span>
+      </span>
+      <button type="button" className={btn} disabled={disabled || value >= max} onClick={() => onChange(value + 1)} aria-label="늘리기">
+        +
+      </button>
+    </div>
+  );
+}
+
+function Toggle({ checked, onChange, label }: { checked: boolean; onChange: (v: boolean) => void; label: string }) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      aria-label={label}
+      onClick={() => onChange(!checked)}
+      className={`relative h-7 w-12 shrink-0 rounded-full transition ${checked ? "bg-candy" : "bg-edge/15"}`}
+    >
+      <span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all ${checked ? "left-6" : "left-1"}`} />
+    </button>
+  );
+}
+
+const todayKst = () => new Date(Date.now() + 9 * 3600_000).toISOString().slice(0, 10);
 
 export default function RecordForm({
   initial,
@@ -81,7 +152,9 @@ export default function RecordForm({
   mode?: "new" | "edit";
 }) {
   const router = useRouter();
-  const [form, setForm] = useState<EscapeRecord>(initial ?? emptyRecord());
+  const [form, setForm] = useState<EscapeRecord>(
+    initial ?? { ...emptyRecord(), playedAt: todayKst() },
+  );
 
   function set<K extends keyof EscapeRecord>(name: K, value: EscapeRecord[K]) {
     setForm((f) => ({ ...f, [name]: value }));
@@ -91,8 +164,8 @@ export default function RecordForm({
   const [hintUnlimited, setHintUnlimited] = useState(
     (initial?.hintCount ?? 0) < 0,
   );
-  const [hintRaw, setHintRaw] = useState(
-    initial && initial.hintCount > 0 ? String(initial.hintCount) : "",
+  const [hintCount, setHintCount] = useState(
+    initial && initial.hintCount > 0 ? initial.hintCount : 0,
   );
 
   const [saving, setSaving] = useState(false);
@@ -114,6 +187,9 @@ export default function RecordForm({
   const [brandFilter, setBrandFilter] = useState<string>("");
   const [themeQuery, setThemeQuery] = useState("");
   const [pickerOpen, setPickerOpen] = useState(false);
+  // 목록에서 고른 테마(고르면 요약 카드로 보여 주고, 직접 입력 칸은 접는다)
+  const [picked, setPicked] = useState<CandidateTheme | null>(null);
+  const [manual, setManual] = useState(mode === "edit");
   useEffect(() => {
     if (mode === "new") getCatalog().then(setCatalog);
   }, [mode]);
@@ -155,6 +231,8 @@ export default function RecordForm({
   function applyTheme(id: string) {
     const t = catalog.find((c) => c.id === id);
     if (!t) return;
+    setPicked(t);
+    setManual(false);
     const genre = (GENRES as string[]).includes(t.genre)
       ? (t.genre as Genre)
       : "기타";
@@ -198,7 +276,7 @@ export default function RecordForm({
       difficulty: Number(form.difficulty),
       fearLevel: Number(form.fearLevel),
       rating: Number(form.rating),
-      hintCount: hintUnlimited ? -1 : hintRaw === "" ? 0 : Number(hintRaw),
+      hintCount: hintUnlimited ? -1 : hintCount,
     };
     if (guest && mode === "new") {
       // 비회원: 이 기기에 먼저 저장하고, 가입하면 계정으로 옮긴다
@@ -234,395 +312,319 @@ export default function RecordForm({
     }
   }
 
+  const showManual = manual || !picked || catalog.length === 0;
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-4 pb-28">
       {guest && mode === "new" && (
-        <p className="rounded-xl border-2 border-dashed border-candy/50 bg-candy/5 px-4 py-3 text-sm text-cream/80">
-          ✍️ 로그인 없이 먼저 써 보세요. 저장하면 이 기기에 보관되고,{" "}
-          <b>10초 가입</b>하면 계정으로 옮겨 드려요.
+        <p className="rounded-2xl bg-candy/10 px-4 py-3 text-[13px] leading-relaxed text-cream/75">
+          로그인 없이 먼저 써 보세요. 저장하면 이 기기에 보관되고, <b>10초 가입</b>하면 계정으로 옮겨 드려요.
         </p>
       )}
-      {mode === "new" && catalog.length > 0 && (
-        <div className="space-y-2 rounded-xl border-2 border-edge bg-ink p-3">
-          <p className="text-sm font-bold text-cream/70">
-            🔎 가진 테마에서 불러오기{" "}
-            {/* <span className="font-normal text-cream/55">
-              (선택 · 고르면 자동 입력돼요. 없으면 아래에 직접 입력)
-            </span> */}
-          </p>
-          {/* 브랜드 칩: 가로 스크롤 대신 여러 줄로 wrap */}
-          <div className="flex flex-wrap gap-1.5">
+
+      {/* 01 어떤 방 */}
+      <section className={card}>
+        <SectionTitle step="01" title="어떤 방이었어요?" />
+
+        {mode === "new" && catalog.length > 0 && !picked && (
+          <div className="space-y-2.5">
+            <div className="relative">
+              <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-cream/35">⌕</span>
+              <input
+                value={themeQuery}
+                onChange={(e) => {
+                  setThemeQuery(e.target.value);
+                  setPickerOpen(true);
+                }}
+                onFocus={() => setPickerOpen(true)}
+                placeholder="테마나 매장 이름으로 찾기"
+                className={`${field} pl-9`}
+              />
+            </div>
+            <div className="-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:-mx-5 sm:px-5">
+              {["", ...brands].map((b) => (
+                <button
+                  key={b || "all"}
+                  type="button"
+                  onClick={() => {
+                    setBrandFilter(b);
+                    setPickerOpen(true);
+                  }}
+                  className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-bold transition active:scale-[0.97] ${
+                    brandFilter === b ? "bg-edge text-white" : "bg-edge/[0.06] text-cream/60"
+                  }`}
+                >
+                  {b || "전체"}
+                </button>
+              ))}
+            </div>
+            {pickerOpen && (
+              <div className="max-h-64 overflow-y-auto rounded-xl border border-edge/10 bg-panel">
+                {results.length === 0 ? (
+                  <p className="p-4 text-[13px] text-cream/50">찾는 방이 없어요. 아래에 직접 적어 주세요.</p>
+                ) : (
+                  results.map((t) => (
+                    <button
+                      type="button"
+                      key={t.id}
+                      onClick={() => {
+                        applyTheme(t.id);
+                        setThemeQuery("");
+                        setPickerOpen(false);
+                      }}
+                      className="flex w-full items-center justify-between gap-3 border-b border-edge/[0.06] px-4 py-3 text-left last:border-0 hover:bg-candy/5"
+                    >
+                      <span className="min-w-0">
+                        <span className="block truncate text-sm font-bold">{t.name}</span>
+                        <span className="block truncate text-xs text-cream/50">{t.cafe}</span>
+                      </span>
+                      <span className="shrink-0 rounded-full bg-edge/[0.06] px-2 py-0.5 text-[11px] font-bold text-cream/55">
+                        {t.genre}
+                      </span>
+                    </button>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {picked && (
+          <div className="flex items-center justify-between gap-3 rounded-xl bg-edge px-4 py-3.5 text-white">
+            <div className="min-w-0">
+              <p className="truncate text-[15px] font-extrabold">{form.themeName}</p>
+              <p className="truncate text-xs text-white/60">
+                {form.cafeName} · {form.genre}
+              </p>
+            </div>
             <button
               type="button"
-              onClick={() => setBrandFilter("")}
-              className={`rounded-full border px-3 py-1 text-xs font-bold transition active:scale-[0.97] ${
-                brandFilter === ""
-                  ? "border-candy bg-candy/10 text-candy"
-                  : "border-edge/20 bg-panel text-cream/60"
-              }`}
+              onClick={() => {
+                setPicked(null);
+                setManual(false);
+              }}
+              className="shrink-0 rounded-full bg-white/15 px-3 py-1.5 text-xs font-bold"
             >
-              전체
+              바꾸기
             </button>
-            {brands.map((b) => (
-              <button
-                key={b}
-                type="button"
-                onClick={() => setBrandFilter(b)}
-                className={`rounded-full border px-3 py-1 text-xs font-bold transition active:scale-[0.97] ${
-                  brandFilter === b
-                    ? "border-candy bg-candy/10 text-candy"
-                    : "border-edge/20 bg-panel text-cream/60"
-                }`}
-              >
-                {b}
-              </button>
-            ))}
           </div>
-          <input
-            value={themeQuery}
-            onChange={(e) => {
-              setThemeQuery(e.target.value);
-              setPickerOpen(true);
-            }}
-            onFocus={() => setPickerOpen(true)}
-            placeholder="테마 이름 검색"
-            className={field}
-          />
-          {pickerOpen && (
-            <div className="max-h-56 overflow-y-auto rounded-lg border-2 border-edge/30 bg-panel">
-              {results.length === 0 ? (
-                <p className="p-3 text-xs text-cream/55">검색 결과가 없어요</p>
-              ) : (
-                results.map((t) => (
-                  <button
-                    type="button"
-                    key={t.id}
-                    onClick={() => {
-                      applyTheme(t.id);
-                      setThemeQuery(t.name);
-                      setPickerOpen(false);
-                    }}
-                    className="flex w-full items-baseline justify-between gap-2 border-b border-edge/10 px-3 py-2 text-left last:border-0 hover:bg-candy/5"
-                  >
-                    <span className="truncate text-sm font-bold">{t.name}</span>
-                    <span className="shrink-0 text-[11px] font-bold text-cream/55">
-                      {t.cafe}
-                    </span>
-                  </button>
-                ))
-              )}
+        )}
+
+        {showManual ? (
+          <>
+          {mode === "new" && catalog.length > 0 && !picked && (
+            <div className="mt-5 flex items-center gap-3 text-[11px] font-bold text-cream/35">
+              <span className="h-px flex-1 bg-edge/10" />
+              목록에 없으면 직접 적기
+              <span className="h-px flex-1 bg-edge/10" />
             </div>
           )}
-        </div>
-      )}
-
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="sm:col-span-2">
-          <label className="mb-1.5 block text-sm font-bold text-cream/70">
-            테마명 *
-          </label>
-          <input
-            className={field}
-            value={form.themeName}
-            onChange={(e) => set("themeName", e.target.value)}
-            placeholder="예: 어느 폐가의 기록"
-          />
-        </div>
-
-        <div>
-          <label className="mb-1.5 block text-sm font-bold text-cream/70">
-            매장명
-          </label>
-          <input
-            className={field}
-            value={form.cafeName}
-            onChange={(e) => set("cafeName", e.target.value)}
-            placeholder="예: 강남 방탈출"
-          />
-        </div>
-
-        <div>
-          <label className="mb-1.5 block text-sm font-bold text-cream/70">
-            지역 (시/도){" "}
-            <span className="font-normal text-cream/55">(선택)</span>
-          </label>
-          <select
-            className={field}
-            value={form.region}
-            onChange={(e) => set("region", e.target.value)}
-          >
-            <option value="">자동 (매장명으로 추측)</option>
-            {REGIONS.map((r) => (
-              <option key={r} value={r}>
-                {r}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label className="mb-1.5 block text-sm font-bold text-cream/70">
-            플레이 날짜
-          </label>
-          <input
-            type="date"
-            className={field}
-            value={form.playedAt}
-            onChange={(e) => set("playedAt", e.target.value)}
-          />
-        </div>
-
-        <div>
-          <label className="mb-1.5 block text-sm font-bold text-cream/70">
-            장르
-          </label>
-          <select
-            className={field}
-            value={form.genre}
-            onChange={(e) => set("genre", e.target.value as Genre)}
-          >
-            {GENRES.map((g) => (
-              <option key={g} value={g}>
-                {g}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label className="mb-1.5 block text-sm font-bold text-cream/70">
-            함께한 인원 <span className="font-normal text-cream/55">(명)</span>
-          </label>
-          <input
-            inputMode="numeric"
-            className={field}
-            value={form.partySize ? String(form.partySize) : ""}
-            onChange={(e) => {
-              const v = e.target.value.replace(/[^0-9]/g, "");
-              set("partySize", v === "" ? 0 : Number(v));
-            }}
-            placeholder="예: 3"
-          />
-        </div>
-
-        <div className="flex items-end gap-3">
-          <label className="flex cursor-pointer items-center gap-2 text-sm font-bold text-cream/70">
-            <input
-              type="checkbox"
-              className="h-4 w-4 accent-mint"
-              checked={form.success}
-              onChange={(e) => set("success", e.target.checked)}
-            />
-            탈출 성공
-          </label>
-        </div>
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-3">
-        <Scale
-          label="난이도"
-          name="difficulty"
-          value={form.difficulty}
-          onChange={set}
-        />
-        <Scale
-          label="공포도"
-          name="fearLevel"
-          value={form.fearLevel}
-          onChange={set}
-          hint={fearLabel(form.fearLevel)}
-        />
-        <Scale
-          label="별점"
-          name="rating"
-          value={form.rating}
-          onChange={set}
-          hint={ratingLabel(form.rating)}
-        />
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div>
-          <label className="mb-1.5 block text-sm font-bold text-cream/70">
-            남은 시간
-          </label>
-          <input
-            className={field}
-            value={form.remainingTime}
-            onChange={(e) => set("remainingTime", e.target.value)}
-            placeholder="예: 3분 12초"
-          />
-        </div>
-        <div>
-          <label className="mb-1.5 block text-sm font-bold text-cream/70">
-            사용 힌트 수
-          </label>
-          <div className="flex items-center gap-3">
-            <input
-              inputMode="numeric"
-              className={`${field} flex-1`}
-              value={hintUnlimited ? "" : hintRaw}
-              onChange={(e) =>
-                setHintRaw(e.target.value.replace(/[^0-9]/g, ""))
-              }
-              disabled={hintUnlimited}
-              placeholder={hintUnlimited ? "무한" : "예: 2"}
-            />
-            <label className="flex shrink-0 cursor-pointer items-center gap-2 text-sm font-bold text-cream/70">
-              <input
-                type="checkbox"
-                className="h-4 w-4 accent-mint"
-                checked={hintUnlimited}
-                onChange={(e) => setHintUnlimited(e.target.checked)}
-              />
-              무한
-            </label>
+          <div className={`grid gap-3 sm:grid-cols-2 ${picked || (mode === "new" && catalog.length > 0) ? "mt-4" : ""}`}>
+            <div className="sm:col-span-2">
+              <label className={labelCls}>테마명 *</label>
+              <input className={field} value={form.themeName} onChange={(e) => set("themeName", e.target.value)} placeholder="예: 어느 폐가의 기록" />
+            </div>
+            <div>
+              <label className={labelCls}>매장명</label>
+              <input className={field} value={form.cafeName} onChange={(e) => set("cafeName", e.target.value)} placeholder="예: 강남 방탈출" />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>장르</label>
+                <select className={field} value={form.genre} onChange={(e) => set("genre", e.target.value as Genre)}>
+                  {GENRES.map((g) => (
+                    <option key={g} value={g}>{g}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className={labelCls}>지역</label>
+                <select className={field} value={form.region} onChange={(e) => set("region", e.target.value)}>
+                  <option value="">자동</option>
+                  {REGIONS.map((r) => (
+                    <option key={r} value={r}>{r}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+          </>
+        ) : (
+          <button type="button" onClick={() => setManual(true)} className="mt-2 text-xs font-bold text-cream/45 underline underline-offset-2">
+            정보 직접 고치기
+          </button>
+        )}
+      </section>
 
-      <div>
-        <label className="mb-1.5 block text-sm font-bold text-cream/70">
-          테마 유형 <span className="font-normal text-cream/55">(선택)</span>
-        </label>
-        <div className="flex flex-wrap gap-1.5">
-          {["장치", "자물쇠", "문제", "혼합"].map((t) => (
+      {/* 02 결과 */}
+      <section className={card}>
+        <SectionTitle step="02" title="결과는요?" />
+        <div className="grid grid-cols-2 gap-2 rounded-xl bg-edge/[0.06] p-1">
+          {[
+            { v: true, t: "탈출 성공" },
+            { v: false, t: "아쉽게 실패" },
+          ].map((o) => (
             <button
-              key={t}
+              key={o.t}
               type="button"
-              onClick={() => set("themeType", form.themeType === t ? "" : t)}
-              className={`rounded-full border-2 px-3 py-1.5 text-sm font-bold transition active:scale-[0.97] ${
-                form.themeType === t
-                  ? "border-edge bg-candy text-white"
-                  : "border-edge/20 bg-panel text-cream/60 hover:border-edge/40"
+              aria-pressed={form.success === o.v}
+              onClick={() => set("success", o.v)}
+              className={`rounded-lg py-3 text-sm font-extrabold transition ${
+                form.success === o.v ? (o.v ? "bg-mint text-white shadow-sm" : "bg-panel text-cream shadow-sm") : "text-cream/45"
               }`}
             >
-              {t}방
+              {o.t}
             </button>
           ))}
         </div>
-      </div>
 
-      <div>
-        <label className="mb-1.5 block text-sm font-bold text-cream/70">
-          한줄 후기{" "}
-          <span className="font-normal text-cream/45">(스포일러 없이)</span>
-        </label>
-        <input
-          className={field}
-          value={form.oneLiner}
-          onChange={(e) => set("oneLiner", e.target.value)}
-          placeholder="분위기, 난이도 위주로"
-        />
-      </div>
-
-      <div>
-        <label className="mb-1.5 block text-sm font-bold text-cream/70">
-          메모 <span className="font-normal text-cream/45">(비공개)</span>
-        </label>
-        <textarea
-          rows={4}
-          className={field}
-          value={form.memo}
-          onChange={(e) => set("memo", e.target.value)}
-          placeholder="상세 메모"
-        />
-      </div>
-
-      <div>
-        <label className="mb-1.5 block text-sm font-bold text-cream/70">
-          사진{" "}
-          <span className="font-normal text-cream/55">
-            (인증샷 한 장, 선택)
-          </span>
-        </label>
-        {guest ? (
-          <p className="text-xs text-cream/60">
-            📷 인증샷은 가입한 뒤에 올릴 수 있어요. (기록은 지금 저장돼요)
-          </p>
-        ) : (
-        <div className="flex items-center gap-3">
-          {form.photoUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={form.photoUrl}
-              alt="첨부 사진"
-              className="h-24 w-24 shrink-0 rounded-xl border-2 border-edge object-cover"
-            />
-          ) : (
-            <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-edge/40 text-2xl">
-              📷
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <div>
+            <label className={labelCls}>다녀온 날</label>
+            <input type="date" className={field} value={form.playedAt} onChange={(e) => set("playedAt", e.target.value)} />
+          </div>
+          <div>
+            <label className={labelCls}>남은 시간</label>
+            <input className={field} value={form.remainingTime} onChange={(e) => set("remainingTime", e.target.value)} placeholder={form.success ? "예: 3분 12초" : "실패면 비워 둬도 돼요"} />
+          </div>
+          <div>
+            <div className="mb-1.5 flex items-center justify-between">
+              <span className="text-[13px] font-bold text-cream/60">사용한 힌트</span>
+              <label className="flex items-center gap-2 text-xs font-bold text-cream/50">
+                무제한
+                <Toggle checked={hintUnlimited} onChange={setHintUnlimited} label="힌트 무제한" />
+              </label>
             </div>
-          )}
-          <div className="space-y-1.5">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => handlePhoto(e.target.files?.[0])}
-              className="block w-full text-xs font-bold file:mr-2 file:rounded-lg file:border-2 file:border-edge file:bg-panel file:px-3 file:py-1.5 file:text-xs file:font-bold"
-            />
-            {uploading && (
-              <p className="text-xs font-bold text-candy">업로드 중…</p>
-            )}
-            {form.photoUrl && (
-              <button
-                type="button"
-                onClick={() => set("photoUrl", "")}
-                className="text-xs font-bold text-red-500 underline"
-              >
-                사진 제거
-              </button>
-            )}
+            <div className="flex items-center justify-between rounded-xl bg-ink/60 px-2 py-1.5">
+              <Stepper value={hintCount} onChange={setHintCount} unit="개" disabled={hintUnlimited} />
+              {!hintUnlimited && hintCount === 0 && form.success && (
+                <span className="mr-2 rounded-full bg-candy/15 px-2.5 py-1 text-[11px] font-extrabold text-candy">노힌트!</span>
+              )}
+            </div>
+          </div>
+          <div>
+            <span className={labelCls}>함께한 인원</span>
+            <div className="rounded-xl bg-ink/60 px-2 py-1.5">
+              <Stepper value={form.partySize} onChange={(v) => set("partySize", v)} unit="명" max={20} />
+            </div>
           </div>
         </div>
-        )}
-      </div>
+      </section>
 
-      <label className="rough flex cursor-pointer items-start gap-3 rounded-xl border-2 border-edge bg-panel p-4 shadow-cute">
-        <input
-          type="checkbox"
-          className="mt-0.5 h-5 w-5 accent-candy"
-          checked={form.isPublic}
-          onChange={(e) => set("isPublic", e.target.checked)}
-        />
-        <span>
-          <span className="block text-sm font-extrabold">
-            🌏 공개 후기로 올리기
+      {/* 03 평가 */}
+      <section className={card}>
+        <SectionTitle step="03" title="어땠어요?" />
+        <div className="mb-5 flex items-center justify-between gap-3">
+          <Stars value={form.rating} onChange={(v) => set("rating", v)} />
+          <span className="text-right text-sm font-extrabold text-candy">{ratingLabel(form.rating)}</span>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Meter label="난이도" value={form.difficulty} onChange={(v) => set("difficulty", v)} />
+          <Meter label="공포도" value={form.fearLevel} onChange={(v) => set("fearLevel", v)} caption={fearLabel(form.fearLevel)} />
+        </div>
+        <div className="mt-4">
+          <span className={labelCls}>
+            테마 유형 <span className="font-normal text-cream/40">선택</span>
           </span>
-          <span className="mt-0.5 block text-xs text-cream/60">
-            켜면 <b>한줄 후기·사진</b>이 닉네임과 함께 피드에 공개돼요. 비공개
-            메모는 절대 노출되지 않아요. 아직 후기가 없는 방이면{" "}
-            <b>🥇 첫 후기 배지</b>가 붙어요.
-          </span>
-        </span>
-      </label>
+          <div className="flex flex-wrap gap-1.5">
+            {["장치", "자물쇠", "문제", "혼합"].map((t) => (
+              <button
+                key={t}
+                type="button"
+                aria-pressed={form.themeType === t}
+                onClick={() => set("themeType", form.themeType === t ? "" : t)}
+                className={`rounded-full px-3.5 py-1.5 text-[13px] font-bold transition active:scale-[0.97] ${
+                  form.themeType === t ? "bg-edge text-white" : "bg-edge/[0.06] text-cream/60"
+                }`}
+              >
+                {t}방
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
-        {mode === "edit" ? (
-          <button
-            type="button"
-            onClick={handleDelete}
-            className="rounded-xl border-2 border-red-400/50 px-4 py-2 text-sm font-bold text-red-500 transition active:scale-[0.97] hover:bg-red-50"
-          >
-            삭제
-          </button>
-        ) : (
-          <span />
-        )}
-        <div className="flex gap-3">
+      {/* 04 남기기 */}
+      <section className={card}>
+        <SectionTitle step="04" title="한마디 남기기" />
+        <div className="space-y-4">
+          <div>
+            <label className={labelCls}>
+              한줄 후기 <span className="font-normal text-cream/40">스포 없이</span>
+            </label>
+            <input className={field} value={form.oneLiner} onChange={(e) => set("oneLiner", e.target.value)} placeholder="분위기, 난이도 위주로" />
+          </div>
+          <div>
+            <label className={labelCls}>
+              메모 <span className="font-normal text-cream/40">나만 보기 · 스포 OK</span>
+            </label>
+            <textarea rows={3} className={`${field} resize-none`} value={form.memo} onChange={(e) => set("memo", e.target.value)} placeholder="기억하고 싶은 장면, 같이 간 사람 이야기" />
+          </div>
+          <div>
+            <span className={labelCls}>
+              인증샷 <span className="font-normal text-cream/40">선택</span>
+            </span>
+            {guest ? (
+              <p className="rounded-xl bg-ink/60 px-3.5 py-3 text-[13px] text-cream/50">인증샷은 가입한 뒤에 올릴 수 있어요. 기록은 지금 저장돼요.</p>
+            ) : (
+              <div className="flex items-center gap-3">
+                <label className="flex h-20 w-20 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-xl border border-dashed border-edge/20 bg-ink/60 text-2xl text-cream/30">
+                  {form.photoUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={form.photoUrl} alt="첨부 사진" className="h-full w-full object-cover" />
+                  ) : (
+                    "+"
+                  )}
+                  <input type="file" accept="image/*" className="hidden" onChange={(e) => handlePhoto(e.target.files?.[0])} />
+                </label>
+                <div className="text-xs text-cream/50">
+                  {uploading ? (
+                    <p className="font-bold text-candy">올리는 중…</p>
+                  ) : form.photoUrl ? (
+                    <button type="button" onClick={() => set("photoUrl", "")} className="font-bold text-red-500 underline">
+                      사진 빼기
+                    </button>
+                  ) : (
+                    <p>눌러서 사진 고르기</p>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="flex items-start justify-between gap-4 rounded-xl bg-ink/60 px-4 py-3.5">
+            <div>
+              <p className="text-sm font-extrabold">공개 후기로 올리기</p>
+              <p className="mt-0.5 text-xs leading-relaxed text-cream/50">
+                한줄 후기·사진이 닉네임과 함께 피드에 보여요. 메모는 절대 공개되지 않아요. 첫 후기면 🥇 배지가 붙어요.
+              </p>
+            </div>
+            <Toggle checked={form.isPublic} onChange={(v) => set("isPublic", v)} label="공개 후기로 올리기" />
+          </div>
+        </div>
+      </section>
+
+      {mode === "edit" && (
+        <button type="button" onClick={handleDelete} className="w-full py-2 text-sm font-bold text-red-500/80 underline underline-offset-2">
+          이 기록 삭제
+        </button>
+      )}
+
+      {/* 저장 바: 화면 아래에 붙어 있다 */}
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-edge/10 bg-ink/90 px-4 pb-[max(12px,env(safe-area-inset-bottom))] pt-3 backdrop-blur">
+        <div className="mx-auto flex max-w-2xl gap-2">
           <button
             type="button"
             onClick={() => router.push("/")}
-            className="flex-1 rounded-xl border-2 border-edge/40 px-4 py-2 text-sm font-bold text-cream/70 transition active:scale-[0.97] hover:border-edge sm:flex-none"
+            className="rounded-xl px-4 py-3.5 text-sm font-bold text-cream/55 transition active:scale-[0.97]"
           >
             취소
           </button>
           <button
             type="submit"
             disabled={saving}
-            className="rough flex-1 rounded-xl border-2 border-edge bg-candy px-6 py-2 text-sm font-bold text-white shadow-cute transition active:scale-[0.97] disabled:opacity-50 sm:flex-none"
+            className="flex-1 rounded-xl bg-edge py-3.5 text-[15px] font-extrabold text-white transition active:scale-[0.98] disabled:opacity-50"
           >
-            {saving ? "저장 중…" : guest && mode === "new" ? "저장하고 기록 지키기" : "저장"}
+            {saving ? "저장 중…" : guest && mode === "new" ? "저장하고 기록 지키기" : "기록 저장"}
           </button>
         </div>
       </div>
