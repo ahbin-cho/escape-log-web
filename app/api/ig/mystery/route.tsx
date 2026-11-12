@@ -7,10 +7,11 @@ import { dailyMystery, kstDate, teaserPreview } from "@/lib/home-picks";
 import { regionFromText } from "@/lib/region";
 import { SITE_URL } from "@/lib/site";
 import { ED, jpegResponse } from "@/lib/og-card";
+import { genreCard, moodOf } from "@/lib/genre-card";
 
 // 인스타용 "오늘의 미스터리 방" 카드 (1080×1350, JPEG — 인스타 게시 API 는 JPEG 만 받음).
 // ?date=YYYY-MM-DD 로 다른 날 미리보기. 정답(테마 이름·매장)은 그리지 않는다.
-// 기본은 장식을 뺀 에디토리얼(잡지 표지) 디자인. ?style=a 는 예전 "사건 파일" 디자인.
+// 기본은 장르별 분위기 카드(lib/genre-card.tsx). ?style=b 에디토리얼, ?style=a 예전 "사건 파일".
 // 콘셉트 "사건 파일": 사이트의 크림 종이·먹선·딱딱한 그림자 그대로, 방 이름은 검은 줄로 가린 기밀 서류.
 // 글꼴: Pretendard (OFL, assets/fonts/Pretendard-LICENSE.txt)
 export const runtime = "nodejs";
@@ -58,8 +59,34 @@ export async function GET(req: Request) {
   const [, m, d] = kstDate(now).split("-");
   const origin = url.origin;
 
-  // 기본은 에디토리얼(B). ?style=a 는 예전 "사건 파일" 디자인
-  if (url.searchParams.get("style") !== "a") {
+  const style = url.searchParams.get("style");
+
+  // 기본: 장르별 분위기 카드. ?genre=공포 처럼 다른 장르 모습 미리보기
+  if (!style) {
+    const genre = url.searchParams.get("genre") || t.genre;
+    const key = moodOf(genre);
+    // public/ig-bg/{키}.jpg 배경 그림이 있으면 사용(없으면 도형 테마)
+    const bgCandidate = `${origin}/ig-bg/${key}.jpg`;
+    const hasBg =
+      url.searchParams.get("bg") !== "0" &&
+      (await fetch(bgCandidate, { method: "HEAD" }).then((r) => r.ok && (r.headers.get("content-type") ?? "").startsWith("image/")).catch(() => false));
+    return jpegResponse(
+      genreCard({
+        teaser: teaserPreview(t.teaser ?? "", 90),
+        genre,
+        difficulty: t.difficulty,
+        fear: t.fear_level,
+        region,
+        date: `${m}.${d}`,
+        origin,
+        seed: Number(`${m}${d}`) || 1,
+        bgUrl: hasBg ? bgCandidate : null,
+      })
+    );
+  }
+
+  // ?style=b: 에디토리얼(잡지 표지). ?style=a: 예전 "사건 파일"
+  if (style === "b") {
     return editorialCard({
       teaser: teaserPreview(t.teaser ?? "", 96),
       genre: t.genre,
