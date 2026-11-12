@@ -113,14 +113,31 @@ export async function GET(req: Request) {
     json({ pending: true, label, reason: "인스타 처리 중 — 돌려준 값으로 다시 부르기", ...o }, 202);
   // 묶음 조각이 다 처리되면 묶음을 만들고 공개
   const finishCarousel = async (children: string[]) => {
-    if (!(await allReady(children))) return pending({ children: children.join(",") });
-    const carousel = await graph(
-      `/${userId}/media`,
-      form({ media_type: "CAROUSEL", children: children.join(","), caption, access_token: token })
-    );
-    if (!(await waitReady(carousel.id))) return pending({ creationId: carousel.id });
-    return publish(carousel.id);
+    await allReady(children);
+    let carousel: { id: string };
+    try {
+      carousel = await graph(
+        `/${userId}/media`,
+        form({ media_type: "CAROUSEL", children: children.join(","), caption, access_token: token })
+      );
+    } catch (e) {
+      if (notReady(e)) return pending({ children: children.join(",") });
+      throw e;
+    }
+    return tryPublish(carousel.id);
   };
+  const tryPublish = async (creationId: string) => {
+    await waitReady(creationId);
+    try {
+      return await publish(creationId);
+    } catch (e) {
+      if (notReady(e)) return pending({ creationId });
+      throw e;
+    }
+  };
+  // 인스타가 처리 상태를 "FINISHED"로 늦게(또는 안) 알려 주는 경우가 있어서,
+  // 기다린 뒤에도 일단 시도해 보고 "아직 준비 안 됨" 오류일 때만 이어서 하라고 돌려준다
+  const notReady = (e: unknown) => /not ready|not finished|being processed|아직|9007|2207027/i.test(e instanceof Error ? e.message : "");
   const publish = async (creationId: string) => {
     const published = await graph(
       `/${userId}/media_publish`,
@@ -131,10 +148,7 @@ export async function GET(req: Request) {
 
   try {
     // 앞서 시간이 모자랐던 릴스 마저 공개
-    if (finishId) {
-      if (!(await waitReady(finishId))) return pending({ creationId: finishId });
-      return await publish(finishId);
-    }
+    if (finishId) return await tryPublish(finishId);
     if (childIds.length > 0) return await finishCarousel(childIds);
 
     // 하루에 한 게시물만: 오늘(한국 날짜) 무엇이든 이미 올렸으면 건너뛴다
@@ -148,7 +162,6 @@ export async function GET(req: Request) {
     if (postedToday) return json({ skipped: true, reason: "오늘 이미 게시함", label });
 
     // 1) 게시물(릴스·한 장·여러 장 묶음) 만들기 → 2) 처리 대기 → 3) 공개
-    let creationId: string;
     if (videoUrl) {
       const c = await graph(
         `/${userId}/media`,
@@ -161,12 +174,10 @@ export async function GET(req: Request) {
           access_token: token,
         })
       );
-      if (!(await waitReady(c.id))) return pending({ creationId: c.id });
-      creationId = c.id;
+      return await tryPublish(c.id);
     } else if (imageUrls.length === 1) {
       const c = await graph(`/${userId}/media`, form({ image_url: imageUrls[0], caption, access_token: token }));
-      if (!(await waitReady(c.id))) return pending({ creationId: c.id });
-      creationId = c.id;
+      return await tryPublish(c.id);
     } else {
       // 조각을 한꺼번에 만들어 인스타가 이미지를 동시에 가져가게 한다
       const children = await Promise.all(
@@ -176,7 +187,6 @@ export async function GET(req: Request) {
       );
       return await finishCarousel(children);
     }
-    return await publish(creationId);
   } catch (e) {
     return json({ error: e instanceof Error ? e.message : "게시 실패" }, 500);
   }

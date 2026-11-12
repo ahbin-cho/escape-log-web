@@ -35,11 +35,13 @@ jobs:
           fi
           out=$(call "$q"); code=$(echo "$out" | tail -1); body=$(echo "$out" | sed '$d'); echo "$body"
           # 인스타 처리가 늦으면(202) 돌려준 값으로 이어서
-          for i in 1 2 3 4; do
+          for i in 1 2 3 4 5 6; do
             [ "$code" = "202" ] || break
             next=$(echo "$body" | python3 -c 'import json,sys,urllib.parse as u;d=json.load(sys.stdin);print("finish="+d["creationId"] if d.get("creationId") else "children="+u.quote(d["children"]))')
             sleep 20
             [ -n "$SET" ] && next="$next&set=$(python3 -c 'import os,urllib.parse;print(urllib.parse.quote(os.environ["SET"]))')"
             out=$(call "$next"); code=$(echo "$out" | tail -1); body=$(echo "$out" | sed '$d'); echo "$body"
           done
+          # 끝까지 처리 중(202)이면 실패로 표시해서 알아차리게
+          if [ "$code" = "202" ]; then echo "::error::인스타 처리가 끝나지 않아 게시되지 않았어요. 다시 실행해 주세요."; exit 1; fi
           [ "$code" -lt 300 ]
