@@ -35,6 +35,15 @@ function SectionTitle({ step, title, sub }: { step: string; title: string; sub?:
   );
 }
 
+// 길 등급 단색 선 아이콘: 흙길(흙더미) → 풀길(새싹) → 꽃길(꽃) → 꽃밭길(꽃 여러 송이) → 인생테마(트로피)
+const RATING_ICONS = [
+  <path key="1" d="M3 18c2-4 5-6 9-6s7 2 9 6z M8 15h.01 M13 14h.01 M16 16h.01" />,
+  <path key="2" d="M12 20v-8 M12 13c0-3-2-5-6-5 0 3 2 5 6 5z M12 11c0-3 2-5 6-5 0 3-2 5-6 5z M7 20h10" />,
+  <g key="3"><circle cx="12" cy="5.5" r="2" /><circle cx="15.5" cy="9" r="2" /><circle cx="12" cy="12.5" r="2" /><circle cx="8.5" cy="9" r="2" /><path d="M12 14.5V21 M12 18c-1.8 0-3-1-3.5-2.5 1.8 0 3 1 3.5 2.5z" /></g>,
+  <g key="4"><circle cx="6" cy="10" r="2.2" /><circle cx="12" cy="6.5" r="2.2" /><circle cx="18" cy="10" r="2.2" /><path d="M6 12.2V20M12 8.7V20M18 12.2V20M3 20h18" /></g>,
+  <path key="5" d="M8 4h8v5a4 4 0 0 1-8 0z M8 6H5a3 3 0 0 0 3 4 M16 6h3a3 3 0 0 1-3 4 M12 13v4 M9 20h6 M10 17h4" />,
+];
+
 // 별점: 길 등급을 글자로. 고른 칸은 먹색으로 채우고, 그 아래 칸은 옅게
 function RatingPicker({ value, onChange }: { value: number; onChange: (v: number) => void }) {
   return (
@@ -49,11 +58,13 @@ function RatingPicker({ value, onChange }: { value: number; onChange: (v: number
             role="radio"
             aria-checked={on}
             onClick={() => onChange(on ? 0 : n)}
-            className={`flex flex-col items-center gap-0.5 border-l border-edge/10 py-3 transition first:border-l-0 active:scale-[0.97] ${
+            className={`flex flex-col items-center gap-1 border-l border-edge/10 py-3 transition first:border-l-0 active:scale-[0.97] ${
               on ? "bg-edge text-white" : under ? "bg-edge/[0.06]" : "hover:bg-edge/[0.04]"
             }`}
           >
-            <span className={`text-[11px] font-extrabold tabular-nums ${on ? "text-white/60" : "text-cream/35"}`}>{n}</span>
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden className={on ? "" : under ? "text-edge/60" : "text-edge/30"}>
+              {RATING_ICONS[n - 1]}
+            </svg>
             <span className={`text-[12px] font-extrabold ${on ? "" : "text-cream/70"}`}>{RATING_LABELS[n - 1]}</span>
           </button>
         );
