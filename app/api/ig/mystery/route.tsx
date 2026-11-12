@@ -10,7 +10,7 @@ import { ED, jpegResponse } from "@/lib/og-card";
 
 // 인스타용 "오늘의 미스터리 방" 카드 (1080×1350, JPEG — 인스타 게시 API 는 JPEG 만 받음).
 // ?date=YYYY-MM-DD 로 다른 날 미리보기. 정답(테마 이름·매장)은 그리지 않는다.
-// ?style=b 는 장식을 뺀 에디토리얼(잡지 표지) 시안.
+// 기본은 장식을 뺀 에디토리얼(잡지 표지) 디자인. ?style=a 는 예전 "사건 파일" 디자인.
 // 콘셉트 "사건 파일": 사이트의 크림 종이·먹선·딱딱한 그림자 그대로, 방 이름은 검은 줄로 가린 기밀 서류.
 // 글꼴: Pretendard (OFL, assets/fonts/Pretendard-LICENSE.txt)
 export const runtime = "nodejs";
@@ -58,7 +58,8 @@ export async function GET(req: Request) {
   const [, m, d] = kstDate(now).split("-");
   const origin = url.origin;
 
-  if (url.searchParams.get("style") === "b") {
+  // 기본은 에디토리얼(B). ?style=a 는 예전 "사건 파일" 디자인
+  if (url.searchParams.get("style") !== "a") {
     return editorialCard({
       teaser: teaserPreview(t.teaser ?? "", 96),
       genre: t.genre,
