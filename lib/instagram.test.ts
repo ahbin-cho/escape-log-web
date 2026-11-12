@@ -65,14 +65,14 @@ describe("districtFromText", () => {
 describe("게시 일정", () => {
   it("일정에 있는 날은 그 묶음, 없으면 null", async () => {
     const { scheduledSet, setImagePaths, SET_CAPTIONS } = await import("./instagram");
-    expect(scheduledSet("2026-11-13")).toBe("intro");
+    expect(scheduledSet("2026-11-12")).toBe("intro");
         expect(setImagePaths("intro")).toHaveLength(6);
     expect(setImagePaths("ad-diary")).toEqual(["/api/ig/slides?ad=diary"]);
-    expect(scheduledSet("2026-11-16")).toBe("record-story");
-    expect(scheduledSet("2026-11-14")).toBe("collection:수원");
-    expect(scheduledSet("2026-11-18")).toBeNull();
-    expect(scheduledSet("2026-11-28")).toBe("cafes:yearend");
-    expect(scheduledSet("2026-11-20")).toBe("reel:b60b538b-618e-4102-ab57-06f369f56a4b");
+    expect(scheduledSet("2026-11-15")).toBe("record-story");
+    expect(scheduledSet("2026-11-13")).toBe("collection:수원");
+    expect(scheduledSet("2026-11-17")).toBeNull();
+    expect(scheduledSet("2026-11-27")).toBe("cafes:yearend");
+    expect(scheduledSet("2026-11-19")).toBe("reel:b60b538b-618e-4102-ab57-06f369f56a4b");
     expect(setImagePaths("record-story")).toHaveLength(4);
     // 첫 줄이 서로 달라야 중복 확인이 된다
     const firsts = Object.values(SET_CAPTIONS).map((c) => c.split("\n")[0]);
