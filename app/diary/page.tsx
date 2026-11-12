@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import PosterTile from "@/components/PosterTile";
 import Link from "next/link";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
@@ -34,14 +35,17 @@ export const metadata: Metadata = {
 };
 
 // 달력 예시 한 주 (실제 사용자 데이터 아님)
-const CAL_SAMPLE: { day: number; emoji?: string; tile?: string; more?: number }[] = [
-  { day: 16 },
-  { day: 17 },
-  { day: 18, emoji: "👻", tile: "bg-red-50" },
-  { day: 19 },
+type CalCell = { day: number; genre?: string; name?: string; success?: boolean; more?: number };
+const CAL_SAMPLE: CalCell[] = [
+  ...[2, 3, 4, 5, 6, 7].map((day) => ({ day })),
+  { day: 8, genre: "추리", name: "고양이 탐정 사무소", success: false },
+  ...[9, 10, 11, 12, 13, 14].map((day) => ({ day })),
+  { day: 15, genre: "SF", name: "은하수 배달부", success: true },
+  ...[16, 17, 18].map((day) => ({ day })),
+  { day: 19, genre: "감성", name: "달빛 편지", success: true },
   { day: 20 },
-  { day: 21, emoji: "🔍", tile: "bg-emerald-50", more: 1 },
-  { day: 22, emoji: "🥹", tile: "bg-pink-50" },
+  { day: 21, genre: "판타지", name: "마법사의 서재", success: true, more: 1 },
+  { day: 22, genre: "공포", name: "어느 폐가의 기록", success: true },
 ];
 
 // 화면에 보여 줄 예시 기록 (실제 사용자 데이터 아님)
@@ -204,7 +208,7 @@ export default function DiaryLandingPage() {
         </p>
         <div className="rough mx-auto max-w-sm rounded-2xl border-2 border-edge bg-panel p-3">
           <p className="mb-2 text-center text-sm font-extrabold">
-            11월 <span className="text-xs font-bold text-cream/55">· 4방 · 탈출 3</span>
+            11월 <span className="text-xs font-bold text-cream/55">· 6방 · 탈출 5</span>
           </p>
           <div className="grid grid-cols-7 gap-1.5 text-center text-[11px] font-extrabold">
             {["일", "월", "화", "수", "목", "금", "토"].map((w) => (
@@ -212,21 +216,21 @@ export default function DiaryLandingPage() {
                 {w}
               </span>
             ))}
-            {CAL_SAMPLE.map((c, i) => (
-              <div key={i} className="flex flex-col gap-1">
-                <span className={c.tile ? "text-cream" : "text-cream/35"}>{c.day}</span>
-                <span
-                  className={`relative flex aspect-[3/4] items-center justify-center rounded-md text-base ${
-                    c.tile ? `${c.tile} ring-1 ring-edge/15` : ""
-                  }`}
-                >
-                  {c.emoji}
-                  {c.more && (
-                    <span className="absolute bottom-0.5 right-0.5 rounded-full bg-edge/80 px-1 text-[9px] leading-3 text-panel">
-                      +{c.more}
-                    </span>
-                  )}
-                </span>
+            {CAL_SAMPLE.map((c) => (
+              <div key={c.day} className="flex flex-col gap-1">
+                <span className={c.name ? "text-cream" : "text-cream/35"}>{c.day}</span>
+                {c.name ? (
+                  <span className="relative block aspect-[3/4] overflow-hidden rounded-md shadow-sm ring-1 ring-edge/20">
+                    <PosterTile genre={c.genre ?? "기타"} name={c.name} success={c.success} />
+                    {c.more && (
+                      <span className="absolute bottom-1 right-1 rounded-full bg-panel/90 px-1 text-[9px] font-extrabold leading-3 text-edge">
+                        +{c.more}
+                      </span>
+                    )}
+                  </span>
+                ) : (
+                  <span className="block aspect-[3/4]" />
+                )}
               </div>
             ))}
           </div>

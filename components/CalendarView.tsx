@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { GENRE_COLOR, GENRE_EMOJI, getPosters, type EscapeRecord } from "@/lib/store";
+import { getPosters, type EscapeRecord } from "@/lib/store";
 import { kstDate } from "@/lib/home-picks";
 import {
   buildPosterIndex,
@@ -13,6 +13,7 @@ import {
   type PosterIndex,
 } from "@/lib/calendar";
 import DiaryView from "./DiaryView";
+import PosterTile from "./PosterTile";
 
 const WEEK = ["일", "월", "화", "수", "목", "금", "토"];
 const EMPTY_INDEX: PosterIndex = { byTheme: new Map(), byName: new Map() };
@@ -142,12 +143,10 @@ export default function CalendarView({
                     isPicked
                       ? "ring-2 ring-candy ring-offset-2 ring-offset-panel"
                       : "ring-1 ring-edge/15 group-hover:ring-edge/40"
-                  } ${GENRE_COLOR[cover.record.genre] || GENRE_COLOR["기타"]}`}
+                  }`}
                 >
-                  {/* 이모지를 깔고 그 위에 그림: 그림이 깨지면 숨겨서 이모지가 보이게 */}
-                  <span className="absolute inset-0 flex items-center justify-center text-lg sm:text-2xl">
-                    {GENRE_EMOJI[cover.record.genre]}
-                  </span>
+                  {/* 미니 포스터를 깔고 그 위에 그림: 그림이 없거나 깨지면 미니 포스터가 보인다 */}
+                  <PosterTile genre={cover.record.genre} name={cover.record.themeName} success={cover.record.success} />
                   {img && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
