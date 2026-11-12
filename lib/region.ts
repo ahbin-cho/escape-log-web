@@ -68,9 +68,14 @@ const CAFE_REGION_OVERRIDES: Record<string, Region> = {
 
 // 임의 텍스트(매장명 등)에서 시/도 추론. 카탈로그 등에서도 재사용.
 export function regionFromText(text: string): Region | null {
-  for (const region of REGIONS) {
-    if (REGION_KEYWORDS[region].some((kw) => text.includes(kw))) {
-      return region;
+  // 매장명은 "브랜드 지점" 형태. 브랜드 이름에 지역 단어가 든 경우가 있어
+  // (예: "서울이스케이프룸 대구 동성로점") 지점 부분을 먼저 보고, 없으면 전체를 본다.
+  const branch = text.trim().split(" ").slice(1).join(" ");
+  for (const part of branch ? [branch, text] : [text]) {
+    for (const region of REGIONS) {
+      if (REGION_KEYWORDS[region].some((kw) => part.includes(kw))) {
+        return region;
+      }
     }
   }
   for (const [cafe, region] of Object.entries(CAFE_REGION_OVERRIDES)) {

@@ -32,3 +32,13 @@ describe("지역 모음", () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 });
+
+describe("지역 판별", () => {
+  it("브랜드 이름의 지역 단어보다 지점 이름을 먼저 본다", async () => {
+    const { regionFromText } = await import("./region");
+    expect(regionFromText("서울이스케이프룸 대구 동성로점")).toBe("대구");
+    expect(regionFromText("서울이스케이프룸 홍대점")).toBe("서울");
+    expect(regionFromText("키이스케이프 강남점")).toBe("서울");
+    expect(regionFromText("셜록홈즈 수원역점")).toBe("경기");
+  });
+});

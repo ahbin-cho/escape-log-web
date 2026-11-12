@@ -1,6 +1,7 @@
 import type { ThemeRow } from "./catalog-server";
 import { districtFromText, regionFromText } from "./region";
 import { areaThemes, pickCollection } from "./collection";
+import { pickYearEndCafes } from "./cafe-picks";
 
 // ─────────────────────────────────────────────────────────────
 // 인스타그램 자동 게시: "오늘의 미스터리 방" 글(캡션)과 게시 순서.
@@ -111,6 +112,7 @@ export const POST_SCHEDULE: { date: string; set: string }[] = [
   { date: "2026-11-20", set: "story:b60b538b-618e-4102-ab57-06f369f56a4b" }, // 성지기숙학원 : 특수교정반
   { date: "2026-11-23", set: "story:4451205b-df5a-462f-9f62-4461c59f9440" }, // 영안실
   { date: "2026-11-26", set: "story:5bcecef5-c59b-41a4-bb31-dda03276f724" }, // 춘화각 : 피할 수 없는 저주
+  { date: "2026-11-28", set: "cafes:yearend" },
   { date: "2026-12-01", set: "ad-recap" },
 ];
 
@@ -144,6 +146,25 @@ export function resolvePost(
         "정보는 각 매장 공식 소개 기준이에요. 전체 목록·줄거리·후기 → 프로필 링크",
         "",
         `#${area}방탈출 #${area}데이트 #${area}놀거리 #경기방탈출 #방탈출추천 #방탈출 #방탈러 #방린이 #방탈출스타그램 #이색데이트 #방탈로그`,
+      ].join("\n"),
+    };
+  }
+  if (set === "cafes:yearend") {
+    const cafes = pickYearEndCafes(themes, 6);
+    if (cafes.length === 0) return null;
+    return {
+      imagePaths: Array.from({ length: cafes.length + 2 }, (_, i) => `/api/ig/cafes?page=${i + 1}`),
+      caption: [
+        "연말 모임, 방탈출 어디서 할까? 🗝️",
+        "",
+        `겁 많은 친구도 같이 갈 수 있게, 무섭지 않은 테마가 많은 서울 방탈출 카페 ${cafes.length}곳을 골랐어요.`,
+        cafes.map((c, i) => `${i + 1}. ${c.cafe}`).join("\n"),
+        "",
+        "고른 기준: 서울 · 테마 3개 이상 · 공포도 2 이하 테마가 60% 넘는 곳 · 브랜드당 1곳 (방탈로그 테마 데이터 기준)",
+        "예약·영업시간은 각 매장 예약 페이지에서 확인해 주세요.",
+        "매장별 테마 전체·줄거리·후기 → 프로필 링크",
+        "",
+        "#서울방탈출 #연말모임 #연말데이트 #이색데이트 #방탈출카페 #방탈출추천 #안무서운방탈출 #방탈출 #방탈러 #방탈출스타그램 #방탈로그",
       ].join("\n"),
     };
   }
