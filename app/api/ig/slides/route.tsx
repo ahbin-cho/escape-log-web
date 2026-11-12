@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { ED, jpegResponse } from "@/lib/og-card";
 
 // 서비스 소개 캐러셀(인스타 여러 장 게시용) ?n=1..6
+// 한 장짜리 광고 카드: ?ad=diary (다이어리 작성 유도), ?ad=recap (12월 연말 결산)
 // 한 번 올리는 용도라 자동 게시하지 않는다: 이미지를 받아 폰에서 직접 올린다.
 // 미스터리 카드 시안 B 와 같은 에디토리얼 톤(크림 바탕·굵은 글자·얇은 선, 장식 없음).
 export const runtime = "nodejs";
@@ -9,7 +10,17 @@ export const dynamic = "force-dynamic";
 
 const TOTAL = 6;
 
-function Frame({ n, children, origin }: { n: number; children: ReactNode; origin: string }) {
+function Frame({
+  n,
+  label,
+  children,
+  origin,
+}: {
+  n: number;
+  label?: string; // 오른쪽 위 표시(없으면 "0n / 06")
+  children: ReactNode;
+  origin: string;
+}) {
   return (
     <div
       style={{
@@ -25,7 +36,7 @@ function Frame({ n, children, origin }: { n: number; children: ReactNode; origin
     >
       <div style={{ display: "flex", justifyContent: "space-between", fontSize: 26, fontWeight: 800, letterSpacing: "0.22em" }}>
         <div>BANGTALLOG</div>
-        <div style={{ color: ED.dim }}>{`0${n} / 0${TOTAL}`}</div>
+        <div style={{ color: ED.dim }}>{label ?? `0${n} / 0${TOTAL}`}</div>
       </div>
       <div style={{ marginTop: 26, height: 3, backgroundColor: ED.ink, display: "flex" }} />
       <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>{children}</div>
@@ -65,7 +76,18 @@ function DiaryRow({ no, day, name, meta, result, hl }: { no: string; day: string
         backgroundColor: hl ? "#FBE9D7" : "#FFFCF6",
       }}
     >
-      <div style={{ display: "flex", width: 70, fontSize: 44, fontWeight: 800, justifyContent: "center" }}>{day}</div>
+      <div
+        style={{
+          display: "flex",
+          width: day.includes(".") ? 130 : 70,
+          fontSize: day.includes(".") ? 38 : 44,
+          fontWeight: 800,
+          justifyContent: "center",
+          letterSpacing: "-0.02em",
+        }}
+      >
+        {day}
+      </div>
       <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <div style={{ display: "flex", padding: "4px 14px", borderRadius: 10, backgroundColor: hl ? ED.accent : ED.panel, color: hl ? "#FFF" : ED.dim, fontSize: 24, fontWeight: 800 }}>{no}</div>
@@ -212,8 +234,71 @@ function slide(n: number, origin: string) {
   }
 }
 
+// 한 장짜리 광고 카드
+function ad(kind: string, origin: string) {
+  const cta = (text: string) => (
+    <div style={{ display: "flex", marginTop: 52, marginBottom: 36, fontSize: 40, fontWeight: 800 }}>{text}</div>
+  );
+  if (kind === "recap") {
+    return (
+      <Frame n={0} label="12월" origin={origin}>
+        <H1>
+          <div style={{ display: "flex" }}>올해,</div>
+          <div style={{ display: "flex" }}>
+            <Accent>몇 방</Accent>
+            <span style={{ marginLeft: 28 }}>했어요?</span>
+          </div>
+        </H1>
+        <Sub>기록만 해 두면 연말 결산이 자동으로 나와요. 친구들한테 자랑은 버튼 하나.</Sub>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 20, marginTop: 56 }}>
+          {[
+            ["올해 플레이", "47", "방"],
+            ["탈출 성공률", "74", "%"],
+            ["노힌트 탈출", "16", "번"],
+            ["원정 지역", "3", "곳"],
+          ].map(([k, v, unit]) => (
+            <div
+              key={k}
+              style={{ display: "flex", flexDirection: "column", width: 438, padding: "24px 34px", borderRadius: 26, border: `3px solid ${ED.ink}`, backgroundColor: "#FFFCF6" }}
+            >
+              <div style={{ fontSize: 28, fontWeight: 800, color: ED.dim }}>{k}</div>
+              <div style={{ display: "flex", alignItems: "baseline", marginTop: 2 }}>
+                <div style={{ fontSize: 84, fontWeight: 800, letterSpacing: "-0.03em", color: ED.accent }}>{v}</div>
+                <div style={{ marginLeft: 6, fontSize: 44, fontWeight: 800 }}>{unit}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div style={{ flex: 1 }} />
+        {cta("지금부터 써도 늦지 않았어요 → 프로필 링크")}
+      </Frame>
+    );
+  }
+  // diary: 다이어리 작성 유도
+  return (
+    <Frame n={0} label="다이어리" origin={origin}>
+      <H1>
+        <div style={{ display: "flex" }}>지난주에 간 방,</div>
+        <div style={{ display: "flex" }}>
+          <Accent>벌써 헷갈려요?</Accent>
+        </div>
+      </H1>
+      <Sub>다녀온 방을 남기면 몇 번째 방인지, 올해 결산까지 알아서 정리돼요.</Sub>
+      <div style={{ display: "flex", flexDirection: "column", gap: 20, marginTop: 56 }}>
+        <DiaryRow no="#50" day="11.16" name="어느 폐가의 기록" meta="공포 · 강남 · 3명" result="50번째 방" hl />
+        <DiaryRow no="#49" day="11.09" name="은하수 배달부" meta="SF · 홍대 · 2명" result="노힌트" />
+        <DiaryRow no="#48" day="11.02" name="고양이 탐정 사무소" meta="추리 · 서면 · 4명" result="탈출 8분 남김" />
+      </div>
+      <div style={{ flex: 1 }} />
+      {cta("무료 · 로그인 없이 30초 → 프로필 링크")}
+    </Frame>
+  );
+}
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
+  const adKind = url.searchParams.get("ad");
+  if (adKind) return jpegResponse(ad(adKind, url.origin), 86400);
   const n = Math.min(TOTAL, Math.max(1, Number(url.searchParams.get("n")) || 1));
   return jpegResponse(slide(n, url.origin), 86400);
 }
