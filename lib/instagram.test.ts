@@ -69,6 +69,8 @@ describe("게시 일정", () => {
     expect(scheduledSet("2026-11-14")).toBeNull();
     expect(setImagePaths("intro")).toHaveLength(6);
     expect(setImagePaths("ad-diary")).toEqual(["/api/ig/slides?ad=diary"]);
+    expect(scheduledSet("2026-11-16")).toBe("record-story");
+    expect(setImagePaths("record-story")).toHaveLength(4);
     // 첫 줄이 서로 달라야 중복 확인이 된다
     const firsts = Object.values(SET_CAPTIONS).map((c) => c.split("\n")[0]);
     expect(new Set(firsts).size).toBe(firsts.length);

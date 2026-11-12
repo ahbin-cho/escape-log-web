@@ -99,11 +99,11 @@ export function graphHost(token: string): string {
 // 게시 일정: 하루에 한 게시물만. 일정에 있는 날은 미스터리 대신 그 묶음을 올린다.
 // 날짜는 한국 날짜(YYYY-MM-DD). 바꾸려면 여기만 고치고 배포.
 // ─────────────────────────────────────────────────────────────
-export type PostSet = "intro" | "ad-diary" | "ad-recap";
+export type PostSet = "intro" | "record-story" | "ad-diary" | "ad-recap";
 
 export const POST_SCHEDULE: { date: string; set: PostSet }[] = [
   { date: "2026-11-13", set: "intro" },
-  { date: "2026-11-16", set: "ad-diary" },
+  { date: "2026-11-16", set: "record-story" },
   { date: "2026-12-01", set: "ad-recap" },
 ];
 
@@ -114,6 +114,14 @@ export function scheduledSet(kstDay: string): PostSet | null {
 // 묶음별 이미지(사이트 카드 생성기 주소)
 export function setImagePaths(set: PostSet): string[] {
   if (set === "intro") return [1, 2, 3, 4, 5, 6].map((n) => `/api/ig/slides?n=${n}`);
+  // 기록 캠페인 4장: 공감(방켓팅) → 해결(다이어리) → 보상(결산) → 행동(시작하기)
+  if (set === "record-story")
+    return [
+      "/api/ig/slides?ad=ticket&page=1/4",
+      "/api/ig/slides?ad=diary&page=2/4",
+      "/api/ig/slides?n=3&page=3/4",
+      "/api/ig/slides?n=6&page=4/4",
+    ];
   return [`/api/ig/slides?ad=${set === "ad-diary" ? "diary" : "recap"}`];
 }
 
@@ -132,6 +140,17 @@ export const SET_CAPTIONS: Record<PostSet, string> = {
     "무료 · 로그인 없이 바로 시작 → 프로필 링크",
     "",
     TAGS_BASE,
+  ].join("\n"),
+  "record-story": [
+    "방켓팅까지 해서 간 방, 1년 뒤에도 기억나요?",
+    "",
+    "예약 전쟁 뚫고 간 방도, 시간이 지나면 이름부터 가물가물해요.",
+    "다녀온 날 30초만 남겨 두면 몇 번째 방인지 세어 주고, 연말엔 결산까지 나와요.",
+    "",
+    "티켓은 사라져도, 기록은 남아요.",
+    "무료 · 로그인 없이 30초 → 프로필 링크",
+    "",
+    `${TAGS_BASE} #방켓팅`,
   ].join("\n"),
   "ad-diary": [
     "지난주에 간 방, 벌써 헷갈리지 않아요?",

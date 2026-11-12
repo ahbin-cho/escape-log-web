@@ -2,7 +2,8 @@ import type { ReactNode } from "react";
 import { ED, jpegResponse } from "@/lib/og-card";
 
 // 서비스 소개 캐러셀(인스타 여러 장 게시용) ?n=1..6
-// 한 장짜리 광고 카드: ?ad=diary (다이어리 작성 유도), ?ad=recap (12월 연말 결산)
+// 한 장짜리 광고 카드: ?ad=diary (다이어리 작성 유도), ?ad=recap (12월 연말 결산), ?ad=ticket (방켓팅)
+// ?page=1/4 를 붙이면 오른쪽 위가 "01 / 04" 로 바뀐다(여러 카드를 한 캐러셀로 묶을 때)
 // 한 번 올리는 용도라 자동 게시하지 않는다: 이미지를 받아 폰에서 직접 올린다.
 // 미스터리 카드 시안 B 와 같은 에디토리얼 톤(크림 바탕·굵은 글자·얇은 선, 장식 없음).
 export const runtime = "nodejs";
@@ -100,11 +101,11 @@ function DiaryRow({ no, day, name, meta, result, hl }: { no: string; day: string
   );
 }
 
-function slide(n: number, origin: string) {
+function slide(n: number, origin: string, page?: string) {
   switch (n) {
     case 1:
       return (
-        <Frame n={1} origin={origin}>
+        <Frame n={1} label={page} origin={origin}>
           <div style={{ display: "flex", flexDirection: "column", flex: 1, justifyContent: "center" }}>
             <div style={{ display: "flex", flexDirection: "column", fontSize: 128, fontWeight: 800, lineHeight: 1.12, letterSpacing: "-0.05em" }}>
               <div>방탈출,</div>
@@ -117,7 +118,7 @@ function slide(n: number, origin: string) {
       );
     case 2:
       return (
-        <Frame n={2} origin={origin}>
+        <Frame n={2} label={page} origin={origin}>
           <H1>
             <div>몇 번째 방이었는지</div>
             <div style={{ display: "flex" }}>
@@ -134,7 +135,7 @@ function slide(n: number, origin: string) {
       );
     case 3:
       return (
-        <Frame n={3} origin={origin}>
+        <Frame n={3} label={page} origin={origin}>
           <H1>
             <div>연말엔,</div>
             <div style={{ display: "flex" }}>
@@ -162,7 +163,7 @@ function slide(n: number, origin: string) {
       );
     case 4:
       return (
-        <Frame n={4} origin={origin}>
+        <Frame n={4} label={page} origin={origin}>
           <H1>
             <div>인기순 말고,</div>
             <div style={{ display: "flex" }}>
@@ -183,7 +184,7 @@ function slide(n: number, origin: string) {
       );
     case 5:
       return (
-        <Frame n={5} origin={origin}>
+        <Frame n={5} label={page} origin={origin}>
           <H1>
             <div>겁 많은 친구도</div>
             <div style={{ display: "flex" }}>
@@ -210,7 +211,7 @@ function slide(n: number, origin: string) {
       );
     default:
       return (
-        <Frame n={6} origin={origin}>
+        <Frame n={6} label={page} origin={origin}>
           <div style={{ display: "flex", flexDirection: "column", flex: 1, justifyContent: "center" }}>
             <div style={{ display: "flex", flexDirection: "column", fontSize: 104, fontWeight: 800, lineHeight: 1.15, letterSpacing: "-0.05em" }}>
               <div>지난 주말 간 방,</div>
@@ -235,13 +236,97 @@ function slide(n: number, origin: string) {
 }
 
 // 한 장짜리 광고 카드
-function ad(kind: string, origin: string) {
+function ad(kind: string, origin: string, page?: string) {
   const cta = (text: string) => (
     <div style={{ display: "flex", marginTop: 52, marginBottom: 36, fontSize: 40, fontWeight: 800 }}>{text}</div>
   );
+  if (kind === "ticket") {
+    // 예매 티켓: 왼쪽 본권 + 점선 + 오른쪽 떼는 부분(#50). 점선 위아래에 반원 홈.
+    const notch = (top: boolean) => (
+      <div
+        style={{
+          position: "absolute",
+          left: 640 - 22,
+          [top ? "top" : "bottom"]: -22,
+          width: 44,
+          height: 44,
+          borderRadius: 22,
+          backgroundColor: ED.bg,
+          display: "flex",
+        }}
+      />
+    );
+    return (
+      <Frame n={0} label={page ?? "방켓팅"} origin={origin}>
+        <H1>
+          <div style={{ display: "flex" }}>방켓팅까지 해서 간 방,</div>
+          <div style={{ display: "flex" }}>
+            <Accent>1년 뒤에도 기억나요?</Accent>
+          </div>
+        </H1>
+        <Sub>예약 전쟁 뚫고 간 방, 30초만 남겨 두면 언제든 꺼내 볼 수 있어요.</Sub>
+
+        <div
+          style={{
+            position: "relative",
+            display: "flex",
+            marginTop: 60,
+            height: 300,
+            borderRadius: 28,
+            border: `3px solid ${ED.ink}`,
+            backgroundColor: "#FFFCF6",
+            transform: "rotate(-2deg)",
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "column", width: 640, padding: "34px 40px" }}>
+            <div style={{ fontSize: 24, fontWeight: 800, letterSpacing: "0.22em", color: ED.accent }}>
+              ESCAPE ROOM TICKET
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 18, marginTop: 18 }}>
+              <div style={{ display: "flex", width: 300, height: 52, backgroundColor: ED.ink }} />
+              <div style={{ fontSize: 36, fontWeight: 800 }}>방</div>
+            </div>
+            <div style={{ display: "flex", gap: 44, marginTop: 34 }}>
+              {[
+                ["DATE", "11.14 (토)"],
+                ["TIME", "19:30"],
+                ["PLAYERS", "4명"],
+              ].map(([k, v]) => (
+                <div key={k} style={{ display: "flex", flexDirection: "column" }}>
+                  <div style={{ fontSize: 20, fontWeight: 800, letterSpacing: "0.18em", color: ED.dim }}>{k}</div>
+                  <div style={{ marginTop: 6, fontSize: 34, fontWeight: 800 }}>{v}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              flex: 1,
+              borderLeft: `4px dashed ${ED.faint}`,
+            }}
+          >
+            <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: "0.2em", color: ED.dim }}>NO.</div>
+            <div style={{ fontSize: 96, fontWeight: 800, letterSpacing: "-0.04em", color: ED.accent }}>50</div>
+          </div>
+          {notch(true)}
+          {notch(false)}
+        </div>
+
+        <div style={{ display: "flex", marginTop: 56, fontSize: 40, fontWeight: 800 }}>
+          티켓은 사라져도, 기록은 남아요.
+        </div>
+        <div style={{ flex: 1 }} />
+        {cta("무료 · 로그인 없이 30초 → 프로필 링크")}
+      </Frame>
+    );
+  }
   if (kind === "recap") {
     return (
-      <Frame n={0} label="12월" origin={origin}>
+      <Frame n={0} label={page ?? "12월"} origin={origin}>
         <H1>
           <div style={{ display: "flex" }}>올해,</div>
           <div style={{ display: "flex" }}>
@@ -276,7 +361,7 @@ function ad(kind: string, origin: string) {
   }
   // diary: 다이어리 작성 유도
   return (
-    <Frame n={0} label="다이어리" origin={origin}>
+    <Frame n={0} label={page ?? "다이어리"} origin={origin}>
       <H1>
         <div style={{ display: "flex" }}>지난주에 간 방,</div>
         <div style={{ display: "flex" }}>
@@ -298,7 +383,10 @@ function ad(kind: string, origin: string) {
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const adKind = url.searchParams.get("ad");
-  if (adKind) return jpegResponse(ad(adKind, url.origin), 86400);
+  // ?page=1/4 → 오른쪽 위를 "01 / 04" 로(여러 카드를 한 캐러셀로 묶을 때 쪽수 통일)
+  const pm = (url.searchParams.get("page") ?? "").match(/^(\d+)\/(\d+)$/);
+  const page = pm ? `${pm[1].padStart(2, "0")} / ${pm[2].padStart(2, "0")}` : undefined;
+  if (adKind) return jpegResponse(ad(adKind, url.origin, page), 86400);
   const n = Math.min(TOTAL, Math.max(1, Number(url.searchParams.get("n")) || 1));
-  return jpegResponse(slide(n, url.origin), 86400);
+  return jpegResponse(slide(n, url.origin, page), 86400);
 }
