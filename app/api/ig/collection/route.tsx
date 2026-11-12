@@ -1,5 +1,7 @@
 import { getAllThemes } from "@/lib/catalog-server";
-import { areaThemes, pickCollection } from "@/lib/collection";
+import { areaThemes, pickCollection, storyLine } from "@/lib/collection";
+import type { ThemeRow } from "@/lib/catalog-server";
+import { fearLabel } from "@/lib/terms";
 import { jpegResponse } from "@/lib/og-card";
 
 // 지역 모음 캐러셀: ?area=수원&page=1..N (1=표지, 마지막=전체 보기, 사이=조건별 고르기)
@@ -37,6 +39,53 @@ const pips = (n: number, color: string) =>
       }}
     />
   ));
+
+// 섹션 목적에 맞는 정보만 카드 아랫줄에: 공포=얼마나 무서운지, 처음=난이도·시간·인원, 이야기=줄거리 한 줄
+function Detail({ t, k, mark }: { t: ThemeRow; k: string; mark: string }) {
+  const chip = (x: string, bg: string, color = INK) => (
+    <div style={{ display: "flex", backgroundColor: bg, color, border: `2.5px solid ${INK}`, borderRadius: 999, padding: "3px 14px", fontSize: 21, fontWeight: 800 }}>{x}</div>
+  );
+  const cafe = <div style={{ display: "flex", fontSize: 23, fontWeight: 500, color: DIM }}>{t.cafe}</div>;
+  if (k === "story") {
+    const line = storyLine(t);
+    return (
+      <div style={{ display: "flex", flexDirection: "column", marginTop: 8 }}>
+        {line && <div style={{ display: "flex", fontSize: 25, fontWeight: 500, color: "#3A352E" }}>{`“${line}”`}</div>}
+        <div style={{ display: "flex", marginTop: 6 }}>{cafe}</div>
+      </div>
+    );
+  }
+  if (k === "fear") {
+    return (
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 10 }}>
+        {cafe}
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ display: "flex", alignItems: "center", fontSize: 21, fontWeight: 800, color: DIM }}>공포{pips(t.fear_level, "#D9573B")}</div>
+          {chip(fearLabel(t.fear_level) || "공포", mark, PAPER)}
+        </div>
+      </div>
+    );
+  }
+  if (k === "first") {
+    const bits = [`난이도 ${t.difficulty}/5`, t.time_limit ? `${t.time_limit}분` : "", t.players ? `${t.players.replace(/명|인/g, "")}인` : ""].filter(Boolean);
+    return (
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 10 }}>
+        {cafe}
+        <div style={{ display: "flex", gap: 8 }}>{bits.map((b) => <div key={b} style={{ display: "flex" }}>{chip(b, "#FDF0CF")}</div>)}</div>
+      </div>
+    );
+  }
+  // calm: 무섭지 않다는 걸 먼저, 난이도는 옆에
+  return (
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 10 }}>
+      {cafe}
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <div style={{ display: "flex", alignItems: "center", fontSize: 21, fontWeight: 800, color: DIM }}>난이도{pips(t.difficulty, ORANGE)}</div>
+        {chip("무공포", "#E8F5EE")}
+      </div>
+    </div>
+  );
+}
 
 function Frame({
   area,
@@ -161,13 +210,13 @@ export async function GET(req: Request) {
       <div style={{ display: "flex", marginTop: 56 }}>
         <div style={{ display: "flex", backgroundColor: c.mark, color: PAPER, border: `3px solid ${INK}`, borderRadius: 14, padding: "6px 18px", fontSize: 26, fontWeight: 800 }}>{c.label}</div>
       </div>
-      <div style={{ display: "flex", marginTop: 20, fontFamily: "Aggro", fontSize: 96 }}>{s.title}</div>
+      <div style={{ display: "flex", marginTop: 20, fontFamily: "Aggro", fontSize: 96, lineHeight: 1.15 }}>{s.title}</div>
       <div style={{ display: "flex", marginTop: 12, fontSize: 30, fontWeight: 800, color: DIM }}>{s.sub}</div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 24, marginTop: 80 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 20, marginTop: 64 }}>
         {s.themes.map((t, i) => (
           <div
             key={t.id}
-            style={{ display: "flex", alignItems: "center", gap: 24, padding: "28px 30px", borderRadius: 24, border: `4px solid ${INK}`, backgroundColor: PAPER, boxShadow: `6px 6px 0 ${INK}` }}
+            style={{ display: "flex", alignItems: "center", gap: 24, padding: "22px 28px", borderRadius: 24, border: `4px solid ${INK}`, backgroundColor: PAPER, boxShadow: `6px 6px 0 ${INK}` }}
           >
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 64, height: 64, borderRadius: 32, backgroundColor: c.tint, border: `3px solid ${INK}`, fontFamily: "Aggro", fontSize: 32, color: c.mark }}>{i + 1}</div>
             <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
@@ -175,14 +224,7 @@ export async function GET(req: Request) {
                 <div style={{ display: "flex", fontFamily: "Aggro", fontSize: 36, maxWidth: 560 }}>{t.name}</div>
                 <div style={{ display: "flex", backgroundColor: c.tint, border: `2.5px solid ${INK}`, borderRadius: 999, padding: "3px 14px", fontSize: 22, fontWeight: 800 }}>{t.genre}</div>
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 10 }}>
-                <div style={{ display: "flex", fontSize: 24, fontWeight: 500, color: DIM }}>{t.cafe}</div>
-                <div style={{ display: "flex", alignItems: "center", fontSize: 21, fontWeight: 800, color: DIM }}>
-                  난이도{pips(t.difficulty, ORANGE)}
-                  <div style={{ display: "flex", width: 18 }} />
-                  공포{pips(t.fear_level, "#D9573B")}
-                </div>
-              </div>
+              <Detail t={t} k={s.key} mark={c.mark} />
             </div>
           </div>
         ))}

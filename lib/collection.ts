@@ -1,5 +1,6 @@
 import type { ThemeRow } from "./catalog-server";
 import { brandOf } from "./cafe";
+import { cleanTeaser } from "./home-picks";
 
 // ─────────────────────────────────────────────────────────────
 // 지역 모음 캐러셀("수원 방탈출" 등)의 테마 고르기. 순수 함수(테스트 대상).
@@ -8,6 +9,11 @@ import { brandOf } from "./cafe";
 // ─────────────────────────────────────────────────────────────
 
 export type CollectionSection = { key: string; title: string; sub: string; themes: ThemeRow[] };
+
+const tagsOf = (t: ThemeRow) => (t.tags ?? []).join(" ");
+// 문제만 푸는 방·장시간·고난도는 '이야기'나 '처음' 목적과 맞지 않는다
+const isPuzzleOnly = (t: ThemeRow) => /문제방|문제 ?풀이/.test(tagsOf(t)) || (t.time_limit ?? 0) >= 150;
+const storyText = (t: ThemeRow) => (t.teaser ? cleanTeaser(t.teaser) : "");
 
 const PER_SECTION = 4;
 const PER_CAFE = 2;
@@ -38,21 +44,21 @@ const SECTIONS: {
     key: "calm",
     title: "무서운 건 싫다면",
     sub: "공포도 1 · 장르 다양하게",
-    match: (t) => t.fear_level <= 1 && t.genre !== "기타",
+    match: (t) => t.fear_level <= 1 && t.genre !== "기타" && t.genre !== "공포",
     rank: (t) => t.difficulty,
   },
   {
     key: "first",
     title: "방탈출이 처음이라면",
     sub: "난이도 낮고 덜 무서운 순",
-    match: (t) => t.difficulty <= 3 && t.fear_level <= 2,
+    match: (t) => t.difficulty <= 3 && t.fear_level <= 2 && !isPuzzleOnly(t) && !/고난이도|장시간/.test(tagsOf(t)),
     rank: (t) => t.difficulty * 10 + t.fear_level,
   },
   {
     key: "story",
     title: "이야기가 좋다면",
-    sub: "추리 · 감성 · 판타지",
-    match: (t) => ["추리", "감성", "판타지"].includes(t.genre),
+    sub: "추리 · 감성 · 판타지 · 줄거리 미리보기",
+    match: (t) => ["추리", "감성", "판타지"].includes(t.genre) && !isPuzzleOnly(t) && storyText(t).length >= 15,
     rank: (t) => t.fear_level * 10 + t.difficulty,
   },
 ];
@@ -82,4 +88,10 @@ export function pickCollection(themes: ThemeRow[]): CollectionSection[] {
     picked.forEach((t) => used.add(t.id));
     return { key: s.key, title: s.title, sub: s.sub, themes: picked };
   }).filter((s) => s.themes.length >= 2);
+}
+
+// 카드에 보여 줄 줄거리 한 줄(이야기 섹션용)
+export function storyLine(t: ThemeRow, max = 34): string {
+  const x = storyText(t).replace(/^["“'‘]+|["”'’]+$/g, "");
+  return x.length <= max ? x : `${x.slice(0, max).trim()}…`;
 }
