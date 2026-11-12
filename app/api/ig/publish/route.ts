@@ -17,6 +17,7 @@ import { SITE_URL } from "@/lib/site";
 // ?set=<묶음> 으로 일정과 상관없이 바로 올릴 수 있다(GitHub Actions "인스타 지금 올리기").
 // 릴스는 영상 처리에 시간이 걸려 시간 안에 못 끝나면 pending 과 creationId 를 돌려준다
 // → ?finish=<creationId> 로 다시 부르면 공개만 한다.
+// 여러 장 묶음도 시간이 모자라면 pending 과 children 을 돌려준다 → ?set=<묶음>&children=<id,id,…> 로 이어서.
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60; // 캐러셀(6장)은 이미지마다 처리 대기가 있어 길게
@@ -47,6 +48,9 @@ export async function GET(req: Request) {
   const now = new Date();
   const params = new URL(req.url).searchParams;
   const finishId = params.get("finish");
+  const childIds = (params.get("children") ?? "").split(",").filter(Boolean);
+  // Vercel 함수 제한(60초) 안에 끝내도록 45초가 지나면 기다리기를 멈추고 이어서 하라고 돌려준다
+  const deadline = Date.now() + 45_000;
 
   // 오늘 올릴 것: ?set= 으로 지정했거나 일정(POST_SCHEDULE)에 있으면 그 묶음, 아니면 오늘의 미스터리 방
   const set = params.get("set") || scheduledSet(kstDate(now));
@@ -94,15 +98,28 @@ export async function GET(req: Request) {
     method: "POST",
     body: new URLSearchParams(o),
   });
-  // 처리 대기: 다 되면 true, 시간 안에 안 끝나면 false
-  const waitReady = async (id: string, tries = 12, gapMs = 2000) => {
-    for (let i = 0; i < tries; i++) {
+  // 처리 대기: 다 되면 true, 시간(deadline) 안에 안 끝나면 false
+  const waitReady = async (id: string) => {
+    for (;;) {
       const st = await graph(`/${id}?fields=status_code&access_token=${encodeURIComponent(token)}`);
       if (st.status_code === "FINISHED") return true;
       if (st.status_code === "ERROR") throw new Error("인스타가 이미지·영상을 처리하지 못했어요");
-      await new Promise((r) => setTimeout(r, gapMs));
+      if (Date.now() + 2000 > deadline) return false;
+      await new Promise((r) => setTimeout(r, 2000));
     }
-    return false;
+  };
+  const allReady = async (ids: string[]) => (await Promise.all(ids.map(waitReady))).every(Boolean);
+  const pending = (o: Record<string, unknown>) =>
+    json({ pending: true, label, reason: "인스타 처리 중 — 돌려준 값으로 다시 부르기", ...o }, 202);
+  // 묶음 조각이 다 처리되면 묶음을 만들고 공개
+  const finishCarousel = async (children: string[]) => {
+    if (!(await allReady(children))) return pending({ children: children.join(",") });
+    const carousel = await graph(
+      `/${userId}/media`,
+      form({ media_type: "CAROUSEL", children: children.join(","), caption, access_token: token })
+    );
+    if (!(await waitReady(carousel.id))) return pending({ creationId: carousel.id });
+    return publish(carousel.id);
   };
   const publish = async (creationId: string) => {
     const published = await graph(
@@ -115,11 +132,10 @@ export async function GET(req: Request) {
   try {
     // 앞서 시간이 모자랐던 릴스 마저 공개
     if (finishId) {
-      if (!(await waitReady(finishId, 18, 2500))) {
-        return json({ pending: true, creationId: finishId, label, reason: "아직 영상 처리 중" }, 202);
-      }
+      if (!(await waitReady(finishId))) return pending({ creationId: finishId });
       return await publish(finishId);
     }
+    if (childIds.length > 0) return await finishCarousel(childIds);
 
     // 하루에 한 게시물만: 오늘(한국 날짜) 무엇이든 이미 올렸으면 건너뛴다
     const recent = await graph(
@@ -145,30 +161,20 @@ export async function GET(req: Request) {
           access_token: token,
         })
       );
-      if (!(await waitReady(c.id, 18, 2500))) {
-        return json({ pending: true, creationId: c.id, label, reason: "영상 처리 중 — ?finish= 로 다시 부르기" }, 202);
-      }
+      if (!(await waitReady(c.id))) return pending({ creationId: c.id });
       creationId = c.id;
     } else if (imageUrls.length === 1) {
       const c = await graph(`/${userId}/media`, form({ image_url: imageUrls[0], caption, access_token: token }));
-      await waitReady(c.id);
+      if (!(await waitReady(c.id))) return pending({ creationId: c.id });
       creationId = c.id;
     } else {
-      const children: string[] = [];
-      for (const image_url of imageUrls) {
-        const c = await graph(
-          `/${userId}/media`,
-          form({ image_url, is_carousel_item: "true", access_token: token })
-        );
-        children.push(c.id);
-      }
-      for (const id of children) await waitReady(id);
-      const carousel = await graph(
-        `/${userId}/media`,
-        form({ media_type: "CAROUSEL", children: children.join(","), caption, access_token: token })
+      // 조각을 한꺼번에 만들어 인스타가 이미지를 동시에 가져가게 한다
+      const children = await Promise.all(
+        imageUrls.map(async (image_url) =>
+          (await graph(`/${userId}/media`, form({ image_url, is_carousel_item: "true", access_token: token }))).id as string
+        )
       );
-      await waitReady(carousel.id);
-      creationId = carousel.id;
+      return await finishCarousel(children);
     }
     return await publish(creationId);
   } catch (e) {

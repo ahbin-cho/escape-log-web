@@ -47,7 +47,7 @@ export async function jpegResponse(element: ReactElement, cacheSeconds = 3600): 
   return new Response(new Uint8Array(jpeg), {
     headers: {
       "Content-Type": "image/jpeg",
-      "Cache-Control": `public, max-age=${cacheSeconds}`,
+      "Cache-Control": `public, max-age=${cacheSeconds}, s-maxage=${cacheSeconds}`,
     },
   });
 }
