@@ -21,5 +21,6 @@ Next.js 14(App Router) · TypeScript · Tailwind · Supabase · Vercel(Hobby).
 - 올리기 전: `npx tsc --noEmit -p . && npx vitest run`
 - 비밀값(CRON_SECRET, IG 토큰)은 Vercel·GitHub Secrets 에만 있다. 읽거나 적지 않는다.
 - 인스타 관련 작업은 `.claude/skills/ig-*` 스킬과 `tools/ig/README.md` 참고.
+- 운영자에게 인스타 앱 사용법을 안내할 때는 `docs/instagram-operations.md` 참고.
 - 디자인 기준: `docs/instagram-prompts.md` (브랜드·후킹 규칙), 사이트는 크림 바탕 #F5F0E6 ·
   먹색 #1D1D1D 굵은 테두리·오프셋 그림자·주황 #E49A4A·제목 글꼴 SB어그로·마스코트 탈출귀.
