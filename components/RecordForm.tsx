@@ -315,19 +315,20 @@ export default function RecordForm({
       // 비회원: 이 기기에 먼저 저장하고, 가입하면 계정으로 옮긴다
       saveGuestRecord(record);
       if (mode === "new") trackAttributionEvent("record_saved");
-      router.push("/login?mode=signup&guest=1&next=/records");
+      router.push("/taste?saved=1");
       return;
     }
     try {
       await saveRecord(record);
       if (mode === "new") trackAttributionEvent("record_saved");
-      router.push("/");
+      // 새 기록은 저장하자마자 '기록으로 본 내 유형·다음 방 추천'으로
+      router.push(mode === "new" ? "/taste?saved=1" : "/");
       router.refresh();
     } catch (err) {
       setSaving(false);
       if (err instanceof Error && err.message.includes("로그인")) {
         saveGuestRecord(record);
-        router.push("/login?mode=signup&guest=1&next=/records");
+        router.push("/taste?saved=1");
         return;
       }
       alert(err instanceof Error ? err.message : "저장에 실패했어요.");
@@ -352,7 +353,7 @@ export default function RecordForm({
       {guest && mode === "new" && (
         <p className="rounded-xl border-2 border-dashed border-candy/50 bg-candy/5 px-4 py-3 text-[13px] leading-relaxed text-cream/80">
           ✍️{" "}
-          로그인 없이 먼저 써 보세요. 저장하면 이 기기에 보관되고, <b>10초 가입</b>하면 계정으로 옮겨 드려요.
+          먼저 써 보세요. 저장하면 바로 내 유형과 추천이 나와요. 기록은 이 기기에 보관되고, <b>10초 가입</b>하면 계정으로 옮겨 드려요.
         </p>
       )}
 
@@ -674,7 +675,7 @@ export default function RecordForm({
             disabled={saving}
             className="rough flex-1 rounded-xl border-2 border-edge bg-candy py-3.5 text-[15px] font-extrabold text-white shadow-cute transition active:scale-[0.98] disabled:opacity-50"
           >
-            {saving ? "저장 중…" : guest && mode === "new" ? "저장하고 기록 지키기" : "기록 저장"}
+            {saving ? "저장 중…" : mode === "new" ? "저장하고 내 유형 보기" : "기록 저장"}
           </button>
         </div>
       </div>

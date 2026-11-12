@@ -74,7 +74,15 @@ export default function LoggedInHero({ records }: { records: EscapeRecord[] }) {
           </>
         )}
       </div>
-      <div className="flex shrink-0 gap-2">
+      <div className="flex shrink-0 flex-wrap gap-2">
+        {!empty && (
+          <Link
+            href="/taste"
+            className="rough inline-flex items-center justify-center rounded-xl border-2 border-edge bg-panel px-4 py-2.5 text-sm font-extrabold shadow-cute transition active:scale-[0.97]"
+          >
+            🔮 내 유형
+          </Link>
+        )}
         {!empty && (
           <Link
             href="/records"

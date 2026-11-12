@@ -41,8 +41,10 @@ export default function ImportBanner() {
             📓 이 기기에만 저장된 기록 {count}개가 있어요
           </p>
           <p className="mt-0.5 text-sm text-cream/70">
-            브라우저를 지우면 사라져요. 10초 가입하면 계정으로 옮기고 다이어리·취향
-            분석까지 열려요.
+            브라우저를 지우면 사라져요. 10초 가입하면 계정으로 옮기고 달력·결산까지 열려요.{" "}
+            <Link href="/taste" className="font-bold underline underline-offset-2">
+              기록으로 본 내 유형 보기 →
+            </Link>
           </p>
         </div>
         <Link
