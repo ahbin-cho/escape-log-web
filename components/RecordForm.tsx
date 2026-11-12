@@ -17,7 +17,7 @@ import {
 import { REGIONS, regionFromText } from "@/lib/region";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { trackAttributionEvent } from "@/lib/track";
-import { fearLabel, RATING_LABELS } from "@/lib/terms";
+import { fearLabel, RATING_LABELS, RATING_EMOJI } from "@/lib/terms";
 
 // ── 작은 입력 부품: 굵은 테두리·이모지 대신 면(面)과 주황 포인트 하나로 ──
 const card = "rough rounded-2xl border-2 border-edge bg-panel p-4 sm:p-5";
@@ -37,16 +37,7 @@ function SectionTitle({ icon, title, sub }: { icon: string; title: string; sub?:
   );
 }
 
-// 길 등급 단색 선 아이콘: 흙길(흙더미) → 풀길(새싹) → 꽃길(꽃) → 꽃밭길(꽃 여러 송이) → 인생테마(트로피)
-const RATING_ICONS = [
-  <path key="1" d="M3 18c2-4 5-6 9-6s7 2 9 6z M8 15h.01 M13 14h.01 M16 16h.01" />,
-  <path key="2" d="M12 20v-8 M12 13c0-3-2-5-6-5 0 3 2 5 6 5z M12 11c0-3 2-5 6-5 0 3-2 5-6 5z M7 20h10" />,
-  <g key="3"><circle cx="12" cy="5.5" r="2" /><circle cx="15.5" cy="9" r="2" /><circle cx="12" cy="12.5" r="2" /><circle cx="8.5" cy="9" r="2" /><path d="M12 14.5V21 M12 18c-1.8 0-3-1-3.5-2.5 1.8 0 3 1 3.5 2.5z" /></g>,
-  <g key="4"><circle cx="6" cy="10" r="2.2" /><circle cx="12" cy="6.5" r="2.2" /><circle cx="18" cy="10" r="2.2" /><path d="M6 12.2V20M12 8.7V20M18 12.2V20M3 20h18" /></g>,
-  <path key="5" d="M8 4h8v5a4 4 0 0 1-8 0z M8 6H5a3 3 0 0 0 3 4 M16 6h3a3 3 0 0 1-3 4 M12 13v4 M9 20h6 M10 17h4" />,
-];
-
-// 별점: 길 등급을 글자로. 고른 칸은 먹색으로 채우고, 그 아래 칸은 옅게
+// 별점: 길 등급마다 자기 이모지(흙길 🟤 → 인생테마 🏆). 고른 칸은 주황, 그 아래 칸은 옅은 주황
 function RatingPicker({ value, onChange }: { value: number; onChange: (v: number) => void }) {
   return (
     <div className="grid grid-cols-5 gap-1.5" role="radiogroup" aria-label="별점">
@@ -64,13 +55,13 @@ function RatingPicker({ value, onChange }: { value: number; onChange: (v: number
               on
                 ? "border-edge bg-candy text-white shadow-cute"
                 : under
-                  ? "border-edge/40 bg-candy/10"
+                  ? "border-edge/40 bg-candy/15"
                   : "border-edge/15 hover:border-edge/40"
             }`}
           >
-            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden className={on ? "" : under ? "text-candy" : "text-edge/35"}>
-              {RATING_ICONS[n - 1]}
-            </svg>
+            <span className={`text-[22px] leading-none ${!on && !under && value > 0 ? "opacity-40 grayscale" : ""}`}>
+              {RATING_EMOJI[n - 1]}
+            </span>
             <span className={`text-[11px] font-extrabold ${on ? "" : "text-cream/70"}`}>{RATING_LABELS[n - 1]}</span>
           </button>
         );
@@ -79,43 +70,37 @@ function RatingPicker({ value, onChange }: { value: number; onChange: (v: number
   );
 }
 
-// 선 아이콘(단색). 채워진 칸은 먹색, 빈 칸은 옅은 선
-const ICONS = {
-  lock: (
-    <>
-      <rect x="5" y="11" width="14" height="9" rx="2" />
-      <path d="M8 11V8a4 4 0 0 1 8 0v3" />
-    </>
-  ),
-  ghost: (
-    <>
-      <path d="M6 20V11a6 6 0 0 1 12 0v9l-2-1.5-2 1.5-2-1.5-2 1.5-2-1.5z" />
-      <circle cx="10" cy="11" r=".9" fill="currentColor" />
-      <circle cx="14" cy="11" r=".9" fill="currentColor" />
-    </>
-  ),
+// 난이도·공포도: 칸마다 색이 진해진다(난이도 보라, 공포도 초록→빨강). 안 찬 칸은 흐린 흑백
+const METER_COLORS = {
+  grape: ["#E4E0F4", "#CEC6EC", "#B3A8DE", "#9B8ED3", "#8B7EC8"],
+  heat: ["#CDEBD9", "#F6E3A1", "#F5C27A", "#EE9257", "#E2603F"],
 };
 
 function IconMeter({
   label,
   icon,
+  palette,
   value,
   onChange,
   caption,
 }: {
   label: string;
-  icon: keyof typeof ICONS;
+  icon: string;
+  palette: keyof typeof METER_COLORS;
   value: number;
   onChange: (v: number) => void;
   caption: string;
 }) {
+  const colors = METER_COLORS[palette];
   return (
-    <div className="rounded-xl border-2 border-edge/15 px-3.5 pb-2.5 pt-3">
-      <div className="flex items-baseline justify-between">
+    <div className="rounded-xl border-2 border-edge/15 px-3 pb-3 pt-3">
+      <div className="mb-2 flex items-baseline justify-between">
         <span className="text-[13px] font-bold text-cream/60">{label}</span>
-        <span className="text-[13px] font-extrabold text-candy">{caption}</span>
+        <span className="text-[13px] font-extrabold" style={{ color: value ? colors[4] : undefined }}>
+          {caption}
+        </span>
       </div>
-      <div className="mt-1.5 flex justify-between" role="radiogroup" aria-label={label}>
+      <div className="grid grid-cols-5 gap-1.5" role="radiogroup" aria-label={label}>
         {[1, 2, 3, 4, 5].map((n) => {
           const on = n <= value;
           return (
@@ -126,13 +111,12 @@ function IconMeter({
               aria-checked={n === value}
               aria-label={`${label} ${n}`}
               onClick={() => onChange(n === value ? 0 : n)}
-              className={`flex h-10 w-10 items-center justify-center rounded-lg transition active:scale-90 ${
-                on ? "text-candy" : "text-edge/20 hover:text-edge/35"
-              }`}
+              style={on ? { background: colors[n - 1] } : undefined}
+              className={`flex h-11 items-center justify-center rounded-lg border-2 text-[20px] transition active:scale-90 ${
+                on ? "border-edge" : "border-edge/10 opacity-35 grayscale hover:opacity-60"
+              } ${n === value ? "shadow-cute" : ""}`}
             >
-              <svg viewBox="0 0 24 24" width="24" height="24" fill={on ? "currentColor" : "none"} fillOpacity={on ? 0.25 : 0} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                {ICONS[icon]}
-              </svg>
+              {icon}
             </button>
           );
         })}
@@ -573,14 +557,16 @@ export default function RecordForm({
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <IconMeter
             label="난이도"
-            icon="lock"
+            icon="🔒"
+            palette="grape"
             value={form.difficulty}
             onChange={(v) => set("difficulty", v)}
             caption={form.difficulty ? `${DIFFICULTY_WORDS[form.difficulty - 1]} · ${form.difficulty}/5` : ""}
           />
           <IconMeter
             label="공포도"
-            icon="ghost"
+            icon="👻"
+            palette="heat"
             value={form.fearLevel}
             onChange={(v) => set("fearLevel", v)}
             caption={fearLabel(form.fearLevel)}
