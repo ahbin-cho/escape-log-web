@@ -104,16 +104,16 @@ export function graphHost(token: string): string {
 export type PostSet = "intro" | "record-story" | "ad-diary" | "ad-recap";
 
 // set 은 고정 묶음(PostSet) 또는 "collection:<지역>"(지역 모음), "story:<테마 id>"(이 방의 이야기),
-// "skip"(그날은 자동 게시 쉼 — 저녁에 릴스를 직접 올리는 날)
+// "reel:<테마 id>"(이 방의 이야기 릴스 — public/reels/ 의 영상), "skip"(그날은 자동 게시 쉼)
 export const POST_SCHEDULE: { date: string; set: string }[] = [
   { date: "2026-11-13", set: "intro" },
   { date: "2026-11-14", set: "collection:수원" },
   { date: "2026-11-16", set: "record-story" },
 
-  // 이 방의 이야기는 카드 대신 릴스(직접, 저녁 8~9시)로 올리고 그날 자동 게시는 쉰다
-  { date: "2026-11-20", set: "skip" }, // 릴스: 성지기숙학원 : 특수교정반
-  { date: "2026-11-23", set: "skip" }, // 릴스: 영안실
-  { date: "2026-11-26", set: "skip" }, // 릴스: 춘화각 : 피할 수 없는 저주
+  // 이 방의 이야기는 카드 대신 릴스로(처음 보는 사람에게 더 퍼진다)
+  { date: "2026-11-20", set: "reel:b60b538b-618e-4102-ab57-06f369f56a4b" }, // 성지기숙학원 : 특수교정반
+  { date: "2026-11-23", set: "reel:4451205b-df5a-462f-9f62-4461c59f9440" }, // 영안실
+  { date: "2026-11-26", set: "reel:5bcecef5-c59b-41a4-bb31-dda03276f724" }, // 춘화각 : 피할 수 없는 저주
   { date: "2026-11-28", set: "cafes:yearend" },
   { date: "2026-12-01", set: "ad-recap" },
 ];
@@ -122,11 +122,24 @@ export function scheduledSet(kstDay: string): string | null {
   return POST_SCHEDULE.find((p) => p.date === kstDay)?.set ?? null;
 }
 
-// 게시할 이미지 경로와 캡션. 알 수 없는 묶음·없는 테마면 null
-export function resolvePost(
-  set: string,
-  themes: ThemeRow[]
-): { imagePaths: string[]; caption: string } | null {
+// 릴스 영상 파일(public/reels/). 테마 id → 파일 이름
+export const REEL_FILES: Record<string, string> = {
+  "b60b538b-618e-4102-ab57-06f369f56a4b": "sungji",
+  "4451205b-df5a-462f-9f62-4461c59f9440": "morgue",
+  "5bcecef5-c59b-41a4-bb31-dda03276f724": "chunhwa",
+};
+
+export type ResolvedPost = { imagePaths: string[]; caption: string; videoPath?: string };
+
+// 게시할 이미지(또는 릴스 영상) 경로와 캡션. 알 수 없는 묶음·없는 테마면 null
+export function resolvePost(set: string, themes: ThemeRow[]): ResolvedPost | null {
+  if (set.startsWith("reel:")) {
+    const id = set.slice("reel:".length);
+    const file = REEL_FILES[id];
+    const story = file ? resolvePost(`story:${id}`, themes) : null;
+    if (!file || !story) return null;
+    return { imagePaths: [], videoPath: `/reels/${file}.mp4`, caption: story.caption };
+  }
   if (set in SET_CAPTIONS) {
     return { imagePaths: setImagePaths(set as PostSet), caption: SET_CAPTIONS[set as PostSet] };
   }

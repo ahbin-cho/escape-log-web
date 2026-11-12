@@ -1,0 +1,39 @@
+name: 인스타 지금 올리기
+
+# 일정과 상관없이 원하는 게시물을 바로 올린다(Actions 탭 → Run workflow, 또는 Claude 가 실행).
+# 필요한 것: 저장소 Settings → Secrets → Actions 에 CRON_SECRET (Vercel 과 같은 값)
+on:
+  workflow_dispatch:
+    inputs:
+      set:
+        description: "올릴 것 (비우면 오늘 일정) 예: intro, collection:수원, story:<id>, reel:<id>, cafes:yearend, ad-recap"
+        required: false
+        default: ""
+      dry:
+        description: "미리보기만(실제로 안 올림)"
+        type: boolean
+        default: true
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 게시
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          SET: ${{ inputs.set }}
+          DRY: ${{ inputs.dry }}
+        run: |
+          q=""
+          [ -n "$SET" ] && q="set=$(python3 -c 'import os,urllib.parse;print(urllib.parse.quote(os.environ["SET"]))')"
+          [ "$DRY" = "true" ] && q="$q&dry=1"
+          call() { curl -sS -m 70 -w '\n%{http_code}' -H "Authorization: Bearer $CRON_SECRET" "https://bangtallog.com/api/ig/publish?$1"; }
+          out=$(call "$q"); code=$(echo "$out" | tail -1); body=$(echo "$out" | sed '$d'); echo "$body"
+          # 릴스 영상 처리가 늦으면 잠시 뒤 공개만 다시
+          for i in 1 2 3; do
+            [ "$code" = "202" ] || break
+            id=$(echo "$body" | python3 -c 'import json,sys;print(json.load(sys.stdin)["creationId"])')
+            sleep 30
+            out=$(call "finish=$id"); code=$(echo "$out" | tail -1); body=$(echo "$out" | sed '$d'); echo "$body"
+          done
+          [ "$code" -lt 300 ]
