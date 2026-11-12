@@ -115,7 +115,7 @@ export const POST_SCHEDULE: { date: string; set: string }[] = [
   { date: "2026-11-16", set: "reel:4451205b-df5a-462f-9f62-4461c59f9440" }, // 영안실
   { date: "2026-11-17", set: "reel:5bcecef5-c59b-41a4-bb31-dda03276f724" }, // 춘화각 : 피할 수 없는 저주
   { date: "2026-11-18", set: "cafes:yearend" },
-  { date: "2026-11-19", set: "ad-recap" },
+  { date: "2026-12-01", set: "ad-recap" },
 ];
 
 export function scheduledSet(kstDay: string): string | null {
