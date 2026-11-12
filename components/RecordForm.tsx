@@ -17,7 +17,7 @@ import {
 import { REGIONS, regionFromText } from "@/lib/region";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { trackAttributionEvent } from "@/lib/track";
-import { ratingLabel, fearLabel } from "@/lib/terms";
+import { fearLabel, RATING_LABELS, RATING_EMOJI } from "@/lib/terms";
 
 // ── 작은 입력 부품: 굵은 테두리·이모지 대신 면(面)과 주황 포인트 하나로 ──
 const card = "rounded-2xl border border-edge/10 bg-panel p-4 sm:p-5";
@@ -35,64 +35,85 @@ function SectionTitle({ step, title, sub }: { step: string; title: string; sub?:
   );
 }
 
-// 1~5 단계: 칸이 차오르는 막대. 같은 칸을 다시 누르면 0(미입력)
-function Meter({
+// 별점: 단계마다 자기 아이콘(흙길 🟤 → 인생테마 🏆). 고른 칸만 크게, 나머지는 흐리게
+function RatingPicker({ value, onChange }: { value: number; onChange: (v: number) => void }) {
+  return (
+    <div className="grid grid-cols-5 gap-1.5" role="radiogroup" aria-label="별점">
+      {[1, 2, 3, 4, 5].map((n) => {
+        const on = n === value;
+        return (
+          <button
+            key={n}
+            type="button"
+            role="radio"
+            aria-checked={on}
+            onClick={() => onChange(on ? 0 : n)}
+            className={`flex flex-col items-center gap-1 rounded-2xl py-3 transition active:scale-95 ${
+              on ? "bg-candy/15 ring-2 ring-candy" : "bg-edge/[0.04] hover:bg-edge/[0.07]"
+            }`}
+          >
+            <span
+              className={`text-[28px] leading-none transition ${
+                on ? "scale-110" : value && n > value ? "opacity-30 grayscale" : "opacity-80"
+              }`}
+            >
+              {RATING_EMOJI[n - 1]}
+            </span>
+            <span className={`text-[11px] font-extrabold ${on ? "text-candy" : "text-cream/45"}`}>
+              {RATING_LABELS[n - 1]}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+// 난이도·공포도: 기존 아이콘(🔒·👻)이 차오른다. 안 찬 칸은 흐린 흑백
+function IconMeter({
   label,
+  icon,
   value,
   onChange,
   caption,
 }: {
   label: string;
+  icon: string;
   value: number;
   onChange: (v: number) => void;
-  caption?: string;
+  caption: string;
 }) {
   return (
-    <div>
-      <div className="mb-1.5 flex items-baseline justify-between">
+    <div className="rounded-2xl bg-edge/[0.04] p-3.5">
+      <div className="mb-2 flex items-baseline justify-between">
         <span className="text-[13px] font-bold text-cream/60">{label}</span>
-        <span className="text-xs font-bold text-candy">{caption ?? (value ? `${value}/5` : "")}</span>
+        <span className="text-[13px] font-extrabold text-candy">{caption}</span>
       </div>
-      <div className="flex gap-1" role="radiogroup" aria-label={label}>
-        {[1, 2, 3, 4, 5].map((n) => (
-          <button
-            key={n}
-            type="button"
-            role="radio"
-            aria-checked={n === value}
-            aria-label={`${label} ${n}`}
-            onClick={() => onChange(n === value ? 0 : n)}
-            className={`h-9 flex-1 rounded-lg transition active:scale-[0.94] ${
-              n <= value ? "bg-candy" : "bg-edge/[0.07] hover:bg-edge/[0.12]"
-            }`}
-          />
-        ))}
+      <div className="flex justify-between" role="radiogroup" aria-label={label}>
+        {[1, 2, 3, 4, 5].map((n) => {
+          const on = n <= value;
+          return (
+            <button
+              key={n}
+              type="button"
+              role="radio"
+              aria-checked={n === value}
+              aria-label={`${label} ${n}`}
+              onClick={() => onChange(n === value ? 0 : n)}
+              className={`flex h-11 w-11 items-center justify-center rounded-full text-[22px] transition active:scale-90 ${
+                on ? "bg-panel shadow-sm" : "opacity-25 grayscale hover:opacity-40"
+              } ${n === value ? "scale-110" : ""}`}
+            >
+              {icon}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
 }
 
-function Stars({ value, onChange }: { value: number; onChange: (v: number) => void }) {
-  return (
-    <div className="flex gap-1.5" role="radiogroup" aria-label="별점">
-      {[1, 2, 3, 4, 5].map((n) => (
-        <button
-          key={n}
-          type="button"
-          role="radio"
-          aria-checked={n === value}
-          aria-label={`별점 ${n}`}
-          onClick={() => onChange(n === value ? 0 : n)}
-          className={`text-[40px] leading-none transition active:scale-90 ${
-            n <= value ? "text-candy" : "text-edge/15 hover:text-edge/25"
-          }`}
-        >
-          ★
-        </button>
-      ))}
-    </div>
-  );
-}
+const DIFFICULTY_WORDS = ["술술", "무난", "적당", "빡셈", "극악"];
 
 function Stepper({
   value,
@@ -514,13 +535,23 @@ export default function RecordForm({
       {/* 03 평가 */}
       <section className={card}>
         <SectionTitle step="03" title="어땠어요?" />
-        <div className="mb-5 flex items-center justify-between gap-3">
-          <Stars value={form.rating} onChange={(v) => set("rating", v)} />
-          <span className="text-right text-sm font-extrabold text-candy">{ratingLabel(form.rating)}</span>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Meter label="난이도" value={form.difficulty} onChange={(v) => set("difficulty", v)} />
-          <Meter label="공포도" value={form.fearLevel} onChange={(v) => set("fearLevel", v)} caption={fearLabel(form.fearLevel)} />
+        <p className="mb-2 text-[13px] font-bold text-cream/60">이 방은 어떤 길이었나요?</p>
+        <RatingPicker value={form.rating} onChange={(v) => set("rating", v)} />
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <IconMeter
+            label="난이도"
+            icon="🔒"
+            value={form.difficulty}
+            onChange={(v) => set("difficulty", v)}
+            caption={form.difficulty ? `${DIFFICULTY_WORDS[form.difficulty - 1]} · ${form.difficulty}/5` : ""}
+          />
+          <IconMeter
+            label="공포도"
+            icon="👻"
+            value={form.fearLevel}
+            onChange={(v) => set("fearLevel", v)}
+            caption={fearLabel(form.fearLevel)}
+          />
         </div>
         <div className="mt-4">
           <span className={labelCls}>
