@@ -105,8 +105,9 @@ export type PostSet = "intro" | "record-story" | "ad-diary" | "ad-recap";
 // set 은 고정 묶음(PostSet) 또는 "collection:<지역>"(지역 모음), "story:<테마 id>"(이 방의 이야기)
 export const POST_SCHEDULE: { date: string; set: string }[] = [
   { date: "2026-11-13", set: "intro" },
+  { date: "2026-11-14", set: "collection:수원" },
   { date: "2026-11-16", set: "record-story" },
-  { date: "2026-11-18", set: "collection:수원" },
+
   { date: "2026-11-20", set: "story:b60b538b-618e-4102-ab57-06f369f56a4b" }, // 성지기숙학원 : 특수교정반
   { date: "2026-11-23", set: "story:4451205b-df5a-462f-9f62-4461c59f9440" }, // 영안실
   { date: "2026-11-26", set: "story:5bcecef5-c59b-41a4-bb31-dda03276f724" }, // 춘화각 : 피할 수 없는 저주
