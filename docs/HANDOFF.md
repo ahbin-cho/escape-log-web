@@ -46,7 +46,7 @@ IG 토큰이 `IGAA…` 종류면 약 60일마다 만료된다. 게시가 갑자�
 | 시크릿 왕국의 스캔들·신데렐라 초대장 | (템플릿 미보관) | 미게시 |
 
 ## 4. 남은 일
-- [ ] `docs/sql/catalog_add_escapeworld.sql` 을 Supabase SQL Editor 에서 실행(방자전·ESCAPE SCHOOL 추가). 운영자가 아직 실행 안 함.
+- [x] 이스케이프월드 테마(방자전·ESCAPE SCHOOL)는 DB 에 들어가 있음(`docs/sql/catalog_add_escapeworld.sql`).
 - [ ] 11/15 첫 자동 릴스가 올라가는지 확인. 실패하면 `app/api/ig/publish/route.ts` 의 REELS 분기 점검.
 - [ ] 다음 지역 모음(강남·홍대 등): 제미나이 그림 방식으로(스킬 ig-region-carousel).
 - [ ] 하이라이트 만들기: 📌시작하기 · 📍수원 · 🎟️수능 · 🔍미스터리 (운영자가 앱에서)
