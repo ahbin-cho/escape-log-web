@@ -23,16 +23,19 @@ export const ED = {
   panel: "#EDE5D6",
 };
 
-type Font = { name: string; data: Buffer; weight: 500 | 800 };
+type Font = { name: string; data: Buffer; weight: 400 | 500 | 800 };
 let fontsCache: Promise<Font[]> | null = null;
 
 export function cardFonts(): Promise<Font[]> {
   fontsCache ??= Promise.all([
     readFile(join(process.cwd(), "assets/fonts/Pretendard-ExtraBold.woff")),
     readFile(join(process.cwd(), "assets/fonts/Pretendard-Medium.woff")),
-  ]).then(([bold, medium]) => [
+    readFile(join(process.cwd(), "assets/fonts/SBAggroB.woff")),
+  ]).then(([bold, medium, aggro]) => [
     { name: "Pretendard", data: bold, weight: 800 as const },
     { name: "Pretendard", data: medium, weight: 500 as const },
+    // 사이트 제목 글꼴(SB 어그로, 상업적 이용 가능 무료 글꼴) — 카드 제목용 fontFamily: "Aggro"
+    { name: "Aggro", data: aggro, weight: 400 as const },
   ]);
   return fontsCache;
 }
