@@ -105,9 +105,10 @@ export type PostSet = "intro" | "record-story" | "ad-diary" | "ad-recap";
 
 // set 은 고정 묶음(PostSet) 또는 "collection:<지역>"(지역 모음), "story:<테마 id>"(이 방의 이야기),
 // "reel:<테마 id>"(이 방의 이야기 릴스 — public/reels/ 의 영상), "skip"(그날은 자동 게시 쉼)
-export const POST_SCHEDULE: { date: string; set: string }[] = [
+// extra: true 면 그날 직접 올린 게시물이 있어도 이 묶음은 올린다(같은 묶음이 이미 있으면 건너뜀)
+export const POST_SCHEDULE: { date: string; set: string; extra?: boolean }[] = [
   { date: "2026-11-12", set: "intro" },
-  { date: "2026-11-13", set: "static:suwon" }, // 제미나이 그림으로 다시 만든 수원 모음 6장
+  { date: "2026-11-13", set: "static:suwon", extra: true }, // 제미나이 그림으로 다시 만든 수원 모음 6장
   { date: "2026-11-14", set: "record-story" },
 
   // 이 방의 이야기는 카드 대신 릴스로(처음 보는 사람에게 더 퍼진다)
@@ -120,6 +121,10 @@ export const POST_SCHEDULE: { date: string; set: string }[] = [
 
 export function scheduledSet(kstDay: string): string | null {
   return POST_SCHEDULE.find((p) => p.date === kstDay)?.set ?? null;
+}
+
+export function scheduledExtra(kstDay: string): boolean {
+  return POST_SCHEDULE.find((p) => p.date === kstDay)?.extra === true;
 }
 
 // 직접 만든 카드 묶음(public/ig-static/<이름>/1.jpg …). "static:<이름>" 으로 올린다

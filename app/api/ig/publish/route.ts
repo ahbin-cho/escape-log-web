@@ -1,6 +1,6 @@
 import { getAllThemes } from "@/lib/catalog-server";
 import { dailyMystery, kstDate } from "@/lib/home-picks";
-import { graphHost, mysteryCaption, resolvePost, scheduledSet } from "@/lib/instagram";
+import { graphHost, mysteryCaption, resolvePost, scheduledExtra, scheduledSet } from "@/lib/instagram";
 import { SITE_URL } from "@/lib/site";
 
 // 인스타 "오늘의 미스터리 방" 게시. Vercel Cron 이 하루 1번 부른다(vercel.json).
@@ -156,10 +156,16 @@ export async function GET(req: Request) {
       `/${userId}/media?fields=caption,timestamp&limit=5&access_token=${encodeURIComponent(token)}`
     );
     const today = kstDate(now);
-    const postedToday = (recent.data ?? []).some(
+    const todays = (recent.data ?? []).filter(
       (m: { timestamp?: string }) => !!m.timestamp && kstDate(new Date(m.timestamp)) === today
-    );
-    if (postedToday) return json({ skipped: true, reason: "오늘 이미 게시함", label });
+    ) as { caption?: string }[];
+    // 일정에 extra 가 켜진 날(일정대로 부를 때만)은 직접 올린 게 있어도 올리되, 같은 게시물(첫 줄이 같은 캡션)은 두 번 올리지 않는다
+    const extra = !params.get("set") && scheduledExtra(today);
+    const firstLine = caption.split("\n")[0];
+    const blocked = extra
+      ? todays.some((m) => (m.caption ?? "").split("\n")[0] === firstLine)
+      : todays.length > 0;
+    if (blocked) return json({ skipped: true, reason: extra ? "오늘 같은 게시물을 이미 올림" : "오늘 이미 게시함", label });
 
     // 1) 게시물(릴스·한 장·여러 장 묶음) 만들기 → 2) 처리 대기 → 3) 공개
     if (videoUrl) {
