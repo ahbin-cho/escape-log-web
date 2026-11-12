@@ -8,6 +8,7 @@ import HomeBanner from "@/components/HomeBanner";
 import FeedPreview from "@/components/FeedPreview";
 import LoggedOutCTA from "@/components/LoggedOutCTA";
 import LoggedInHero from "@/components/LoggedInHero";
+import HomeSearchBar from "@/components/HomeSearchBar";
 import HomeRegionThemes from "@/components/HomeRegionThemes";
 import HomeDiary from "@/components/HomeDiary";
 
@@ -43,6 +44,8 @@ export default function HomeClient({ discover }: { discover: ReactNode }) {
 
   return (
     <div className="space-y-8 sm:space-y-10">
+      {/* 검색은 첫 화면 맨 위에: 찾는 방이 있는 사람은 바로 찾게 */}
+      <HomeSearchBar />
       <LoggedOutCTA />
       {loggedIn === true && <LoggedInHero records={records} />}
       {discover}
