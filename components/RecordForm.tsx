@@ -20,16 +20,18 @@ import { trackAttributionEvent } from "@/lib/track";
 import { fearLabel, RATING_LABELS } from "@/lib/terms";
 
 // ── 작은 입력 부품: 굵은 테두리·이모지 대신 면(面)과 주황 포인트 하나로 ──
-const card = "rounded-2xl border border-edge/10 bg-panel p-4 sm:p-5";
+const card = "rough rounded-2xl border-2 border-edge bg-panel p-4 sm:p-5";
 const field =
-  "w-full rounded-xl border border-edge/10 bg-ink/60 px-3.5 py-3 text-[15px] outline-none transition placeholder:text-cream/35 focus:border-candy focus:bg-panel";
+  "w-full rounded-xl border-2 border-edge/25 bg-ink/50 px-3.5 py-3 text-[15px] outline-none transition placeholder:text-cream/35 focus:border-edge focus:bg-panel";
 const labelCls = "mb-1.5 block text-[13px] font-bold text-cream/60";
 
-function SectionTitle({ step, title, sub }: { step: string; title: string; sub?: string }) {
+function SectionTitle({ icon, title, sub }: { icon: string; title: string; sub?: string }) {
   return (
     <div className="mb-4 flex items-baseline gap-2">
-      <span className="text-[11px] font-extrabold tracking-[0.2em] text-candy">{step}</span>
-      <h2 className="text-base font-extrabold">{title}</h2>
+      <h2 className="text-lg">
+        <span className="mr-1.5">{icon}</span>
+        {title}
+      </h2>
       {sub && <span className="text-xs text-cream/45">{sub}</span>}
     </div>
   );
@@ -47,7 +49,7 @@ const RATING_ICONS = [
 // 별점: 길 등급을 글자로. 고른 칸은 먹색으로 채우고, 그 아래 칸은 옅게
 function RatingPicker({ value, onChange }: { value: number; onChange: (v: number) => void }) {
   return (
-    <div className="grid grid-cols-5 overflow-hidden rounded-xl border border-edge/15" role="radiogroup" aria-label="별점">
+    <div className="grid grid-cols-5 gap-1.5" role="radiogroup" aria-label="별점">
       {[1, 2, 3, 4, 5].map((n) => {
         const on = n === value;
         const under = value > 0 && n < value;
@@ -58,14 +60,18 @@ function RatingPicker({ value, onChange }: { value: number; onChange: (v: number
             role="radio"
             aria-checked={on}
             onClick={() => onChange(on ? 0 : n)}
-            className={`flex flex-col items-center gap-1 border-l border-edge/10 py-3 transition first:border-l-0 active:scale-[0.97] ${
-              on ? "bg-edge text-white" : under ? "bg-edge/[0.06]" : "hover:bg-edge/[0.04]"
+            className={`flex flex-col items-center gap-1 rounded-xl border-2 py-2.5 transition active:scale-[0.95] ${
+              on
+                ? "border-edge bg-candy text-white shadow-cute"
+                : under
+                  ? "border-edge/40 bg-candy/10"
+                  : "border-edge/15 hover:border-edge/40"
             }`}
           >
-            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden className={on ? "" : under ? "text-edge/60" : "text-edge/30"}>
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden className={on ? "" : under ? "text-candy" : "text-edge/35"}>
               {RATING_ICONS[n - 1]}
             </svg>
-            <span className={`text-[12px] font-extrabold ${on ? "" : "text-cream/70"}`}>{RATING_LABELS[n - 1]}</span>
+            <span className={`text-[11px] font-extrabold ${on ? "" : "text-cream/70"}`}>{RATING_LABELS[n - 1]}</span>
           </button>
         );
       })}
@@ -104,10 +110,10 @@ function IconMeter({
   caption: string;
 }) {
   return (
-    <div className="rounded-xl border border-edge/10 px-3.5 pb-2.5 pt-3">
+    <div className="rounded-xl border-2 border-edge/15 px-3.5 pb-2.5 pt-3">
       <div className="flex items-baseline justify-between">
         <span className="text-[13px] font-bold text-cream/60">{label}</span>
-        <span className="text-[13px] font-extrabold">{caption}</span>
+        <span className="text-[13px] font-extrabold text-candy">{caption}</span>
       </div>
       <div className="mt-1.5 flex justify-between" role="radiogroup" aria-label={label}>
         {[1, 2, 3, 4, 5].map((n) => {
@@ -121,10 +127,10 @@ function IconMeter({
               aria-label={`${label} ${n}`}
               onClick={() => onChange(n === value ? 0 : n)}
               className={`flex h-10 w-10 items-center justify-center rounded-lg transition active:scale-90 ${
-                on ? "text-edge" : "text-edge/20 hover:text-edge/35"
+                on ? "text-candy" : "text-edge/20 hover:text-edge/35"
               }`}
             >
-              <svg viewBox="0 0 24 24" width="24" height="24" fill={on ? "currentColor" : "none"} fillOpacity={on ? 0.12 : 0} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <svg viewBox="0 0 24 24" width="24" height="24" fill={on ? "currentColor" : "none"} fillOpacity={on ? 0.25 : 0} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                 {ICONS[icon]}
               </svg>
             </button>
@@ -360,14 +366,15 @@ export default function RecordForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4 pb-28">
       {guest && mode === "new" && (
-        <p className="rounded-2xl bg-candy/10 px-4 py-3 text-[13px] leading-relaxed text-cream/75">
+        <p className="rounded-xl border-2 border-dashed border-candy/50 bg-candy/5 px-4 py-3 text-[13px] leading-relaxed text-cream/80">
+          ✍️{" "}
           로그인 없이 먼저 써 보세요. 저장하면 이 기기에 보관되고, <b>10초 가입</b>하면 계정으로 옮겨 드려요.
         </p>
       )}
 
       {/* 01 어떤 방 */}
       <section className={card}>
-        <SectionTitle step="01" title="어떤 방이었어요?" />
+        <SectionTitle icon="🗝️" title="어떤 방이었어요?" />
 
         {mode === "new" && catalog.length > 0 && !picked && (
           <div className="space-y-2.5">
@@ -394,7 +401,7 @@ export default function RecordForm({
                     setPickerOpen(true);
                   }}
                   className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-bold transition active:scale-[0.97] ${
-                    brandFilter === b ? "bg-edge text-white" : "bg-edge/[0.06] text-cream/60"
+                    brandFilter === b ? "border-2 border-edge bg-candy text-white" : "border-2 border-transparent bg-edge/[0.06] text-cream/60"
                   }`}
                 >
                   {b || "전체"}
@@ -433,10 +440,10 @@ export default function RecordForm({
         )}
 
         {picked && (
-          <div className="flex items-center justify-between gap-3 rounded-xl bg-edge px-4 py-3.5 text-white">
+          <div className="flex items-center justify-between gap-3 rounded-xl border-2 border-edge bg-candy/10 px-4 py-3.5">
             <div className="min-w-0">
               <p className="truncate text-[15px] font-extrabold">{form.themeName}</p>
-              <p className="truncate text-xs text-white/60">
+              <p className="truncate text-xs text-cream/55">
                 {form.cafeName} · {form.genre}
               </p>
             </div>
@@ -446,7 +453,7 @@ export default function RecordForm({
                 setPicked(null);
                 setManual(false);
               }}
-              className="shrink-0 rounded-full bg-white/15 px-3 py-1.5 text-xs font-bold"
+              className="shrink-0 rounded-full border-2 border-edge bg-panel px-3 py-1 text-xs font-bold"
             >
               바꾸기
             </button>
@@ -501,19 +508,23 @@ export default function RecordForm({
 
       {/* 02 결과 */}
       <section className={card}>
-        <SectionTitle step="02" title="결과는요?" />
-        <div className="grid grid-cols-2 gap-2 rounded-xl bg-edge/[0.06] p-1">
+        <SectionTitle icon="🏁" title="결과는요?" />
+        <div className="grid grid-cols-2 gap-2">
           {[
-            { v: true, t: "탈출 성공" },
-            { v: false, t: "아쉽게 실패" },
+            { v: true, t: "🎉 탈출 성공" },
+            { v: false, t: "😵 아쉽게 실패" },
           ].map((o) => (
             <button
               key={o.t}
               type="button"
               aria-pressed={form.success === o.v}
               onClick={() => set("success", o.v)}
-              className={`rounded-lg py-3 text-sm font-extrabold transition ${
-                form.success === o.v ? (o.v ? "bg-mint text-white shadow-sm" : "bg-panel text-cream shadow-sm") : "text-cream/45"
+              className={`rounded-xl border-2 py-3 text-sm font-extrabold transition active:scale-[0.97] ${
+                form.success === o.v
+                  ? o.v
+                    ? "border-edge bg-mint text-white shadow-cute"
+                    : "border-edge bg-panel text-cream shadow-cute"
+                  : "border-edge/15 text-cream/45"
               }`}
             >
               {o.t}
@@ -538,7 +549,7 @@ export default function RecordForm({
                 <Toggle checked={hintUnlimited} onChange={setHintUnlimited} label="힌트 무제한" />
               </label>
             </div>
-            <div className="flex items-center justify-between rounded-xl bg-ink/60 px-2 py-1.5">
+            <div className="flex items-center justify-between rounded-xl border-2 border-edge/15 px-2 py-1.5">
               <Stepper value={hintCount} onChange={setHintCount} unit="개" disabled={hintUnlimited} />
               {!hintUnlimited && hintCount === 0 && form.success && (
                 <span className="mr-2 rounded-full bg-candy/15 px-2.5 py-1 text-[11px] font-extrabold text-candy">노힌트!</span>
@@ -547,7 +558,7 @@ export default function RecordForm({
           </div>
           <div>
             <span className={labelCls}>함께한 인원</span>
-            <div className="rounded-xl bg-ink/60 px-2 py-1.5">
+            <div className="rounded-xl border-2 border-edge/15 px-2 py-1.5">
               <Stepper value={form.partySize} onChange={(v) => set("partySize", v)} unit="명" max={20} />
             </div>
           </div>
@@ -556,7 +567,7 @@ export default function RecordForm({
 
       {/* 03 평가 */}
       <section className={card}>
-        <SectionTitle step="03" title="어땠어요?" />
+        <SectionTitle icon="⭐" title="어땠어요?" />
         <p className="mb-2 text-[13px] font-bold text-cream/60">이 방은 어떤 길이었나요?</p>
         <RatingPicker value={form.rating} onChange={(v) => set("rating", v)} />
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -587,7 +598,7 @@ export default function RecordForm({
                 aria-pressed={form.themeType === t}
                 onClick={() => set("themeType", form.themeType === t ? "" : t)}
                 className={`rounded-full px-3.5 py-1.5 text-[13px] font-bold transition active:scale-[0.97] ${
-                  form.themeType === t ? "bg-edge text-white" : "bg-edge/[0.06] text-cream/60"
+                  form.themeType === t ? "border-2 border-edge bg-candy text-white" : "border-2 border-edge/15 text-cream/60"
                 }`}
               >
                 {t}방
@@ -599,7 +610,7 @@ export default function RecordForm({
 
       {/* 04 남기기 */}
       <section className={card}>
-        <SectionTitle step="04" title="한마디 남기기" />
+        <SectionTitle icon="✍️" title="한마디 남기기" />
         <div className="space-y-4">
           <div>
             <label className={labelCls}>
@@ -618,7 +629,7 @@ export default function RecordForm({
               인증샷 <span className="font-normal text-cream/40">선택</span>
             </span>
             {guest ? (
-              <p className="rounded-xl bg-ink/60 px-3.5 py-3 text-[13px] text-cream/50">인증샷은 가입한 뒤에 올릴 수 있어요. 기록은 지금 저장돼요.</p>
+              <p className="rounded-xl border-2 border-dashed border-edge/20 px-3.5 py-3 text-[13px] text-cream/50">인증샷은 가입한 뒤에 올릴 수 있어요. 기록은 지금 저장돼요.</p>
             ) : (
               <div className="flex items-center gap-3">
                 <label className="flex h-20 w-20 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-xl border border-dashed border-edge/20 bg-ink/60 text-2xl text-cream/30">
@@ -644,7 +655,7 @@ export default function RecordForm({
               </div>
             )}
           </div>
-          <div className="flex items-start justify-between gap-4 rounded-xl bg-ink/60 px-4 py-3.5">
+          <div className="flex items-start justify-between gap-4 rounded-xl border-2 border-edge/15 px-4 py-3.5">
             <div>
               <p className="text-sm font-extrabold">공개 후기로 올리기</p>
               <p className="mt-0.5 text-xs leading-relaxed text-cream/50">
@@ -663,7 +674,7 @@ export default function RecordForm({
       )}
 
       {/* 저장 바: 화면 아래에 붙어 있다 */}
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-edge/10 bg-ink/90 px-4 pb-[max(12px,env(safe-area-inset-bottom))] pt-3 backdrop-blur">
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t-2 border-edge bg-ink/95 px-4 pb-[max(12px,env(safe-area-inset-bottom))] pt-3 backdrop-blur">
         <div className="mx-auto flex max-w-2xl gap-2">
           <button
             type="button"
@@ -675,7 +686,7 @@ export default function RecordForm({
           <button
             type="submit"
             disabled={saving}
-            className="flex-1 rounded-xl bg-edge py-3.5 text-[15px] font-extrabold text-white transition active:scale-[0.98] disabled:opacity-50"
+            className="rough flex-1 rounded-xl border-2 border-edge bg-candy py-3.5 text-[15px] font-extrabold text-white shadow-cute transition active:scale-[0.98] disabled:opacity-50"
           >
             {saving ? "저장 중…" : guest && mode === "new" ? "저장하고 기록 지키기" : "기록 저장"}
           </button>

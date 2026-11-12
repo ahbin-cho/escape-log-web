@@ -13,8 +13,8 @@ export default function NewRecordPage() {
   return (
     <div className="mx-auto max-w-2xl space-y-5">
       <div>
-        <p className="text-[11px] font-extrabold tracking-[0.25em] text-candy">NEW RECORD</p>
-        <h1 className="mt-1 text-2xl font-extrabold tracking-tight">오늘 다녀온 방, 남겨 둘까요?</h1>
+        <p className="text-sm font-bold text-candy">새 방탈출 기록</p>
+        <h1 className="mt-1 text-2xl leading-tight">오늘 다녀온 방,<br />남겨 둘까요?</h1>
         <p className="mt-1 text-sm text-cream/50">1분이면 돼요. 몇 번째 방인지, 연말 결산까지 알아서 정리돼요.</p>
       </div>
       <RecordForm mode="new" />
