@@ -108,14 +108,14 @@ export type PostSet = "intro" | "record-story" | "ad-diary" | "ad-recap";
 export const POST_SCHEDULE: { date: string; set: string }[] = [
   { date: "2026-11-12", set: "intro" },
   { date: "2026-11-13", set: "collection:수원" },
-  { date: "2026-11-15", set: "record-story" },
+  { date: "2026-11-14", set: "record-story" },
 
   // 이 방의 이야기는 카드 대신 릴스로(처음 보는 사람에게 더 퍼진다)
-  { date: "2026-11-16", set: "reel:b60b538b-618e-4102-ab57-06f369f56a4b" }, // 성지기숙학원 : 특수교정반
-  { date: "2026-11-19", set: "reel:4451205b-df5a-462f-9f62-4461c59f9440" }, // 영안실
-  { date: "2026-11-22", set: "reel:5bcecef5-c59b-41a4-bb31-dda03276f724" }, // 춘화각 : 피할 수 없는 저주
-  { date: "2026-11-27", set: "cafes:yearend" },
-  { date: "2026-11-30", set: "ad-recap" },
+  { date: "2026-11-15", set: "reel:b60b538b-618e-4102-ab57-06f369f56a4b" }, // 성지기숙학원 : 특수교정반
+  { date: "2026-11-16", set: "reel:4451205b-df5a-462f-9f62-4461c59f9440" }, // 영안실
+  { date: "2026-11-17", set: "reel:5bcecef5-c59b-41a4-bb31-dda03276f724" }, // 춘화각 : 피할 수 없는 저주
+  { date: "2026-11-18", set: "cafes:yearend" },
+  { date: "2026-11-19", set: "ad-recap" },
 ];
 
 export function scheduledSet(kstDay: string): string | null {
