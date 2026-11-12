@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { listedConditions } from "@/lib/best";
 import { getAllThemes, listedBrands } from "@/lib/catalog-server";
+import HomeSearchBar from "@/components/HomeSearchBar";
 
 // 홈 상단 "어떤 방 찾아?": 조건별 추천 진입 + 우리 팀 궁합 진입.
 // 서버 컴포넌트라 링크가 HTML 에 그대로 실려 검색엔진이 /best 페이지들을 따라간다.
@@ -21,6 +22,8 @@ export default async function HomeDiscover() {
           </Link>
         )}
       </div>
+
+      <HomeSearchBar />
 
       {conditions.length > 0 && (
         <ul className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">

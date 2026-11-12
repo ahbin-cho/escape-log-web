@@ -35,6 +35,17 @@ export default function SearchButton() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open, index]);
 
+  // 홈 검색창 등 다른 곳에서 열기: window.dispatchEvent(new CustomEvent("open-search", { detail: "검색어" }))
+  useEffect(() => {
+    const onOpen = (e: Event) => {
+      const preset = (e as CustomEvent<string | undefined>).detail;
+      if (typeof preset === "string") setQ(preset);
+      setOpen(true);
+    };
+    window.addEventListener("open-search", onOpen);
+    return () => window.removeEventListener("open-search", onOpen);
+  }, []);
+
   // "/" 키로 어디서든 검색 열기 (입력 중일 때는 제외)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -78,13 +89,17 @@ export default function SearchButton() {
 
   return (
     <>
+      {/* 아이콘만 있으면 눈에 안 띄어서, 검색창처럼 생긴 버튼으로 */}
       <button
         type="button"
         onClick={() => setOpen(true)}
         aria-label="테마 검색"
-        className="rounded-xl px-2.5 py-2 text-base transition hover:bg-panel active:scale-[0.97]"
+        className="flex items-center gap-1.5 rounded-full border-2 border-edge bg-panel px-3 py-1.5 text-sm font-bold text-cream/55 transition hover:border-candy hover:text-cream active:scale-[0.97] md:w-60"
       >
-        🔍
+        <span aria-hidden>🔍</span>
+        <span className="md:hidden">검색</span>
+        <span className="hidden md:inline">테마·매장·동네 검색</span>
+        <kbd className="ml-auto hidden rounded-md border border-edge/25 px-1.5 text-[11px] font-bold text-cream/40 md:inline">/</kbd>
       </button>
 
       {open && (
