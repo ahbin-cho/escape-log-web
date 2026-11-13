@@ -1,8 +1,9 @@
--- 마스터키 공식 포스터 채우기 (출처: https://www.playpointlab.com/office/detail (이미지는 같은 회사 master-key.co.kr), 2026-11-13 확인)
+-- 마스터키 공식 포스터 채우기 (출처: https://www.playpointlab.com/office/detail (이미지 주소는 같은 회사 www.master-key.co.kr), 2026-11-13 확인)
 -- Supabase → SQL Editor 에 붙여 넣고 Run. 비어 있는 것만 채운다.
 update public.catalog c set poster_url = v.poster from (values
   ('fd3d9d63-271f-44ca-bfaf-c74dacccfeed'::uuid, 'https://www.master-key.co.kr/upload/room/154_img1.jpg'),  -- 마스터키 건대점 / D-Day (424x600 portrait)
   ('88f97703-2743-48be-8ac1-30d7ba65979a'::uuid, 'https://www.master-key.co.kr/upload/room/155_img1.png'),  -- 마스터키 건대점 / DELIVER (424x600 portrait)
+  ('044be644-c51b-4739-a36b-578a55191215'::uuid, 'https://www.master-key.co.kr/upload/room/212_img1.jpg'),  -- 마스터키 건대점 / 교생실습 (424x600 portrait)
   ('746ecb5b-087e-4fad-a3d1-825beb64794f'::uuid, 'https://www.master-key.co.kr/upload/room/3_img1.jpg'),  -- 마스터키 궁동직영점(서울) / MK빌딩을털어라:45C6 (424x600 portrait)
   ('e6c06c2c-e937-4158-a0b4-a2d0b7ea4a56'::uuid, 'https://www.master-key.co.kr/upload/room/2_img1.png'),  -- 마스터키 궁동직영점(서울) / MSI 미제사건 전담반 (486x600 portrait)
   ('00b18d0c-8d12-4d8d-b11b-a88234fd00cd'::uuid, 'https://www.master-key.co.kr/upload/room/5_img1.jpeg'),  -- 마스터키 궁동직영점(서울) / 블랙룸 (479x600 portrait)
@@ -43,6 +44,3 @@ update public.catalog c set poster_url = v.poster from (values
   ('5554fb0b-bed2-431e-8dbb-7c8ad6dd74e2'::uuid, 'https://www.master-key.co.kr/upload/room/135_img1.jpg')  -- 마스터키 화정점(경기) / 현월 (493x697 portrait)
 ) as v(id, poster) where c.id = v.id and coalesce(c.poster_url,'') = '';
 select count(*) filter (where coalesce(poster_url,'')<>'') as 포스터있음, count(*) as 전체 from public.catalog where cafe like '마스터키%';
-
--- 못 맞춘 것 (1개) — 공식 페이지에서 확인 안 됨, 비워 둠
---   044be644-c51b-4739-a36b-578a55191215  마스터키 건대점 / 교생실습  : 이미지 확인 실패 (000 )
