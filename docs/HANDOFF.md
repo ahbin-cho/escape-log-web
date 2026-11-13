@@ -48,11 +48,14 @@ IG 토큰이 `IGAA…` 종류면 약 60일마다 만료된다. 게시가 갑자�
 
 ## 4. 남은 일
 - [ ] 티켓투이스케이프 난이도·웨스턴 뱅 예약 링크 고치기: `docs/sql/catalog_update_ttescape.sql` 을 운영자가 Supabase 에서 실행(테마 15개는 이미 있음).
-- [ ] 예약 오픈 한 줄("예약 오픈 7일 전부터"): 칸 `catalog.booking_open`, 테마 페이지·관리자 화면에 반영. SQL `docs/sql/catalog_add_booking_open.sql`(8곳).
-      테마 페이지는 미리 구워 두는 방식이라 **SQL 실행 → 그 뒤 재배포** 순서여야 화면에 나온다.
-      남은 것: 네이버 예약 매장 17곳(룸즈에이 나머지·오늘의한페이지·더챕터·이스케이프월드) — 네이버 달력 API
-      (`api.booking.naver.com/v3.0/businesses/<biz>/biz-items/<item>/daily-schedules`)가 조회 횟수를 막아 중단. 한 번에 10여 건만, 몇 시간 뒤 이어서.
-      설정값(bookingAvailableEndValue)은 실제 달력과 달라 쓰면 안 된다. 자체 예약 사이트 체인은 공지 확인 후 수동으로.
+- [ ] 예약 오픈 한 줄(테마 페이지 "예약 오픈 7일 전 자정"): 칸 `catalog.booking_open`, 테마 페이지·관리자 화면에 반영.
+      SQL `docs/sql/catalog_add_booking_open.sql` = 86곳·테마 389/735개(2026-11-13 공식 예약 페이지·공지로 확인).
+      테마 페이지는 미리 구워 두는 방식이라 **SQL 실행 → 그 뒤 main 배포** 순서여야 화면에 나온다.
+      비어 있는 곳: 셜록홈즈 35곳(반년 뒤까지 열려 있어 규칙 없음 → 확인 필요), 큐브이스케이프·단편선(접속 차단),
+      룸익스케이프(수집 금지 문구), 네이버 예약 17곳(룸즈에이 나머지 등 — 네이버 달력 API 조회 제한, 몇 시간 뒤 10여 건씩).
+      네이버 설정값(bookingAvailableEndValue)은 실제 달력과 달라 쓰면 안 된다. 값은 바뀔 수 있으니 분기마다 다시 확인.
+- [ ] 수능 이벤트 매장 테마 SQL: `catalog_add_gangneung.sql`(바로 실행 가능), `catalog_add_doorescape.sql`(운영자 화면 대조 후),
+      `catalog_add_roomexcape_sinchon.sql`(사이트에 수집 금지 문구 — 사실 정보만, 실행 여부는 운영자 판단).
 - [x] 이스케이프월드 테마(방자전·ESCAPE SCHOOL)는 DB 에 들어가 있음(`docs/sql/catalog_add_escapeworld.sql`).
 - [ ] 11/15 첫 자동 릴스가 올라가는지 확인. 실패하면 `app/api/ig/publish/route.ts` 의 REELS 분기 점검.
 - [ ] 다음 지역 모음(강남·홍대 등): 제미나이 그림 방식으로(스킬 ig-region-carousel).
