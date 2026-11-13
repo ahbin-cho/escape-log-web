@@ -23,6 +23,7 @@ export type ThemeRow = {
   time_limit: number | null;
   players: string | null;
   reservation_url: string | null;
+  poster_url?: string | null; // 공식 포스터 주소(없으면 장르 색 표지)
   created_at?: string | null; // 새로 들어온 테마 정렬용(목록 조회에만 있음)
 };
 
@@ -37,7 +38,7 @@ export const getAllThemes = cache(async (): Promise<ThemeRow[]> => {
     const { data } = await publicClient()
       .from("catalog")
       .select(
-        "id,name,cafe,genre,difficulty,fear_level,tags,teaser,time_limit,players,reservation_url,created_at"
+        "id,name,cafe,genre,difficulty,fear_level,tags,teaser,time_limit,players,reservation_url,poster_url,created_at"
       )
       .order("created_at", { ascending: true });
     // 크롤링한 장르를 앱 장르로 묶는다(목록 페이지·테마 상세가 같은 기준을 쓰도록)

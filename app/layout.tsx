@@ -2,7 +2,7 @@ import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
-import MiniGameFab from "@/components/MiniGameFab";
+import TabBar from "@/components/TabBar";
 import AttributionCapture from "@/components/AttributionCapture";
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/site";
 
@@ -87,7 +87,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#F5F0E6"
+  themeColor: "#FFFFFF"
 };
 
 // 검색엔진 리치 결과용 구조화 데이터 (JSON-LD)
@@ -178,7 +178,7 @@ export default function RootLayout({
         >
           {children}
         </main>
-        <MiniGameFab />
+        <TabBar />
         <AttributionCapture />
         <SiteFooter />
       </body>
