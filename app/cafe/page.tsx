@@ -22,28 +22,28 @@ export default async function CafeIndexPage() {
   return (
     <div className="space-y-6">
       <header className="space-y-1">
-        <h1 className="text-xl font-extrabold sm:text-2xl">
-          🏠 방탈출 브랜드별 테마
+        <h1 className="text-[22px] font-extrabold leading-tight">
+          방탈출 브랜드별 테마
         </h1>
-        <p className="text-sm text-cream/70">
+        <p className="text-sm text-cream/60">
           브랜드를 고르면 지점별 테마를 한 번에 볼 수 있어요.
         </p>
       </header>
 
       {brands.length === 0 ? (
-        <p className="rounded-2xl border-2 border-dashed border-edge/40 bg-panel py-10 text-center text-sm text-cream/60">
+        <p className="rounded-[14px] bg-ink py-10 text-center text-sm text-cream/60">
           등록된 브랜드가 아직 없어요
         </p>
       ) : (
-        <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="border-t border-line sm:columns-2 sm:gap-x-10 lg:columns-3">
           {brands.map((b) => (
-            <li key={b.key}>
+            <li key={b.key} className="break-inside-avoid border-b border-line">
               <Link
                 href={`/cafe/${b.key}`}
-                className="flex items-baseline justify-between rounded-2xl border-2 border-edge bg-panel p-4 font-extrabold transition hover:border-candy hover:text-candy"
+                className="flex items-baseline justify-between py-3.5 text-[15px] font-extrabold hover:underline"
               >
                 {b.key}
-                <span className="text-sm font-bold text-cream/50">
+                <span className="text-[13px] font-normal text-cream/60">
                   테마 {b.count}개
                 </span>
               </Link>

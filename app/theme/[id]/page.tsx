@@ -3,12 +3,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cleanTeaser, teaserPreview } from "@/lib/home-picks";
 import { publicClient } from "@/lib/supabase/public";
-import { GENRE_EMOJI } from "@/lib/store";
 import { regionFromText } from "@/lib/region";
 import { brandOf } from "@/lib/cafe";
 import ReserveLink from "@/components/ReserveLink";
 import OwnerCTA from "@/components/OwnerCTA";
 import ThemeReviews from "@/components/ThemeReviews";
+import Poster from "@/components/Poster";
+import QuizRow from "@/components/QuizRow";
+import ThemeScroller from "@/components/ThemeScroller";
+import { BTN_LINE, BTN_PRIMARY, CHIP, CRUMB, H2, posterSrc } from "@/lib/ui";
 import {
   getAllThemes,
   listedBrands,
@@ -23,7 +26,11 @@ import { listedConditions } from "@/lib/best";
 // dynamicParams(기본 true): 배포 후 새로 추가된 테마도 첫 요청 때 생성되어 캐시됨.
 export const dynamicParams = true;
 
-type ThemeDetail = ThemeRow & { poster_url?: string | null; booking_open?: string | null };
+type ThemeDetail = ThemeRow & {
+  poster_url?: string | null;
+  booking_open?: string | null;
+  price?: number | null;
+};
 
 const THEME_COLUMNS =
   "id,name,cafe,genre,difficulty,fear_level,tags,teaser,time_limit,players,reservation_url,poster_url";
@@ -32,11 +39,11 @@ async function getTheme(id: string): Promise<ThemeDetail | null> {
   try {
     const first = await publicClient()
       .from("catalog")
-      .select(`${THEME_COLUMNS},booking_open`)
+      .select(`${THEME_COLUMNS},booking_open,price,created_at`)
       .eq("id", id)
       .maybeSingle();
     if (!first.error) return (first.data as ThemeDetail | null) ?? null;
-    // booking_open 칸이 아직 DB 에 없을 때(SQL 실행 전)도 테마 페이지는 떠야 한다.
+    // booking_open 같은 칸이 아직 DB 에 없을 때(SQL 실행 전)도 테마 페이지는 떠야 한다.
     const { data } = await publicClient()
       .from("catalog")
       .select(THEME_COLUMNS)
@@ -89,20 +96,12 @@ export async function generateMetadata({
       title: `${t.name} | ${SITE_NAME}`,
       description,
       url: `${SITE_URL}/theme/${t.id}`,
-      images: [t.poster_url ? { url: t.poster_url } : DEFAULT_OG_IMAGE],
+      images: [posterSrc(t.poster_url) ? { url: posterSrc(t.poster_url)! } : DEFAULT_OG_IMAGE],
     },
   };
 }
 
-function Stars({ n, max = 5 }: { n: number; max?: number }) {
-  const v = Math.min(max, Math.max(0, n));
-  return (
-    <span aria-label={`${v} / ${max}`}>
-      {"★".repeat(v)}
-      <span className="text-cream/25">{"★".repeat(max - v)}</span>
-    </span>
-  );
-}
+const NEW_DAYS = 14;
 
 export default async function ThemePage({
   params,
@@ -113,7 +112,7 @@ export default async function ThemePage({
   if (!t) notFound();
 
   const region = regionFromText(t.cafe);
-  const tags = t.tags ?? [];
+  const tags = (t.tags ?? []).filter((x) => x !== t.genre);
 
   // 목록 페이지(지역·브랜드)가 실제로 있을 때만 그쪽으로 링크
   const [regions, brands, all] = await Promise.all([
@@ -129,13 +128,44 @@ export default async function ThemePage({
   const brandHref = brands.some((b) => b.key === brand)
     ? `/cafe/${brand}`
     : null;
+  // 목록과 같은 기준으로 묶은 장르(크롤링 원문 장르는 제각각이라)
+  const genre = all.find((x) => x.id === t.id)?.genre ?? t.genre;
   const siblings = all
     .filter((x) => x.cafe === t.cafe && x.id !== t.id)
-    .slice(0, 6);
+    .slice(0, 12);
+  // 비슷한 방: 같은 장르의 다른 매장 테마. 같은 지역 → 난이도가 가까운 순.
+  const similar = all
+    .filter((x) => x.id !== t.id && x.cafe !== t.cafe && x.genre === genre)
+    .map((x) => ({
+      x,
+      score:
+        (region && regionFromText(x.cafe) === region ? 0 : 10) +
+        Math.abs(x.difficulty - t.difficulty) * 2 +
+        Math.abs(x.fear_level - t.fear_level) +
+        (posterSrc(x.poster_url) ? 0 : 1),
+    }))
+    .sort((a, b) => a.score - b.score)
+    .map(({ x }) => x)
+    // 한 브랜드가 줄을 다 차지하지 않게 브랜드마다 2개까지
+    .filter((x, i, arr) => arr.slice(0, i).filter((y) => brandOf(y.cafe) === brandOf(x.cafe)).length < 2)
+    .slice(0, 10);
   // 이 테마가 들어가는 조건별 목록 (페이지가 실제로 있는 것만)
   const conditions = listedConditions(all)
     .map((x) => x.condition)
     .filter((c) => c.match(t));
+
+  // 들어온 지 2주 안이면 '새로 들어옴' (페이지를 만든 시점 기준)
+  const isNew =
+    !!t.created_at &&
+    Date.now() - Date.parse(t.created_at) < NEW_DAYS * 86400000;
+
+  const facts = [
+    t.difficulty ? { label: "난이도", value: `${t.difficulty}/5` } : null,
+    // 공포도 0 은 '정보 없음'과 구분이 안 돼 칸을 만들지 않는다
+    t.fear_level ? { label: "공포", value: `${t.fear_level}/5` } : null,
+    t.time_limit ? { label: "시간", value: `${t.time_limit}분` } : null,
+    t.players ? { label: "인원", value: t.players } : null,
+  ].filter((f): f is { label: string; value: string } => f !== null);
 
   // 빵부스러기(BreadcrumbList) 구조화 데이터 — 검색결과 경로 표시
   const jsonLd = {
@@ -154,102 +184,85 @@ export default async function ThemePage({
   };
 
   return (
-    <article className="mx-auto max-w-2xl space-y-6">
+    <article className="mx-auto max-w-2xl">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
       {/* 빵부스러기 내비 (내부 링크 + 사용자 경로) */}
-      <nav className="flex flex-wrap items-center gap-1 text-xs font-bold text-cream/50">
-        <Link href="/" className="hover:text-candy">
+      <nav aria-label="경로" className={CRUMB}>
+        <Link href="/" className="hover:text-cream">
           방탈로그
         </Link>
-        <span aria-hidden>›</span>
-        <Link href={regionHref} className="hover:text-candy">
+        <span aria-hidden>·</span>
+        <Link href={regionHref} className="hover:text-cream">
           {region ? `${region} 방탈출` : "지역별 방탈출"}
         </Link>
-        <span aria-hidden>›</span>
-        <span className="text-cream/70">{t.name}</span>
+        {brandHref && (
+          <>
+            <span aria-hidden>·</span>
+            <Link href={brandHref} className="hover:text-cream">
+              {brand}
+            </Link>
+          </>
+        )}
       </nav>
 
-      <header className="rough rounded-2xl border-2 border-edge bg-panel p-6 shadow-cute">
-        <p className="text-sm font-bold text-cream/60">
-          {GENRE_EMOJI[t.genre] ?? "🎲"}{" "}
-          {brandHref ? (
-            <Link href={brandHref} className="hover:text-candy hover:underline">
-              {t.cafe}
-            </Link>
-          ) : (
-            t.cafe
-          )}
-        </p>
-        <h1 className="mt-1 text-2xl font-extrabold leading-tight sm:text-3xl">
-          {t.name}
-        </h1>
-
-        <dl className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm font-bold">
-          <div>
-            <dt className="inline text-cream/50">장르 </dt>
-            <dd className="inline">{t.genre}</dd>
-          </div>
-          <div>
-            <dt className="inline text-cream/50">난이도 </dt>
-            <dd className="inline text-candy">
-              <Stars n={t.difficulty} />
-            </dd>
-          </div>
-          <div>
-            <dt className="inline text-cream/50">공포도 </dt>
-            <dd className="inline text-candy">
-              <Stars n={t.fear_level} />
-            </dd>
-          </div>
-          {t.time_limit ? (
-            <div>
-              <dt className="inline text-cream/50">시간 </dt>
-              <dd className="inline">{t.time_limit}분</dd>
-            </div>
-          ) : null}
-          {t.players ? (
-            <div>
-              <dt className="inline text-cream/50">인원 </dt>
-              <dd className="inline">{t.players}</dd>
-            </div>
-          ) : null}
-          {t.booking_open ? (
-            <div>
-              <dt className="inline text-cream/50">예약 오픈 </dt>
-              <dd className="inline">{t.booking_open}</dd>
-            </div>
-          ) : null}
-        </dl>
-
-        {tags.length > 0 && (
-          <ul className="mt-4 flex flex-wrap gap-1.5">
+      <header className="mt-4 flex gap-4">
+        <div className="w-[132px] shrink-0">
+          <Poster src={posterSrc(t.poster_url)} name={t.name} genre={genre} rounded="rounded-xl" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <h1 className="text-[22px] font-extrabold leading-tight [word-break:keep-all]">
+            {t.name}
+          </h1>
+          <p className="mt-1.5 text-[13px] text-cream/60">
+            {brandHref ? (
+              <Link href={brandHref} className="hover:text-cream hover:underline">
+                {t.cafe}
+              </Link>
+            ) : (
+              t.cafe
+            )}
+          </p>
+          <ul className="mt-2.5 flex flex-wrap gap-1.5">
+            <li className="rounded-md bg-ink px-2 py-1 text-xs font-extrabold text-cream/75">
+              {genre}
+            </li>
             {tags.map((tag) => (
               <li
                 key={tag}
-                className="rough-sm rounded-full border border-edge/20 bg-ink px-2.5 py-1 text-xs font-bold text-cream/70"
+                className="rounded-md bg-ink px-2 py-1 text-xs font-extrabold text-cream/75"
               >
-                #{tag}
+                {tag}
               </li>
             ))}
+            {isNew && (
+              <li className="rounded-md bg-[#FFF3E6] px-2 py-1 text-xs font-extrabold text-[#A85A14]">
+                새로 들어옴
+              </li>
+            )}
           </ul>
-        )}
+        </div>
       </header>
 
-      {t.teaser && (
-        <section className="space-y-2">
-          <h2 className="text-lg font-extrabold">📖 줄거리</h2>
-          <p className="whitespace-pre-line text-sm leading-relaxed text-cream/80">
-            {t.teaser}
-          </p>
-        </section>
+      {facts.length > 0 && (
+        <dl className="mt-5 flex divide-x divide-line border-y border-line">
+          {facts.map((f) => (
+            <div key={f.label} className="flex-1 py-3 text-center">
+              <dt className="text-[13px] text-cream/60">{f.label}</dt>
+              <dd className="mt-0.5 font-extrabold">{f.value}</dd>
+            </div>
+          ))}
+        </dl>
       )}
 
       {/* 행동 유도 */}
-      <div className="flex flex-col gap-2.5 sm:flex-row">
+      <div className="mt-4 flex gap-2">
+        <Link href={`/new?theme=${t.id}`} className={`flex-1 ${BTN_PRIMARY}`}>
+          다녀왔어요
+        </Link>
         {t.reservation_url && (
           <ReserveLink
             href={t.reservation_url}
@@ -258,71 +271,98 @@ export default async function ThemePage({
             cafe={t.cafe}
             source="theme"
             rel="noopener nofollow"
-            className="rough flex-1 rounded-xl border-2 border-edge bg-candy px-5 py-3 text-center text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.97]"
+            className={`flex-1 ${BTN_LINE}`}
           >
-            🎟️ 예약 페이지로
+            예약 페이지
           </ReserveLink>
         )}
-        <Link
-          href={`/new?theme=${t.id}`}
-          className="rough flex-1 rounded-xl border-2 border-edge bg-panel px-5 py-3 text-center text-sm font-extrabold shadow-cute transition active:scale-[0.97] hover:border-candy"
-        >
-          🗝️ 이 방 기록하기
-        </Link>
       </div>
 
-      <ThemeReviews themeId={t.id} themeName={t.name} cafe={t.cafe} />
+      <QuizRow
+        className="mt-4"
+        title="내 취향과 얼마나 맞을까?"
+        sub="질문 몇 개로 내 방탈출 유형과 맞는 방을 찾아 줘요"
+      />
 
-      {siblings.length > 0 && (
-        <section className="space-y-2">
-          <h2 className="text-lg font-extrabold">🚪 같은 매장의 다른 테마</h2>
-          <ul className="flex flex-wrap gap-1.5">
-            {siblings.map((x) => (
-              <li key={x.id}>
-                <Link
-                  href={`/theme/${x.id}`}
-                  className="rough-sm inline-block rounded-full border border-edge/20 bg-panel px-3 py-1.5 text-sm font-bold text-cream/70 transition hover:border-candy hover:text-candy"
-                >
-                  {x.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
+      {t.teaser && (
+        <section className="mt-8">
+          <h2 className={H2}>줄거리</h2>
+          <p className="mt-2.5 whitespace-pre-line text-[15px] leading-[1.65] text-cream/85">
+            {t.teaser}
+          </p>
         </section>
       )}
 
-      {conditions.length > 0 && (
-        <section className="space-y-2">
-          <h2 className="text-lg font-extrabold">🎯 이런 조건이라면 비슷한 방도</h2>
-          <ul className="flex flex-wrap gap-1.5">
-            {conditions.map((c) => (
-              <li key={c.slug}>
-                <Link
-                  href={`/best/${c.slug}`}
-                  className="rough-sm inline-block rounded-full border border-edge/20 bg-panel px-3 py-1.5 text-sm font-bold text-cream/70 transition hover:border-candy hover:text-candy"
-                >
-                  {c.emoji} {c.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      <section className="rough rounded-2xl border-2 border-dashed border-edge/30 bg-panel/60 p-5 text-center">
-        <p className="text-sm font-bold">이 테마, 내 취향에 맞을까?</p>
-        <p className="mt-1 text-sm text-cream/60">
-          질문 몇 개로 방탈출 유형을 진단하고 딱 맞는 방을 추천받아요.
+      <section className="mt-8">
+        <h2 className={H2}>이용 정보</h2>
+        <dl className="mt-2.5 space-y-1 text-[15px] leading-[1.65] text-cream/85">
+          <div>
+            <dt className="inline text-cream/60">매장 </dt>
+            <dd className="inline">{t.cafe}</dd>
+          </div>
+          {t.price ? (
+            <div>
+              <dt className="inline text-cream/60">가격 </dt>
+              <dd className="inline">{t.price.toLocaleString("ko-KR")}원</dd>
+            </div>
+          ) : null}
+          {t.booking_open ? (
+            <div>
+              <dt className="inline text-cream/60">예약 오픈 </dt>
+              <dd className="inline">{t.booking_open}</dd>
+            </div>
+          ) : null}
+        </dl>
+        <p className="mt-2 text-[13px] text-cream/60">
+          가기 전에 예약 페이지에서 한 번 더 확인해 주세요. 매장 사정에 따라 바뀔 수 있어요.
         </p>
-        <Link
-          href="/quiz"
-          className="rough mt-3 inline-block rounded-xl border-2 border-edge bg-candy px-5 py-2.5 text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.97]"
-        >
-          🔮 취향 찾기
-        </Link>
       </section>
 
-      <OwnerCTA cafe={t.cafe} />
+      <div className="mt-8">
+        <ThemeReviews themeId={t.id} themeName={t.name} cafe={t.cafe} />
+      </div>
+
+      {siblings.length > 0 && (
+        <section className="mt-8">
+          <div className="flex items-baseline justify-between">
+            <h2 className={H2}>같은 매장의 다른 테마</h2>
+            {brandHref && (
+              <Link href={brandHref} className="text-[13px] text-cream/60 hover:text-cream">
+                {brand} 전체
+              </Link>
+            )}
+          </div>
+          <div className="mt-3">
+            <ThemeScroller themes={siblings} sub="meta" />
+          </div>
+        </section>
+      )}
+
+      {(similar.length > 0 || conditions.length > 0) && (
+        <section className="mt-8">
+          <h2 className={H2}>비슷한 방</h2>
+          {similar.length > 0 && (
+            <div className="mt-3">
+              <ThemeScroller themes={similar} sub="cafe" />
+            </div>
+          )}
+          {conditions.length > 0 && (
+            <ul className="mt-4 flex flex-wrap gap-1.5">
+              {conditions.map((c) => (
+                <li key={c.slug}>
+                  <Link href={`/best/${c.slug}`} className={CHIP}>
+                    {c.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      )}
+
+      <div className="mt-10">
+        <OwnerCTA cafe={t.cafe} />
+      </div>
     </article>
   );
 }

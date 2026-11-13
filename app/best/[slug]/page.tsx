@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ThemeList from "@/components/ThemeList";
+import QuizRow from "@/components/QuizRow";
+import { CHIP, CRUMB } from "@/lib/ui";
 import {
   conditionBySlug,
   listedConditions,
@@ -133,24 +135,24 @@ export default async function BestConditionPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <nav className="flex flex-wrap items-center gap-1 text-xs font-bold text-cream/50">
-        <Link href="/" className="hover:text-candy">
+      <nav aria-label="경로" className={CRUMB}>
+        <Link href="/" className="hover:text-cream">
           방탈로그
         </Link>
-        <span aria-hidden>›</span>
-        <Link href="/best" className="hover:text-candy">
+        <span aria-hidden>·</span>
+        <Link href="/best" className="hover:text-cream">
           조건별 추천
         </Link>
-        <span aria-hidden>›</span>
-        <span className="text-cream/70">{condition.label}</span>
+        <span aria-hidden>·</span>
+        <span className="text-cream/80">{condition.label}</span>
       </nav>
 
       <header className="space-y-2">
-        <h1 className="text-xl font-extrabold sm:text-2xl">
-          {condition.emoji} {condition.title} · 테마 {themes.length}개
+        <h1 className="text-[22px] font-extrabold leading-tight">
+          {condition.title} · 테마 {themes.length}개
         </h1>
-        <p className="text-sm leading-relaxed text-cream/70">{condition.intro}</p>
-        <p className="text-xs font-bold text-cream/50">
+        <p className="text-[15px] leading-[1.65] text-cream/80">{condition.intro}</p>
+        <p className="text-[13px] text-cream/60">
           고른 기준: {condition.criteria}
         </p>
       </header>
@@ -162,9 +164,9 @@ export default async function BestConditionPage({ params }: Props) {
               <li key={region}>
                 <a
                   href={`#${anchorOf(region)}`}
-                  className="rough-sm inline-block rounded-full border border-edge/20 bg-panel px-3 py-1.5 text-sm font-bold text-cream/70 transition hover:border-candy hover:text-candy"
+                  className={CHIP}
                 >
-                  {region} <span className="text-cream/45">{list.length}</span>
+                  {region} <span className="text-cream/60">{list.length}</span>
                 </a>
               </li>
             ))}
@@ -182,32 +184,21 @@ export default async function BestConditionPage({ params }: Props) {
                 {region} {condition.label} 방탈출
               </>
             )}{" "}
-            <span className="text-sm font-bold text-cream/50">{list.length}개</span>
+            <span className="text-sm font-normal text-cream/60">{list.length}개</span>
           </h2>
           <ThemeList themes={list} />
         </section>
       ))}
 
-      <section className="rough rounded-2xl border-2 border-dashed border-edge/30 bg-panel/60 p-5 text-center">
-        <p className="text-sm font-bold">이 중에서 뭘 골라야 할지 모르겠다면?</p>
-        <p className="mt-1 text-sm text-cream/60">{condition.quizCta}</p>
-        <div className="mt-3 flex flex-wrap justify-center gap-2">
-          <Link
-            href="/quiz"
-            className="rough inline-block rounded-xl border-2 border-edge bg-candy px-5 py-2.5 text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.97]"
-          >
-            🔮 취향 찾기 (무료)
+      <section className="space-y-3">
+        <QuizRow title="이 중에서 뭘 골라야 할지 모르겠다면?" sub={condition.quizCta} />
+        <p className="text-[13px] text-cream/60">
+          친구와 같이 간다면{" "}
+          <Link href="/match" className="font-bold text-cream underline underline-offset-2">
+            친구 궁합
           </Link>
-          <Link
-            href="/match"
-            className="rough inline-block rounded-xl border-2 border-edge bg-panel px-5 py-2.5 text-sm font-extrabold transition active:scale-[0.97] hover:border-candy"
-          >
-            💞 친구 궁합
-          </Link>
-        </div>
-        <p className="mt-3 text-xs text-cream/60">
-          이미 다녀왔다면?{" "}
-          <Link href="/diary" className="font-bold text-candy underline">
+          , 이미 다녀왔다면{" "}
+          <Link href="/diary" className="font-bold text-cream underline underline-offset-2">
             방탈출 기록장에 남기기
           </Link>
         </p>
@@ -215,13 +206,10 @@ export default async function BestConditionPage({ params }: Props) {
 
       <section className="space-y-3">
         <h2 className="text-lg font-extrabold">자주 묻는 질문</h2>
-        <dl className="space-y-3">
+        <dl className="divide-y divide-line border-y border-line">
           {condition.faq.map((f) => (
-            <div
-              key={f.q}
-              className="rounded-2xl border-2 border-edge/30 bg-panel p-4"
-            >
-              <dt className="text-sm font-extrabold">Q. {f.q}</dt>
+            <div key={f.q} className="py-3.5">
+              <dt className="text-[15px] font-extrabold">{f.q}</dt>
               <dd className="mt-1 text-sm leading-relaxed text-cream/70">{f.a}</dd>
             </div>
           ))}
@@ -229,16 +217,16 @@ export default async function BestConditionPage({ params }: Props) {
       </section>
 
       {others.length > 0 && (
-        <nav className="space-y-3 border-t-2 border-edge/15 pt-6">
+        <nav className="space-y-3 border-t border-line pt-6">
           <h2 className="text-lg font-extrabold">다른 조건으로 찾기</h2>
           <ul className="flex flex-wrap gap-1.5">
             {others.map(({ condition: c, count }) => (
               <li key={c.slug}>
                 <Link
                   href={`/best/${c.slug}`}
-                  className="rough-sm inline-block rounded-full border border-edge/20 bg-panel px-3 py-1.5 text-sm font-bold text-cream/70 transition hover:border-candy hover:text-candy"
+                  className={CHIP}
                 >
-                  {c.emoji} {c.label} <span className="text-cream/45">{count}</span>
+                  {c.label} <span className="text-cream/60">{count}</span>
                 </Link>
               </li>
             ))}

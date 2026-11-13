@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ThemeList from "@/components/ThemeList";
+import QuizRow from "@/components/QuizRow";
+import { CHIP, CRUMB } from "@/lib/ui";
 import { brandOf } from "@/lib/cafe";
 import { listedConditions } from "@/lib/best";
 import {
@@ -117,23 +119,23 @@ export default async function RegionThemesPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <nav className="flex flex-wrap items-center gap-1 text-xs font-bold text-cream/50">
-        <Link href="/" className="hover:text-candy">
+      <nav aria-label="경로" className={CRUMB}>
+        <Link href="/" className="hover:text-cream">
           방탈로그
         </Link>
-        <span aria-hidden>›</span>
-        <Link href="/region" className="hover:text-candy">
+        <span aria-hidden>·</span>
+        <Link href="/region" className="hover:text-cream">
           지역별 방탈출
         </Link>
-        <span aria-hidden>›</span>
-        <span className="text-cream/70">{region}</span>
+        <span aria-hidden>·</span>
+        <span className="text-cream/80">{region}</span>
       </nav>
 
       <header className="space-y-1">
-        <h1 className="text-xl font-extrabold sm:text-2xl">
-          📍 {region} 방탈출 테마 {themes.length}개
+        <h1 className="text-[22px] font-extrabold leading-tight">
+          {region} 방탈출 테마 {themes.length}개
         </h1>
-        <p className="text-sm text-cream/70">
+        <p className="text-sm text-cream/60">
           {region}에서 즐길 수 있는 방탈출 테마를 브랜드별로 모았어요. 테마를
           누르면 줄거리와 예약 정보를 볼 수 있어요.
         </p>
@@ -143,13 +145,13 @@ export default async function RegionThemesPage({ params }: Props) {
         <section key={brand} className="space-y-3">
           <h2 className="text-lg font-extrabold">
             {brandPages.has(brand) ? (
-              <Link href={`/cafe/${brand}`} className="hover:text-candy">
+              <Link href={`/cafe/${brand}`} className="hover:underline">
                 {brand}
               </Link>
             ) : (
               brand
             )}{" "}
-            <span className="text-sm font-bold text-cream/50">
+            <span className="text-sm font-normal text-cream/60">
               {list.length}개
             </span>
           </h2>
@@ -158,16 +160,16 @@ export default async function RegionThemesPage({ params }: Props) {
       ))}
 
       {conditions.length > 0 && (
-        <nav className="space-y-3 border-t-2 border-edge/15 pt-6">
+        <nav className="space-y-3 border-t border-line pt-6">
           <h2 className="text-lg font-extrabold">조건별로 찾기</h2>
           <ul className="flex flex-wrap gap-1.5">
             {conditions.map(({ condition: c }) => (
               <li key={c.slug}>
                 <Link
                   href={`/best/${c.slug}#${region}`}
-                  className="rough-sm inline-block rounded-full border border-edge/20 bg-panel px-3 py-1.5 text-sm font-bold text-cream/70 transition hover:border-candy hover:text-candy"
+                  className={CHIP}
                 >
-                  {c.emoji} {region} {c.label}
+                  {region} {c.label}
                 </Link>
               </li>
             ))}
@@ -175,7 +177,7 @@ export default async function RegionThemesPage({ params }: Props) {
         </nav>
       )}
 
-      <nav className="space-y-3 border-t-2 border-edge/15 pt-6">
+      <nav className="space-y-3 border-t border-line pt-6">
         <h2 className="text-lg font-extrabold">다른 지역 방탈출</h2>
         <ul className="flex flex-wrap gap-1.5">
           {regions
@@ -184,27 +186,16 @@ export default async function RegionThemesPage({ params }: Props) {
               <li key={r.key}>
                 <Link
                   href={`/region/${r.key}`}
-                  className="rough-sm inline-block rounded-full border border-edge/20 bg-panel px-3 py-1.5 text-sm font-bold text-cream/70 transition hover:border-candy hover:text-candy"
+                  className={CHIP}
                 >
-                  {r.key} <span className="text-cream/45">{r.count}</span>
+                  {r.key} <span className="text-cream/60">{r.count}</span>
                 </Link>
               </li>
             ))}
         </ul>
       </nav>
 
-      <section className="rough rounded-2xl border-2 border-dashed border-edge/30 bg-panel/60 p-5 text-center">
-        <p className="text-sm font-bold">어떤 테마가 내 취향일까?</p>
-        <p className="mt-1 text-sm text-cream/60">
-          질문 몇 개로 방탈출 취향을 진단하고 딱 맞는 방을 추천받아요.
-        </p>
-        <Link
-          href="/quiz"
-          className="rough mt-3 inline-block rounded-xl border-2 border-edge bg-candy px-5 py-2.5 text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.97]"
-        >
-          🔮 취향 찾기
-        </Link>
-      </section>
+      <QuizRow title="어떤 테마가 내 취향일까?" sub="질문 몇 개로 방탈출 취향을 진단하고 맞는 방을 추천받아요" />
     </article>
   );
 }
