@@ -87,7 +87,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#FFFFFF"
+  themeColor: "#F5F0E6"
 };
 
 // 검색엔진 리치 결과용 구조화 데이터 (JSON-LD)
