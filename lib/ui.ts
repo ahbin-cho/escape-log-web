@@ -3,12 +3,12 @@
 export const CHIP =
   "inline-block rounded-full bg-ink px-3 py-1.5 text-[13px] font-bold text-cream/75 transition hover:bg-line active:scale-[0.97]";
 export const CHIP_ON =
-  "inline-block rounded-full border-[2px] border-[#1D1D1D] bg-candy px-3 py-1 text-[13px] font-extrabold text-[#1D1D1D] transition active:scale-[0.97]";
+  "rough inline-block rounded-full border-[2px] border-[#1D1D1D] bg-candy px-3 py-1 text-[13px] font-extrabold text-[#1D1D1D] transition active:scale-[0.97]";
 // 주 버튼(먹색) · 보조 버튼(선)
 export const BTN_PRIMARY =
-  "rounded-xl border-[2px] border-[#1D1D1D] bg-candy px-5 py-3 text-center text-[15px] font-extrabold text-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none";
+  "rough rounded-xl border-[2px] border-[#1D1D1D] bg-candy px-5 py-3 text-center text-[15px] font-extrabold text-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none";
 export const BTN_LINE =
-  "rounded-xl border-[2px] border-[#1D1D1D] bg-white px-5 py-3 text-center text-[15px] font-extrabold transition hover:bg-ink active:scale-[0.98]";
+  "rough rounded-xl border-[2px] border-[#1D1D1D] bg-white px-5 py-3 text-center text-[15px] font-extrabold transition hover:bg-ink active:scale-[0.98]";
 // 빵부스러기 한 줄
 export const CRUMB = "flex flex-wrap items-center gap-1 text-[13px] text-cream/60";
 // 구역 제목

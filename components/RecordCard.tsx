@@ -84,7 +84,7 @@ export default function RecordCard({ record, number }: { record: EscapeRecord; n
           <div className="flex gap-2">
             <Link
               href={guest ? "/login?mode=signup&guest=1&next=/records" : `/edit/${record.id}`}
-              className="rounded-lg bg-candy px-3.5 py-2 text-[13px] font-extrabold text-[#1D1D1D] border-[2px] border-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D]"
+              className="rough rounded-lg bg-candy px-3.5 py-2 text-[13px] font-extrabold text-[#1D1D1D] border-[2px] border-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D]"
             >
               {guest ? "가입하고 수정하기" : "수정"}
             </Link>

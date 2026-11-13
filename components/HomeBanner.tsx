@@ -142,7 +142,7 @@ export default function HomeBanner() {
                 {b.body}
               </p>
             </div>
-            <span className="relative mt-auto inline-flex w-fit items-center gap-1 rounded-full bg-candy px-4 py-2 text-sm font-extrabold text-[#1D1D1D] transition-transform group-active:scale-[0.97] border-[2px] border-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D]">
+            <span className="rough relative mt-auto inline-flex w-fit items-center gap-1 rounded-full bg-candy px-4 py-2 text-sm font-extrabold text-[#1D1D1D] transition-transform group-active:scale-[0.97] border-[2px] border-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D]">
               {b.cta}
               <Icon d="M5 12h14M13 6l6 6-6 6" />
             </span>

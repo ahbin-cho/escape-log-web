@@ -148,7 +148,7 @@ export default function RecordsPage() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/mascot.png" alt="" className="h-24 w-24 object-contain" />
           <p className="mt-4 text-[15px] text-cream/70">다녀온 방을 하나 적으면 여기에 포스터가 쌓여요.</p>
-          <Link href="/new" className="mt-5 rounded-xl bg-candy px-6 py-3.5 text-[15px] font-extrabold text-[#1D1D1D] border-[2px] border-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D]">
+          <Link href="/new" className="rough mt-5 rounded-xl bg-candy px-6 py-3.5 text-[15px] font-extrabold text-[#1D1D1D] border-[2px] border-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D]">
             첫 기록 남기기
           </Link>
         </div>
@@ -200,7 +200,7 @@ export default function RecordsPage() {
           </p>
           <Link
             href="/login?mode=signup&guest=1&next=/records"
-            className="shrink-0 rounded-lg bg-candy px-3 py-2 text-[13px] font-extrabold text-[#1D1D1D] transition-opacity duration-200 active:opacity-80 border-[2px] border-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D]"
+            className="rough shrink-0 rounded-lg bg-candy px-3 py-2 text-[13px] font-extrabold text-[#1D1D1D] transition-opacity duration-200 active:opacity-80 border-[2px] border-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D]"
           >
             가입하기
           </Link>
@@ -367,7 +367,7 @@ function Chip({ on, onClick, children }: { on: boolean; onClick: () => void; chi
     <button
       onClick={onClick}
       aria-pressed={on}
-      className={`shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-[13px] transition-colors duration-200 ${
+      className={`rough shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-[13px] transition-colors duration-200 ${
         on ? "bg-candy font-extrabold text-[#1D1D1D]" : "bg-ink text-cream/70 hover:text-cream"
       } border-[2px] border-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D]`}
     >

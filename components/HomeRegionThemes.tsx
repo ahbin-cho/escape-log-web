@@ -79,7 +79,7 @@ export default function HomeRegionThemes() {
             key={r}
             onClick={() => setRegion(r)}
             aria-pressed={region === r}
-            className={`shrink-0 rounded-lg px-3 py-2 text-[13px] font-bold transition active:scale-[0.97] ${
+            className={`rough shrink-0 rounded-lg px-3 py-2 text-[13px] font-bold transition active:scale-[0.97] ${
               region === r ? "bg-candy text-[#1D1D1D]" : "bg-ink text-cream"
             } border-[2px] border-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D]`}
           >
