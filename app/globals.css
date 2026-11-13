@@ -137,3 +137,13 @@ input[type="range"].candy-range::-moz-range-thumb {
 .shelf-card { animation: shelf-rise 220ms cubic-bezier(0.22, 1, 0.36, 1) both; }
 @media (prefers-reduced-motion: reduce) { .shelf-backdrop, .shelf-card { animation: none; } }
 
+
+/* /immersive 무대 */
+.stage-curtain{background:repeating-linear-gradient(90deg,#A8322C 0 14px,#8C2622 14px 22px,#B93C34 22px 34px,#7A1F1C 34px 38px)}
+.stage-valance{background:repeating-linear-gradient(90deg,#8C2622 0 24px,#A8322C 24px 48px)}
+.stage-valance::after{content:"";position:absolute;left:0;right:0;bottom:-12px;height:12px;background:radial-gradient(circle at 12px 0,#F2C879 7px,#1D1D1D 8px 9.5px,transparent 10px);background-size:24px 12px}
+.stage-spot{background:linear-gradient(180deg,rgba(255,226,170,.28),rgba(255,226,170,.04) 85%);clip-path:polygon(40% 0,60% 0,100% 100%,0 100%);animation:stage-sway 4s ease-in-out infinite alternate}
+@keyframes stage-sway{from{transform:translateX(-52%) rotate(-1.5deg)}to{transform:translateX(-48%) rotate(1.5deg)}}
+.stage-bob{animation:stage-bob 2.4s ease-in-out infinite}
+@keyframes stage-bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
+@media (prefers-reduced-motion:reduce){.stage-spot,.stage-bob{animation:none}}

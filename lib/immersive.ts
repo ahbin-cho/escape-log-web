@@ -30,6 +30,6 @@ export function splitImmersive<T extends { tags: string[] | null }>(rows: T[]): 
 export function priceLabel(price: string | number | null | undefined): string | null {
   if (price === null || price === undefined) return null;
   const s = String(price).trim();
-  if (!s) return null;
+  if (!s || /^0+$/.test(s)) return null; // 0 = 모름(화면에 안 보임)
   return /^\d+$/.test(s) ? `${Number(s).toLocaleString("ko-KR")}원` : s;
 }

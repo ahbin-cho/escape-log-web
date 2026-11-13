@@ -25,5 +25,6 @@ describe("immersive", () => {
     expect(priceLabel("1인 25,000원")).toBe("1인 25,000원");
     expect(priceLabel(" ")).toBeNull();
     expect(priceLabel(null)).toBeNull();
+    expect(priceLabel(0)).toBeNull();
   });
 });

@@ -91,57 +91,57 @@ export default async function ImmersivePage() {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(j) }} />
       ))}
 
-      <header className="space-y-3">
-        <nav aria-label="현재 위치" className={CRUMB}>
-          <Link href="/" className="hover:underline">
-            홈
-          </Link>
-          <span aria-hidden>›</span>
-          <span>배우가 나오는 방</span>
-        </nav>
-        <h1 className="text-[28px] leading-tight sm:text-4xl [word-break:keep-all]">
-          🎭 자물쇠 대신
-          <br />
-          <span className="text-candy">배우가 있는 방</span>
-        </h1>
-        <p className="max-w-2xl text-[15px] leading-[1.65] text-cream/80 [word-break:keep-all]">
-          여기서는 관객석이 없어요. 배우가 처음부터 끝까지 같이 연기하고, 나는 그 이야기 속 등장인물이 돼요.
-          배우가 잠깐 나오는 곳은 빼고, 공식 안내로 확인된 곳만 모았어요.
-        </p>
+      <nav aria-label="현재 위치" className={CRUMB}>
+        <Link href="/" className="hover:underline">
+          홈
+        </Link>
+        <span aria-hidden>›</span>
+        <span>배우가 나오는 방</span>
+      </nav>
+
+      {/* 무대: 막 · 조명 · 탈출귀 */}
+      <header className="relative -mt-6 overflow-hidden rounded-[28px] border-2 border-edge bg-[#1B1420] px-5 pb-6 pt-12 text-[#F5F0E6] shadow-cute sm:px-10 sm:pt-14">
+        <span aria-hidden className="stage-curtain absolute inset-y-0 left-0 w-[15%] rounded-br-[40px] border-r-2 border-edge" />
+        <span aria-hidden className="stage-curtain absolute inset-y-0 right-0 w-[15%] rounded-bl-[40px] border-l-2 border-edge" />
+        <span aria-hidden className="stage-valance absolute inset-x-0 top-0 h-7 border-b-2 border-edge" />
+        <span aria-hidden className="stage-spot pointer-events-none absolute left-1/2 top-0 h-full w-[70%] -translate-x-1/2" />
+        <div className="relative mx-auto max-w-md text-center">
+          <p className="text-[11px] font-extrabold tracking-[0.25em] text-[#F2C879]">NOW PLAYING · IMMERSIVE</p>
+          <h1 className="mt-3 text-[30px] leading-[1.2] sm:text-[40px] [word-break:keep-all]">
+            자물쇠 대신
+            <br />
+            <span className="text-candy">배우가 있는 방</span>
+          </h1>
+          <p className="mx-auto mt-3 max-w-[22rem] text-[14px] leading-[1.65] text-[#F5F0E6]/80 [word-break:keep-all]">
+            관객석은 없어요. 배우가 처음부터 끝까지 같이 연기하고, 나는 그 이야기 속 등장인물이 돼요.
+          </p>
+          <div className="relative mx-auto mt-5 h-32 w-32">
+            <span aria-hidden className="absolute inset-x-0 bottom-0 mx-auto h-5 w-28 rounded-[50%] bg-[#F2C879]/40 blur-[2px]" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/mascot.png" alt="" className="stage-bob relative mx-auto w-24" />
+          </div>
+          <p className="mt-1 text-[12px] text-[#F5F0E6]/60">공식 안내로 확인된 곳만 · 배우가 잠깐 나오는 곳은 뺐어요</p>
+        </div>
+
+        {/* 표 두 장: 연극형 / 방탈출형 */}
+        <div className="relative mt-6 grid grid-cols-2 gap-2.5">
+          <a href="#theatre" className="ticket-mini rough rounded-xl border-2 border-edge bg-[#F5F0E6] px-3 py-3 text-[#1D1D1D] transition active:scale-[0.97]">
+            <span className="block text-[11px] font-extrabold tracking-[0.15em] text-[#A85A14]">ADMIT ONE</span>
+            <span className="mt-0.5 block text-[17px] font-extrabold">🎬 연극형</span>
+            <span className="mt-0.5 block text-[12px] leading-snug text-[#1D1D1D]/70 [word-break:keep-all]">퍼즐 없이 이야기 속으로</span>
+            <span className="mt-1.5 block text-xs font-extrabold text-[#A85A14]">{theatre.length}곳 →</span>
+          </a>
+          <a href="#escape" className="ticket-mini rough rounded-xl border-2 border-edge bg-[#F5F0E6] px-3 py-3 text-[#1D1D1D] transition active:scale-[0.97]">
+            <span className="block text-[11px] font-extrabold tracking-[0.15em] text-[#A85A14]">ADMIT ONE</span>
+            <span className="mt-0.5 block text-[17px] font-extrabold">🗝️ 방탈출형</span>
+            <span className="mt-0.5 block text-[12px] leading-snug text-[#1D1D1D]/70 [word-break:keep-all]">배우와 함께 퍼즐까지</span>
+            <span className="mt-1.5 block text-xs font-extrabold text-[#A85A14]">{escape.length}곳 →</span>
+          </a>
+        </div>
       </header>
 
-      {/* 두 갈래 설명 */}
-      <section aria-label="두 가지 종류" className="grid grid-cols-2 gap-2.5">
-        <a
-          href="#theatre"
-          className="rough rounded-2xl border-2 border-edge bg-panel p-4 shadow-cute transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
-        >
-          <span className="text-2xl" aria-hidden>
-            🎬
-          </span>
-          <span className="mt-1 block font-extrabold">연극형</span>
-          <span className="mt-1 block text-[13px] leading-snug text-cream/70 [word-break:keep-all]">
-            퍼즐 없이 이야기를 따라가요. 처음이어도 OK
-          </span>
-          <span className="mt-2 block text-xs font-extrabold text-candy">{theatre.length}곳 →</span>
-        </a>
-        <a
-          href="#escape"
-          className="rough rounded-2xl border-2 border-edge bg-panel p-4 shadow-cute transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
-        >
-          <span className="text-2xl" aria-hidden>
-            🗝️
-          </span>
-          <span className="mt-1 block font-extrabold">방탈출형</span>
-          <span className="mt-1 block text-[13px] leading-snug text-cream/70 [word-break:keep-all]">
-            배우와 함께 퍼즐도 풀어요. 몰입 + 머리 쓰기
-          </span>
-          <span className="mt-2 block text-xs font-extrabold text-candy">{escape.length}곳 →</span>
-        </a>
-      </section>
-
-      <Group id="theatre" title="🎬 연극형 · 퍼즐 없이 이야기 속으로" rows={theatre} />
-      <Group id="escape" title="🗝️ 방탈출형 · 배우와 함께 푸는 방" rows={escape} />
+      <Group id="theatre" act="ACT 1" title="연극형 · 퍼즐 없이 이야기 속으로" rows={theatre} />
+      <Group id="escape" act="ACT 2" title="방탈출형 · 배우와 함께 푸는 방" rows={escape} />
 
       <Tips />
 
@@ -168,37 +168,49 @@ export default async function ImmersivePage() {
   );
 }
 
-function Group({ id, title, rows }: { id: string; title: string; rows: Row[] }) {
+function Group({ id, act, title, rows }: { id: string; act: string; title: string; rows: Row[] }) {
   return (
     <section id={id} aria-labelledby={`${id}-h`} className="scroll-mt-20 space-y-3">
-      <h2 id={`${id}-h`} className="text-xl">
-        {title}
-      </h2>
+      <div>
+        <p className="text-[11px] font-extrabold tracking-[0.25em] text-[#A85A14]">{act}</p>
+        <h2 id={`${id}-h`} className="text-xl">
+          {title}
+        </h2>
+      </div>
       {rows.length === 0 ? (
         <p className="rounded-2xl border-2 border-dashed border-edge/30 px-4 py-6 text-center text-sm text-cream/60">
-          공식 안내를 확인하는 중이에요. 곧 채워져요.
+          공식 안내를 확인하는 중이에요. 곧 막이 올라요.
         </p>
       ) : (
-        <ul className="space-y-3">
-          {rows.map((t) => {
+        <ul className="space-y-4">
+          {rows.map((t, i) => {
             const region = regionFromText(t.cafe);
             const price = priceLabel(t.price);
             return (
-              <li key={t.id} className="rough rounded-2xl border-2 border-edge bg-panel p-3 shadow-cute">
-                <div className="flex gap-3.5">
-                  <Link href={`/theme/${t.id}?from=immersive`} className="block w-[88px] shrink-0 sm:w-28">
+              <li key={t.id} className="ticket relative rounded-2xl border-2 border-edge bg-panel shadow-cute">
+                <div className="flex">
+                  {/* 표 꼭지: 포스터 */}
+                  <Link href={`/theme/${t.id}?from=immersive`} className="block w-[96px] shrink-0 p-3 pr-2.5 sm:w-32">
                     <Poster src={posterSrc(t.poster_url)} name={t.name} genre={t.genre} />
+                    <span className="mt-2 block text-center text-[10px] font-extrabold tracking-[0.15em] text-cream/50">
+                      No.{String(i + 1).padStart(2, "0")}
+                    </span>
                   </Link>
-                  <div className="min-w-0 flex-1">
+                  {/* 절취선 */}
+                  <span aria-hidden className="relative w-0 border-l-2 border-dashed border-edge/40">
+                    <span className="absolute -left-[11px] -top-[11px] h-5 w-5 rounded-full border-2 border-edge bg-paper [clip-path:inset(50%_0_0_0)]" />
+                    <span className="absolute -bottom-[11px] -left-[11px] h-5 w-5 rounded-full border-2 border-edge bg-paper [clip-path:inset(0_0_50%_0)]" />
+                  </span>
+                  <div className="min-w-0 flex-1 p-3.5 pl-4">
                     <p className="text-xs font-extrabold text-cream/60">
                       {region ? `${region} · ` : ""}
                       {t.cafe}
                     </p>
-                    <Link href={`/theme/${t.id}?from=immersive`} className="mt-0.5 block text-[17px] font-extrabold hover:underline">
+                    <Link href={`/theme/${t.id}?from=immersive`} className="mt-0.5 block text-[18px] font-extrabold leading-snug hover:underline [word-break:keep-all]">
                       {t.name}
                     </Link>
-                    <p className="mt-1.5 flex flex-wrap gap-1.5 text-xs font-bold">
-                      <span className="rounded-full bg-candy/25 px-2 py-0.5">배우가 끝까지 함께</span>
+                    <p className="mt-2 flex flex-wrap gap-1.5 text-xs font-bold">
+                      <span className="rounded-full border-2 border-edge bg-candy px-2 py-0.5 text-edge">🎭 배우가 끝까지 함께</span>
                       {t.time_limit ? <span className="rounded-full bg-ink px-2 py-0.5">{t.time_limit}분</span> : null}
                       {t.players ? <span className="rounded-full bg-ink px-2 py-0.5">{t.players}명</span> : null}
                       {price ? <span className="rounded-full bg-ink px-2 py-0.5">{price}</span> : null}
@@ -208,20 +220,20 @@ function Group({ id, title, rows }: { id: string; title: string; rows: Row[] }) 
                     )}
                   </div>
                 </div>
-                {t.booking_open?.trim() ? (
-                  <div className="mt-3">
-                    <BookingOpen rule={t.booking_open} />
+                {(t.booking_open?.trim() || t.reservation_url) && (
+                  <div className="space-y-2.5 border-t-2 border-dashed border-edge/30 p-3">
+                    {t.booking_open?.trim() ? <BookingOpen rule={t.booking_open} /> : null}
+                    {t.reservation_url && (
+                      <a
+                        href={t.reservation_url}
+                        target="_blank"
+                        rel="noopener noreferrer nofollow"
+                        className="rough block rounded-xl border-2 border-edge bg-[#1B1420] py-2.5 text-center text-sm font-extrabold text-[#F5F0E6] transition hover:bg-candy hover:text-edge"
+                      >
+                        🎟️ 공식 예약 페이지에서 표 구하기 →
+                      </a>
+                    )}
                   </div>
-                ) : null}
-                {t.reservation_url && (
-                  <a
-                    href={t.reservation_url}
-                    target="_blank"
-                    rel="noopener noreferrer nofollow"
-                    className="mt-3 block rounded-xl border-2 border-edge/40 py-2 text-center text-sm font-extrabold transition hover:border-edge hover:bg-candy"
-                  >
-                    공식 예약 페이지 →
-                  </a>
                 )}
               </li>
             );
@@ -244,21 +256,22 @@ const TIPS: { e: string; t: string; d: string }[] = [
 
 function Tips() {
   return (
-    <section aria-labelledby="tips-h" className="space-y-3">
-      <h2 id="tips-h" className="text-xl">
+    <section aria-labelledby="tips-h" className="rounded-[24px] border-[5px] border-double border-edge bg-panel p-5 sm:p-7">
+      <p className="text-center text-[11px] font-extrabold tracking-[0.25em] text-[#A85A14]">PROGRAM · 관람 안내서</p>
+      <h2 id="tips-h" className="mt-1 text-center text-xl">
         🎟️ 티켓팅, 이렇게 하면 덜 놓쳐요
       </h2>
-      <ol className="grid gap-2.5 sm:grid-cols-2">
+      <ol className="mt-4 divide-y-2 divide-dashed divide-edge/20">
         {TIPS.map((x, i) => (
-          <li key={x.t} className="rough flex gap-3 rounded-2xl border-2 border-edge bg-panel p-3.5">
-            <span className="text-2xl leading-none" aria-hidden>
-              {x.e}
+          <li key={x.t} className="flex gap-3 py-3">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-edge bg-candy text-sm font-extrabold text-edge">
+              {i + 1}
             </span>
             <span className="min-w-0">
               <span className="block font-extrabold">
-                {i + 1}. {x.t}
+                {x.e} {x.t}
               </span>
-              <span className="mt-1 block text-[13px] leading-relaxed text-cream/75 [word-break:keep-all]">{x.d}</span>
+              <span className="mt-0.5 block text-[13px] leading-relaxed text-cream/75 [word-break:keep-all]">{x.d}</span>
             </span>
           </li>
         ))}
