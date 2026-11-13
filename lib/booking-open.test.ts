@@ -50,6 +50,13 @@ describe("openStatus", () => {
     expect(md(s.lastBookable!)).toBe("11/22(일)");
     expect(s.next!.when).toBe("11/16(월) 오전 10시");
   });
+  it("몇 달 앞까지 열려 있음", () => {
+    expect(parseOpenRule("몇 달 앞까지 열려 있음")).toEqual({ kind: "wide" });
+    const s = openStatus("몇 달 앞까지 열려 있음", FRI_3PM)!;
+    expect(s.wide).toBe(true);
+    expect(s.lastBookable).toBeNull();
+    expect(shortRule("몇 달 앞까지 열려 있음")).toBe("예약 넉넉");
+  });
   it("규칙이 없으면 null", () => {
     expect(openStatus("", FRI_3PM)).toBeNull();
   });

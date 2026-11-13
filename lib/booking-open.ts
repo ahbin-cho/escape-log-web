@@ -9,6 +9,7 @@
 export type OpenRule =
   | { kind: "daily"; days: number; minutes: number | null; approx: boolean } // minutes: 하루 중 열리는 시각(0=자정), null=모름
   | { kind: "weekly"; weekday: number; minutes: number; span: number } // 매주 weekday(0=일) 그 시각에 다음 주 span 일치
+  | { kind: "wide" } // 몇 달 앞까지 이미 열려 있음(예: 셜록홈즈) — "N일 전" 규칙이 없다
   | { kind: "unknown" };
 
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
@@ -30,6 +31,7 @@ function parseTime(text: string): number | null {
 export function parseOpenRule(raw: string | null | undefined): OpenRule {
   const text = (raw ?? "").trim();
   if (!text) return { kind: "unknown" };
+  if (/몇\s*달|넉넉|개월\s*앞|상시/.test(text)) return { kind: "wide" };
 
   const weekly = text.match(/매주\s*([일월화수목금토])요일/);
   if (weekly) {
@@ -83,6 +85,7 @@ function clock(minutes: number): string {
 }
 
 export type OpenStatus = {
+  wide?: boolean; // 몇 달 앞까지 열려 있음
   rule: string; // 사람이 읽는 규칙 한 줄
   lastBookable: Ymd | null; // 지금 예약할 수 있는 가장 먼 날짜
   next: { date: Ymd; when: string } | null; // 다음에 열리는 날짜와 그 시각("오늘 밤 12시")
@@ -92,6 +95,7 @@ export type OpenStatus = {
 export function openStatus(raw: string | null | undefined, now: Date): OpenStatus | null {
   const rule = parseOpenRule(raw);
   if (rule.kind === "unknown") return null;
+  if (rule.kind === "wide") return { wide: true, rule: "몇 달 앞까지 예약이 열려 있어요", lastBookable: null, next: null, approx: false };
   const k = kstParts(now);
   const today: Ymd = { y: k.y, m: k.m, d: k.d };
 
@@ -134,5 +138,6 @@ export function shortRule(raw: string | null | undefined): string {
   const r = parseOpenRule(raw);
   if (r.kind === "daily") return r.approx && r.days % 7 === 0 ? `약 ${r.days / 7}주 전 오픈` : `${r.approx ? "약 " : ""}${r.days}일 전 오픈`;
   if (r.kind === "weekly") return `매주 ${WEEKDAYS[r.weekday]} 오픈`;
+  if (r.kind === "wide") return "예약 넉넉";
   return "";
 }
