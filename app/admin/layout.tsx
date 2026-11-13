@@ -36,6 +36,9 @@ export default async function AdminLayout({
         <Link href="/admin/catalog" className={tab}>
           추천 카탈로그
         </Link>
+        <Link href="/admin/spotlights" className={tab}>
+          화제의 방
+        </Link>
         <Link href="/admin/reviews" className={tab}>
           공개 후기
         </Link>

@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
-import { SPOTLIGHTS, spotlightBySlug } from "@/lib/spotlight";
-import { spotlightThemes } from "@/lib/spotlight-server";
+import { getSpotlight, getSpotlights, spotlightThemes } from "@/lib/spotlight-server";
 
 // 화제의 방 정리 페이지. 검색에서 "○○ 방탈출 예약·가격·인원"으로 찾는 사람에게
 // 공식 정보 기준 한 장 정리를 주고, 테마 상세·기록으로 이어 준다.
@@ -11,12 +10,13 @@ export const revalidate = 3600;
 
 type Props = { params: { slug: string } };
 
-export function generateStaticParams() {
-  return SPOTLIGHTS.map((s) => ({ slug: s.slug }));
+// 관리자 화면에서 새로 넣은 항목도 배포 없이 열리도록(없는 주소는 요청 때 만들어 본다)
+export async function generateStaticParams() {
+  return (await getSpotlights()).map((s) => ({ slug: s.slug }));
 }
 
-export function generateMetadata({ params }: Props): Metadata {
-  const s = spotlightBySlug(params.slug);
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const s = await getSpotlight(params.slug);
   if (!s) return {};
   const url = `${SITE_URL}/spotlight/${s.slug}`;
   return {
@@ -30,7 +30,7 @@ export function generateMetadata({ params }: Props): Metadata {
 const dots = (n: number) => "●".repeat(Math.max(0, n)) + "○".repeat(Math.max(0, 5 - n));
 
 export default async function SpotlightPage({ params }: Props) {
-  const s = spotlightBySlug(params.slug);
+  const s = await getSpotlight(params.slug);
   if (!s) notFound();
   const themes = await spotlightThemes(s.cafeIncludes);
   const url = `${SITE_URL}/spotlight/${s.slug}`;

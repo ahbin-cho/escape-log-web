@@ -433,3 +433,36 @@ create view public.attribution_stats
   group by source, medium, campaign;
 
 grant select on public.attribution_stats to authenticated;
+
+-- ─────────────────────────────────────────────────────────────
+-- 화제의 방(스포트라이트): 홈 "지금 화제인 방"과 /spotlight/<slug> 정리 페이지의 내용.
+-- 관리자 화면(/admin/spotlights)에서 넣고 고친다. 누구나 읽기, 쓰기는 관리자만. 재실행 안전.
+-- facts: [{"label","value","note"}], faq: [{"q","a"}]
+-- ─────────────────────────────────────────────────────────────
+create table if not exists public.spotlights (
+  slug            text primary key check (slug ~ '^[a-z0-9-]{2,60}$'),
+  label           text not null default '',
+  name            text not null default '',
+  title           text not null default '',
+  lead            text not null default '',
+  seo_title       text not null default '',
+  seo_description text not null default '',
+  cafe_includes   text not null default '',
+  facts           jsonb not null default '[]',
+  faq             jsonb not null default '[]',
+  source_name     text not null default '',
+  source_url      text not null default '',
+  checked_at      date not null default current_date,
+  until           date not null default (current_date + 30),
+  created_at      timestamptz not null default now()
+);
+
+alter table public.spotlights enable row level security;
+
+drop policy if exists spotlights_select on public.spotlights;
+create policy spotlights_select on public.spotlights
+  for select using (true);
+
+drop policy if exists spotlights_write on public.spotlights;
+create policy spotlights_write on public.spotlights
+  for all using (public.is_admin()) with check (public.is_admin());

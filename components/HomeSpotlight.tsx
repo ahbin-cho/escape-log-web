@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { activeSpotlights } from "@/lib/spotlight";
-import { spotlightThemes } from "@/lib/spotlight-server";
+import { getSpotlights, spotlightThemes } from "@/lib/spotlight-server";
 import { kstDate } from "@/lib/home-picks";
 
 // 홈 "지금 화제인 방": 새로 생겼거나 이슈가 된 매장을 잡지 지면처럼 한 판으로 보여 준다.
 // 서버 컴포넌트라 제목·테마 링크가 HTML 에 실려 검색엔진이 따라간다.
 // DB 에 테마가 아직 없으면 그 스포트라이트는 건너뛴다.
 export default async function HomeSpotlight() {
-  const list = activeSpotlights(kstDate(new Date()));
+  const list = activeSpotlights(await getSpotlights(), kstDate(new Date()));
   for (const s of list) {
     const themes = await spotlightThemes(s.cafeIncludes);
     if (themes.length === 0) continue;

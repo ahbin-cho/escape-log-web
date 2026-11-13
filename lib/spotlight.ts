@@ -1,6 +1,7 @@
 // ─────────────────────────────────────────────────────────────
 // 화제의 방(스포트라이트): 새로 생겼거나 이슈가 된 매장·테마를 홈과 정리 페이지에 올린다.
-// 여기 한 곳만 고치면 홈 "지금 화제인 방", /spotlight/<slug> 페이지, 사이트맵에 같이 반영된다.
+// 내용은 DB(spotlights 표)에 있고 관리자 화면(/admin/spotlights)에서 넣고 고친다.
+// 아래 SPOTLIGHTS 는 표가 아직 없거나 못 읽을 때만 쓰는 예비 목록이다.
 // 사실 정보는 공식 사이트·공지에서 확인한 것만 적고, 출처와 확인한 날짜를 남긴다.
 // 테마 목록은 DB(catalog)에서 매장 이름(cafeIncludes)으로 찾아 붙인다(DB 에 없으면 홈에는 안 나온다).
 // ─────────────────────────────────────────────────────────────
@@ -65,11 +66,75 @@ export const SPOTLIGHTS: Spotlight[] = [
   },
 ];
 
-export function spotlightBySlug(slug: string): Spotlight | undefined {
-  return SPOTLIGHTS.find((s) => s.slug === slug);
+// 홈에 올릴 것(노출 기간이 지나지 않은 것)
+export function activeSpotlights(list: Spotlight[], todayKst: string): Spotlight[] {
+  return list.filter((s) => s.until >= todayKst);
 }
 
-// 홈에 올릴 것(노출 기간이 지나지 않은 것, 최신이 앞)
-export function activeSpotlights(todayKst: string): Spotlight[] {
-  return SPOTLIGHTS.filter((s) => s.until >= todayKst);
+// ── DB 행 ↔ Spotlight ──
+export type SpotlightRow = {
+  slug: string;
+  label: string;
+  name: string;
+  title: string;
+  lead: string;
+  seo_title: string;
+  seo_description: string;
+  cafe_includes: string;
+  facts: unknown;
+  faq: unknown;
+  source_name: string;
+  source_url: string;
+  checked_at: string;
+  until: string;
+};
+
+const str = (v: unknown) => (typeof v === "string" ? v : "");
+
+export function spotlightFromRow(r: SpotlightRow): Spotlight {
+  const facts = (Array.isArray(r.facts) ? r.facts : [])
+    .map((f) => ({ label: str(f?.label), value: str(f?.value), note: str(f?.note) || undefined }))
+    .filter((f) => f.label && f.value);
+  const faq = (Array.isArray(r.faq) ? r.faq : [])
+    .map((f) => ({ q: str(f?.q), a: str(f?.a) }))
+    .filter((f) => f.q && f.a);
+  return {
+    slug: r.slug,
+    label: r.label,
+    name: r.name,
+    title: r.title,
+    lead: r.lead,
+    seoTitle: r.seo_title || `${r.name} 테마·예약·가격·인원 정리`,
+    seoDescription: r.seo_description || r.lead,
+    cafeIncludes: r.cafe_includes,
+    facts,
+    faq,
+    source: { name: r.source_name, url: r.source_url },
+    checkedAt: r.checked_at,
+    until: r.until,
+  };
+}
+
+// ── 관리자 화면의 여러 줄 입력 ↔ 목록 ("항목 | 내용 | 덧붙임", "질문 | 답") ──
+const cut = (line: string) => line.split("|").map((x) => x.trim());
+
+export function parseFacts(text: string): Spotlight["facts"] {
+  return text
+    .split("\n")
+    .map(cut)
+    .filter((p) => p[0] && p[1])
+    .map(([label, value, note]) => (note ? { label, value, note } : { label, value }));
+}
+export function factsToText(facts: Spotlight["facts"]): string {
+  return facts.map((f) => [f.label, f.value, f.note].filter(Boolean).join(" | ")).join("\n");
+}
+export function parseFaq(text: string): Spotlight["faq"] {
+  return text
+    .split("\n")
+    .map(cut)
+    .filter((p) => p[0] && p[1])
+    .map(([q, ...rest]) => ({ q, a: rest.join(" | ") }));
+}
+export function faqToText(faq: Spotlight["faq"]): string {
+  return faq.map((f) => `${f.q} | ${f.a}`).join("\n");
 }
