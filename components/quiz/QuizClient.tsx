@@ -30,6 +30,7 @@ import Loader from "@/components/Loader";
 import QuestionView from "@/components/quiz/QuestionView";
 import DoorProgress from "@/components/quiz/DoorProgress";
 import QuizResult from "@/components/quiz/QuizResult";
+import JoinTeamCard from "@/components/team/JoinTeamCard";
 
 type Phase = "quiz" | "analyzing" | "result";
 
@@ -57,6 +58,8 @@ export default function QuizClient() {
   const [msgIdx, setMsgIdx] = useState(0);
   // 공유 링크(?from=코드)로 들어왔으면 끝난 뒤 그 친구와의 궁합을 보여 준다.
   const [friend, setFriend] = useState<SharedResult | null>(null);
+  // 팀 링크(?team=코드.코드)로 들어왔으면 끝난 뒤 "팀에 추가하기"를 보여 준다.
+  const [team, setTeam] = useState<string | null>(null);
   const moved = useRef(false); // 첫 화면에서는 포커스를 건드리지 않는다
   const analyzing = useRef(false); // 마지막 문항 연타로 분석이 두 번 도는 것 방지
 
@@ -64,6 +67,7 @@ export default function QuizClient() {
     setQuestions(pickQuestions(loadLastVariants()));
     const from = new URLSearchParams(window.location.search).get("from");
     if (from) setFriend(decodeShare(from));
+    setTeam(new URLSearchParams(window.location.search).get("team"));
   }, []);
 
   useEffect(() => {
@@ -168,7 +172,12 @@ export default function QuizClient() {
   }
 
   if (phase === "result" && result) {
-    return <QuizResult {...result} friend={friend} onRestart={restart} />;
+    return (
+      <>
+        {team !== null && <JoinTeamCard values={result.values} team={team} />}
+        <QuizResult {...result} friend={friend} onRestart={restart} />
+      </>
+    );
   }
 
   return (
