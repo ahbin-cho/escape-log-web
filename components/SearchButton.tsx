@@ -113,12 +113,12 @@ export default function SearchButton() {
         type="button"
         onClick={() => setOpen(true)}
         aria-label="테마 검색"
-        className="flex items-center gap-1.5 rounded-full bg-ink px-3 py-1.5 text-sm text-cream/60 transition hover:text-cream active:scale-[0.97] md:w-60"
+        className="flex items-center gap-1.5 rounded-full border-2 border-edge/30 bg-panel px-3 py-1.5 text-sm font-bold text-cream/70 transition hover:border-edge hover:text-cream active:scale-[0.97] md:w-60"
       >
         <SearchIcon />
         <span className="md:hidden">검색</span>
         <span className="hidden md:inline">테마·매장·동네 검색</span>
-        <kbd className="ml-auto hidden rounded-md border border-line bg-white px-1.5 text-[11px] font-bold text-cream/60 md:inline">/</kbd>
+        <kbd className="ml-auto hidden rounded-md border-2 border-edge/30 bg-ink px-1.5 text-[11px] font-bold text-cream/70 md:inline">/</kbd>
       </button>
 
       {open && typeof document !== "undefined" && createPortal(
@@ -221,7 +221,7 @@ export default function SearchButton() {
                       <Link
                         href={`/theme/${t.id}`}
                         onClick={() => setOpen(false)}
-                        className="flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-ink"
+                        className="flex items-center gap-3 rounded-xl border-2 border-transparent px-3 py-2 hover:border-edge/30 hover:bg-ink"
                       >
                         <span className="block w-9 shrink-0 overflow-hidden rounded-md text-[0px]">
                           <Poster src={posterSrc(t.poster_url)} name={t.name} genre={t.genre} rounded="rounded-md" />
