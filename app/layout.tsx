@@ -118,15 +118,6 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {[
-          "/key.png",
-          "/door-open.png",
-          "/bread.png",
-          "/footprint.png",
-          "/house.png"
-        ].map((src) => (
-          <link key={src} rel="preload" as="image" href={src} />
-        ))}
       </head>
       <body className="flex min-h-screen flex-col">
         {/* 손그림 SVG 필터 */}

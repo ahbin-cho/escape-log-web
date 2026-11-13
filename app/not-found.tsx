@@ -5,7 +5,7 @@ export default function NotFound() {
   return (
     <div className="flex min-h-[55vh] flex-col items-center justify-center text-center">
       <Image
-        src="/door.png"
+        src="/door.webp"
         alt=""
         width={140}
         height={140}

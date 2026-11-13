@@ -14,7 +14,7 @@ export default function DoorProgress({ progress }: { progress: number }) {
       className="relative mx-auto h-24 w-24"
     >
       <Image
-        src="/door.png"
+        src="/door.webp"
         alt=""
         width={96}
         height={96}
@@ -22,7 +22,7 @@ export default function DoorProgress({ progress }: { progress: number }) {
         className="absolute inset-0 h-full w-full object-contain"
       />
       <Image
-        src="/door-open.png"
+        src="/door-open.webp"
         alt=""
         width={96}
         height={96}
