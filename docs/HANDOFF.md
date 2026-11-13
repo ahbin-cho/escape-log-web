@@ -54,9 +54,12 @@ IG 토큰이 `IGAA…` 종류면 약 60일마다 만료된다. 게시가 갑자�
       비어 있는 곳: 셜록홈즈 35곳(반년 뒤까지 열려 있어 규칙 없음 → 확인 필요), 큐브이스케이프·단편선(접속 차단),
       룸익스케이프(수집 금지 문구), 네이버 예약 17곳(룸즈에이 나머지 등 — 네이버 달력 API 조회 제한, 몇 시간 뒤 10여 건씩).
       네이버 설정값(bookingAvailableEndValue)은 실제 달력과 달라 쓰면 안 된다. 값은 바뀔 수 있으니 분기마다 다시 확인.
-- [ ] 수능 이벤트 매장 테마 SQL: `catalog_add_gangneung.sql`(바로 실행 가능), `catalog_add_doorescape.sql`(운영자 화면 대조 후),
+- [ ] 수능 이벤트 매장 테마 SQL: `catalog_add_gangneung.sql`(실행됨), `catalog_add_doorescape.sql`(운영자 화면 대조 후),
       `catalog_add_roomexcape_sinchon.sql`(사이트에 수집 금지 문구 — 사실 정보만, 실행 여부는 운영자 판단).
 - [x] 이스케이프월드 테마(방자전·ESCAPE SCHOOL)는 DB 에 들어가 있음(`docs/sql/catalog_add_escapeworld.sql`).
+- [x] 2026-11-13 등록: 메이플스토리 이스케이프 5, 강릉방탈출카페 5, 파노라마 2(부산 미래재난리포트·홍대삼거리 퍼펫 플레이). Bing IndexNow 제출함.
+- [ ] 파노라마 홍대입구점(룰더데이·Combo): 시간·요금·포스터는 확인, 장르·난이도·공포도가 공식으로 없어 보류.
+      `docs/sql/catalog_add_panorama.sql` 맨 아래 주석 블록의 ?? 만 채우면 실행 가능. 매장 인스타 @panorama_escape 확인.
 - [ ] 11/15 첫 자동 릴스가 올라가는지 확인. 실패하면 `app/api/ig/publish/route.ts` 의 REELS 분기 점검.
 - [ ] 다음 지역 모음(강남·홍대 등): 제미나이 그림 방식으로(스킬 ig-region-carousel).
 - [ ] 하이라이트 만들기: 📌시작하기 · 📍수원 · 🎟️수능 · 🔍미스터리 (운영자가 앱에서)
