@@ -19,6 +19,7 @@ import { typeFromRecords, TYPE_MIN_RECORDS } from "@/lib/record-type";
 import { FOCUS_TAGS, QUIZ_TYPES, MASCOT, typeImage, type TypeId } from "@/lib/quiz";
 import { inferRegion } from "@/lib/region";
 import RecommendCard from "@/components/RecommendCard";
+import InstallHint from "@/components/InstallHint";
 
 export default function TastePage() {
   const [records, setRecords] = useState<EscapeRecord[]>([]);
@@ -122,11 +123,11 @@ export default function TastePage() {
       {justSaved && (
         <p className="rounded-xl border-2 border-mint/60 bg-mint/10 px-4 py-3 text-sm font-bold">
           ✅ 기록을 저장했어요.{" "}
-          {guest ? "지금은 이 기기에만 있어요." : (
-            <Link href="/records" className="underline underline-offset-2">내 달력에서 보기 →</Link>
-          )}
+          {guest && "지금은 이 기기에만 있어요. "}
+          <Link href="/records" className="underline underline-offset-2">내 달력에서 보기 →</Link>
         </p>
       )}
+      <InstallHint />
       {guest && records.length > 0 && (
         <div className="rough flex flex-col gap-3 rounded-2xl border-2 border-candy/60 bg-candy/10 p-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-cream/80">

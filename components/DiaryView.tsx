@@ -51,7 +51,7 @@ export default function DiaryView({
               return (
                 <li key={r.id}>
                   <Link
-                    href={`/edit/${r.id}`}
+                    href={r.id.startsWith("guest-") ? "/login?mode=signup&guest=1&next=/records" : `/edit/${r.id}`}
                     className={`rough flex gap-3 rounded-2xl border-2 bg-panel p-3.5 transition hover:border-candy active:scale-[0.99] ${
                       milestone ? "border-candy shadow-cute" : "border-edge"
                     }`}

@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
-import { getRecords, type EscapeRecord } from "@/lib/store";
+import { getRecords,
+  getGuestRecords, type EscapeRecord } from "@/lib/store";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import ImportBanner from "@/components/ImportBanner";
 import HomeBanner from "@/components/HomeBanner";
@@ -20,8 +21,9 @@ export default function HomeClient({ discover }: { discover: ReactNode }) {
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
 
   useEffect(() => {
+    // 가입 전이면 이 기기에 써 둔 기록을 보여 준다
     getRecords().then((r) => {
-      setRecords(r);
+      setRecords(r.length ? r : getGuestRecords());
       setReady(true);
     });
   }, []);
@@ -36,7 +38,7 @@ export default function HomeClient({ discover }: { discover: ReactNode }) {
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
       setLoggedIn(!!s?.user);
       // 로그인/로그아웃 시 내 기록 갱신(로그아웃하면 [] → 잔상 제거)
-      getRecords().then(setRecords);
+      getRecords().then((r) => setRecords(r.length ? r : getGuestRecords()));
     });
     return () => sub.subscription.unsubscribe();
   }, []);

@@ -96,6 +96,7 @@ export default function RecordCard({ record }: { record: EscapeRecord }) {
               </p>
             )}
 
+            {!record.id.startsWith("guest-") && (
             <Link
               href={`/edit/${record.id}`}
               onClick={(e) => e.stopPropagation()}
@@ -103,6 +104,7 @@ export default function RecordCard({ record }: { record: EscapeRecord }) {
             >
               수정
             </Link>
+            )}
           </div>
         </div>
       </div>

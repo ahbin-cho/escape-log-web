@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   getRecords,
-  hasGuestPending,
+  getGuestRecords,
   GENRES,
   GENRE_EMOJI,
   type EscapeRecord,
@@ -17,6 +17,7 @@ import RecordCard from "@/components/RecordCard";
 import Loader from "@/components/Loader";
 import DiaryView from "@/components/DiaryView";
 import CalendarView from "@/components/CalendarView";
+import InstallHint from "@/components/InstallHint";
 import YearRecapCard from "@/components/YearRecapCard";
 import { nextMilestone, playNumbers } from "@/lib/diary";
 
@@ -39,6 +40,8 @@ export default function RecordsPage() {
   const router = useRouter();
   const [records, setRecords] = useState<EscapeRecord[]>([]);
   const [ready, setReady] = useState(false);
+  // 가입 전: 이 기기에 써 둔 기록을 그대로 보여 준다(달력·다이어리·결산까지)
+  const [guest, setGuest] = useState(false);
 
   const [query, setQuery] = useState("");
   const [genre, setGenre] = useState<Genre | "전체">("전체");
@@ -74,12 +77,14 @@ export default function RecordsPage() {
           data: { user },
         } = await supabase.auth.getUser();
         if (!user) {
-          // 비회원으로 써 둔 기록이 있으면 가입 화면으로(가입하면 바로 옮겨짐)
-          router.replace(
-            hasGuestPending()
-              ? "/login?mode=signup&guest=1&next=/records"
-              : "/login?next=/records"
-          );
+          const local = getGuestRecords();
+          if (local.length === 0) {
+            router.replace("/login?next=/records");
+            return;
+          }
+          setGuest(true);
+          setRecords(local);
+          setReady(true);
           return;
         }
       }
@@ -129,6 +134,22 @@ export default function RecordsPage() {
           {filtered.length}/{records.length}개
         </span>
       </div>
+
+      {guest && (
+        <div className="rough flex flex-col gap-3 rounded-2xl border-2 border-candy/60 bg-candy/10 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-cream/80">
+            <b className="font-extrabold">이 기록은 지금 이 기기에만 있어요.</b> 10초 가입하면 계정으로 옮겨져서 폰을 바꾸거나
+            브라우저를 지워도 남고, 수정도 할 수 있어요.
+          </p>
+          <Link
+            href="/login?mode=signup&guest=1&next=/records"
+            className="rough shrink-0 rounded-xl border-2 border-edge bg-candy px-4 py-2 text-center text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
+          >
+            가입하고 기록 지키기
+          </Link>
+        </div>
+      )}
+      <InstallHint />
 
       {records.length > 0 && (
         <>

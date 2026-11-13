@@ -638,6 +638,14 @@ export function saveGuestRecord(record: EscapeRecord): void {
   window.localStorage.setItem(GUEST_PENDING_KEY, "1");
 }
 
+// 가입 전 기록을 화면에 보여 줄 때 쓰는 목록. 계정 기록과 구분되게 id 를 "guest-N" 으로 붙인다
+// (이 id 로는 수정 화면을 열 수 없다 → 화면에서 수정 링크를 숨긴다).
+export const GUEST_ID_PREFIX = "guest-";
+export const isGuestRecord = (r: { id: string }) => r.id.startsWith(GUEST_ID_PREFIX);
+export function getGuestRecords(): EscapeRecord[] {
+  return getLegacyLocalRecords().map((r, i) => ({ ...r, id: `${GUEST_ID_PREFIX}${i}` }));
+}
+
 export function hasGuestPending(): boolean {
   if (typeof window === "undefined") return false;
   try {
