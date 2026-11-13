@@ -65,7 +65,6 @@ describe("districtFromText", () => {
 describe("게시 일정", () => {
   it("일정에 있는 날은 그 묶음, 없으면 null", async () => {
     const { scheduledSet, setImagePaths, SET_CAPTIONS } = await import("./instagram");
-    expect(scheduledSet("2026-11-12")).toBe("intro");
         expect(setImagePaths("intro")).toHaveLength(6);
     expect(setImagePaths("ad-diary")).toEqual(["/api/ig/slides?ad=diary"]);
     expect(scheduledSet("2026-11-14")).toBe("static:diary");

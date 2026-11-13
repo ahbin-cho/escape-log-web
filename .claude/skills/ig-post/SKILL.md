@@ -19,6 +19,10 @@ GitHub Actions `ig-post.yml` 을 실행한다(inputs: `set`, `dry`).
 ## 직접 만든 카드 묶음을 자동 게시에 태우기
 `public/ig-static/<이름>/1.jpg…` 로 넣고 `STATIC_POSTS` 에 장수와 캡션을 추가, 일정에 `static:<이름>`.
 
+## 올라간 뒤 정리
+게시가 끝난 항목은 지운다: `POST_SCHEDULE` 의 지난 날짜, `STATIC_POSTS` 의 그 묶음, `public/ig-static/<이름>/`.
+(다시 만들 수 있게 템플릿은 `tools/ig/templates/` 에 남긴다. 테스트의 날짜 기대값도 같이 정리)
+
 ## 규칙
 - 하루 1개가 기본. 운영자가 직접 올린 날에도 올려야 하면 일정에 `extra: true`.
 - 12시 전에 운영자가 직접 올리면 자동 게시가 쉰다는 점을 미리 알려 준다.

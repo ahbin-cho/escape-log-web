@@ -107,7 +107,6 @@ export type PostSet = "intro" | "record-story" | "ad-diary" | "ad-recap";
 // "reel:<테마 id>"(이 방의 이야기 릴스 — public/reels/ 의 영상), "skip"(그날은 자동 게시 쉼)
 // extra: true 면 그날 직접 올린 게시물이 있어도 이 묶음은 올린다(같은 묶음이 이미 있으면 건너뜀)
 export const POST_SCHEDULE: { date: string; set: string; extra?: boolean }[] = [
-  { date: "2026-11-12", set: "intro" },
   // 11/13: 수원 모음은 운영자가 직접 올리고, 자동 게시는 메이플스토리 이스케이프 7장
   { date: "2026-11-13", set: "static:maple", extra: true },
   { date: "2026-11-14", set: "static:diary" }, // 다이어리 소개 4장(후기 카드·달력·기록으로 본 유형)
@@ -128,7 +127,8 @@ export function scheduledExtra(kstDay: string): boolean {
   return POST_SCHEDULE.find((p) => p.date === kstDay)?.extra === true;
 }
 
-// 직접 만든 카드 묶음(public/ig-static/<이름>/1.jpg …). "static:<이름>" 으로 올린다
+// 직접 만든 카드 묶음(public/ig-static/<이름>/1.jpg …). "static:<이름>" 으로 올린다.
+// 올라간 묶음은 일정·여기 항목·public/ig-static/<이름> 을 지운다(템플릿은 tools/ig/templates 에 남는다).
 export const STATIC_POSTS: Record<string, { count: number; caption: string }> = {
   maple: {
     count: 7,
@@ -169,24 +169,6 @@ export const STATIC_POSTS: Record<string, { count: number; caption: string }> = 
       "먼저 써 보고 10초 가입 → 프로필 링크",
       "",
       "#방탈출 #방탈출기록 #방탈출다이어리 #방탈출후기 #방탈출추천 #방탈러 #방린이 #방켓팅 #방탈출스타그램 #이색데이트 #방탈로그",
-    ].join("\n"),
-  },
-  suwon: {
-    count: 6,
-    caption: [
-      "수원 방탈출, 어디 갈지 고민이라면 📍",
-      "",
-      "수원 테마 44개 중에서 취향별로 골라 봤어요. 옆으로 넘겨 보세요 →",
-      "👻 무서운 게 좋다면",
-      "🌿 무서운 건 싫다면",
-      "🐣 방탈출이 처음이라면",
-      "📖 이야기가 좋다면",
-      "",
-      "저장해 두고 수원 갈 때 꺼내 보기 📌",
-      "테마 전체 목록·줄거리·후기 → 프로필 링크",
-      "(정보는 각 매장 공식 소개 기준이에요)",
-      "",
-      "#수원방탈출 #인계동방탈출 #수원데이트 #수원놀거리 #수원가볼만한곳 #경기방탈출 #방탈출추천 #방탈출 #방탈러 #방린이 #방탈출스타그램 #이색데이트 #방탈로그",
     ].join("\n"),
   },
 };
