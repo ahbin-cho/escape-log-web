@@ -108,7 +108,8 @@ export type PostSet = "intro" | "record-story" | "ad-diary" | "ad-recap";
 // extra: true 면 그날 직접 올린 게시물이 있어도 이 묶음은 올린다(같은 묶음이 이미 있으면 건너뜀)
 export const POST_SCHEDULE: { date: string; set: string; extra?: boolean }[] = [
   { date: "2026-11-12", set: "intro" },
-  { date: "2026-11-13", set: "static:suwon", extra: true }, // 제미나이 그림으로 다시 만든 수원 모음 6장
+  // 11/13: 수원 모음은 운영자가 직접 올리고, 자동 게시는 메이플스토리 이스케이프 7장
+  { date: "2026-11-13", set: "static:maple", extra: true },
   { date: "2026-11-14", set: "static:diary" }, // 다이어리 소개 4장(후기 카드·달력·기록으로 본 유형)
 
   // 이 방의 이야기는 카드 대신 릴스로(처음 보는 사람에게 더 퍼진다)
@@ -129,6 +130,31 @@ export function scheduledExtra(kstDay: string): boolean {
 
 // 직접 만든 카드 묶음(public/ig-static/<이름>/1.jpg …). "static:<이름>" 으로 올린다
 export const STATIC_POSTS: Record<string, { count: number; caption: string }> = {
+  maple: {
+    count: 7,
+    caption: [
+      "결말이 비어 있는 책 다섯 권이 발견됐다 📖",
+      "",
+      "홍대에 메이플스토리 방탈출 카페가 생겼어요. @maplestory.escape",
+      "책 속 용사가 되어 '차원의 조각'을 찾아 빈 결말을 채우는 이야기, 테마는 다섯 개예요.",
+      "",
+      "📕 커닝시티, 사라진 사람들 (스릴러)",
+      "📘 도전! 무릉도장! (아케이드)",
+      "📓 헌티드 맨션으로 초대합니다 (미스터리)",
+      "📗 에델슈타인 더 비기닝 (잠입)",
+      "📒 뒤죽박죽 루디브리엄 (협동)",
+      "",
+      "⏱️ 테마마다 60분 · 💰 1인 29,000원",
+      "👥 커닝시티는 2명부터, 나머지는 3명부터 (최대 6명)",
+      "🎟️ 예약은 YES24 티켓, 매주 월요일 오전 10시에 열려요",
+      "",
+      "어떤 책부터 펼치고 싶어요? 댓글로 알려 주세요 👇",
+      "테마별 정리 → 프로필 링크",
+      "⚠️ 방문 전에 공식 홈페이지(maplestoryescape.com)에서 한 번 더 확인하세요",
+      "",
+      "#메이플스토리 #메이플스토리이스케이프 #메이플스토리방탈출 #홍대방탈출 #홍대데이트 #홍대놀거리 #방탈출추천 #방탈출 #방탈러 #방린이 #방탈출스타그램 #방탈로그",
+    ].join("\n"),
+  },
   diary: {
     count: 4,
     caption: [
