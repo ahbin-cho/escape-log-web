@@ -18,9 +18,9 @@ import {
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from "@/lib/site";
 import { listedConditions } from "@/lib/best";
 
-// 순수 SSG: 배포 시 generateStaticParams 의 전 테마를 미리 구움.
-// 크롤링 데이터라 거의 안 바뀌므로 자동 재생성(ISR)은 안 씀 → 갱신은 재배포로.
+// 배포 시 전 테마를 미리 굽고, DB 를 고치면 10분 안에 다시 굽는다(재배포 불필요).
 // dynamicParams(기본 true): 배포 후 새로 추가된 테마도 첫 요청 때 생성되어 캐시됨.
+export const revalidate = 600;
 export const dynamicParams = true;
 
 type ThemeDetail = ThemeRow & { poster_url?: string | null; booking_open?: string | null };

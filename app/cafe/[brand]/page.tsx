@@ -15,8 +15,9 @@ import {
 import { regionFromText } from "@/lib/region";
 import { SITE_NAME, SITE_URL, DEFAULT_OG_IMAGE } from "@/lib/site";
 
-// 순수 SSG: 테마가 있는 브랜드는 빌드 시 생성. 그 외 주소는 404.
-export const dynamicParams = false;
+// DB(catalog)를 고치면 10분 안에 화면에 반영된다(재배포 불필요). 새 브랜드·지역도 첫 방문 때 페이지가 생긴다.
+export const revalidate = 600;
+export const dynamicParams = true;
 
 export async function generateStaticParams() {
   return (await listedBrands()).map((b) => ({ brand: staticParam(b.key) }));

@@ -17,7 +17,8 @@ import {
 import { regionFromText, REGIONS } from "@/lib/region";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
-// 순수 SSG: 테마가 충분히 걸리는 조건만 빌드 시 생성. 그 외 주소는 404.
+// 조건 목록은 코드에 있고, 걸리는 테마는 DB 에서 10분마다 다시 읽는다(재배포 불필요).
+export const revalidate = 600;
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
