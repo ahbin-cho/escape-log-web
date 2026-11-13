@@ -14,6 +14,7 @@ import {
 } from "@/lib/calendar";
 import DiaryView from "./DiaryView";
 import PosterTile from "./PosterTile";
+import MonthCardButton from "./MonthCardButton";
 
 const WEEK = ["일", "월", "화", "수", "목", "금", "토"];
 const EMPTY_INDEX: PosterIndex = { byTheme: new Map(), byName: new Map() };
@@ -79,6 +80,12 @@ export default function CalendarView({
             ›
           </button>
         </div>
+
+        {monthRecords.length > 0 && (
+          <div className="-mt-1 mb-3 flex justify-center">
+            <MonthCardButton month={month} records={monthRecords} />
+          </div>
+        )}
 
         <div className="grid grid-cols-7 gap-1 text-center text-[11px] font-extrabold text-cream/50">
           {WEEK.map((w, i) => (
