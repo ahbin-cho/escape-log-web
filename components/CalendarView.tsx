@@ -1,25 +1,18 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { getPosters, type EscapeRecord } from "@/lib/store";
+import { useMemo, useState } from "react";
+import type { EscapeRecord } from "@/lib/store";
 import { kstDate } from "@/lib/home-picks";
-import {
-  buildPosterIndex,
-  dayCover,
-  initialMonth,
-  monthCells,
-  recordsByDay,
-  shiftMonth,
-  type PosterIndex,
-} from "@/lib/calendar";
+import { initialMonth, monthCells, recordsByDay, shiftMonth } from "@/lib/calendar";
+import { findPoster } from "@/lib/poster";
+import { usePosterIndex } from "@/lib/use-poster-index";
 import DiaryView from "./DiaryView";
 import PosterTile from "./PosterTile";
 import MonthCardButton from "./MonthCardButton";
 
 const WEEK = ["일", "월", "화", "수", "목", "금", "토"];
-const EMPTY_INDEX: PosterIndex = { byTheme: new Map(), byName: new Map() };
 
-// 기록 달력: 날짜 칸마다 그날 한 방의 인증샷/포스터를 채운다.
+// 기록 달력: 다녀온 날 칸에 그 방의 공식 포스터를 채운다(없으면 인증샷, 그것도 없으면 장르 색 표지).
 // 아래에는 고른 날(없으면 그 달 전체)의 기록을 다이어리 모양으로 보여 준다.
 export default function CalendarView({
   records,
@@ -31,18 +24,11 @@ export default function CalendarView({
   const today = kstDate(new Date());
   const [month, setMonth] = useState(() => initialMonth(records, today));
   const [picked, setPicked] = useState<string | null>(null);
-  const [posters, setPosters] = useState<PosterIndex>(EMPTY_INDEX);
-
-  useEffect(() => {
-    getPosters().then((rows) => setPosters(buildPosterIndex(rows)));
-  }, []);
+  const posters = usePosterIndex();
 
   const byDay = useMemo(() => recordsByDay(records), [records]);
   const cells = monthCells(month);
   const monthRecords = cells.flatMap((d) => (d ? byDay.get(d) ?? [] : []));
-  // 기록이 하나도 없는 주는 날짜 줄만 남겨 달력을 짧게
-  const weekHasRecord = (i: number) =>
-    cells.slice(i - (i % 7), i - (i % 7) + 7).some((d) => d && byDay.has(d));
   const shown = picked ? byDay.get(picked) ?? [] : monthRecords;
   const [y, m] = month.split("-").map(Number);
 
@@ -51,126 +37,104 @@ export default function CalendarView({
     setPicked(null);
   }
 
+  // 하루 칸의 대표 기록: 포스터(또는 인증샷)가 있는 기록을 먼저, 없으면 그날 첫 기록
+  function cover(list: EscapeRecord[]): { record: EscapeRecord; image: string } {
+    for (const record of list) {
+      const image = findPoster(posters, record.themeName, record.cafeName)?.poster || record.photoUrl;
+      if (image) return { record, image };
+    }
+    return { record: list[0], image: "" };
+  }
+
   return (
-    <div className="space-y-5">
-      <section className="rough mx-auto max-w-lg rounded-2xl border-2 border-edge bg-panel p-3 shadow-cute sm:p-4">
-        <div className="mb-3 flex items-center justify-between">
-          <button
-            onClick={() => go(-1)}
-            aria-label="이전 달"
-            className="rounded-lg px-3 py-1 text-lg font-extrabold transition hover:bg-edge/10 active:scale-95"
-          >
-            ‹
-          </button>
-          <div className="text-center">
-            <div className="text-lg font-extrabold">
+    <div className="space-y-6">
+      <section className="mx-auto max-w-xl" aria-label={`${y}년 ${m}월 달력`}>
+        <div className="flex items-center justify-between">
+          <div className="-ml-2 flex items-center">
+            <button
+              onClick={() => go(-1)}
+              aria-label="이전 달"
+              className="flex h-9 w-8 items-center justify-center rounded-lg text-lg text-cream/70 transition-colors hover:text-cream"
+            >
+              ‹
+            </button>
+            <h2 className="px-1 text-[17px] tabular-nums">
               {y}년 {m}월
-            </div>
-            <div className="text-xs font-bold text-cream/55">
-              {monthRecords.length
-                ? `${monthRecords.length}방 · 탈출 ${monthRecords.filter((r) => r.success).length}`
-                : "기록 없음"}
-            </div>
+            </h2>
+            <button
+              onClick={() => go(1)}
+              aria-label="다음 달"
+              className="flex h-9 w-8 items-center justify-center rounded-lg text-lg text-cream/70 transition-colors hover:text-cream"
+            >
+              ›
+            </button>
           </div>
-          <button
-            onClick={() => go(1)}
-            aria-label="다음 달"
-            className="rounded-lg px-3 py-1 text-lg font-extrabold transition hover:bg-edge/10 active:scale-95"
-          >
-            ›
-          </button>
+          {monthRecords.length > 0 && <MonthCardButton month={month} records={monthRecords} />}
         </div>
 
-        {monthRecords.length > 0 && (
-          <div className="-mt-1 mb-3 flex justify-center">
-            <MonthCardButton month={month} records={monthRecords} />
-          </div>
-        )}
-
-        <div className="grid grid-cols-7 gap-1 text-center text-[11px] font-extrabold text-cream/50">
-          {WEEK.map((w, i) => (
-            <div key={w} className={i === 0 ? "text-red-500/70" : i === 6 ? "text-sky-600/70" : ""}>
+        <div className="mt-1.5 grid grid-cols-7 gap-1 text-center text-[11px] text-cream/70">
+          {WEEK.map((w) => (
+            <div key={w} className="pb-1">
               {w}
             </div>
           ))}
         </div>
 
-        <div className="mt-1 grid grid-cols-7 gap-x-1.5 gap-y-2">
+        <div className="grid grid-cols-7 gap-1">
           {cells.map((day, i) => {
             if (!day) return <div key={`blank-${i}`} />;
             const list = byDay.get(day) ?? [];
-            const cover = dayCover(list, posters);
-            const img = cover?.image ?? "";
-            const isPicked = picked === day;
             const isToday = day === today;
             const dayNum = Number(day.slice(8));
-            const week = i % 7;
 
-            // 날짜는 포스터 위에 겹치지 않고 따로 한 줄 (오늘은 주황 동그라미)
-            const dateRow = (
-              <span
-                className={`mx-auto flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-extrabold tabular-nums ${
-                  isToday
-                    ? "bg-candy text-edge"
-                    : cover
-                      ? "text-cream"
-                      : week === 0
-                        ? "text-red-500/60"
-                        : week === 6
-                          ? "text-sky-600/60"
-                          : "text-cream/40"
-                }`}
-              >
-                {dayNum}
-              </span>
-            );
-
-            if (!cover) {
+            if (!list.length) {
               return (
-                <div key={day} className="flex flex-col gap-1">
-                  {dateRow}
-                  {weekHasRecord(i) && <div className="aspect-[3/4]" />}
+                <div
+                  key={day}
+                  className={`aspect-[2/3] rounded-md bg-ink px-1 py-[3px] text-[10px] tabular-nums ${
+                    isToday ? "font-extrabold text-candy" : "text-cream/45"
+                  }`}
+                >
+                  {dayNum}
                 </div>
               );
             }
 
+            const { record, image } = cover(list);
+            const isPicked = picked === day;
             return (
               <button
                 key={day}
                 onClick={() => setPicked(isPicked ? null : day)}
                 aria-pressed={isPicked}
-                aria-label={`${m}월 ${dayNum}일 ${list.length}방: ${list
-                  .map((r) => r.themeName)
-                  .join(", ")}`}
-                className="group flex flex-col gap-1 transition active:scale-95"
+                aria-label={`${m}월 ${dayNum}일 ${list.length}방: ${list.map((r) => r.themeName).join(", ")}`}
+                className={`relative block aspect-[2/3] overflow-hidden rounded-md transition-opacity duration-200 active:opacity-80 ${
+                  isPicked ? "ring-2 ring-edge ring-offset-2 ring-offset-white" : ""
+                }`}
               >
-                {dateRow}
-                <span
-                  className={`relative block aspect-[3/4] w-full overflow-hidden rounded-md shadow-sm transition ${
-                    isPicked
-                      ? "ring-2 ring-candy ring-offset-2 ring-offset-panel"
-                      : "ring-1 ring-edge/15 group-hover:ring-edge/40"
-                  }`}
-                >
-                  {/* 미니 포스터를 깔고 그 위에 그림: 그림이 없거나 깨지면 미니 포스터가 보인다 */}
-                  <PosterTile genre={cover.record.genre} name={cover.record.themeName} success={cover.record.success} />
-                  {img && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={img}
-                      alt=""
-                      loading="lazy"
-                      referrerPolicy="no-referrer"
-                      onError={(e) => (e.currentTarget.style.display = "none")}
-                      className="absolute inset-0 h-full w-full object-cover"
-                    />
-                  )}
-                  {list.length > 1 && (
-                    <span className="absolute bottom-1 right-1 rounded-full bg-edge/80 px-1.5 text-[10px] font-extrabold leading-4 text-panel backdrop-blur-sm">
-                      +{list.length - 1}
-                    </span>
-                  )}
+                {/* 장르 색 표지를 깔고 그 위에 그림: 그림이 없거나 깨지면 표지가 보인다 */}
+                <PosterTile genre={record.genre} name={record.themeName} />
+                {image && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={image}
+                    alt=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                    onError={(e) => (e.currentTarget.style.display = "none")}
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
+                )}
+                {/* 날짜가 어떤 그림 위에서도 읽히게 위쪽만 살짝 어둡게 */}
+                <span className="absolute inset-x-0 top-0 h-2/5 bg-gradient-to-b from-black/55 to-transparent" aria-hidden />
+                <span className="absolute left-1 top-[3px] text-[10px] font-extrabold tabular-nums text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.6)]">
+                  {dayNum}
                 </span>
+                {list.length > 1 && (
+                  <span className="absolute bottom-1 right-1 rounded-full bg-black/70 px-1.5 text-[10px] font-extrabold leading-4 text-white">
+                    +{list.length - 1}
+                  </span>
+                )}
               </button>
             );
           })}
@@ -180,10 +144,10 @@ export default function CalendarView({
       {/* 아래 목록은 다이어리가 달 제목을 붙이므로, 날을 골랐을 때만 따로 안내 */}
       {picked && (
         <div className="flex items-baseline justify-between">
-          <h2 className="text-base font-extrabold">
+          <h2 className="text-[17px]">
             {m}월 {Number(picked.slice(8))}일 기록
           </h2>
-          <button onClick={() => setPicked(null)} className="text-xs font-bold text-candy">
+          <button onClick={() => setPicked(null)} className="text-[13px] text-cream/70 underline underline-offset-2">
             {m}월 전체 보기
           </button>
         </div>
@@ -192,9 +156,7 @@ export default function CalendarView({
       {shown.length ? (
         <DiaryView records={shown} numbers={numbers} />
       ) : (
-        <p className="rounded-2xl border-2 border-dashed border-edge/30 py-10 text-center text-sm text-cream/55">
-          이 달엔 기록이 없어요
-        </p>
+        <p className="py-8 text-center text-sm text-cream/70">이 달엔 기록이 없어요</p>
       )}
     </div>
   );
