@@ -10,7 +10,7 @@
 with v(name, cafe, genre, difficulty, fear_level, tags, teaser, time_limit, players, price, reservation_url, poster_url) as (values
   ('인세인 INSANE', 'UMEPLAY 홍대', '추리', 5::int2, 1::int2, array['추리','이머시브','이머시브연극','홍대'],
    '살인사건이 일어난 모닝가 46번지 아파트. 공판을 앞둔 사건의 진실을 밝히기 위해 당신은 수사관이 된다.',
-   75::int2, '1~6', 0, 'https://booking.naver.com/booking/12/bizes/1661745/items/7713929', null)
+   75::int2, '1~6', 0, 'https://booking.naver.com/booking/12/bizes/1661745/items/7713929', '')
 ),
 upd as (
   update public.catalog c set genre=v.genre, difficulty=v.difficulty, fear_level=v.fear_level, tags=v.tags, teaser=v.teaser,
