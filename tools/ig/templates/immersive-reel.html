@@ -51,14 +51,16 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#1B1420
 .bang{left:210px;top:-90px;width:90px;height:110px;background:#E49A4A;border:7px solid #1D1D1D;border-radius:18px;font-family:A;font-size:80px;text-align:center;line-height:118px;transform:scale(0) rotate(12deg);animation:pop .3s 9.2s steps(3) forwards,bye .2s 10.6s forwards}
 
 /* 배우 인형 */
-.actorwrap{left:560px;top:640px;width:440px;height:1400px;transform:translateX(700px);animation:ain 1.3s 7.2s steps(8) forwards,bow 1.2s 8.5s steps(6) 1}
+.actorwrap{left:560px;top:700px;width:440px;height:1400px;transform:translateX(700px);animation:ain 1.3s 7.2s steps(8) forwards,bow 1.2s 8.5s steps(6) 1}
 @keyframes ain{0%{transform:translateX(700px) rotate(8deg)}70%{transform:translateX(-30px) rotate(-4deg)}100%{transform:translateX(0)}}
 @keyframes bow{0%,100%{transform:rotate(0)}45%{transform:rotate(-13deg) translateY(20px)}}
 .actorbob{inset:0;transform-origin:50% 60%;animation:bob2 1s steps(2) infinite}
 @keyframes bob2{0%{transform:rotate(1.5deg)}50%{transform:rotate(-1.5deg)}100%{transform:rotate(1.5deg)}}
 .actorwrap svg{position:absolute;left:0;top:0;width:440px;filter:drop-shadow(9px 11px 0 rgba(0,0,0,.35))}
-.actorwrap .stick{top:760px;height:700px}
-.arm{transform-origin:118px 300px;animation:wave .7s 8.9s steps(3) 5 alternate}
+.actorwrap .stick{top:690px;height:760px}
+.eye{transform-box:fill-box;transform-origin:center;animation:blink 2.6s 6s steps(1) infinite}
+@keyframes blink{0%,92%{transform:scaleY(1)}93%,97%{transform:scaleY(.12)}98%{transform:scaleY(1)}}
+.arm{transform-origin:128px 392px;animation:wave .7s 8.9s steps(3) 5 alternate}
 @keyframes wave{from{transform:rotate(0)}to{transform:rotate(38deg)}}
 
 /* 말풍선 */
@@ -130,18 +132,38 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#1B1420
 
 <div class="a actorwrap"><div class="a actorbob b">
   <svg viewBox="0 0 440 800">
-    <g class="arm"><path d="M118 300 Q40 330 22 430 L58 444 Q76 372 140 344Z" fill="#1D1D1D" stroke="#F5F0E6" stroke-width="7"/><circle cx="38" cy="446" r="26" fill="#F5F0E6" stroke="#1D1D1D" stroke-width="7"/></g>
-    <path d="M120 270 Q220 230 320 270 L372 770 L68 770Z" fill="#1D1D1D" stroke="#F5F0E6" stroke-width="7" stroke-linejoin="round"/>
-    <path d="M220 262 L196 770 M220 262 L246 770" stroke="#3A3A3A" stroke-width="6"/>
-    <path d="M140 250 Q220 320 300 250 L316 300 Q220 360 124 300Z" fill="#E49A4A" stroke="#1D1D1D" stroke-width="7" stroke-linejoin="round"/>
-    <path d="M290 296 L330 420 L286 410 L270 310Z" fill="#E49A4A" stroke="#1D1D1D" stroke-width="7" stroke-linejoin="round"/>
-    <ellipse cx="220" cy="170" rx="86" ry="96" fill="#1D1D1D" stroke="#F5F0E6" stroke-width="7"/>
-    <path d="M150 150 Q220 118 290 150 Q296 214 220 236 Q144 214 150 150Z" fill="#F5F0E6" stroke="#1D1D1D" stroke-width="6"/>
-    <path d="M172 168 q18 -16 36 0 M232 168 q18 -16 36 0" fill="none" stroke="#1D1D1D" stroke-width="7" stroke-linecap="round"/>
-    <path d="M196 204 q24 16 48 0" fill="none" stroke="#1D1D1D" stroke-width="6" stroke-linecap="round"/>
-    <rect x="96" y="72" width="248" height="30" rx="15" fill="#1D1D1D" stroke="#F5F0E6" stroke-width="7"/>
-    <path d="M144 76 Q150 -6 220 -4 Q290 -6 296 76Z" fill="#1D1D1D" stroke="#F5F0E6" stroke-width="7"/>
-    <rect x="146" y="52" width="148" height="20" fill="#B8433A"/>
+    <!-- 귀여운 배우 인형: 큰 머리 · 가면 · 작은 실크햇 · 망토 -->
+    <path d="M300 400 Q350 450 352 510" fill="none" stroke="#1D1D1D" stroke-width="44" stroke-linecap="round"/>
+    <path d="M300 400 Q350 450 352 510" fill="none" stroke="#3B3358" stroke-width="30" stroke-linecap="round"/>
+    <circle cx="354" cy="522" r="26" fill="#FFF4E6" stroke="#1D1D1D" stroke-width="7"/>
+    <path d="M112 372 Q220 330 328 372 L372 676 Q220 724 68 676Z" fill="#3B3358" stroke="#1D1D1D" stroke-width="7" stroke-linejoin="round"/>
+    <path d="M74 652 Q220 700 366 652 L372 676 Q220 724 68 676Z" fill="#E49A4A" stroke="#1D1D1D" stroke-width="6" stroke-linejoin="round"/>
+    <circle cx="220" cy="430" r="11" fill="#F2C879" stroke="#1D1D1D" stroke-width="5"/>
+    <circle cx="220" cy="480" r="11" fill="#F2C879" stroke="#1D1D1D" stroke-width="5"/>
+    <circle cx="220" cy="530" r="11" fill="#F2C879" stroke="#1D1D1D" stroke-width="5"/>
+    <g class="arm">
+      <path d="M128 392 Q84 420 62 470" fill="none" stroke="#1D1D1D" stroke-width="44" stroke-linecap="round"/>
+      <path d="M128 392 Q84 420 62 470" fill="none" stroke="#3B3358" stroke-width="30" stroke-linecap="round"/>
+      <circle cx="58" cy="484" r="27" fill="#FFF4E6" stroke="#1D1D1D" stroke-width="7"/>
+    </g>
+    <path d="M220 352 L178 330 L178 376Z M220 352 L262 330 L262 376Z" fill="#E49A4A" stroke="#1D1D1D" stroke-width="6" stroke-linejoin="round"/>
+    <circle cx="220" cy="352" r="10" fill="#B8433A" stroke="#1D1D1D" stroke-width="5"/>
+    <circle cx="220" cy="218" r="124" fill="#FFF4E6" stroke="#1D1D1D" stroke-width="7"/>
+    <ellipse cx="142" cy="270" rx="24" ry="13" fill="#F4A6A0" opacity=".85"/>
+    <ellipse cx="298" cy="270" rx="24" ry="13" fill="#F4A6A0" opacity=".85"/>
+    <path d="M104 206 Q160 160 214 200 Q220 207 226 200 Q280 160 336 206 Q328 256 274 258 Q240 258 220 238 Q200 258 166 258 Q112 256 104 206Z" fill="#E49A4A" stroke="#1D1D1D" stroke-width="7" stroke-linejoin="round"/>
+    <path d="M104 206 Q92 190 80 196 M336 206 Q352 186 364 194" stroke="#1D1D1D" stroke-width="6" stroke-linecap="round" fill="none"/>
+    <ellipse cx="166" cy="216" rx="31" ry="25" fill="#FFF4E6" stroke="#1D1D1D" stroke-width="5"/>
+    <ellipse cx="274" cy="216" rx="31" ry="25" fill="#FFF4E6" stroke="#1D1D1D" stroke-width="5"/>
+    <g class="eye"><circle cx="168" cy="220" r="15" fill="#1D1D1D"/><circle cx="174" cy="213" r="5" fill="#fff"/></g>
+    <g class="eye"><circle cx="276" cy="220" r="15" fill="#1D1D1D"/><circle cx="282" cy="213" r="5" fill="#fff"/></g>
+    <path d="M200 286 Q220 306 240 286" fill="#B8433A" stroke="#1D1D1D" stroke-width="6" stroke-linejoin="round"/>
+    <g transform="rotate(-10 230 110)">
+      <ellipse cx="230" cy="112" rx="104" ry="20" fill="#3B3358" stroke="#1D1D1D" stroke-width="7"/>
+      <path d="M170 110 L176 22 Q230 10 284 22 L290 110Z" fill="#3B3358" stroke="#1D1D1D" stroke-width="7" stroke-linejoin="round"/>
+      <rect x="171" y="78" width="118" height="22" fill="#B8433A" stroke="#1D1D1D" stroke-width="5"/>
+      <circle cx="268" cy="80" r="17" fill="#F2C879" stroke="#1D1D1D" stroke-width="5"/>
+    </g>
   </svg>
   <div class="a stick"></div></div></div>
 
@@ -162,7 +184,7 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#1B1420
 
 <div class="a end paper b"><img src="../../../public/mascot.png">
   <div class="x">배우가 있는 방<br><b>모아 뒀어요</b></div>
-  <div class="s">다녀오면 방탈로그에 한 줄 기록</div>
+  <div class="s">예약 오픈 시각 · 티켓팅 꿀팁까지<br>다녀오면 방탈로그에 한 줄 기록</div>
   <div class="u">프로필 링크 · bangtallog.com</div></div>
 
 <svg class="a tex" width="1080" height="1920"><rect width="1080" height="1920" filter="url(#pt)"/></svg>

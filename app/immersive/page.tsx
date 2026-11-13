@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Poster from "@/components/Poster";
+import BookingOpen from "@/components/BookingOpen";
 import { BTN_LINE, BTN_PRIMARY, CRUMB, posterSrc } from "@/lib/ui";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { publicClient } from "@/lib/supabase/public";
@@ -38,13 +39,14 @@ type Row = {
   fear_level: number;
   poster_url: string | null;
   reservation_url: string | null;
+  booking_open: string | null;
 };
 
 async function getImmersive(): Promise<Row[]> {
   try {
     const { data } = await publicClient()
       .from("catalog")
-      .select("id,name,cafe,genre,tags,teaser,time_limit,players,price,difficulty,fear_level,poster_url,reservation_url")
+      .select("id,name,cafe,genre,tags,teaser,time_limit,players,price,difficulty,fear_level,poster_url,reservation_url,booking_open")
       .overlaps("tags", [IMMERSIVE_TAG, THEATRE_TAG])
       .order("created_at", { ascending: false });
     return ((data as Row[]) ?? []).map((t) => ({ ...t, genre: normalizeGenre(t.genre, t.tags) }));
@@ -141,6 +143,8 @@ export default async function ImmersivePage() {
       <Group id="theatre" title="🎬 연극형 · 퍼즐 없이 이야기 속으로" rows={theatre} />
       <Group id="escape" title="🗝️ 방탈출형 · 배우와 함께 푸는 방" rows={escape} />
 
+      <Tips />
+
       <section className="space-y-2 border-t border-line pt-6 text-[13px] leading-relaxed text-cream/60 [word-break:keep-all]">
         <p>각 곳의 공식 홈페이지·예약 페이지에 적힌 내용만 옮겼어요. 회차·가격은 자주 바뀌니 예약 전에 한 번 더 확인해 주세요.</p>
         <p>배우가 끝까지 함께하는 곳인데 여기 없다면, 인스타 @bangtal_log 로 알려 주세요. 공식 안내를 확인하고 넣을게요.</p>
@@ -204,6 +208,11 @@ function Group({ id, title, rows }: { id: string; title: string; rows: Row[] }) 
                     )}
                   </div>
                 </div>
+                {t.booking_open?.trim() ? (
+                  <div className="mt-3">
+                    <BookingOpen rule={t.booking_open} />
+                  </div>
+                ) : null}
                 {t.reservation_url && (
                   <a
                     href={t.reservation_url}
@@ -219,6 +228,41 @@ function Group({ id, title, rows }: { id: string; title: string; rows: Row[] }) 
           })}
         </ul>
       )}
+    </section>
+  );
+}
+
+// 이머시브는 한 회차에 몇 명만 들어가서 표가 금방 사라진다 → 덜 놓치는 방법
+const TIPS: { e: string; t: string; d: string }[] = [
+  { e: "⏰", t: "열리는 시각을 먼저 알아 두기", d: "곳마다 며칠 전 몇 시에 열리는지가 달라요. 위 카드에 확인된 오픈 시각을 적어 뒀어요." },
+  { e: "🔑", t: "로그인·결제는 미리", d: "네이버 예약이면 미리 로그인, 무통장 입금이면 예약자 이름과 입금자 이름을 똑같이. 열리는 순간 고민할 틈이 없어요." },
+  { e: "📅", t: "날짜 후보는 2~3개", d: "한 회차에 몇 명만 들어가서 금방 차요. 주말이 막히면 평일 저녁 회차가 비교적 여유 있어요." },
+  { e: "🔁", t: "취소표는 '수수료 붙기 직전'에", d: "환불 수수료가 바뀌기 바로 전날 취소가 몰리기 쉬워요. 그 무렵 예약 페이지를 몇 번 더 열어 보세요." },
+  { e: "🙅", t: "중복 예약은 금물", d: "같은 작품을 여러 번 잡아 두면 전부 취소하는 곳도 있어요. 꼭 갈 회차 하나만." },
+  { e: "🏃", t: "10분 일찍 도착", d: "공연이 정시에 시작해서 늦으면 들어갈 수 없는 곳이 많아요. 환불도 안 돼요." },
+];
+
+function Tips() {
+  return (
+    <section aria-labelledby="tips-h" className="space-y-3">
+      <h2 id="tips-h" className="text-xl">
+        🎟️ 티켓팅, 이렇게 하면 덜 놓쳐요
+      </h2>
+      <ol className="grid gap-2.5 sm:grid-cols-2">
+        {TIPS.map((x, i) => (
+          <li key={x.t} className="rough flex gap-3 rounded-2xl border-2 border-edge bg-panel p-3.5">
+            <span className="text-2xl leading-none" aria-hidden>
+              {x.e}
+            </span>
+            <span className="min-w-0">
+              <span className="block font-extrabold">
+                {i + 1}. {x.t}
+              </span>
+              <span className="mt-1 block text-[13px] leading-relaxed text-cream/75 [word-break:keep-all]">{x.d}</span>
+            </span>
+          </li>
+        ))}
+      </ol>
     </section>
   );
 }

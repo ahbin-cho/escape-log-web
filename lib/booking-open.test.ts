@@ -65,4 +65,17 @@ describe("openStatus", () => {
     expect(shortRule("약 4주 전")).toBe("약 4주 전 오픈");
     expect(shortRule("")).toBe("");
   });
+
+  it("기간 한정 공연은 '공연 기간 전체'로 안내", () => {
+    const s = openStatus("공연 기간 전체 상시 오픈", new Date("2026-11-13T14:00:00Z"))!;
+    expect(s.wide).toBe(true);
+    expect(s.rule).toBe("공연 기간 전체 예매가 열려 있어요");
+  });
+
+  it("위센트 아바타: 7일 전 오후 7시 (11/13 밤 11시 45분 기준)", () => {
+    const s = openStatus("7일 전 오후 7시", new Date("2026-11-13T14:45:00Z"))!;
+    expect(md(s.lastBookable!)).toBe("11/20(금)");
+    expect(md(s.next!.date)).toBe("11/21(토)");
+    expect(s.next!.when).toBe("내일 오후 7시");
+  });
 });

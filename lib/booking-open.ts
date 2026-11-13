@@ -95,7 +95,11 @@ export type OpenStatus = {
 export function openStatus(raw: string | null | undefined, now: Date): OpenStatus | null {
   const rule = parseOpenRule(raw);
   if (rule.kind === "unknown") return null;
-  if (rule.kind === "wide") return { wide: true, rule: "몇 달 앞까지 예약이 열려 있어요", lastBookable: null, next: null, approx: false };
+  if (rule.kind === "wide") {
+    // 기간 한정 공연은 "공연 기간 전체"가 열려 있다(몇 달 앞이 아니라)
+    const text = /공연\s*기간/.test(raw ?? "") ? "공연 기간 전체 예매가 열려 있어요" : "몇 달 앞까지 예약이 열려 있어요";
+    return { wide: true, rule: text, lastBookable: null, next: null, approx: false };
+  }
   const k = kstParts(now);
   const today: Ymd = { y: k.y, m: k.m, d: k.d };
 
