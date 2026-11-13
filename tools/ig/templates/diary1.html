@@ -1,35 +1,26 @@
 <!doctype html><html><head><meta charset="utf-8"><style>
-@font-face{font-family:A;src:url(../../../assets/fonts/SBAggroB.woff)}
 @font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
 @font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-Medium.woff);font-weight:500}
-html,body{margin:0;width:1080px;height:1350px;font-family:P;overflow:hidden;color:#1D1D1D;background:#F5F0E6}
-.dots{position:absolute;inset:0;background-image:radial-gradient(rgba(29,29,29,.06) 1.5px,transparent 1.6px);background-size:28px 28px}
-h1{font-family:A;font-weight:400;margin:0;line-height:1.12}
-.top{position:absolute;left:80px;right:80px;top:70px;display:flex;justify-content:space-between;align-items:center}
-.brand{font-family:A;font-size:32px}
-.pg{border:3px solid #1D1D1D;border-radius:999px;background:#FFFCF6;padding:6px 18px;font-weight:800;font-size:24px}
-.kick{position:absolute;left:80px;top:170px;font-weight:800;font-size:30px;color:#E49A4A}
-.acc{color:#E49A4A;text-shadow:5px 5px 0 #1D1D1D}
-.sub{position:absolute;left:80px;right:80px;font-weight:500;font-size:30px;line-height:1.5;color:#5A5148}
-.shot{position:absolute;background:#FFFCF6;border:4px solid #1D1D1D;border-radius:30px;box-shadow:9px 9px 0 #1D1D1D;overflow:hidden}
-.shot img{display:block;width:100%}
-.phone{position:absolute;background:#1D1D1D;border-radius:56px;padding:16px;box-shadow:10px 10px 0 #E49A4A}
-.phone .scr{border-radius:42px;overflow:hidden;background:#F5F0E6}
+@font-face{font-family:A;src:url(../../../assets/fonts/SBAggroB.woff)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1350px;overflow:hidden;font-family:P;font-weight:500;color:#17171A;letter-spacing:-.02em;background:#F5F0E6}
+body:before{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='640'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.006 0.01' numOctaves='3' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0.35  0 0 0 0 0.27  0 0 0 0 0.16  0 0 0 0.13 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E")}
+.top{position:absolute;left:72px;right:72px;top:64px;display:flex;justify-content:space-between;align-items:center;font-size:26px}
+.logo{font:30px A}
+.n{color:#8A8478;font-weight:800}
+h1{position:absolute;left:72px;right:72px;top:150px;font:800 84px/1.18 P;letter-spacing:-.035em}
+h1 em{font-style:normal;color:#EE7A2B}
+.sub{position:absolute;left:72px;right:72px;font-size:34px;line-height:1.5;color:#55514A}
+.phone{position:absolute;left:150px;width:780px;background:#F5F0E6;border-radius:44px 44px 0 0;border:3px solid #17171A;border-bottom:0;overflow:hidden;box-shadow:0 30px 60px rgba(60,45,20,.18)}
 .phone img{display:block;width:100%}
-.mascot{position:absolute}
-.foot{position:absolute;left:80px;right:80px;bottom:64px;display:flex;justify-content:space-between;align-items:center}
-.cta{border:4px solid #1D1D1D;border-radius:18px;background:#E49A4A;color:#fff;font-weight:800;font-size:31px;padding:14px 28px;box-shadow:6px 6px 0 #1D1D1D}
-.url{font-family:A;font-size:26px}
-.sticker{position:absolute;border:3px solid #1D1D1D;border-radius:999px;background:#FFFCF6;padding:8px 20px;font-weight:800;font-size:26px;box-shadow:4px 4px 0 #1D1D1D}
-
-.rv{position:absolute;border-radius:34px;overflow:hidden;background:#3A2912;box-shadow:12px 14px 0 #1D1D1D;border:4px solid #1D1D1D;color:#fff}
-.rv .ph{position:absolute;inset:0;background:url(../assets/sw-first.jpg) center 30%/cover;opacity:.72}
-.rv .sh{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.38),rgba(0,0,0,.1) 35%,rgba(0,0,0,.84))}
-.pill{display:inline-block;border-radius:999px;padding:6px 16px;font-weight:800;font-size:22px;background:rgba(255,255,255,.2);margin-right:8px}
-</style></head><body><div class="dots"></div>
-<div class="top"><span class="brand">방탈로그</span><span class="pg">1 / 4</span></div>
-<div class="kick">방탈출 다이어리</div>
-<h1 style="position:absolute;left:76px;top:220px;font-size:112px">방켓팅까지 해서<br>간 방,<br><span class="acc">1년 뒤에도</span><br>기억나요?</h1>
-<div class="sub" style="top:760px">예약 전쟁 뚫고 간 방도, 시간이 지나면 이름부터 가물가물해요.<br><b style="color:#1D1D1D">사진 한 장, 한 줄이면 남길 수 있어요.</b></div>
-<img class="mascot" src="../../../public/mascot.png" style="right:90px;top:900px;width:240px;transform:rotate(8deg)">
-<div class="foot"><span class="cta">이렇게 남아요 →</span><span class="url">bangtallog.com</span></div></body></html>
+.foot{position:absolute;left:72px;right:72px;bottom:56px;display:flex;justify-content:space-between;align-items:center;font-size:28px;font-weight:800}
+.pill{background:#17171A;color:#fff;border-radius:999px;padding:16px 30px}
+.note{color:#8A8478;font-weight:500;font-size:22px}
+.fade{position:absolute;left:0;right:0;bottom:0;height:230px;background:linear-gradient(180deg,rgba(245,240,230,0),#F5F0E6 62%)}
+</style></head><body>
+<div class="top"><span class="logo">방탈로그</span><span class="n">1 / 4</span></div>
+<h1 style="top:210px;font-size:104px">방켓팅까지<br>해서 간 방,<br><em>1년 뒤에도</em><br>기억나요?</h1>
+<p class="sub" style="top:800px">예약 전쟁 뚫고 간 방도 시간이 지나면<br>이름부터 가물가물해요.<br><b style="color:#17171A;font-weight:800">다녀온 날, 한 줄만 남겨 두세요.</b></p>
+<img src="../../../public/mascot.png" style="position:absolute;right:80px;bottom:150px;width:190px">
+<div class="foot"><span class="pill">넘겨서 보기</span><span>bangtallog.com</span></div>
+</body></html>
