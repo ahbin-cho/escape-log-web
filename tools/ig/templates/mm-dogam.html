@@ -1,0 +1,52 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-Medium.woff);font-weight:500}
+@font-face{font-family:Hand;src:url(../assets/fonts/nanum-brush-script-korean-400-normal.woff2)}
+@font-face{font-family:M;src:url(../assets/fonts/nanum-myeongjo-korean-800-normal.woff2);font-weight:800}
+@font-face{font-family:BH;src:url(../assets/fonts/black-han-sans-korean-400-normal.woff2)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1350px;overflow:hidden;background:#1F2624;font-family:P;color:#2A211A}
+.page{position:absolute;left:54px;right:54px;top:54px;bottom:54px;background:#E8DCC0;box-shadow:0 0 0 4px #2A211A,14px 16px 0 #0E1211;overflow:hidden}
+.page:before{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.03' numOctaves='4' seed='11'/%3E%3CfeColorMatrix values='0 0 0 0 0.42  0 0 0 0 0.32  0 0 0 0 0.18  0 0 0 0.28 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");mix-blend-mode:multiply}
+.frame{position:absolute;inset:34px;border:3px solid #2A211A;outline:1px solid #2A211A;outline-offset:-12px}
+.a{position:absolute}
+.seal{border:5px solid #A3302A;color:#A3302A;font-family:M;font-weight:800;text-align:center;line-height:1.05;background:rgba(163,48,42,.06)}
+.lab{font-family:M;font-weight:800;color:#2F5F5B;font-size:26px;letter-spacing:.1em}
+.ent{display:flex;gap:22px;padding:14px 0;border-bottom:2px solid rgba(42,33,26,.35);font-size:27px;line-height:1.45;word-break:keep-all}
+.ent b{font-family:M;font-weight:800;color:#A3302A;width:80px;flex:none;font-size:26px}
+</style></head><body>
+<div class="page"><div class="frame"></div>
+ <div class="a" style="left:90px;top:84px;font-family:M;font-weight:800;font-size:30px;letter-spacing:.35em;color:#2F5F5B">未命圖鑑</div>
+ <div class="a" style="right:90px;top:84px;font-family:M;font-weight:800;font-size:24px;color:#2A211A">第 一 號</div>
+ <div class="a" style="left:90px;right:90px;top:128px;height:3px;background:#2A211A"></div>
+ <div class="a" style="left:90px;top:150px;font-family:Hand;font-size:150px;line-height:1">어둑시니</div>
+ <div class="a lab" style="left:96px;top:300px">이름 없는 것들의 도감 · 첫 번째 기록</div>
+ <div class="a seal" style="right:96px;top:160px;width:132px;height:132px;font-size:40px;padding-top:18px;transform:rotate(4deg)">백산<br>방역</div>
+ <!-- 먹으로 그린 어둑시니: 위로 갈수록 커진다 -->
+ <svg class="a" viewBox="0 0 600 560" style="left:70px;top:360px;width:470px">
+  <defs><filter id="ink"><feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="3" seed="2"/><feDisplacementMap in="SourceGraphic" scale="14"/></filter>
+  <linearGradient id="g" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#2A211A" stop-opacity=".25"/><stop offset=".35" stop-color="#1A1512" stop-opacity=".85"/><stop offset="1" stop-color="#0E0B09"/></linearGradient></defs>
+  <g filter="url(#ink)">
+   <path d="M250 540 Q240 470 210 420 Q120 330 110 210 Q100 60 300 30 Q500 60 490 210 Q480 330 390 420 Q360 470 350 540Z" fill="url(#g)"/>
+   <path d="M150 300 Q70 330 40 420 M450 300 Q530 330 560 420" stroke="#1A1512" stroke-width="14" fill="none" stroke-linecap="round" opacity=".7"/>
+  </g>
+  <ellipse cx="245" cy="190" rx="26" ry="12" fill="#E8DCC0"/><ellipse cx="355" cy="190" rx="26" ry="12" fill="#E8DCC0"/>
+  <circle cx="245" cy="190" r="7" fill="#A3302A"/><circle cx="355" cy="190" r="7" fill="#A3302A"/>
+  <!-- 크기 눈금 -->
+  <g stroke="#2F5F5B" stroke-width="3" fill="none"><path d="M560 540 V40 M548 540 H572 M548 290 H572 M548 40 H572"/></g>
+  <text x="575" y="300" font-family="M" font-size="20" fill="#2F5F5B" transform="rotate(90 575 300)">올려다볼수록 ↑</text>
+  <path d="M300 545 q-30 10 -60 0" stroke="#2A211A" stroke-width="3" fill="none"/>
+ </svg>
+ <div class="a" style="left:560px;right:90px;top:390px">
+  <div class="ent"><b>出沒</b><span>밤길 · 어두운 골목 · 불 꺼진 방</span></div>
+  <div class="ent"><b>特徵</b><span>올려다볼수록 커지고 내려다보면 작아진다<br><small style="font-size:20px;color:#6B5A44">(옛이야기 속 어둑시니)</small></span></div>
+  <div class="ent" style="border:0"><b>對處</b><span>백산방역에 연락할 것</span></div>
+ </div>
+ <div class="a" style="left:90px;right:90px;top:950px;border-top:3px double #2A211A;padding-top:22px">
+  <div style="font-family:M;font-weight:800;font-size:34px">“어둑시니도 혼비백산, 백산방역.”</div>
+  <div style="margin-top:16px;font-size:28px;font-weight:800;color:#2A211A">키이스케이프 백산방역 「미명도감: 최초의 어둑시니」</div>
+  <div style="margin-top:8px;font-size:26px;color:#4A3D30">75분 · 난이도 ★3.5 · 일상·드라마·오피스 · <span style="color:#A3302A;font-weight:800">예약은 6일 전 아침 9:30 오픈</span></div>
+ </div>
+ <div class="a" style="left:90px;right:90px;bottom:60px;display:flex;justify-content:space-between;font-size:20px;color:#6B5A44"><span>정보: 키이스케이프 공식 사이트(11/14 확인) · 그림은 새로 그렸어요</span><span style="font-weight:800;color:#2A211A;white-space:nowrap">bangtallog.com</span></div>
+</div>
+</body></html>
