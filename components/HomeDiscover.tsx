@@ -1,69 +1,38 @@
 import Link from "next/link";
 import { listedConditions } from "@/lib/best";
 import { getAllThemes, listedBrands } from "@/lib/catalog-server";
+import { Chevron } from "@/components/LoggedOutCTA";
 
-// 홈 상단 "어떤 방 찾아?": 조건별 추천 진입 + 우리 팀 궁합 진입.
-// 서버 컴포넌트라 링크가 HTML 에 그대로 실려 검색엔진이 /best 페이지들을 따라간다.
+const CHIP =
+  "inline-block whitespace-nowrap rounded-lg bg-ink px-3 py-2 text-[13px] font-bold transition active:scale-[0.97]";
+const CHIP_ROW = "no-scrollbar -mx-4 flex gap-1.5 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0";
+
+// 홈 "어떤 방 찾아요?": 조건별 추천(/best) · 브랜드(/cafe) · 팀 궁합(/match) 진입.
+// 서버 컴포넌트라 링크가 HTML 에 그대로 실려 검색엔진이 따라간다.
 export default async function HomeDiscover() {
   const [all, brands] = await Promise.all([getAllThemes(), listedBrands()]);
   const conditions = listedConditions(all);
   const topBrands = brands.slice(0, 12);
 
   return (
-    <section className="space-y-3" aria-labelledby="home-discover">
-      <div className="flex items-baseline justify-between">
-        <h2 id="home-discover" className="text-xl">
-          🎯 어떤 방 찾아?
-        </h2>
-        {conditions.length > 0 && (
-          <Link href="/best" className="text-xs font-bold text-candy">
-            조건 전체 보기 →
-          </Link>
-        )}
-      </div>
-
+    <section aria-labelledby="home-discover">
+      <h2 id="home-discover" className="mb-3 text-[18px]">
+        어떤 방 찾아요?
+      </h2>
 
       {conditions.length > 0 && (
-        <ul className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
-          {conditions.map(({ condition: c, count }) => (
-            <li key={c.slug}>
-              <Link
-                href={`/best/${c.slug}`}
-                className="rough flex h-full items-center gap-2.5 rounded-2xl border-2 border-edge bg-panel px-3 py-3 transition hover:border-candy active:scale-[0.97]"
-              >
-                <span className="text-2xl leading-none" aria-hidden>
-                  {c.emoji}
-                </span>
-                <span className="min-w-0">
-                  <span className="block truncate text-sm font-extrabold">
-                    {c.label}
-                  </span>
-                  <span className="block text-xs font-bold text-cream/50">
-                    테마 {count}개
-                  </span>
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {topBrands.length > 0 && (
-        <div className="space-y-2 pt-1">
-          <div className="flex items-baseline justify-between">
-            <h3 className="text-base font-extrabold">🏠 브랜드로 찾기</h3>
-            <Link href="/cafe" className="text-xs font-bold text-candy">
-              전체 브랜드 {brands.length}개 →
+        <div>
+          <div className="mb-2 flex items-baseline justify-between">
+            <h3 className="text-[13px] font-bold text-cream/70">조건으로</h3>
+            <Link href="/best" className="text-[13px] text-cream/70">
+              전체 ›
             </Link>
           </div>
-          <ul className="no-scrollbar -mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1 sm:flex-wrap">
-            {topBrands.map((b) => (
-              <li key={b.key} className="shrink-0">
-                <Link
-                  href={`/cafe/${b.key}`}
-                  className="rough-sm inline-block whitespace-nowrap rounded-full border-2 border-edge/30 bg-panel px-3 py-1.5 text-sm font-bold transition hover:border-candy hover:text-candy"
-                >
-                  {b.key} <span className="text-cream/45">{b.count}</span>
+          <ul className={CHIP_ROW}>
+            {conditions.map(({ condition: c, count }) => (
+              <li key={c.slug} className="shrink-0">
+                <Link href={`/best/${c.slug}`} className={CHIP}>
+                  {c.label} <span className="font-medium text-cream/70">{count}</span>
                 </Link>
               </li>
             ))}
@@ -71,23 +40,34 @@ export default async function HomeDiscover() {
         </div>
       )}
 
-      <Link
-        href="/match"
-        className="rough flex items-center gap-4 rounded-2xl border-2 border-edge bg-grape/10 p-4 transition hover:border-grape active:scale-[0.99]"
-      >
-        <span className="text-3xl leading-none" aria-hidden>
-          👥
-        </span>
+      {topBrands.length > 0 && (
+        <div className="mt-4">
+          <div className="mb-2 flex items-baseline justify-between">
+            <h3 className="text-[13px] font-bold text-cream/70">브랜드로</h3>
+            <Link href="/cafe" className="text-[13px] text-cream/70">
+              전체 {brands.length}개 ›
+            </Link>
+          </div>
+          <ul className={CHIP_ROW}>
+            {topBrands.map((b) => (
+              <li key={b.key} className="shrink-0">
+                <Link href={`/cafe/${b.key}`} className={CHIP}>
+                  {b.key} <span className="font-medium text-cream/70">{b.count}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <Link href="/match" className="mt-4 flex items-center gap-3 border-y border-line py-3.5">
         <span className="min-w-0 flex-1">
-          <span className="block font-extrabold">
-            여럿이 가? 우리 팀 궁합부터
-          </span>
-          <span className="mt-0.5 block text-sm text-cream/70 [word-break:keep-all]">
-            팀 궁합 점수에, 제일 겁 많은 친구도 들어갈 수 있는 방까지 골라 줄게.
-            링크 하나로 단톡방에 공유.
+          <b className="block text-[15px] font-extrabold">여럿이 가요? 우리 팀 궁합부터</b>
+          <span className="block text-[13px] text-cream/70 [word-break:keep-all]">
+            제일 겁 많은 친구도 들어갈 수 있는 방까지 골라 줘요
           </span>
         </span>
-        <span className="shrink-0 text-sm font-extrabold text-grape">시작 →</span>
+        <Chevron className="text-cream/50" />
       </Link>
     </section>
   );
