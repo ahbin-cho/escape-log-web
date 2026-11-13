@@ -7,7 +7,7 @@ export default function MiniGameFab() {
   const [hover, setHover] = useState(false);
   const pathname = usePathname();
   // 기록 작성·수정 화면은 아래에 저장 바가 붙어 있어서 가리지 않게 숨긴다
-  if (pathname === "/new" || pathname?.startsWith("/edit/")) return null;
+  if (pathname === "/new" || pathname === "/records" || pathname?.startsWith("/edit/")) return null;
 
   return (
     <a
