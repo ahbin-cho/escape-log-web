@@ -5,6 +5,7 @@ import Image from "next/image";
 import type { TimePref, TypeId } from "@/lib/quiz/slots";
 import { PLAYERS_LABEL, QUIZ_TYPES, TIME_LABEL, typeImage } from "@/lib/quiz/types";
 import { fearTrait } from "@/lib/terms";
+import { HINT_NOTE } from "@/lib/quiz/story-card";
 import Mascot from "@/components/Mascot";
 
 function Bar({ label, value, note }: { label: string; value: number; note?: string }) {
@@ -39,8 +40,6 @@ function Text({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
-
-const HINT_NOTE = ["", "끝까지 버틴다", "웬만하면 버틴다", "적당히 쓴다", "막히면 쓴다", "바로 쓴다"];
 
 // 유형 그림·이름·한 줄 설명·세부 성향. 내 결과 화면과 공유 화면이 같이 쓴다.
 export default function TypeCard({
