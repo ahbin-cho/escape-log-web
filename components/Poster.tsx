@@ -19,16 +19,17 @@ export default function Poster({
   rounded?: string;
 }) {
   const [broken, setBroken] = useState(false);
+  const url = (src ?? "").trim(); // 빈칸·줄바꿈만 든 주소는 없는 것으로 본다
   const t = TONE[genre ?? "기타"] ?? TONE["기타"];
   return (
     <span
       className={`relative block aspect-[2/3] w-full overflow-hidden ${rounded} ${className}`}
       style={{ backgroundColor: t.bg }}
     >
-      {src && !broken ? (
+      {url && !broken ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={src}
+          src={url}
           alt={`${name} 포스터`}
           loading="lazy"
           decoding="async"
