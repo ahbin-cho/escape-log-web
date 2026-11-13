@@ -18,6 +18,7 @@ import {
 import { brandOf } from "@/lib/cafe";
 import RecordCard from "@/components/RecordCard";
 import ThemeCard from "@/components/ThemeCard";
+import { CHIP, CHIP_ON } from "@/lib/ui";
 
 // 결정론적 셔플 (같은 날이면 같은 순서 — 새로고침해도 안정적)
 function seededShuffle<T>(arr: T[]): T[] {
@@ -96,46 +97,46 @@ export default function RegionExplorer() {
   const hasMore = visible < filteredThemes.length;
 
   if (!ready) {
-    return <p className="py-20 text-center text-cream/55">불러오는 중…</p>;
+    return <p className="py-20 text-center text-cream/60">불러오는 중…</p>;
   }
 
   return (
     <div className="space-y-8">
       <header className="space-y-1">
-        <h1 className="text-xl font-extrabold sm:text-2xl">🗺️ 지역별 방탈출</h1>
-        <p className="text-sm text-cream/70">
-          내 기록과 추천 테마를 지역(시·도)별로 모아봤어.
+        <h1 className="text-[22px] font-extrabold leading-tight">지역별 방탈출</h1>
+        <p className="text-sm text-cream/60">
+          내 기록과 테마를 지역(시·도)별로 모아 봤어요.
         </p>
       </header>
 
       {/* 내 기록 분포 */}
       {records.length === 0 ? (
-        <div className="rounded-2xl border-2 border-dashed border-edge/40 bg-panel py-10 text-center">
-          <p className="text-sm text-cream/60">
-            기록이 쌓이면 내 지역 분포가 그려져!
+        <div className="flex items-center justify-between gap-3 rounded-[14px] bg-ink px-4 py-3.5">
+          <p className="text-sm text-cream/70">
+            기록이 쌓이면 내 지역 분포가 그려져요.
           </p>
           <Link
             href="/new"
-            className="rough mt-3 inline-block rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-edge shadow-cute"
+            className="shrink-0 text-sm font-extrabold underline underline-offset-2"
           >
-            첫 기록 추가하기
+            첫 기록 남기기
           </Link>
         </div>
       ) : (
         <>
           {topRegion && (
-            <div className="rounded-2xl border-2 border-edge bg-panel p-5">
-              <p className="text-xs text-cream/60">내가 가장 많이 간 지역</p>
-              <p className="mt-1 text-xl font-extrabold">
-                📍 {topRegion.region}{" "}
-                <span className="text-sm font-normal text-cream/70">
+            <div className="border-y border-line py-3.5">
+              <p className="text-[13px] text-cream/60">내가 가장 많이 간 지역</p>
+              <p className="mt-0.5 text-[22px] font-extrabold">
+                {topRegion.region}{" "}
+                <span className="text-sm font-normal text-cream/60">
                   {topRegion.count}개 방
                 </span>
               </p>
             </div>
           )}
 
-          <section className="space-y-2">
+          <section className="space-y-3">
             <h2 className="text-lg font-extrabold">내 기록 분포</h2>
             <div className="space-y-1.5">
               {dist.map((d) => {
@@ -151,11 +152,11 @@ export default function RegionExplorer() {
                     <span className="w-14 shrink-0 text-sm font-bold">
                       {d.region}
                     </span>
-                    <span className="relative h-6 flex-1 overflow-hidden rounded-lg border-2 border-edge bg-ink">
+                    <span className="relative h-5 flex-1 overflow-hidden rounded-md bg-ink">
                       <span
                         className={`block h-full ${
-                          d.region === "미분류" ? "bg-cream/20" : "bg-candy"
-                        } ${active ? "opacity-100" : "opacity-80"}`}
+                          d.region === "미분류" ? "bg-cream/20" : active ? "bg-edge" : "bg-cream/45"
+                        }`}
                         style={{
                           width: `${Math.max(8, Math.round((d.count / maxCount) * 100))}%`,
                         }}
@@ -180,16 +181,16 @@ export default function RegionExplorer() {
       )}
 
       {/* 지역별 추천 테마 (크롤/등록 카탈로그) */}
-      <section className="space-y-3 border-t-2 border-edge/15 pt-6">
+      <section className="space-y-3 border-t border-line pt-6">
         <div className="flex items-baseline justify-between">
-          <h2 className="text-lg font-extrabold">🎯 지역별 방탈출 테마</h2>
-          <span className="text-xs font-bold text-cream/60">
+          <h2 className="text-lg font-extrabold">지역별 방탈출 테마</h2>
+          <span className="text-[13px] text-cream/60">
             {filteredThemes.length}개
           </span>
         </div>
 
         {/* 지역 필터 칩 (막대와 연동) */}
-        <div className="flex flex-wrap gap-1.5">
+        <div className="no-scrollbar -mx-4 flex gap-1.5 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0">
           <Chip
             label="전체"
             active={selected === null}
@@ -207,7 +208,7 @@ export default function RegionExplorer() {
 
         {/* 브랜드 필터 칩 */}
         {brandsPresent.length > 1 && (
-          <div className="flex flex-wrap gap-1.5">
+          <div className="no-scrollbar -mx-4 flex gap-1.5 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0">
             <Chip
               label="브랜드 전체"
               active={brandFilter === null}
@@ -225,12 +226,12 @@ export default function RegionExplorer() {
         )}
 
         {filteredThemes.length === 0 ? (
-          <p className="rounded-2xl border-2 border-dashed border-edge/40 bg-panel py-10 text-center text-sm text-cream/60">
+          <p className="rounded-[14px] bg-ink py-10 text-center text-sm text-cream/60">
             이 지역엔 등록된 테마가 아직 없어요
           </p>
         ) : (
           <>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-2 gap-x-3 gap-y-5 pt-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
               {pagedThemes.map(({ t, region }) => (
                 <ThemeCard
                   key={`${t.cafe}-${t.name}`}
@@ -243,7 +244,7 @@ export default function RegionExplorer() {
               <div className="pt-2 text-center">
                 <button
                   onClick={() => setVisible((v) => v + PAGE_SIZE)}
-                  className="rough rounded-xl border-2 border-edge bg-panel px-5 py-2.5 text-sm font-extrabold shadow-cute transition active:scale-[0.97]"
+                  className="w-full rounded-xl border border-line bg-white px-5 py-3 text-sm font-extrabold transition hover:bg-ink active:scale-[0.98] sm:w-auto"
                 >
                   더보기 ({filteredThemes.length - visible} 남음)
                 </button>
@@ -253,8 +254,8 @@ export default function RegionExplorer() {
         )}
       </section>
 
-      <p className="text-xs text-cream/55">
-        ※ 지역은 매장명 키워드로 자동 추정해요. 못 찾으면 “미분류”로 모여요.
+      <p className="text-xs text-cream/60">
+        지역은 매장명 키워드로 자동 추정해요. 못 찾으면 “미분류”로 모여요.
       </p>
     </div>
   );
@@ -272,11 +273,8 @@ function Chip({
   return (
     <button
       onClick={onClick}
-      className={`rough-sm rounded-full border px-3 py-1.5 text-sm font-bold transition active:scale-[0.97] ${
-        active
-          ? "border-candy bg-candy/10 text-candy"
-          : "border-edge/20 bg-panel text-cream/60 hover:border-edge/40"
-      }`}
+      aria-pressed={active}
+      className={`shrink-0 whitespace-nowrap ${active ? CHIP_ON : CHIP}`}
     >
       {label}
     </button>

@@ -5,9 +5,27 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { ThemeRow } from "@/lib/catalog-server";
 import { searchThemes } from "@/lib/search";
-import { genreEmoji } from "@/lib/store";
 import { brandOf } from "@/lib/cafe";
 import { norm } from "@/lib/search";
+import Poster from "@/components/Poster";
+import { CHIP, posterSrc } from "@/lib/ui";
+
+function SearchIcon() {
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      className="h-4 w-4 shrink-0 text-cream/60"
+    >
+      <circle cx="11" cy="11" r="7" />
+      <path d="m20 20-3.5-3.5" />
+    </svg>
+  );
+}
 
 const MIN_BRAND_THEMES = 3; // 브랜드 페이지가 만들어지는 기준(lib/catalog-server 의 MIN_THEMES 와 같게)
 
@@ -94,12 +112,12 @@ export default function SearchButton() {
         type="button"
         onClick={() => setOpen(true)}
         aria-label="테마 검색"
-        className="flex items-center gap-1.5 rounded-full border-2 border-edge bg-panel px-3 py-1.5 text-sm font-bold text-cream/55 transition hover:border-candy hover:text-cream active:scale-[0.97] md:w-60"
+        className="flex items-center gap-1.5 rounded-full bg-ink px-3 py-1.5 text-sm text-cream/60 transition hover:text-cream active:scale-[0.97] md:w-60"
       >
-        <span aria-hidden>🔍</span>
+        <SearchIcon />
         <span className="md:hidden">검색</span>
         <span className="hidden md:inline">테마·매장·동네 검색</span>
-        <kbd className="ml-auto hidden rounded-md border border-edge/25 px-1.5 text-[11px] font-bold text-cream/40 md:inline">/</kbd>
+        <kbd className="ml-auto hidden rounded-md border border-line bg-white px-1.5 text-[11px] font-bold text-cream/60 md:inline">/</kbd>
       </button>
 
       {open && (
@@ -110,23 +128,23 @@ export default function SearchButton() {
           <div
             role="dialog"
             aria-label="테마 검색"
-            className="w-full max-w-xl overflow-hidden rounded-2xl border-2 border-edge bg-ink shadow-cute"
+            className="w-full max-w-xl overflow-hidden rounded-2xl bg-white shadow-float"
             onClick={(e) => e.stopPropagation()}
           >
-            <form onSubmit={submit} className="flex items-center gap-2 border-b-2 border-edge/20 px-4">
-              <span aria-hidden>🔍</span>
+            <form onSubmit={submit} className="flex items-center gap-2 border-b border-line px-4">
+              <SearchIcon />
               <input
                 ref={inputRef}
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
-                placeholder="테마·매장·지역 검색 (초성도 돼요)"
-                className="w-full bg-transparent py-3.5 text-base outline-none placeholder:text-cream/45"
+                placeholder="테마, 매장, 동네로 찾기 (초성도 돼요)"
+                className="w-full bg-transparent py-3.5 text-base outline-none placeholder:text-cream/50"
                 enterKeyHint="search"
               />
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="shrink-0 text-xs font-bold text-cream/55"
+                className="shrink-0 text-[13px] text-cream/60"
               >
                 닫기
               </button>
@@ -136,14 +154,14 @@ export default function SearchButton() {
               {!q.trim() ? (
                 <div className="space-y-4 p-2">
                   <div className="space-y-2">
-                  <p className="text-xs font-bold text-cream/55">이렇게 찾아보세요</p>
+                  <p className="text-[13px] text-cream/60">이렇게 찾아보세요</p>
                   <div className="flex flex-wrap gap-1.5">
                     {SUGGEST.map((s) => (
                       <button
                         key={s}
                         type="button"
                         onClick={() => setQ(s)}
-                        className="rounded-full border border-edge/30 bg-panel px-3 py-1.5 text-sm font-bold"
+                        className={CHIP}
                       >
                         {s}
                       </button>
@@ -152,31 +170,31 @@ export default function SearchButton() {
                   </div>
                   {brands.length > 0 && (
                     <div className="space-y-2">
-                      <p className="text-xs font-bold text-cream/55">브랜드로 찾기</p>
+                      <p className="text-[13px] text-cream/60">브랜드로 찾기</p>
                       <div className="flex flex-wrap gap-1.5">
                         {brands.slice(0, 16).map(([b, n]) => (
                           <Link
                             key={b}
                             href={`/cafe/${b}`}
                             onClick={() => setOpen(false)}
-                            className="rounded-full border border-edge/30 bg-panel px-3 py-1.5 text-sm font-bold hover:border-candy"
+                            className={CHIP}
                           >
-                            {b} <span className="text-cream/45">{n}</span>
+                            {b} <span className="text-cream/60">{n}</span>
                           </Link>
                         ))}
                         <Link
                           href="/cafe"
                           onClick={() => setOpen(false)}
-                          className="rounded-full px-3 py-1.5 text-sm font-bold text-candy"
+                          className="rounded-full px-3 py-1.5 text-[13px] font-bold underline underline-offset-2"
                         >
-                          전체 →
+                          전체
                         </Link>
                       </div>
                     </div>
                   )}
                 </div>
               ) : index === null ? (
-                <p className="p-4 text-center text-sm text-cream/55">불러오는 중…</p>
+                <p className="p-4 text-center text-sm text-cream/60">불러오는 중…</p>
               ) : hits.length === 0 ? (
                 <p className="p-4 text-center text-sm text-cream/60">
                   “{q}”에 맞는 테마가 없어요
@@ -188,9 +206,12 @@ export default function SearchButton() {
                       <Link
                         href={`/cafe/${brandMatch[0]}`}
                         onClick={() => setOpen(false)}
-                        className="mb-1 flex items-center gap-3 rounded-xl bg-candy/10 px-3 py-2.5 font-extrabold text-candy hover:bg-candy/20"
+                        className="mb-1 flex items-center justify-between gap-3 rounded-xl bg-[#FFF3E6] px-3 py-2.5 text-sm font-extrabold"
                       >
-                        🏠 {brandMatch[0]} 전 지점 테마 {brandMatch[1]}개 보기 →
+                        {brandMatch[0]} 전 지점 테마 {brandMatch[1]}개 보기
+                        <span aria-hidden className="text-[#A85A14]">
+                          ›
+                        </span>
                       </Link>
                     </li>
                   )}
@@ -199,13 +220,13 @@ export default function SearchButton() {
                       <Link
                         href={`/theme/${t.id}`}
                         onClick={() => setOpen(false)}
-                        className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-panel"
+                        className="flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-ink"
                       >
-                        <span className="text-lg" aria-hidden>
-                          {genreEmoji(t.genre)}
+                        <span className="block w-9 shrink-0 overflow-hidden rounded-md text-[0px]">
+                          <Poster src={posterSrc(t.poster_url)} name={t.name} genre={t.genre} rounded="rounded-md" />
                         </span>
                         <span className="min-w-0 flex-1">
-                          <span className="block truncate font-extrabold">{t.name}</span>
+                          <span className="block truncate text-sm font-extrabold">{t.name}</span>
                           <span className="block truncate text-xs text-cream/60">
                             {t.cafe} · 난이도 {t.difficulty}/5 · 공포도 {t.fear_level}/5
                           </span>
@@ -217,9 +238,9 @@ export default function SearchButton() {
                     <button
                       type="submit"
                       onClick={submit}
-                      className="w-full rounded-xl px-3 py-2.5 text-left text-sm font-bold text-candy hover:bg-panel"
+                      className="w-full rounded-xl px-3 py-2.5 text-left text-sm font-bold underline underline-offset-2 hover:bg-ink"
                     >
-                      “{q}” 전체 결과 보기 →
+                      “{q}” 전체 결과 보기
                     </button>
                   </li>
                 </ul>

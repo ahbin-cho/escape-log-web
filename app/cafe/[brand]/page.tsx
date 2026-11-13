@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ThemeList from "@/components/ThemeList";
 import OwnerCTA from "@/components/OwnerCTA";
+import QuizRow from "@/components/QuizRow";
+import { CHIP, CRUMB } from "@/lib/ui";
 import { branchOf } from "@/lib/cafe";
 import {
   decodeParam,
@@ -109,23 +111,23 @@ export default async function BrandPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <nav className="flex flex-wrap items-center gap-1 text-xs font-bold text-cream/50">
-        <Link href="/" className="hover:text-candy">
+      <nav aria-label="경로" className={CRUMB}>
+        <Link href="/" className="hover:text-cream">
           방탈로그
         </Link>
-        <span aria-hidden>›</span>
-        <Link href="/cafe" className="hover:text-candy">
+        <span aria-hidden>·</span>
+        <Link href="/cafe" className="hover:text-cream">
           브랜드별 방탈출
         </Link>
-        <span aria-hidden>›</span>
-        <span className="text-cream/70">{brand}</span>
+        <span aria-hidden>·</span>
+        <span className="text-cream/80">{brand}</span>
       </nav>
 
       <header className="space-y-1">
-        <h1 className="text-xl font-extrabold sm:text-2xl">
-          🏠 {brand} 방탈출 테마 {themes.length}개
+        <h1 className="text-[22px] font-extrabold leading-tight">
+          {brand} 방탈출 테마 {themes.length}개
         </h1>
-        <p className="text-sm text-cream/70">
+        <p className="text-sm text-cream/60">
           {brand}의 테마를 지점별로 모았어요. 테마를 누르면 줄거리와 예약
           정보를 볼 수 있어요.
         </p>
@@ -136,27 +138,29 @@ export default async function BrandPage({ params }: Props) {
         return (
           <section key={branch || brand} className="space-y-3">
             {branch && (
-              <h2 className="text-lg font-extrabold">
-                {brand} {branch}{" "}
-                <span className="text-sm font-bold text-cream/50">
-                  {list.length}개
-                </span>
+              <div className="flex items-baseline justify-between gap-3">
+                <h2 className="text-lg font-extrabold">
+                  {brand} {branch}{" "}
+                  <span className="text-sm font-normal text-cream/60">
+                    {list.length}개
+                  </span>
+                </h2>
                 {region && regionPages.has(region) && (
                   <Link
                     href={`/region/${region}`}
-                    className="ml-2 text-xs font-bold text-cream/50 hover:text-candy"
+                    className="shrink-0 text-[13px] text-cream/60 hover:text-cream"
                   >
-                    {region} 방탈출 더보기 ›
+                    {region} 방탈출 더보기
                   </Link>
                 )}
-              </h2>
+              </div>
             )}
             <ThemeList themes={list} />
           </section>
         );
       })}
 
-      <nav className="space-y-3 border-t-2 border-edge/15 pt-6">
+      <nav className="space-y-3 border-t border-line pt-6">
         <h2 className="text-lg font-extrabold">다른 브랜드</h2>
         <ul className="flex flex-wrap gap-1.5">
           {brands
@@ -165,27 +169,16 @@ export default async function BrandPage({ params }: Props) {
               <li key={b.key}>
                 <Link
                   href={`/cafe/${b.key}`}
-                  className="rough-sm inline-block rounded-full border border-edge/20 bg-panel px-3 py-1.5 text-sm font-bold text-cream/70 transition hover:border-candy hover:text-candy"
+                  className={CHIP}
                 >
-                  {b.key} <span className="text-cream/45">{b.count}</span>
+                  {b.key} <span className="text-cream/60">{b.count}</span>
                 </Link>
               </li>
             ))}
         </ul>
       </nav>
 
-      <section className="rough rounded-2xl border-2 border-dashed border-edge/30 bg-panel/60 p-5 text-center">
-        <p className="text-sm font-bold">어떤 테마가 내 취향일까?</p>
-        <p className="mt-1 text-sm text-cream/60">
-          질문 몇 개로 방탈출 취향을 진단하고 딱 맞는 방을 추천받아요.
-        </p>
-        <Link
-          href="/quiz"
-          className="rough mt-3 inline-block rounded-xl border-2 border-edge bg-candy px-5 py-2.5 text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.97]"
-        >
-          🔮 취향 찾기
-        </Link>
-      </section>
+      <QuizRow title="어떤 테마가 내 취향일까?" sub="질문 몇 개로 방탈출 취향을 진단하고 맞는 방을 추천받아요" />
 
       <OwnerCTA cafe={brand} />
     </article>

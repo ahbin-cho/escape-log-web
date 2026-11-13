@@ -61,27 +61,27 @@ export default function ThemeReviews({
   const recordHref = `/new?theme=${themeId}`;
 
   return (
-    <section className="space-y-5" aria-labelledby="theme-reviews">
+    <section className="space-y-6" aria-labelledby="theme-reviews">
       {/* 내 기록 */}
       {mine.length > 0 && (
-        <div className="rough space-y-2 rounded-2xl border-2 border-candy/60 bg-candy/10 p-4">
-          <h2 className="text-lg font-extrabold">📓 내 기록</h2>
-          <ul className="space-y-1.5">
+        <div>
+          <h2 className="text-lg font-extrabold">내 기록</h2>
+          <ul className="mt-2.5 divide-y divide-line border-y border-line">
             {mine.map((r) => (
               <li key={r.id}>
                 <Link
                   href={`/edit/${r.id}`}
-                  className="flex flex-wrap items-center gap-1.5 text-sm font-bold hover:text-candy"
+                  className="flex flex-wrap items-center gap-x-2 gap-y-0.5 py-3 text-sm font-bold"
                 >
                   <span className="text-cream/60">{r.playedAt || "날짜 없음"}</span>
-                  <span className={r.success ? "text-mint" : "text-cream/60"}>
+                  <span className={r.success ? "text-cream" : "text-cream/60"}>
                     {r.success ? `탈출${r.remainingTime ? ` · ${r.remainingTime} 남김` : ""}` : "실패"}
                   </span>
                   <span className="text-cream/60">{hintText(r.hintCount)}</span>
                   {ratingLabel(r.rating) && (
-                    <span className="text-candy">{ratingLabel(r.rating)}</span>
+                    <span className="text-[#A85A14]">{ratingLabel(r.rating)}</span>
                   )}
-                  <span className="text-xs text-cream/50">수정 →</span>
+                  <span className="ml-auto text-xs text-cream/60">수정</span>
                 </Link>
               </li>
             ))}
@@ -93,22 +93,22 @@ export default function ThemeReviews({
       <div className="space-y-3">
         <div className="flex items-baseline justify-between">
           <h2 id="theme-reviews" className="text-lg font-extrabold">
-            💬 모두의 후기 {summary ? <span className="text-cream/50">{summary.count}</span> : null}
+            모두의 후기 {summary ? <span className="text-cream/60">{summary.count}</span> : null}
           </h2>
-          <Link href="/feed" className="text-xs font-bold text-candy">
-            전체 후기 →
+          <Link href="/feed" className="text-[13px] text-cream/60 hover:text-cream">
+            전체 후기
           </Link>
         </div>
 
         {first && (
           <p className="text-sm font-bold">
-            🥇 이 방의 첫 후기는 <span className="text-candy">{first.nickname}</span>님
+            이 방의 첫 후기는 <span className="text-[#A85A14]">{first.nickname}</span>님
             {mine.some((r) => r.id === first.id) ? " (바로 나!)" : ""}
           </p>
         )}
 
         {summary && (
-          <p className="flex flex-wrap gap-x-3 gap-y-1 text-sm font-bold text-cream/70">
+          <p className="flex flex-wrap gap-x-3 gap-y-1 text-sm text-cream/70">
             <span>탈출 성공률 {summary.successRate}%</span>
             <span>평균 별점 {summary.avgRating}</span>
             {summary.noHint > 0 && <span>노힌트 {summary.noHint}명</span>}
@@ -116,51 +116,48 @@ export default function ThemeReviews({
         )}
 
         {ready && all.length > 0 && real.length === 0 && (
-          <p className="rounded-xl bg-candy/10 px-3 py-2 text-sm font-bold">
-            🥇 아직 진짜 후기가 없어요. 지금 남기면 첫 후기 배지가 붙어요!
+          <p className="rounded-xl bg-[#FFF3E6] px-3.5 py-2.5 text-sm font-bold">
+            아직 진짜 후기가 없어요. 지금 남기면 첫 후기 배지가 붙어요.
           </p>
         )}
 
         {!ready ? (
-          <p className="text-sm text-cream/55">후기 불러오는 중…</p>
+          <p className="text-sm text-cream/60">후기 불러오는 중…</p>
         ) : all.length === 0 ? (
-          <div className="rounded-2xl border-2 border-dashed border-edge/40 bg-panel p-5 text-center">
-            <p className="text-2xl" aria-hidden>
-              🥇
-            </p>
-            <p className="mt-1 text-sm font-extrabold">아직 아무도 후기를 안 남긴 방이에요</p>
+          <div className="rounded-[14px] bg-ink px-4 py-5 text-center">
+            <p className="text-sm font-extrabold">아직 아무도 후기를 안 남긴 방이에요</p>
             <p className="mt-1 text-sm text-cream/60">
-              지금 공개 후기를 남기면 <b className="text-candy">첫 후기 배지</b>가 붙어요.
+              지금 공개 후기를 남기면 <b className="text-cream">첫 후기 배지</b>가 붙어요.
               스포 없이 한 줄이면 충분해요.
             </p>
           </div>
         ) : (
-          <ul className="space-y-2">
+          <ul className="divide-y divide-line border-y border-line">
             {all.map((r) => (
-              <li key={r.id} className="flex gap-3 rounded-2xl border-2 border-edge bg-panel p-3.5">
+              <li key={r.id} className="flex gap-3 py-3.5">
                 <div className="min-w-0 flex-1">
                   <p className="flex flex-wrap items-center gap-1.5 text-xs font-bold">
                     <span className="font-extrabold">{r.nickname}</span>
                     {r.isSample && (
-                      <span className="rounded-md border border-edge/40 px-1.5 py-0.5 text-[11px] font-extrabold text-cream/60">
+                      <span className="rounded-md bg-ink px-1.5 py-0.5 text-[11px] font-extrabold text-cream/60">
                         예시
                       </span>
                     )}
                     {first?.id === r.id && (
-                      <span className="rounded-md bg-candy px-1.5 py-0.5 text-[11px] font-extrabold text-edge">
-                        🥇 첫 후기
+                      <span className="rounded-md bg-[#FFF3E6] px-1.5 py-0.5 text-[11px] font-extrabold text-[#A85A14]">
+                        첫 후기
                       </span>
                     )}
-                    <span className={r.success ? "text-mint" : "text-cream/55"}>
+                    <span className={r.success ? "text-cream" : "text-cream/60"}>
                       {r.success ? "탈출" : "실패"}
                     </span>
-                    <span className="text-cream/55">{hintText(r.hintCount)}</span>
+                    <span className="text-cream/60">{hintText(r.hintCount)}</span>
                     {ratingLabel(r.rating) && (
-                      <span className="rounded-md bg-candy/10 px-1.5 py-0.5 text-candy">
+                      <span className="text-[#A85A14]">
                         {ratingLabel(r.rating)}
                       </span>
                     )}
-                    {r.playedAt && <span className="text-cream/45">{r.playedAt}</span>}
+                    {r.playedAt && <span className="font-normal text-cream/60">{r.playedAt}</span>}
                   </p>
                   {r.oneLiner && <p className="mt-1 text-sm text-cream/85">“{r.oneLiner}”</p>}
                 </div>
@@ -169,7 +166,7 @@ export default function ThemeReviews({
                   <img
                     src={r.photoUrl}
                     alt=""
-                    className="h-16 w-16 shrink-0 rounded-xl border-2 border-edge object-cover"
+                    className="h-16 w-16 shrink-0 rounded-lg object-cover"
                   />
                 )}
               </li>
@@ -179,13 +176,13 @@ export default function ThemeReviews({
 
         <Link
           href={recordHref}
-          className="rough block rounded-xl border-2 border-edge bg-panel px-4 py-3 text-center text-sm font-extrabold transition hover:border-candy active:scale-[0.99]"
+          className="block rounded-xl border border-line bg-white px-4 py-3 text-center text-sm font-extrabold transition hover:bg-ink active:scale-[0.99]"
         >
           {mine.length > 0
-            ? "✍️ 이 방 또 기록하기"
+            ? "이 방 또 기록하기"
             : real.length === 0
-              ? "🥇 첫 후기 남기기"
-              : "✍️ 다녀왔다면 이 방 기록하기"}
+              ? "첫 후기 남기기"
+              : "다녀왔다면 이 방 기록하기"}
         </Link>
       </div>
     </section>

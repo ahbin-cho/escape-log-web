@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import Poster from "@/components/Poster";
+import { BTN_LINE, BTN_PRIMARY, posterSrc } from "@/lib/ui";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { getSpotlight, getSpotlights, spotlightThemes } from "@/lib/spotlight-server";
 
@@ -26,8 +28,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: { title: s.seoTitle, description: s.seoDescription, url, type: "article", siteName: SITE_NAME },
   };
 }
-
-const dots = (n: number) => "●".repeat(Math.max(0, n)) + "○".repeat(Math.max(0, 5 - n));
 
 export default async function SpotlightPage({ params }: Props) {
   const s = await getSpotlight(params.slug);
@@ -87,15 +87,12 @@ export default async function SpotlightPage({ params }: Props) {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(j) }} />
       ))}
 
-      <header className="space-y-4 border-b-2 border-edge pb-7">
-        <p className="flex items-center gap-2 text-[11px] font-extrabold tracking-[0.22em] text-candy">
-          <span className="h-px w-6 bg-candy" />
-          화제의 방 · {s.label}
-        </p>
-        <h1 className="text-3xl leading-tight sm:text-5xl sm:leading-[1.15] [word-break:keep-all]">{s.title}</h1>
-        <p className="text-lg font-extrabold">{s.name}</p>
-        <p className="max-w-2xl leading-relaxed text-cream/70 [word-break:keep-all]">{s.lead}</p>
-        <p className="text-xs font-bold text-cream/45">
+      <header className="space-y-3 border-b border-line pb-6">
+        <p className="text-[13px] font-extrabold text-[#A85A14]">화제의 방 · {s.label}</p>
+        <h1 className="text-[26px] leading-tight sm:text-4xl sm:leading-[1.2] [word-break:keep-all]">{s.title}</h1>
+        <p className="text-base font-extrabold">{s.name}</p>
+        <p className="max-w-2xl text-[15px] leading-[1.65] text-cream/80 [word-break:keep-all]">{s.lead}</p>
+        <p className="text-[13px] text-cream/60">
           {s.checkedAt.replaceAll("-", ".")} 확인 · 출처{" "}
           <a href={s.source.url} target="_blank" rel="noopener noreferrer nofollow" className="underline underline-offset-2">
             {s.source.name}
@@ -105,36 +102,27 @@ export default async function SpotlightPage({ params }: Props) {
 
       {themes.length > 0 && (
         <section aria-labelledby="sp-themes" className="space-y-4">
-          <h2 id="sp-themes" className="text-xl">
+          <h2 id="sp-themes" className="text-lg sm:text-xl">
             테마 {themes.length}개 한눈에
           </h2>
-          <ol className="divide-y divide-edge/15 border-y border-edge/15">
-            {themes.map((t, i) => (
+          <ol className="divide-y divide-line border-y border-line">
+            {themes.map((t) => (
               <li key={t.id}>
                 <Link href={`/theme/${t.id}?from=spotlight`} className="group flex gap-4 py-4">
-                  <span className="relative block aspect-[3/4] w-24 shrink-0 overflow-hidden rounded-md bg-edge/10 sm:w-28">
-                    {t.poster_url && (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={t.poster_url}
-                        alt={`${t.name} 포스터`}
-                        loading="lazy"
-                        referrerPolicy="no-referrer"
-                        className="absolute inset-0 h-full w-full object-cover"
-                      />
-                    )}
+                  <span className="block w-24 shrink-0 sm:w-28">
+                    <Poster src={posterSrc(t.poster_url)} name={t.name} genre={t.genre} />
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="text-[11px] font-extrabold tabular-nums tracking-widest text-cream/40">
-                      {String(i + 1).padStart(2, "0")} · {(t.tags ?? []).find((x) => x !== "메이플스토리") ?? t.genre}
+                    <span className="text-xs font-extrabold text-cream/60">
+                      {(t.tags ?? []).find((x) => x !== "메이플스토리") ?? t.genre}
                     </span>
-                    <span className="mt-0.5 block text-lg font-extrabold group-hover:text-candy">{t.name}</span>
+                    <span className="mt-0.5 block text-base font-extrabold group-hover:underline">{t.name}</span>
                     {t.teaser && (
-                      <span className="mt-1 block text-sm leading-relaxed text-cream/65 [word-break:keep-all]">“{t.teaser}”</span>
+                      <span className="mt-1 line-clamp-3 text-sm leading-relaxed text-cream/75 [word-break:keep-all]">{t.teaser}</span>
                     )}
-                    <span className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs font-bold text-cream/55">
-                      <span>난이도 {dots(t.difficulty)}</span>
-                      <span>공포 {dots(t.fear_level)}</span>
+                    <span className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-cream/60">
+                      <span>난이도 {t.difficulty}/5</span>
+                      <span>공포 {t.fear_level}/5</span>
                       {t.time_limit ? <span>{t.time_limit}분</span> : null}
                       {t.players ? <span>{t.players}명</span> : null}
                     </span>
@@ -147,52 +135,52 @@ export default async function SpotlightPage({ params }: Props) {
       )}
 
       <section aria-labelledby="sp-facts" className="space-y-4">
-        <h2 id="sp-facts" className="text-xl">
+        <h2 id="sp-facts" className="text-lg sm:text-xl">
           가기 전에 알아 둘 것
         </h2>
-        <dl className="divide-y divide-edge/15 border-y border-edge/15">
+        <dl className="divide-y divide-line border-y border-line">
           {s.facts.map((f) => (
             <div key={f.label} className="flex gap-4 py-3.5">
-              <dt className="w-24 shrink-0 text-sm font-bold text-cream/50">{f.label}</dt>
+              <dt className="w-24 shrink-0 text-sm text-cream/60">{f.label}</dt>
               <dd className="min-w-0">
                 <span className="font-extrabold">{f.value}</span>
-                {f.note && <span className="mt-0.5 block text-sm text-cream/55">{f.note}</span>}
+                {f.note && <span className="mt-0.5 block text-sm text-cream/60">{f.note}</span>}
               </dd>
             </div>
           ))}
         </dl>
-        <p className="text-xs text-cream/50">
+        <p className="text-[13px] text-cream/60">
           방문 전에 공식 사이트와 예매 페이지에서 한 번 더 확인해 주세요. 운영 사정에 따라 바뀔 수 있어요.
         </p>
       </section>
 
       <section aria-labelledby="sp-faq" className="space-y-4">
-        <h2 id="sp-faq" className="text-xl">
+        <h2 id="sp-faq" className="text-lg sm:text-xl">
           자주 묻는 질문
         </h2>
-        <div className="divide-y divide-edge/15 border-y border-edge/15">
+        <div className="divide-y divide-line border-y border-line">
           {s.faq.map((f) => (
             <details key={f.q} className="group py-3.5">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-extrabold [&::-webkit-details-marker]:hidden">
                 {f.q}
-                <span className="text-cream/40 transition group-open:rotate-45">+</span>
+                <span aria-hidden className="text-cream/60 transition group-open:rotate-45">+</span>
               </summary>
-              <p className="mt-2 text-sm leading-relaxed text-cream/70 [word-break:keep-all]">{f.a}</p>
+              <p className="mt-2 text-sm leading-relaxed text-cream/75 [word-break:keep-all]">{f.a}</p>
             </details>
           ))}
         </div>
       </section>
 
-      <section className="rounded-2xl bg-edge px-6 py-7 text-ink">
-        <h2 className="text-xl">다녀왔다면, 잊기 전에 남겨 두세요</h2>
-        <p className="mt-2 text-sm leading-relaxed text-ink/65 [word-break:keep-all]">
+      <section className="border-t border-line pt-7">
+        <h2 className="text-lg sm:text-xl">다녀왔다면, 잊기 전에 남겨 두세요</h2>
+        <p className="mt-2 text-sm leading-relaxed text-cream/75 [word-break:keep-all]">
           몇 번째 방이었는지, 탈출했는지, 누구와 갔는지. 기록 3개면 내 방탈출 유형과 다음에 갈 방까지 나와요.
         </p>
-        <div className="mt-4 flex flex-wrap gap-3">
-          <Link href="/new" className="rounded-xl bg-candy px-5 py-2.5 text-sm font-extrabold text-edge">
+        <div className="mt-4 flex gap-2">
+          <Link href="/new" className={`flex-1 sm:flex-none ${BTN_PRIMARY}`}>
             기록 남기기
           </Link>
-          <Link href="/quiz" className="rounded-xl border border-ink/30 px-5 py-2.5 text-sm font-extrabold">
+          <Link href="/quiz" className={`flex-1 sm:flex-none ${BTN_LINE}`}>
             내 취향 방 찾기
           </Link>
         </div>
