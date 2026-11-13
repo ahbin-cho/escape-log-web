@@ -23,16 +23,26 @@ import { listedConditions } from "@/lib/best";
 // dynamicParams(기본 true): 배포 후 새로 추가된 테마도 첫 요청 때 생성되어 캐시됨.
 export const dynamicParams = true;
 
-async function getTheme(id: string): Promise<(ThemeRow & { poster_url?: string | null }) | null> {
+type ThemeDetail = ThemeRow & { poster_url?: string | null; booking_open?: string | null };
+
+const THEME_COLUMNS =
+  "id,name,cafe,genre,difficulty,fear_level,tags,teaser,time_limit,players,reservation_url,poster_url";
+
+async function getTheme(id: string): Promise<ThemeDetail | null> {
   try {
-    const { data } = await publicClient()
+    const first = await publicClient()
       .from("catalog")
-      .select(
-        "id,name,cafe,genre,difficulty,fear_level,tags,teaser,time_limit,players,reservation_url,poster_url"
-      )
+      .select(`${THEME_COLUMNS},booking_open`)
       .eq("id", id)
       .maybeSingle();
-    return (data as ThemeRow) ?? null;
+    if (!first.error) return (first.data as ThemeDetail | null) ?? null;
+    // booking_open 칸이 아직 DB 에 없을 때(SQL 실행 전)도 테마 페이지는 떠야 한다.
+    const { data } = await publicClient()
+      .from("catalog")
+      .select(THEME_COLUMNS)
+      .eq("id", id)
+      .maybeSingle();
+    return (data as ThemeDetail | null) ?? null;
   } catch {
     return null;
   }
@@ -205,6 +215,12 @@ export default async function ThemePage({
             <div>
               <dt className="inline text-cream/50">인원 </dt>
               <dd className="inline">{t.players}</dd>
+            </div>
+          ) : null}
+          {t.booking_open ? (
+            <div>
+              <dt className="inline text-cream/50">예약 오픈 </dt>
+              <dd className="inline">{t.booking_open}</dd>
             </div>
           ) : null}
         </dl>

@@ -121,6 +121,8 @@ alter table public.catalog add column if not exists time_limit      int2 not nul
 alter table public.catalog add column if not exists players         text not null default '';
 alter table public.catalog add column if not exists reservation_url text not null default '';
 alter table public.catalog add column if not exists price           int4 not null default 0;
+-- 예약이 며칠 전부터 열리는지(예: '7일 전부터'). 예약 페이지 달력에서 확인한 것만 적는다. 비면 화면에 안 나온다.
+alter table public.catalog add column if not exists booking_open    text not null default '';
 
 -- ─────────────────────────────────────────────────────────────
 -- RLS (Row Level Security)

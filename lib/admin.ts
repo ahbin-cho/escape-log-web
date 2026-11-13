@@ -99,6 +99,7 @@ export function emptyCatalogItem(): CatalogInput {
     players: "",
     reservationUrl: "",
     price: 0,
+    bookingOpen: "",
   };
 }
 
@@ -120,13 +121,16 @@ export async function saveCatalogItem(item: CatalogInput): Promise<void> {
     reservation_url: item.reservationUrl ?? "",
     price: Number(item.price) || 0,
   };
-  if (item.id) {
-    const { error } = await supabase.from("catalog").update(row).eq("id", item.id);
-    if (error) throw error;
-  } else {
-    const { error } = await supabase.from("catalog").insert(row);
-    if (error) throw error;
-  }
+  const write = (r: Record<string, unknown>) =>
+    item.id
+      ? supabase.from("catalog").update(r).eq("id", item.id)
+      : supabase.from("catalog").insert(r);
+  const { error } = await write({ ...row, booking_open: item.bookingOpen ?? "" });
+  if (!error) return;
+  // booking_open 칸이 아직 DB 에 없으면(SQL 실행 전) 그 칸만 빼고 저장한다.
+  if (!/booking_open/.test(error.message ?? "")) throw error;
+  const retry = await write(row);
+  if (retry.error) throw retry.error;
 }
 
 export async function deleteCatalogItem(id: string): Promise<void> {

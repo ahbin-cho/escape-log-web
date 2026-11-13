@@ -336,6 +336,7 @@ type CatalogRow = {
   players: string | null;
   reservation_url: string | null;
   price: number | null;
+  booking_open?: string | null;
 };
 
 function catalogFromRow(r: CatalogRow): CandidateTheme {
@@ -355,6 +356,7 @@ function catalogFromRow(r: CatalogRow): CandidateTheme {
     players: r.players ?? "",
     reservationUrl: r.reservation_url ?? "",
     price: r.price ?? 0,
+    bookingOpen: r.booking_open ?? "",
   };
 }
 
@@ -457,6 +459,7 @@ export interface CandidateTheme {
   players?: string; // 인원 (예: "2~4")
   reservationUrl?: string; // 예약/상세 페이지 링크
   price?: number; // 1인 가격(원), 0/미설정=미입력
+  bookingOpen?: string; // 예약이 열리는 시점(예: "7일 전부터"), 비면 미확인
 }
 
 export interface Recommendation extends CandidateTheme {

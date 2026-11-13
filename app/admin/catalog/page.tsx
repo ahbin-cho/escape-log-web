@@ -338,6 +338,15 @@ export default function AdminCatalog() {
               />
             </div>
             <div>
+              <label className={label}>예약 오픈 (확인된 것만)</label>
+              <input
+                className={field}
+                value={editing.bookingOpen ?? ""}
+                onChange={(e) => upd("bookingOpen", e.target.value)}
+                placeholder="예: 7일 전부터"
+              />
+            </div>
+            <div>
               <label className={label}>줄거리 / 소개 (무스포)</label>
               <textarea
                 rows={2}
