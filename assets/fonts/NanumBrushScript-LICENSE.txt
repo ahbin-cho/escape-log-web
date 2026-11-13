@@ -1,0 +1,7 @@
+Nanum Brush Script (나눔손글씨 붓)
+Copyright (c) 2010 NHN Corporation. Font designed by Sandoll Communications Inc.
+Licensed under the SIL Open Font License, Version 1.1 — https://openfontlicense.org
+
+NanumBrushScript.woff 는 tools/ig/assets/fonts/nanum-brush-script-korean-400-normal.woff2 (fontsource 배포본)를
+글자 모양 그대로 WOFF 로만 다시 싼 파일이다. 서버 카드(next/og)가 WOFF2 를 읽지 못해서 따로 둔다.
+인스타 카드의 주황 붓글씨 한마디에만 쓴다(lib/og-card.tsx 의 fontFamily "Hand").

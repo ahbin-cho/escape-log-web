@@ -7,6 +7,9 @@ const nextConfig = {
     outputFileTracingIncludes: {
       "/api/ig/mystery": ["./assets/fonts/**"],
       "/api/ig/collection": ["./assets/fonts/**"],
+      "/api/ig/cafes": ["./assets/fonts/**"],
+      "/api/ig/slides": ["./assets/fonts/**"],
+      "/api/ig/story": ["./assets/fonts/**"],
     },
   },
 };

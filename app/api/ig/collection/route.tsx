@@ -2,130 +2,64 @@ import { getAllThemes } from "@/lib/catalog-server";
 import { areaThemes, pickCollection, storyLine } from "@/lib/collection";
 import type { ThemeRow } from "@/lib/catalog-server";
 import { fearLabel } from "@/lib/terms";
-import { jpegResponse } from "@/lib/og-card";
+import { Cover, Dots, ED, Em, FootNote, FootPill, Ghost, Hand, Headline, Line, Paper, Sheet, Sticker, Sub, Wig, jpegResponse } from "@/lib/og-card";
 
 // 지역 모음 캐러셀: ?area=수원&page=1..N (1=표지, 마지막=전체 보기, 사이=조건별 고르기)
 // 정보성 소개(대가 없음). 매장 공식 소개 기준 데이터만 쓴다.
-// 사이트 느낌: 크림 바탕 · 굵은 먹색 테두리 · 오프셋 그림자 · 제목은 사이트 글꼴(Aggro) · 섹션마다 색
+// 디자인 D: 종이 바탕 · 먹색 글자 · 주황 포인트 하나 · 얇은 선. 테마마다 장르 색 표지(매장 포스터는 쓰지 않는다).
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const INK = "#1D1D1D";
-const CREAM = "#F5F0E6";
-const PAPER = "#FFFCF6";
-const ORANGE = "#E49A4A";
-const DIM = "#6E6458";
+const SOURCE = "정보는 각 매장 공식 소개 기준";
 
-// 섹션별 색(배경 띠 · 번호 · 꼬리표)
-const THEME: Record<string, { bg: string; tint: string; mark: string; label: string }> = {
-  fear: { bg: "#F6D5CC", tint: "#FBE8E2", mark: "#D9573B", label: "공포 MAX" },
-  calm: { bg: "#D3ECDD", tint: "#E8F5EE", mark: "#4E9A72", label: "무섭지 않아요" },
-  first: { bg: "#FBE3A6", tint: "#FDF0CF", mark: "#D48A1C", label: "입문 추천" },
-  story: { bg: "#E2DAF5", tint: "#F0ECFA", mark: "#7A68C2", label: "스토리 맛집" },
+// 섹션별 꼬리표(스티커 색만 다르게: 노랑·주황·흰색)
+const THEME: Record<string, { tone: "y" | "o" | "w"; label: string; hand: string }> = {
+  fear: { tone: "o", label: "공포 MAX", hand: "심장 약한 분은 다음 장으로!" },
+  calm: { tone: "w", label: "무섭지 않아요", hand: "겁쟁이도 마음 놓고!" },
+  first: { tone: "y", label: "입문 추천", hand: "첫 방은 여기서 골라 봐요!" },
+  story: { tone: "w", label: "스토리 맛집", hand: "줄거리부터 읽어 봐요!" },
 };
 
-const pips = (n: number, color: string) =>
-  [1, 2, 3, 4, 5].map((i) => (
-    <div
-      key={i}
-      style={{
-        display: "flex",
-        width: 16,
-        height: 16,
-        borderRadius: 8,
-        marginLeft: 5,
-        border: `2.5px solid ${INK}`,
-        backgroundColor: i <= n ? color : "transparent",
-      }}
-    />
-  ));
+const chip = (x: string) => (
+  <div key={x} style={{ display: "flex", marginLeft: 8, backgroundColor: ED.white, border: `2px solid ${ED.ink}`, borderRadius: 999, padding: "3px 14px", fontSize: 21, fontWeight: 800 }}>{x}</div>
+);
+const small = (x: string) => <div style={{ display: "flex", fontSize: 21, fontWeight: 800, color: ED.mute, marginRight: 8 }}>{x}</div>;
 
 // 섹션 목적에 맞는 정보만 카드 아랫줄에: 공포=얼마나 무서운지, 처음=난이도·시간·인원, 이야기=줄거리 한 줄
-function Detail({ t, k, mark }: { t: ThemeRow; k: string; mark: string }) {
-  const chip = (x: string, bg: string, color = INK) => (
-    <div style={{ display: "flex", backgroundColor: bg, color, border: `2.5px solid ${INK}`, borderRadius: 999, padding: "3px 14px", fontSize: 21, fontWeight: 800 }}>{x}</div>
-  );
-  const cafe = <div style={{ display: "flex", fontSize: 23, fontWeight: 500, color: DIM }}>{t.cafe}</div>;
+function Detail({ t, k }: { t: ThemeRow; k: string }) {
+  const cafe = <div style={{ display: "flex", fontSize: 23, fontWeight: 500, color: ED.dim }}>{t.cafe}</div>;
   if (k === "story") {
     const line = storyLine(t);
     return (
-      <div style={{ display: "flex", flexDirection: "column", marginTop: 8 }}>
-        {line && <div style={{ display: "flex", fontSize: 25, fontWeight: 500, color: "#3A352E" }}>{`“${line}”`}</div>}
-        <div style={{ display: "flex", marginTop: 6 }}>{cafe}</div>
+      <div style={{ display: "flex", flexDirection: "column", marginTop: 6 }}>
+        {line ? <div style={{ display: "flex", fontSize: 25, fontWeight: 500, color: ED.ink }}>{`“${line}”`}</div> : null}
+        <div style={{ display: "flex", marginTop: 4 }}>{cafe}</div>
       </div>
     );
   }
-  if (k === "fear") {
-    return (
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 10 }}>
-        {cafe}
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ display: "flex", alignItems: "center", fontSize: 21, fontWeight: 800, color: DIM }}>공포{pips(t.fear_level, "#D9573B")}</div>
-          {chip(fearLabel(t.fear_level) || "공포", mark, PAPER)}
-        </div>
+  const right =
+    k === "fear" ? (
+      <div style={{ display: "flex", alignItems: "center" }}>
+        {small("공포")}
+        <Dots n={t.fear_level} size={15} color={ED.accent} />
+        {chip(fearLabel(t.fear_level) || "공포")}
+      </div>
+    ) : k === "first" ? (
+      <div style={{ display: "flex" }}>
+        {[`난이도 ${t.difficulty}/5`, t.time_limit ? `${t.time_limit}분` : "", t.players ? `${t.players.replace(/명|인/g, "")}인` : ""].filter(Boolean).map(chip)}
+      </div>
+    ) : (
+      // calm: 무섭지 않다는 걸 먼저, 난이도는 옆에
+      <div style={{ display: "flex", alignItems: "center" }}>
+        {small("난이도")}
+        <Dots n={t.difficulty} size={15} />
+        {chip("무공포")}
       </div>
     );
-  }
-  if (k === "first") {
-    const bits = [`난이도 ${t.difficulty}/5`, t.time_limit ? `${t.time_limit}분` : "", t.players ? `${t.players.replace(/명|인/g, "")}인` : ""].filter(Boolean);
-    return (
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 10 }}>
-        {cafe}
-        <div style={{ display: "flex", gap: 8 }}>{bits.map((b) => <div key={b} style={{ display: "flex" }}>{chip(b, "#FDF0CF")}</div>)}</div>
-      </div>
-    );
-  }
-  // calm: 무섭지 않다는 걸 먼저, 난이도는 옆에
   return (
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 10 }}>
       {cafe}
-      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-        <div style={{ display: "flex", alignItems: "center", fontSize: 21, fontWeight: 800, color: DIM }}>난이도{pips(t.difficulty, ORANGE)}</div>
-        {chip("무공포", "#E8F5EE")}
-      </div>
-    </div>
-  );
-}
-
-function Frame({
-  area,
-  page,
-  total,
-  origin,
-  band,
-  bandH = 470,
-  children,
-}: {
-  area: string;
-  page: number;
-  total: number;
-  origin: string;
-  band?: string;
-  bandH?: number;
-  children: React.ReactNode;
-}) {
-  return (
-    <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", backgroundColor: CREAM, color: INK, fontFamily: "Pretendard", position: "relative" }}>
-      {/* 윗부분 색 띠: 섹션마다 다른 색 */}
-      {band && <div style={{ position: "absolute", left: 0, top: 0, width: 1080, height: bandH, backgroundColor: band, borderBottom: `4px solid ${INK}`, display: "flex" }} />}
-      <div style={{ display: "flex", flexDirection: "column", flex: 1, padding: "72px 80px 64px", position: "relative" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, backgroundColor: PAPER, border: `3px solid ${INK}`, borderRadius: 999, padding: "8px 22px", fontSize: 26, fontWeight: 800 }}>
-            <div style={{ display: "flex", width: 14, height: 14, borderRadius: 7, backgroundColor: ORANGE }} />
-            {`${area} 방탈출`}
-          </div>
-          <div style={{ display: "flex", backgroundColor: INK, color: PAPER, borderRadius: 999, padding: "8px 20px", fontSize: 24, fontWeight: 800 }}>{`${page} / ${total}`}</div>
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>{children}</div>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ fontFamily: "Aggro", fontSize: 30 }}>방탈로그</div>
-            <div style={{ fontSize: 21, fontWeight: 500, color: DIM, marginTop: 4 }}>정보는 각 매장 공식 소개 기준 · bangtallog.com</div>
-          </div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={`${origin}/mascot.png`} alt="" width={104} height={104} />
-        </div>
-      </div>
+      {right}
     </div>
   );
 }
@@ -138,36 +72,38 @@ export async function GET(req: Request) {
   const total = sections.length + 2;
   const page = Math.min(total, Math.max(1, Number(url.searchParams.get("page")) || 1));
   const brands = new Set(themes.map((t) => t.cafe.split(" ")[0])).size;
+  const label = `${page} / ${total}`;
+  const origin = url.origin;
 
   // ── 1장: 표지 ──
   if (page === 1) {
     return jpegResponse(
-      <Frame area={area} page={1} total={total} origin={url.origin} band="#FBE3A6" bandH={735}>
-        <div style={{ display: "flex", flexDirection: "column", marginTop: 92 }}>
-          <div style={{ display: "flex", fontSize: 30, fontWeight: 800, color: "#B5651D" }}>{`테마 ${themes.length}개 · 브랜드 ${brands}곳에서 골랐어요`}</div>
-          <div style={{ display: "flex", flexDirection: "column", marginTop: 18, fontFamily: "Aggro", fontSize: 118, lineHeight: 1.12 }}>
-            <div style={{ display: "flex" }}>{`${area} 방탈출,`}</div>
-            <div style={{ display: "flex", color: ORANGE, textShadow: `6px 6px 0 ${INK}` }}>어디 갈지</div>
-            <div style={{ display: "flex" }}>고민이라면?</div>
-          </div>
+      <Paper label={label} footLeft={<FootPill>넘겨 봐요</FootPill>}>
+        <div style={{ display: "flex", marginTop: 64 }}>
+          <Sticker tone="y" rotate={-5}>{`테마 ${themes.length}개 · 브랜드 ${brands}곳에서 골랐어요`}</Sticker>
         </div>
-        {/* 안에 뭐가 있는지 미리 보여 주는 칸들 */}
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 16, marginTop: 96 }}>
-          {sections.map((s, i) => {
-            const c = THEME[s.key] ?? THEME.first;
-            return (
-              <div
-                key={s.key}
-                style={{ display: "flex", alignItems: "center", gap: 14, width: 450, backgroundColor: PAPER, border: `3px solid ${INK}`, borderRadius: 20, padding: "18px 22px", boxShadow: `5px 5px 0 ${INK}` }}
-              >
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 46, height: 46, borderRadius: 23, backgroundColor: c.bg, border: `3px solid ${INK}`, fontSize: 24, fontWeight: 800 }}>{i + 2}</div>
-                <div style={{ display: "flex", fontSize: 30, fontWeight: 800 }}>{s.title}</div>
-              </div>
-            );
-          })}
+        <Headline size={[...area].length > 3 ? 100 : 116} top={34}>
+          <Line>{`${area} 방탈출,`}</Line>
+          <Line>
+            <Em>어디 갈지</Em>
+          </Line>
+          <Line>고민이라면?</Line>
+        </Headline>
+        <Wig width={400} top={12} />
+        {/* 안에 뭐가 있는지 미리 보여 주는 스티커들 */}
+        <div style={{ display: "flex", flexWrap: "wrap", marginTop: 54 }}>
+          {sections.map((s, i) => (
+            <Sticker key={s.key} tone={(THEME[s.key] ?? THEME.first).tone} rotate={[-3, 2, 3, -2][i % 4]} size={32} style={{ marginRight: 20, marginBottom: 26 }}>
+              {s.title}
+            </Sticker>
+          ))}
         </div>
-        <div style={{ display: "flex", marginTop: 30, fontSize: 28, fontWeight: 800, color: DIM }}>옆으로 넘겨 보세요 →</div>
-      </Frame>,
+        <div style={{ display: "flex", flex: 1 }} />
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 26 }}>
+          <Hand size={66} rotate={-5} style={{ marginBottom: 50, marginLeft: 6 }}>조건별로 골라 놨어요!</Hand>
+          <Ghost origin={origin} say="같이 골라 보자!" size={180} />
+        </div>
+      </Paper>,
       3600
     );
   }
@@ -175,29 +111,29 @@ export async function GET(req: Request) {
   // ── 마지막 장: 전체 보러 가기 ──
   if (page === total) {
     return jpegResponse(
-      <Frame area={area} page={page} total={total} origin={url.origin} band="#FBE3A6" bandH={560}>
-        <div style={{ display: "flex", flexDirection: "column", marginTop: 100, fontFamily: "Aggro", fontSize: 100, lineHeight: 1.15 }}>
-          <div style={{ display: "flex" }}>{`${area} 테마 ${themes.length}개,`}</div>
-          <div style={{ display: "flex", color: ORANGE, textShadow: `6px 6px 0 ${INK}` }}>전부 보고 싶다면</div>
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", marginTop: 110, backgroundColor: PAPER, border: `4px solid ${INK}`, borderRadius: 28, boxShadow: `8px 8px 0 ${INK}`, padding: "34px 40px", gap: 20 }}>
-          {[
-            ["1", `검색창에 "${area}"`],
-            ["2", "줄거리 · 난이도 · 공포도 · 후기"],
-            ["3", "내 취향에 딱 맞는 방 추천까지"],
-          ].map(([n, x]) => (
-            <div key={n} style={{ display: "flex", alignItems: "center", gap: 20, fontSize: 36, fontWeight: 800 }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 48, height: 48, borderRadius: 24, backgroundColor: ORANGE, color: PAPER, border: `3px solid ${INK}`, fontSize: 24 }}>{n}</div>
+      <Paper label={label} footLeft={<FootPill>프로필 링크에서 보기</FootPill>}>
+        <Headline size={96} top={90}>
+          <Line>{`${area} 테마 ${themes.length}개,`}</Line>
+          <Line>
+            <Em>전부 보고 싶다면</Em>
+          </Line>
+        </Headline>
+        <Wig width={520} top={10} />
+        <div style={{ display: "flex", flexDirection: "column", marginTop: 56 }}>
+          {[`검색창에 "${area}"`, "줄거리 · 난이도 · 공포도 · 후기", "내 취향에 딱 맞는 방 추천까지"].map((x, i) => (
+            <div key={x} style={{ display: "flex", alignItems: "center", padding: "26px 0", borderTop: i ? `2px solid ${ED.faint}` : "none", fontSize: 40, fontWeight: 800 }}>
+              <div style={{ display: "flex", width: 16, height: 16, borderRadius: 8, backgroundColor: ED.accent, marginRight: 22 }} />
               {x}
             </div>
           ))}
         </div>
-        <div style={{ display: "flex", marginTop: 44 }}>
-          <div style={{ display: "flex", backgroundColor: ORANGE, color: PAPER, border: `4px solid ${INK}`, borderRadius: 20, boxShadow: `6px 6px 0 ${INK}`, padding: "18px 34px", fontSize: 38, fontWeight: 800 }}>
-            프로필 링크 → bangtallog.com
-          </div>
+        <div style={{ display: "flex", marginTop: 20, fontSize: 26, fontWeight: 500, color: ED.mute }}>{`${SOURCE}예요. 방문 전 매장 예약 페이지에서 확인해 주세요.`}</div>
+        <div style={{ display: "flex", flex: 1 }} />
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 26 }}>
+          <Hand size={66} rotate={-5} style={{ marginBottom: 50, marginLeft: 6 }}>다녀오면 기록도 남겨요!</Hand>
+          <Ghost origin={origin} say="내가 기억해 줄게!" size={180} />
         </div>
-      </Frame>,
+      </Paper>,
       3600
     );
   }
@@ -206,30 +142,32 @@ export async function GET(req: Request) {
   const s = sections[page - 2];
   const c = THEME[s.key] ?? THEME.first;
   return jpegResponse(
-    <Frame area={area} page={page} total={total} origin={url.origin} band={c.bg}>
-      <div style={{ display: "flex", marginTop: 56 }}>
-        <div style={{ display: "flex", backgroundColor: c.mark, color: PAPER, border: `3px solid ${INK}`, borderRadius: 14, padding: "6px 18px", fontSize: 26, fontWeight: 800 }}>{c.label}</div>
+    <Paper label={label} footLeft={<FootNote>{SOURCE}</FootNote>}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginTop: 40 }}>
+        <Sticker tone={c.tone} rotate={-5} size={28}>{c.label}</Sticker>
+        <div style={{ display: "flex", fontSize: 26, fontWeight: 800, color: ED.mute, marginTop: 10 }}>{`${area} 방탈출`}</div>
       </div>
-      <div style={{ display: "flex", marginTop: 20, fontFamily: "Aggro", fontSize: 96, lineHeight: 1.15 }}>{s.title}</div>
-      <div style={{ display: "flex", marginTop: 12, fontSize: 30, fontWeight: 800, color: DIM }}>{s.sub}</div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 20, marginTop: 64 }}>
+      <Headline size={88} top={26}>
+        <Line>{s.title}</Line>
+      </Headline>
+      <Wig width={300} top={6} />
+      <Sub top={16} size={30}>{s.sub}</Sub>
+      <div style={{ display: "flex", flexDirection: "column", marginTop: 34 }}>
         {s.themes.map((t, i) => (
-          <div
-            key={t.id}
-            style={{ display: "flex", alignItems: "center", gap: 24, padding: "22px 28px", borderRadius: 24, border: `4px solid ${INK}`, backgroundColor: PAPER, boxShadow: `6px 6px 0 ${INK}` }}
-          >
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 64, height: 64, borderRadius: 32, backgroundColor: c.tint, border: `3px solid ${INK}`, fontFamily: "Aggro", fontSize: 32, color: c.mark }}>{i + 1}</div>
-            <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <div style={{ display: "flex", fontFamily: "Aggro", fontSize: 36, maxWidth: 560 }}>{t.name}</div>
-                <div style={{ display: "flex", backgroundColor: c.tint, border: `2.5px solid ${INK}`, borderRadius: 999, padding: "3px 14px", fontSize: 22, fontWeight: 800 }}>{t.genre}</div>
-              </div>
-              <Detail t={t} k={s.key} mark={c.mark} />
+          <Sheet key={t.id} style={{ flexDirection: "row", alignItems: "center", padding: "18px 26px 18px 20px", marginTop: i ? 18 : 0, transform: `rotate(${[-0.6, 0.5, -0.4, 0.6][i % 4]}deg)` }}>
+            <Cover genre={t.genre} title="" width={74} style={{ boxShadow: "0 6px 12px rgba(60,45,20,0.18)" }} />
+            <div style={{ display: "flex", flexDirection: "column", flex: 1, marginLeft: 24 }}>
+              <div style={{ display: "flex", fontSize: [...t.name].length > 18 ? 30 : 36, fontWeight: 800, lineHeight: 1.2, wordBreak: "keep-all" }}>{t.name}</div>
+              <Detail t={t} k={s.key} />
             </div>
-          </div>
+          </Sheet>
         ))}
       </div>
-    </Frame>,
+      <div style={{ display: "flex", flex: 1 }} />
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 6 }}>
+        <Hand size={50} rotate={-3}>{c.hand}</Hand>
+      </div>
+    </Paper>,
     3600
   );
 }

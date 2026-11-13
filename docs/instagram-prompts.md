@@ -105,7 +105,7 @@
 | 카드 | 주소 |
 |---|---|
 | 서비스 소개 6장 | `https://bangtallog.com/api/ig/slides?n=1` ~ `?n=6` |
-| 오늘의 미스터리 방 | `https://bangtallog.com/api/ig/mystery` (`?date=YYYY-MM-DD` 로 다른 날, `?style=a` 로 예전 '사건 파일' 디자인) |
+| 오늘의 미스터리 방 | `https://bangtallog.com/api/ig/mystery` (`?date=YYYY-MM-DD` 로 다른 날. 기본은 디자인 D 종이 카드 — 종이 바탕·장르 색 표지·스티커·탈출귀. 예전 모습: `?style=mood` 장르별 어두운 카드, `?style=a` '사건 파일') |
 
 ---
 
@@ -130,7 +130,8 @@
 | `pop.jpg` | 모험·코믹·기타 | 노란 배경에 보물 지도·열쇠·나침반이 흩어진 플랫 일러스트, 굵은 검정 외곽선, 장난스러운 만화 스타일 |
 
 > 넣은 뒤 배포하면 바로 적용된다. 마음에 안 들면 파일만 지우면 도형 테마로 돌아간다.
-> 미리보기: `https://bangtallog.com/api/ig/mystery?genre=공포` (장르 바꿔 보기), `&bg=0` 은 그림 없이.
+> 미리보기: `https://bangtallog.com/api/ig/mystery?style=mood&genre=공포` (장르 바꿔 보기), `&bg=0` 은 그림 없이.
+> (지금 기본 카드는 디자인 D 종이 카드라 이 배경 그림을 쓰지 않는다. `?style=mood` 일 때만 쓴다.)
 
 ---
 
