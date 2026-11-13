@@ -7,7 +7,7 @@ import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { publicClient } from "@/lib/supabase/public";
 import { normalizeGenre } from "@/lib/genre";
 import { regionFromText } from "@/lib/region";
-import { IMMERSIVE_TAG, THEATRE_TAG, priceLabel, splitImmersive } from "@/lib/immersive";
+import { IMMERSIVE_TAG, THEATRE_TAG, priceLabel, splitImmersive, untilLabel } from "@/lib/immersive";
 
 // 배우가 나오는 방(이머시브) 모음.
 // 배우가 처음부터 끝까지 같이 연기하는 곳만, 공식 안내로 확인된 것만 싣는다(docs/immersive.md).
@@ -40,16 +40,19 @@ type Row = {
   poster_url: string | null;
   reservation_url: string | null;
   booking_open: string | null;
+  run_until?: string | null;
 };
+
+const COLS = "id,name,cafe,genre,tags,teaser,time_limit,players,price,difficulty,fear_level,poster_url,reservation_url,booking_open";
 
 async function getImmersive(): Promise<Row[]> {
   try {
-    const { data } = await publicClient()
-      .from("catalog")
-      .select("id,name,cafe,genre,tags,teaser,time_limit,players,price,difficulty,fear_level,poster_url,reservation_url,booking_open")
-      .overlaps("tags", [IMMERSIVE_TAG, THEATRE_TAG])
-      .order("created_at", { ascending: false });
-    return ((data as Row[]) ?? []).map((t) => ({ ...t, genre: normalizeGenre(t.genre, t.tags) }));
+    const q = (cols: string) =>
+      publicClient().from("catalog").select(cols).overlaps("tags", [IMMERSIVE_TAG, THEATRE_TAG]).order("created_at", { ascending: false });
+    // run_until 칸(기간 한정 공연)이 아직 없는 DB 에서도 목록은 나오게
+    let { data, error } = await q(`${COLS},run_until`);
+    if (error) ({ data, error } = await q(COLS));
+    return ((data as unknown as Row[]) ?? []).map((t) => ({ ...t, genre: normalizeGenre(t.genre, t.tags) }));
   } catch {
     return [];
   }
@@ -57,7 +60,7 @@ async function getImmersive(): Promise<Row[]> {
 
 export default async function ImmersivePage() {
   const rows = await getImmersive();
-  const { theatre, escape } = splitImmersive(rows);
+  const { limited, theatre, escape } = splitImmersive(rows);
 
   const jsonLd = [
     {
@@ -140,6 +143,7 @@ export default async function ImmersivePage() {
         </div>
       </header>
 
+      {limited.length > 0 && <Group id="limited" act="SPECIAL · 기간 한정" title="끝나기 전에 가야 하는 공연" rows={limited} />}
       <Group id="theatre" act="ACT 1" title="연극형 · 퍼즐 없이 이야기 속으로" rows={theatre} />
       <Group id="escape" act="ACT 2" title="방탈출형 · 배우와 함께 푸는 방" rows={escape} />
 
@@ -211,6 +215,9 @@ function Group({ id, act, title, rows }: { id: string; act: string; title: strin
                     </Link>
                     <p className="mt-2 flex flex-wrap gap-1.5 text-xs font-bold">
                       <span className="rounded-full border-2 border-edge bg-candy px-2 py-0.5 text-edge">🎭 배우가 끝까지 함께</span>
+                      {untilLabel(t.run_until) ? (
+                        <span className="rounded-full border-2 border-edge bg-[#1B1420] px-2 py-0.5 text-[#F5F0E6]">⏳ {untilLabel(t.run_until)}</span>
+                      ) : null}
                       {t.time_limit ? <span className="rounded-full bg-ink px-2 py-0.5">{t.time_limit}분</span> : null}
                       {t.players ? <span className="rounded-full bg-ink px-2 py-0.5">{t.players}명</span> : null}
                       {price ? <span className="rounded-full bg-ink px-2 py-0.5">{price}</span> : null}
