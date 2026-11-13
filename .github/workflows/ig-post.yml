@@ -13,6 +13,10 @@ on:
         description: "미리보기만(실제로 안 올림)"
         type: boolean
         default: true
+      check:
+        description: "연결 확인만(올리지 않고 인스타 연결이 살아 있는지 본다)"
+        type: boolean
+        default: false
 
 jobs:
   post:
@@ -23,11 +27,13 @@ jobs:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
           SET: ${{ inputs.set }}
           DRY: ${{ inputs.dry }}
+          CHECK: ${{ inputs.check }}
         run: |
           q=""
           [ -n "$SET" ] && q="set=$(python3 -c 'import os,urllib.parse;print(urllib.parse.quote(os.environ["SET"]))')"
           [ "$DRY" = "true" ] && q="$q&dry=1"
           call() { curl -sS -m 70 -w '\n%{http_code}' -H "Authorization: Bearer $CRON_SECRET" "https://bangtallog.com/api/ig/publish?$1"; }
+          if [ "$CHECK" = "true" ]; then out=$(call "check=1"); code=$(echo "$out" | tail -1); echo "$out" | sed '$d'; [ "$code" -lt 300 ]; exit $?; fi
           # 카드 이미지를 미리 한 번 불러 둬서 인스타가 가져갈 때 빨리 나오게
           if [ "$DRY" != "true" ]; then
             call "$q&dry=1" | sed '$d' | python3 -c 'import json,sys;d=json.load(sys.stdin);print("\n".join(d.get("imageUrls") or []))' > urls.txt || true
