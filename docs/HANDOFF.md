@@ -55,7 +55,7 @@ IG 토큰이 `IGAA…` 종류면 약 60일마다 만료된다. 게시가 갑자�
       룸익스케이프(수집 금지 문구), 네이버 예약 17곳(룸즈에이 나머지 등 — 네이버 달력 API 조회 제한, 몇 시간 뒤 10여 건씩).
       네이버 설정값(bookingAvailableEndValue)은 실제 달력과 달라 쓰면 안 된다. 값은 바뀔 수 있으니 분기마다 다시 확인.
 - [ ] 수능 이벤트 매장 테마 SQL: `catalog_add_gangneung.sql`(실행됨), `catalog_add_doorescape.sql`(운영자 화면 대조 후),
-      `catalog_add_roomexcape_sinchon.sql`(사이트에 수집 금지 문구 — 사실 정보만, 실행 여부는 운영자 판단).
+      `catalog_add_roomexcape_sinchon.sql`(신촌 블랙·화이트·올리브 11개, 사실 정보만 — **실행 완료 11/13**). 강릉도 실행 완료.
 - [x] 이스케이프월드 테마(방자전·ESCAPE SCHOOL)는 DB 에 들어가 있음(`docs/sql/catalog_add_escapeworld.sql`).
 - [x] 2026-11-13 등록: 메이플스토리 이스케이프 5, 강릉방탈출카페 5, 파노라마 2(부산 미래재난리포트·홍대삼거리 퍼펫 플레이). Bing IndexNow 제출함.
 - [ ] 파노라마 홍대입구점(룰더데이·Combo): 시간·요금·포스터는 확인, 장르·난이도·공포도가 공식으로 없어 보류.
