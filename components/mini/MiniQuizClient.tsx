@@ -96,7 +96,7 @@ export default function MiniQuizClient({
               <button
                 type="button"
                 onClick={back}
-                className="-ml-2 flex items-center gap-1 rounded-lg px-2 py-1.5 text-sm font-bold text-cream/55 transition hover:text-cream"
+                className="-ml-2 flex min-h-[44px] items-center gap-1 rounded-lg px-2 text-sm font-bold text-cream/70 transition hover:text-cream"
               >
                 <svg aria-hidden viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
                   <path d="m15 18-6-6 6-6" />
@@ -105,7 +105,7 @@ export default function MiniQuizClient({
               </button>
               <p className="text-sm font-extrabold tabular-nums tracking-wide">
                 {String(idx + 1).padStart(2, "0")}
-                <span className="text-cream/35"> / {String(total).padStart(2, "0")}</span>
+                <span className="text-cream/70"> / {String(total).padStart(2, "0")}</span>
               </p>
             </div>
             <div
@@ -167,7 +167,7 @@ function Intro({ quiz, onStart }: { quiz: MiniQuiz; onStart: () => void }) {
           <p className="text-[15px] leading-relaxed text-cream/75 [word-break:keep-all]">
             {quiz.intro}
           </p>
-          <ul className="flex gap-2 text-xs font-bold text-cream/60">
+          <ul className="flex gap-2 text-xs font-bold text-cream/70">
             <li className="rounded-full border border-edge/15 bg-ink px-3 py-1.5">
               질문 {quiz.questions.length}개
             </li>
@@ -186,7 +186,7 @@ function Intro({ quiz, onStart }: { quiz: MiniQuiz; onStart: () => void }) {
           </button>
         </div>
       </div>
-      <p className="mt-5 text-center text-xs font-bold text-cream/45">
+      <p className="mt-5 text-center text-xs font-bold text-cream/70">
         고른 답은 저장하지 않아요. 결과만 링크로 나눌 수 있어요.
       </p>
     </div>
@@ -309,7 +309,7 @@ function OptionButton({
         {sub && (
           <span
             className={`mt-1 block text-sm leading-snug [word-break:keep-all] ${
-              selected ? "text-ink/70" : "text-cream/55"
+              selected ? "text-ink/70" : "text-cream/70"
             }`}
           >
             {sub}
@@ -365,7 +365,7 @@ function ResultScreen({
             <button
               type="button"
               onClick={onRestart}
-              className="w-full rounded-2xl px-5 py-2 text-sm font-bold text-cream/55 transition hover:text-cream"
+              className="w-full rounded-2xl px-5 py-2 text-sm font-bold text-cream/70 transition hover:text-cream"
             >
               처음부터 다시 하기
             </button>
@@ -378,7 +378,7 @@ function ResultScreen({
       <p className="text-center">
         <Link
           href="/mini"
-          className="text-sm font-bold text-cream/55 underline decoration-edge/20 underline-offset-4 transition hover:text-cream"
+          className="text-sm font-bold text-cream/70 underline decoration-edge/20 underline-offset-4 transition hover:text-cream"
         >
           다른 1분 테스트 보기
         </Link>
@@ -400,11 +400,11 @@ function FullQuizCta() {
           더 정확하게 알고 싶다면
         </span>
         <span className="mt-1 block font-display text-[17px] leading-snug">방탈출 취향 찾기</span>
-        <span className="mt-1 block text-sm leading-snug text-cream/60 [word-break:keep-all]">
+        <span className="mt-1 block text-sm leading-snug text-cream/70 [word-break:keep-all]">
           16가지 유형 중 내 유형과, 공포도·난이도까지 맞춘 테마 추천
         </span>
       </span>
-      <span className="shrink-0 text-cream/40 transition group-hover:translate-x-0.5 group-hover:text-cream">
+      <span className="shrink-0 text-cream/70 transition group-hover:translate-x-0.5 group-hover:text-cream">
         <Arrow />
       </span>
     </Link>

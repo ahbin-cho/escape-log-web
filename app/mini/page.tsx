@@ -44,7 +44,7 @@ export default function MiniListPage() {
           ))}
         </ul>
       ) : (
-        <p className="rounded-3xl border-2 border-dashed border-edge/25 bg-panel p-6 text-center text-sm font-bold text-cream/60">
+        <p className="rounded-3xl border-2 border-dashed border-edge/25 bg-panel p-6 text-center text-sm font-bold text-cream/70">
           지금은 열려 있는 테스트가 없어요. 곧 새 테스트로 돌아올게요.
         </p>
       )}
@@ -72,7 +72,7 @@ export default function MiniListPage() {
 
       {past.length > 0 && (
         <section className="space-y-2">
-          <h2 className="text-sm text-cream/55">지난 테스트</h2>
+          <h2 className="text-sm text-cream/70">지난 테스트</h2>
           <ul className="divide-y divide-edge/10 rounded-2xl border border-edge/15 bg-panel">
             {past.map((q) => (
               <li key={q.slug}>
@@ -81,7 +81,7 @@ export default function MiniListPage() {
                   className="flex items-center justify-between px-4 py-3 text-sm font-bold text-cream/70 hover:text-cream"
                 >
                   {q.title}
-                  <span aria-hidden className="text-cream/35">→</span>
+                  <span aria-hidden className="text-cream/70">→</span>
                 </Link>
               </li>
             ))}
@@ -111,7 +111,7 @@ function QuizCard({ quiz }: { quiz: MiniQuiz }) {
         </p>
       </div>
       <div className="flex items-center gap-3 px-5 py-4">
-        <p className="min-w-0 flex-1 text-sm font-bold text-cream/55">
+        <p className="min-w-0 flex-1 text-sm font-bold text-cream/70">
           질문 {quiz.questions.length}개 · 약 1분
         </p>
         <span className="flex items-center gap-1.5 rounded-full bg-candy px-4 py-2 text-sm font-extrabold text-edge transition group-hover:gap-2.5">

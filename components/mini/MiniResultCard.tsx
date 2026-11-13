@@ -36,7 +36,7 @@ export default function MiniResultCard({
 
         {result.stat && (
           <div className="flex items-center justify-between gap-4 rounded-2xl bg-ink px-4 py-3.5">
-            <span className="shrink-0 text-xs font-extrabold text-cream/50">
+            <span className="shrink-0 text-xs font-extrabold text-cream/70">
               {result.stat.label}
             </span>
             <span className="text-right text-[15px] font-extrabold [word-break:keep-all]">
@@ -48,7 +48,7 @@ export default function MiniResultCard({
         <div className="border-t-2 border-dashed border-edge/15 pt-5">
           <p className="text-xs font-extrabold tracking-[0.04em] text-candy">이런 방 추천</p>
           <p className="mt-1.5 font-display text-lg leading-snug">{result.recommend.label}</p>
-          <p className="mt-1 text-sm leading-snug text-cream/60 [word-break:keep-all]">
+          <p className="mt-1 text-sm leading-snug text-cream/70 [word-break:keep-all]">
             {result.recommend.hint}
           </p>
           <Link

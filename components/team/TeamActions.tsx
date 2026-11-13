@@ -65,7 +65,7 @@ export default function TeamActions({
             <button
               type="button"
               onClick={share}
-              className="rounded-lg bg-edge px-5 py-3 text-sm font-extrabold text-panel transition hover:bg-edge/85 active:scale-[0.98]"
+              className="rough rounded-xl border-2 border-edge bg-candy text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.98] px-5 py-3"
             >
               팀 링크 공유하기
             </button>
@@ -74,7 +74,7 @@ export default function TeamActions({
                 type="button"
                 onClick={() => setOpen((v) => !v)}
                 aria-expanded={open}
-                className="rounded-lg border border-edge/30 px-5 py-3 text-sm font-extrabold transition hover:border-edge active:scale-[0.98]"
+                className="rough rounded-xl border-2 border-edge bg-panel text-sm font-extrabold transition active:scale-[0.98] px-5 py-3"
               >
                 팀원 추가하기
               </button>
@@ -110,14 +110,14 @@ export default function TeamActions({
                 <p className="text-sm font-extrabold">
                   {mine ? "새로 진단하고 추가" : "취향 진단하고 추가"}
                 </p>
-                <p className="mt-1 text-xs leading-relaxed text-cream/60 [word-break:keep-all]">
+                <p className="mt-1 text-xs leading-relaxed text-cream/70 [word-break:keep-all]">
                   질문 몇 개면 끝나요. 결과 화면 맨 위의 ‘팀에 추가하기’를 누르면 이 팀으로
                   돌아와요.
                 </p>
               </div>
               <Link
                 href={quizForTeamPath(team)}
-                className="mt-4 inline-block self-start rounded-lg bg-candy px-4 py-2.5 text-sm font-extrabold text-white transition hover:brightness-95 active:scale-[0.98]"
+                className="mt-4 inline-block self-start rough rounded-xl border-2 border-edge bg-candy text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.98] px-4 py-2.5"
               >
                 취향 진단 시작
               </Link>

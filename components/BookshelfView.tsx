@@ -44,7 +44,7 @@ export default function BookshelfView({ records }: { records: EscapeRecord[] }) 
           <span className="rounded-full border-2 border-edge bg-ink px-2.5 py-1">탈출 {stats.escaped}</span>
         </div>
       </header>
-      <p className="mt-1 text-xs text-cream/55">책 키가 클수록 좋았던 방이에요. 책을 누르면 그날 기록이 열려요.</p>
+      <p className="mt-1 text-xs text-cream/70">책 키가 클수록 좋았던 방이에요. 책을 누르면 그날 기록이 열려요.</p>
 
       <div className="mt-4 space-y-5">
         {shelves.map(({ year, books }) => {
@@ -55,7 +55,7 @@ export default function BookshelfView({ records }: { records: EscapeRecord[] }) 
                 <span className="text-base font-extrabold" style={{ fontFamily: '"SBAggroB", sans-serif' }}>
                   {year}
                 </span>
-                <span className="text-xs font-bold text-cream/50">{books.length}권</span>
+                <span className="text-xs font-bold text-cream/70">{books.length}권</span>
               </div>
               <div className="overflow-hidden rounded-xl border-2 border-edge bg-[#EFE5D3]">
                 {rows.map((row, i) => (
@@ -120,12 +120,13 @@ function BookCard({ book: b, onClose }: { book: Book; onClose: () => void }) {
   const r = b.record;
   const guest = r.id.startsWith("guest-");
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/45 p-4 sm:items-center" onClick={onClose}>
+    <div className="shelf-backdrop fixed inset-0 z-50 flex items-end justify-center bg-black/45 p-4 sm:items-center" onClick={onClose}>
       <article
         role="dialog"
+        aria-modal="true"
         aria-label={b.title}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-sm overflow-hidden rounded-2xl border-2 border-edge bg-panel shadow-cute"
+        className="shelf-card w-full max-w-sm overflow-hidden rounded-2xl border-2 border-edge bg-panel shadow-cute"
       >
         <div className="flex items-center gap-2 border-b-2 border-edge px-5 py-3" style={{ background: b.cloth.base }}>
           <span className="text-xs font-extrabold" style={{ color: b.cloth.foil }}>
@@ -137,7 +138,7 @@ function BookCard({ book: b, onClose }: { book: Book; onClose: () => void }) {
         </div>
         <div className="px-5 pb-5 pt-4">
           <h3 className="text-xl leading-snug">{b.title}</h3>
-          <p className="mt-0.5 text-sm text-cream/60">{b.cafe}</p>
+          <p className="mt-0.5 text-sm text-cream/70">{b.cafe}</p>
 
           <dl className="mt-4 grid grid-cols-3 gap-2 text-center">
             <Cell label="평가" value={RATING_LABELS[b.rating - 1]} strong={b.legend} />
@@ -150,12 +151,13 @@ function BookCard({ book: b, onClose }: { book: Book; onClose: () => void }) {
           <div className="mt-4 flex gap-2">
             <Link
               href={guest ? "/login?mode=signup&guest=1&next=/records" : `/edit/${r.id}`}
-              className="rough flex-1 rounded-xl border-2 border-edge bg-candy py-2.5 text-center text-sm font-extrabold text-white shadow-cute transition active:scale-[0.98]"
+              className="rough flex-1 rounded-xl border-2 border-edge bg-candy py-2.5 text-center text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.98]"
             >
               {guest ? "가입하고 수정하기" : "기록 펼쳐 보기"}
             </Link>
             <button
               type="button"
+              autoFocus
               onClick={onClose}
               className="rough rounded-xl border-2 border-edge bg-panel px-4 py-2.5 text-sm font-extrabold transition active:scale-[0.98]"
             >
@@ -171,7 +173,7 @@ function BookCard({ book: b, onClose }: { book: Book; onClose: () => void }) {
 function Cell({ label, value, strong }: { label: string; value: string; strong?: boolean }) {
   return (
     <div className="rounded-xl border-2 border-edge/15 bg-ink py-2">
-      <dt className="text-[11px] font-bold text-cream/50">{label}</dt>
+      <dt className="text-[11px] font-bold text-cream/70">{label}</dt>
       <dd className={`mt-0.5 text-sm font-extrabold ${strong ? "text-candy" : ""}`}>{value}</dd>
     </div>
   );

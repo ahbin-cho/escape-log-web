@@ -72,7 +72,7 @@ export function generateMetadata({ searchParams }: Props): Metadata {
   };
 }
 
-const EYEBROW = "text-[11px] font-bold tracking-[0.18em] text-cream/50";
+const EYEBROW = "text-[11px] font-bold tracking-[0.18em] text-cream/70";
 
 export default async function TeamPage({ searchParams }: Props) {
   const members = parseTeam(one(searchParams.m));
@@ -110,7 +110,7 @@ export default async function TeamPage({ searchParams }: Props) {
           <section className="space-y-4">
             <div className="flex items-baseline justify-between">
               <h2 className="text-lg">지금 모인 팀원</h2>
-              <p className="text-sm font-bold tabular-nums text-cream/60">
+              <p className="text-sm font-bold tabular-nums text-cream/70">
                 {members.length} / {TEAM_MIN}명
               </p>
             </div>
@@ -124,13 +124,13 @@ export default async function TeamPage({ searchParams }: Props) {
               {members.map((m) => (
                 <li key={m.code} className="rounded-xl border border-edge/15 bg-panel p-5">
                   <p className="text-lg font-extrabold">{m.label}</p>
-                  <p className="mt-0.5 text-sm text-cream/60">{QUIZ_TYPES[m.typeId].title}</p>
+                  <p className="mt-0.5 text-sm text-cream/70">{QUIZ_TYPES[m.typeId].title}</p>
                 </li>
               ))}
               {Array.from({ length: TEAM_MIN - members.length }, (_, i) => (
                 <li
                   key={`empty-${i}`}
-                  className="flex items-center justify-center rounded-xl border border-dashed border-edge/25 p-5 text-sm text-cream/45"
+                  className="flex items-center justify-center rounded-xl border border-dashed border-edge/25 p-5 text-sm text-cream/70"
                 >
                   빈 자리
                 </li>
@@ -225,25 +225,22 @@ export default async function TeamPage({ searchParams }: Props) {
                     <p className="text-base font-extrabold group-hover:underline group-hover:underline-offset-4">
                       {t.name}
                     </p>
-                    <p className="mt-0.5 text-sm text-cream/60">
+                    <p className="mt-0.5 text-sm text-cream/70">
                       {t.cafe} · {t.genre} · 난이도 {t.difficulty} · 공포 {t.fearLevel}
                       {t.players ? ` · ${t.players}인` : ""}
                     </p>
                     {t.reasons.length > 0 && (
-                      <p className="mt-2 text-xs leading-relaxed text-cream/55 [word-break:keep-all]">
+                      <p className="mt-2 text-xs leading-relaxed text-cream/70 [word-break:keep-all]">
                         {t.reasons.join(" · ")}
                       </p>
                     )}
                   </div>
-                  <span aria-hidden className="shrink-0 self-center text-cream/35 transition group-hover:translate-x-0.5 group-hover:text-cream">
-                    →
-                  </span>
                 </Link>
               </li>
             ))}
           </ol>
         ) : (
-          <p className="rounded-2xl border border-dashed border-edge/25 bg-panel px-5 py-10 text-center text-sm text-cream/60 [word-break:keep-all]">
+          <p className="rounded-2xl border border-dashed border-edge/25 bg-panel px-5 py-10 text-center text-sm text-cream/70 [word-break:keep-all]">
             {catalog.length === 0
               ? "지금은 테마 목록을 불러오지 못했어요. 잠시 뒤에 다시 열어 주세요."
               : "모두가 들어갈 수 있는 방을 아직 못 찾았어요. 공포 기준이 낮거나 인원이 많으면 그래요."}{" "}
@@ -258,7 +255,7 @@ export default async function TeamPage({ searchParams }: Props) {
       <TeamActions team={param} size={members.length} title={report.name.name} />
 
       <p className="text-center text-sm">
-        <Link href="/match" className="font-bold text-cream/60 underline-offset-4 hover:underline">
+        <Link href="/match" className="font-bold text-cream/70 underline-offset-4 hover:underline">
           둘이서 궁합 보기
         </Link>
       </p>
@@ -269,12 +266,12 @@ export default async function TeamPage({ searchParams }: Props) {
 function Stat({ label, value, unit, note }: { label: string; value: string; unit: string; note: string }) {
   return (
     <div className="border-l border-edge/10 px-3 first:border-l-0 first:pl-0 sm:px-5">
-      <dt className="text-xs font-bold text-cream/55">{label}</dt>
+      <dt className="text-xs font-bold text-cream/70">{label}</dt>
       <dd className="mt-1">
         <span className="font-display text-2xl tabular-nums sm:text-3xl">{value}</span>
-        <span className="ml-0.5 text-sm font-bold text-cream/50">{unit}</span>
+        <span className="ml-0.5 text-sm font-bold text-cream/70">{unit}</span>
       </dd>
-      <dd className="mt-0.5 text-[11px] leading-snug text-cream/50 [word-break:keep-all] sm:text-xs">{note}</dd>
+      <dd className="mt-0.5 text-[11px] leading-snug text-cream/70 [word-break:keep-all] sm:text-xs">{note}</dd>
     </div>
   );
 }
@@ -283,7 +280,7 @@ function SectionHead({ title, note }: { title: string; note: string }) {
   return (
     <div className="space-y-1">
       <h2 className="text-xl sm:text-2xl">{title}</h2>
-      <p className="text-sm text-cream/60 [word-break:keep-all]">{note}</p>
+      <p className="text-sm text-cream/70 [word-break:keep-all]">{note}</p>
     </div>
   );
 }
@@ -299,15 +296,12 @@ function MemberCard({
 }) {
   const r = TEAM_ROLES[role];
   return (
-    <li className="flex flex-col rounded-2xl border border-edge/15 bg-panel p-5 sm:p-6">
+    <li className="flex flex-col rounded-2xl border-2 border-edge bg-panel p-5 sm:p-6">
       <div className="flex items-center justify-between">
         <p className="text-xs font-extrabold tracking-[0.08em] text-candy">{r.name}</p>
-        <p className="font-display text-xs text-cream/30 tabular-nums">
-          {String(index + 1).padStart(2, "0")}
-        </p>
       </div>
       <p className="mt-3 text-xl font-extrabold">{member.label}</p>
-      <p className="mt-0.5 text-sm text-cream/55">{QUIZ_TYPES[member.typeId].title}</p>
+      <p className="mt-0.5 text-sm text-cream/70">{QUIZ_TYPES[member.typeId].title}</p>
       <p className="mt-4 border-t border-edge/10 pt-4 text-sm leading-relaxed text-cream/75 [word-break:keep-all]">
         {r.job}
       </p>

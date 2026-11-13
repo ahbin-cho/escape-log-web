@@ -56,7 +56,7 @@ export default function JoinTeamForm({
         router.push(teamPath(addToTeam(team, code)));
       }}
     >
-      <label htmlFor="team-name" className="text-xs font-bold text-cream/60">
+      <label htmlFor="team-name" className="text-xs font-bold text-cream/70">
         팀원에게 보일 이름
       </label>
       <div className="mt-1.5 flex gap-2">
@@ -67,12 +67,12 @@ export default function JoinTeamForm({
           maxLength={12}
           placeholder="비우면 '친구'로 보여요"
           autoComplete="nickname"
-          className="min-w-0 flex-1 rounded-lg border border-edge/25 bg-panel px-3 py-2.5 text-sm font-bold outline-none transition placeholder:font-normal placeholder:text-cream/40 focus:border-edge"
+          className="min-w-0 flex-1 rounded-xl border-2 border-edge bg-panel px-3 py-2.5 text-sm font-bold outline-none transition placeholder:font-normal placeholder:text-cream/70 focus:border-edge"
         />
         <button
           type="submit"
           disabled={busy}
-          className="shrink-0 rounded-lg bg-edge px-4 py-2.5 text-sm font-extrabold text-panel transition hover:bg-edge/85 active:scale-[0.98] disabled:opacity-60"
+          className="shrink-0 rough rounded-xl border-2 border-edge bg-candy text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.98] px-4 py-2.5 disabled:opacity-60"
         >
           {busy ? "추가하는 중…" : submitLabel}
         </button>
