@@ -3,7 +3,6 @@
 update public.catalog c set poster_url = v.poster from (values
   ('fd3d9d63-271f-44ca-bfaf-c74dacccfeed'::uuid, 'https://www.master-key.co.kr/upload/room/154_img1.jpg'),  -- 마스터키 건대점 / D-Day (424x600 portrait)
   ('88f97703-2743-48be-8ac1-30d7ba65979a'::uuid, 'https://www.master-key.co.kr/upload/room/155_img1.png'),  -- 마스터키 건대점 / DELIVER (424x600 portrait)
-  ('044be644-c51b-4739-a36b-578a55191215'::uuid, 'https://www.master-key.co.kr/upload/room/212_img1.jpg'),  -- 마스터키 건대점 / 교생실습 (424x600 portrait)
   ('746ecb5b-087e-4fad-a3d1-825beb64794f'::uuid, 'https://www.master-key.co.kr/upload/room/3_img1.jpg'),  -- 마스터키 궁동직영점(서울) / MK빌딩을털어라:45C6 (424x600 portrait)
   ('e6c06c2c-e937-4158-a0b4-a2d0b7ea4a56'::uuid, 'https://www.master-key.co.kr/upload/room/2_img1.png'),  -- 마스터키 궁동직영점(서울) / MSI 미제사건 전담반 (486x600 portrait)
   ('00b18d0c-8d12-4d8d-b11b-a88234fd00cd'::uuid, 'https://www.master-key.co.kr/upload/room/5_img1.jpeg'),  -- 마스터키 궁동직영점(서울) / 블랙룸 (479x600 portrait)
@@ -19,6 +18,7 @@ update public.catalog c set poster_url = v.poster from (values
   ('efc2c9f9-d84e-45f7-a076-eee0ad1340e7'::uuid, 'https://www.master-key.co.kr/upload/room/148_img1.jpg'),  -- 마스터키 안양점 / 레드럼 (425x600 portrait)
   ('3a9cf0e0-4148-43a2-95f4-c25e2b396573'::uuid, 'https://www.master-key.co.kr/upload/room/86_img1.jpg'),  -- 마스터키 안양점 / 사랑과전쟁 (479x600 portrait)
   ('d197f100-cddb-48f5-b4bb-2c00e56eb29e'::uuid, 'https://www.master-key.co.kr/upload/room/85_img1.jpg'),  -- 마스터키 안양점 / 우주대미남 (479x600 portrait)
+  ('c89eef1e-cfcd-4e48-a4ad-d7e4c75d13e5'::uuid, 'https://www.master-key.co.kr/upload/room/84_img1.png'),  -- 마스터키 안양점 / 운수좋은날 (479x600 portrait)
   ('7f378d95-826b-42c4-b536-089f8455df9d'::uuid, 'https://www.master-key.co.kr/upload/room/142_img1.png'),  -- 마스터키 은행직영점(대전) / 1990 (400x491 portrait)
   ('3c1b9927-a177-4ffc-9572-9317d00de737'::uuid, 'https://www.master-key.co.kr/upload/room/149_img1.jpg'),  -- 마스터키 은행직영점(대전) / REC (486x600 portrait)
   ('29e8fc16-88f4-4141-a666-dc554f5f9f0f'::uuid, 'https://www.master-key.co.kr/upload/room/152_img1.jpg'),  -- 마스터키 은행직영점(대전) / 그레이트월 (488x600 portrait)
@@ -45,4 +45,4 @@ update public.catalog c set poster_url = v.poster from (values
 select count(*) filter (where coalesce(poster_url,'')<>'') as 포스터있음, count(*) as 전체 from public.catalog where cafe like '마스터키%';
 
 -- 못 맞춘 것 (1개) — 공식 페이지에서 확인 안 됨, 비워 둠
---   c89eef1e-cfcd-4e48-a4ad-d7e4c75d13e5  마스터키 안양점 / 운수좋은날  : 이미지 확인 실패 (000 )
+--   044be644-c51b-4739-a36b-578a55191215  마스터키 건대점 / 교생실습  : 이미지 확인 실패 (000 )
