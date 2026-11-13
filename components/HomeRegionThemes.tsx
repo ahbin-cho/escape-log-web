@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { getCatalog, genreEmoji, type CandidateTheme } from "@/lib/store";
+import Poster from "@/components/Poster";
+import { getCatalog, type CandidateTheme } from "@/lib/store";
 import { regionFromText, REGIONS, type Region } from "@/lib/region";
 
 // 브랜드별로 번갈아 뽑아 다양하게 섞기 (한 브랜드 쏠림 방지)
@@ -24,7 +25,7 @@ function mixByBrand(themes: CandidateTheme[], limit: number): CandidateTheme[] {
   return out;
 }
 
-// 홈 위젯: 위(지역 칩) / 아래(그 지역 테마 미리보기 8장).
+// 홈 "동네별 테마": 위(지역 칩) / 아래(그 지역 테마 포스터 줄 8장).
 export default function HomeRegionThemes() {
   const [catalog, setCatalog] = useState<CandidateTheme[]>([]);
   const [ready, setReady] = useState(false);
@@ -54,29 +55,32 @@ export default function HomeRegionThemes() {
   if (!ready || regionsPresent.length === 0) return null;
 
   const regionThemes = byRegion.filter((x) => x.r === region).map((x) => x.t);
-  const themes = mixByBrand(regionThemes, 8);
+  // 공식 포스터가 있는 테마를 먼저 보여 준다(없으면 장르 색 표지)
+  const themes = mixByBrand(
+    [...regionThemes].sort((a, b) => Number(!!b.posterUrl) - Number(!!a.posterUrl)),
+    8,
+  );
 
   return (
-    <section className="space-y-3">
-      <div className="flex items-baseline justify-between">
-        <h2 className="text-xl">지역별 테마</h2>
-        <div className="flex items-baseline gap-3 text-xs font-bold text-candy">
-          <Link href="/cafe">브랜드별 →</Link>
-          <Link href="/region">지역 지도 →</Link>
-        </div>
+    <section aria-labelledby="home-region">
+      <div className="mb-3 flex items-baseline justify-between gap-3">
+        <h2 id="home-region" className="text-[18px]">
+          동네별 테마
+        </h2>
+        <Link href="/region" className="text-[13px] text-cream/70">
+          지역 전체 ›
+        </Link>
       </div>
 
-      {/* 지역 칩: 모바일 가로 스크롤 / 데스크톱 한두 줄로 감김 */}
-      <div className="no-scrollbar flex gap-1.5 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible sm:pb-0">
+      {/* 지역 칩: 모바일 가로 스크롤 / 넓은 화면은 한두 줄로 감김 */}
+      <div className="no-scrollbar -mx-4 flex gap-1.5 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0">
         {regionsPresent.map((r) => (
           <button
             key={r}
             onClick={() => setRegion(r)}
             aria-pressed={region === r}
-            className={`shrink-0 rounded-full px-3.5 py-1.5 text-sm font-bold transition active:scale-[0.97] ${
-              region === r
-                ? "bg-edge text-panel"
-                : "text-cream/70 hover:bg-edge/10 hover:text-cream"
+            className={`shrink-0 rounded-lg px-3 py-2 text-[13px] font-bold transition active:scale-[0.97] ${
+              region === r ? "bg-edge text-white" : "bg-ink text-cream"
             }`}
           >
             {r}
@@ -84,44 +88,25 @@ export default function HomeRegionThemes() {
         ))}
       </div>
 
-      {/* 테마 미리보기: 소개글 없이 이름·지점·장르만 (줄거리는 테마 상세에서) */}
-      <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
-        {themes.map((t, i) => {
-          const [brand, ...rest] = (t.cafe || "").split(" ");
-          const branch = rest.join(" ");
-          // 예약 사이트로 바로 보내지 않고 우리 테마 상세를 거친다(줄거리·후기 보고 예약)
-          return (
-            <Link
-              key={`${t.cafe}-${t.name}`}
-              href={`/theme/${t.id}?from=home`}
-              // 모바일은 4장까지만
-              className={`flex min-w-0 flex-col gap-0.5 rounded-xl border border-edge/15 bg-panel px-3.5 py-3 transition hover:border-edge active:scale-[0.98] ${
-                i >= 4 ? "max-sm:hidden" : ""
-              }`}
-            >
-              {brand && (
-                <span className="truncate text-xs font-extrabold text-candy">{brand}</span>
-              )}
-              <span className="truncate text-sm font-extrabold">
-                {genreEmoji(t.genre)} {t.name}
-              </span>
-              <span className="truncate text-xs font-medium text-cream/60">
-                {branch}
-                {branch ? " · " : ""}
-                {t.genre}
-                {t.timeLimit ? ` · ${t.timeLimit}분` : ""}
-              </span>
+      {/* 예약 사이트로 바로 보내지 않고 우리 테마 상세를 거친다(줄거리·후기 보고 예약) */}
+      <ul className="no-scrollbar -mx-4 mt-3 flex gap-2.5 overflow-x-auto px-4 sm:-mx-6 sm:gap-3 sm:px-6">
+        {themes.map((t) => (
+          <li key={`${t.cafe}-${t.name}`} className="w-[116px] shrink-0 sm:w-[140px]">
+            <Link href={`/theme/${t.id}?from=home`} className="block transition active:scale-[0.98]">
+              <Poster src={t.posterUrl} name={t.name} genre={t.genre} />
+              <b className="mt-2 block truncate text-sm font-extrabold">{t.name}</b>
+              <span className="mt-0.5 block truncate text-xs text-cream/70">{t.cafe}</span>
             </Link>
-          );
-        })}
-      </div>
+          </li>
+        ))}
+      </ul>
 
       {regionThemes.length > themes.length && region && (
         <Link
           href={`/region/${region}`}
-          className="block text-right text-xs font-bold text-candy"
+          className="mt-4 block rounded-xl border border-line py-3 text-center text-sm font-extrabold transition active:scale-[0.99]"
         >
-          {region} 테마 {regionThemes.length}개 전체 보기 →
+          {region} 테마 {regionThemes.length}개 모두 보기
         </Link>
       )}
     </section>
