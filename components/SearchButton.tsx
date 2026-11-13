@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { ThemeRow } from "@/lib/catalog-server";
 import { searchThemes } from "@/lib/search";
 import { brandOf } from "@/lib/cafe";
@@ -120,18 +121,18 @@ export default function SearchButton() {
         <kbd className="ml-auto hidden rounded-md border border-line bg-white px-1.5 text-[11px] font-bold text-cream/60 md:inline">/</kbd>
       </button>
 
-      {open && (
+      {open && typeof document !== "undefined" && createPortal(
         <div
-          className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 px-4 pt-16 sm:pt-24"
+          className="fixed inset-0 z-50 flex items-start justify-center bg-black/45 px-4 pt-16 sm:pt-24"
           onClick={() => setOpen(false)}
         >
           <div
             role="dialog"
             aria-label="테마 검색"
-            className="w-full max-w-xl overflow-hidden rounded-2xl bg-white shadow-float"
+            className="w-full max-w-xl overflow-hidden rounded-2xl border-2 border-edge bg-panel shadow-cute"
             onClick={(e) => e.stopPropagation()}
           >
-            <form onSubmit={submit} className="flex items-center gap-2 border-b border-line px-4">
+            <form onSubmit={submit} className="flex items-center gap-2 border-b-2 border-edge px-4">
               <SearchIcon />
               <input
                 ref={inputRef}
@@ -247,7 +248,8 @@ export default function SearchButton() {
               )}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
