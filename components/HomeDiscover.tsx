@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { listedConditions } from "@/lib/best";
 import { getAllThemes, listedBrands } from "@/lib/catalog-server";
+import { immersiveKind } from "@/lib/immersive";
 
 // 홈 상단 "어떤 방 찾아?": 조건별 추천 진입 + 우리 팀 궁합 진입.
 // 서버 컴포넌트라 링크가 HTML 에 그대로 실려 검색엔진이 /best 페이지들을 따라간다.
@@ -8,6 +9,7 @@ export default async function HomeDiscover() {
   const [all, brands] = await Promise.all([getAllThemes(), listedBrands()]);
   const conditions = listedConditions(all);
   const topBrands = brands.slice(0, 12);
+  const immersiveCount = all.filter((t) => immersiveKind(t.tags)).length;
 
   return (
     <section className="space-y-3" aria-labelledby="home-discover">
@@ -69,6 +71,24 @@ export default async function HomeDiscover() {
             ))}
           </ul>
         </div>
+      )}
+
+      {immersiveCount > 0 && (
+        <Link
+          href="/immersive"
+          className="rough flex items-center gap-4 rounded-2xl border-2 border-edge bg-candy/15 p-4 transition hover:border-candy active:scale-[0.99]"
+        >
+          <span className="text-3xl leading-none" aria-hidden>
+            🎭
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block font-extrabold">자물쇠 대신 배우가 있는 방</span>
+            <span className="mt-0.5 block text-sm text-cream/70 [word-break:keep-all]">
+              배우가 처음부터 끝까지 같이 연기하는 이머시브 연극·방탈출 {immersiveCount}곳
+            </span>
+          </span>
+          <span className="shrink-0 text-sm font-extrabold text-candy">보기 →</span>
+        </Link>
       )}
 
       <Link
