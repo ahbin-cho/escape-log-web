@@ -1,6 +1,6 @@
 // 달력 칸의 '미니 포스터': 포스터 그림이 없을 때(또는 그림 밑에) 깔리는 타일.
 // 파스텔 칸 + 이모지 대신, 영화 포스터처럼 어두운 장르 색 바탕에 테마 이름을 넣는다.
-const TONE: Record<string, { bg: string; accent: string }> = {
+export const TONE: Record<string, { bg: string; accent: string }> = {
   공포: { bg: "#2A1215", accent: "#E5604C" },
   스릴러: { bg: "#1A1E2C", accent: "#8FA3D9" },
   추리: { bg: "#17282A", accent: "#6FC2A6" },

@@ -2,112 +2,51 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { GENRE_COLOR, GENRE_EMOJI, type EscapeRecord } from "@/lib/store";
-import { ratingLabel, fearLabel, achievements } from "@/lib/terms";
+import type { EscapeRecord } from "@/lib/store";
+import { fearLabel } from "@/lib/terms";
+import ReviewCard from "@/components/ReviewCard";
 
-export default function RecordCard({ record }: { record: EscapeRecord }) {
+// 내 기록 카드: 위는 후기 카드(사진 위에 한줄 후기, 공유 가능), 아래는 눌러서 펼치는 자세한 기록.
+export default function RecordCard({ record, number }: { record: EscapeRecord; number?: number }) {
   const [expanded, setExpanded] = useState(false);
+  const guest = record.id.startsWith("guest-");
 
   return (
-    <div
-      onClick={() => setExpanded((v) => !v)}
-      className="rough group flex cursor-pointer flex-col gap-3 rounded-2xl border-2 border-edge bg-panel p-5 shadow-cute transition active:scale-[0.98]"
-    >
-      <div className="flex items-start justify-between gap-2">
-        <h3 className="font-extrabold leading-tight">
-          {record.themeName || "(제목 없음)"}
-        </h3>
-        <span
-          className={`shrink-0 rounded-lg border-2 border-edge px-2 py-0.5 text-xs font-bold ${
-            GENRE_COLOR[record.genre] || GENRE_COLOR["기타"]
-          }`}
+    <ReviewCard review={record} byline={number ? `${number}번째 방` : undefined}>
+      <div className="px-4 py-3">
+        <button
+          onClick={() => setExpanded((v) => !v)}
+          aria-expanded={expanded}
+          className="flex w-full items-center justify-between text-xs font-bold text-cream/60"
         >
-          {GENRE_EMOJI[record.genre]} {record.genre}
-        </span>
-      </div>
-
-      <div className="text-sm text-cream/60">
-        {record.cafeName || "매장 미입력"}
-        {record.playedAt ? ` · ${record.playedAt}` : ""}
-      </div>
-
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
-        {ratingLabel(record.rating) && (
-          <span className="rounded-md border-2 border-candy/50 bg-candy/10 px-2 py-0.5 text-xs font-extrabold text-candy">
-            {ratingLabel(record.rating)}
+          <span>
+            난이도 {record.difficulty} · 공포 {record.fearLevel}
+            {fearLabel(record.fearLevel) ? ` (${fearLabel(record.fearLevel)})` : ""} · 힌트{" "}
+            {record.hintCount < 0 ? "무한" : `${record.hintCount}회`}
           </span>
-        )}
-        <span
-          className={
-            record.success
-              ? "rounded-lg border border-mint bg-mint/10 px-2 py-0.5 text-xs font-bold text-mint"
-              : "rounded-lg border border-edge/30 bg-ink px-2 py-0.5 text-xs text-cream/60"
-          }
-        >
-          {record.success ? "탈출 성공" : "실패"}
-        </span>
-        {achievements(record).map((a) => (
-          <span
-            key={a}
-            className="rounded-md border border-edge/25 bg-ink px-1.5 py-0.5 text-[11px] font-bold text-cream/65"
-          >
-            {a}
-          </span>
-        ))}
-        <span className="text-xs text-cream/60">
-          난이도 {record.difficulty} · 공포 {record.fearLevel}
-          {fearLabel(record.fearLevel) ? ` (${fearLabel(record.fearLevel)})` : ""}
-        </span>
-      </div>
-
-      {record.oneLiner ? (
-        <p className="line-clamp-2 text-sm text-cream/70">{record.oneLiner}</p>
-      ) : null}
-
-      {/* 확장 영역 */}
-      <div
-        className="grid transition-[grid-template-rows] duration-200"
-        style={{ gridTemplateRows: expanded ? "1fr" : "0fr" }}
-      >
-        <div className="overflow-hidden">
-          <div className="space-y-3 border-t-2 border-edge/20 pt-3">
-            {record.photoUrl && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={record.photoUrl}
-                alt={record.themeName}
-                className="max-h-64 w-full rounded-xl border-2 border-edge object-cover"
-              />
-            )}
-            <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-cream/70">
-              {record.remainingTime && (
-                <span>남은 시간 {record.remainingTime}</span>
-              )}
-              <span>
-                힌트 {record.hintCount < 0 ? "무한" : `${record.hintCount}회`}
-              </span>
+          <span className={`transition ${expanded ? "rotate-180" : ""}`}>⌄</span>
+        </button>
+        {expanded && (
+          <div className="mt-3 space-y-3 border-t border-edge/10 pt-3 text-sm">
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-cream/70">
+              {record.remainingTime && <span>남은 시간 {record.remainingTime}</span>}
               {record.partySize > 0 && <span>인원 {record.partySize}명</span>}
               {record.themeType && <span>{record.themeType}방</span>}
             </div>
-
             {record.memo && (
-              <p className="rounded-xl border border-edge/20 bg-ink p-3 text-sm text-cream/60">
+              <p className="rounded-xl bg-ink p-3 text-cream/65">
+                <span className="mb-1 block text-[11px] font-extrabold text-cream/40">나만 보는 메모</span>
                 {record.memo}
               </p>
             )}
-
-            {!record.id.startsWith("guest-") && (
-            <Link
-              href={`/edit/${record.id}`}
-              onClick={(e) => e.stopPropagation()}
-              className="rough inline-block rounded-xl border-2 border-edge bg-panel px-3 py-1.5 text-sm font-bold transition active:scale-[0.97]"
-            >
-              수정
-            </Link>
+            {!guest && (
+              <Link href={`/edit/${record.id}`} className="inline-block rounded-lg border border-edge/25 px-3 py-1.5 text-sm font-bold">
+                수정
+              </Link>
             )}
           </div>
-        </div>
+        )}
       </div>
-    </div>
+    </ReviewCard>
   );
 }

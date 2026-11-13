@@ -267,7 +267,7 @@ export default function RecordsPage() {
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((r) => (
-            <RecordCard key={r.id} record={r} />
+            <RecordCard key={r.id} record={r} number={numbers.get(r.id)} />
           ))}
         </div>
       )}

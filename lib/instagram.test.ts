@@ -68,7 +68,7 @@ describe("게시 일정", () => {
     expect(scheduledSet("2026-11-12")).toBe("intro");
         expect(setImagePaths("intro")).toHaveLength(6);
     expect(setImagePaths("ad-diary")).toEqual(["/api/ig/slides?ad=diary"]);
-    expect(scheduledSet("2026-11-14")).toBe("record-story");
+    expect(scheduledSet("2026-11-14")).toBe("static:diary");
     expect(scheduledSet("2026-11-13")).toBe("static:suwon");
     expect(scheduledSet("2026-11-20")).toBeNull();
     expect(scheduledSet("2026-11-18")).toBe("cafes:yearend");

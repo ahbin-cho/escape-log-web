@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { TONE } from "@/components/PosterTile";
 import Link from "next/link";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { getPublicFeed, GENRE_EMOJI, type PublicReview } from "@/lib/store";
@@ -76,20 +77,22 @@ export default function FeedPreview() {
             key={r.id}
             href="/feed"
             draggable={false}
-            className="flex w-44 shrink-0 snap-start flex-col gap-1 rounded-xl border-2 border-edge bg-panel p-3 shadow-cute transition active:scale-[0.98]"
+            className="relative flex aspect-[4/5] w-40 shrink-0 snap-start flex-col justify-end overflow-hidden rounded-xl p-3 text-white transition active:scale-[0.98]"
+            style={{ backgroundColor: (TONE[r.genre] ?? TONE["기타"]).bg }}
           >
-            <p className="truncate text-sm font-extrabold">
-              {GENRE_EMOJI[r.genre]} {r.themeName}
-            </p>
-            <p className="text-xs font-bold text-candy">
-              {"🌸".repeat(Math.round(r.rating))}
-            </p>
-            {r.oneLiner && (
-              <p className="line-clamp-2 text-xs text-cream/70">"{r.oneLiner}"</p>
+            {r.photoUrl && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={r.photoUrl} alt="" loading="lazy" draggable={false} className="absolute inset-0 h-full w-full object-cover opacity-70" />
             )}
-            <p className="mt-auto truncate text-[11px] font-bold text-cream/60">
-              — {r.nickname}{r.isSample ? " · 예시" : ""}
-            </p>
+            <span className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/80" />
+            <span className="relative">
+              {r.oneLiner && <span className="line-clamp-3 text-[13px] font-extrabold leading-snug">“{r.oneLiner}”</span>}
+              <span className="mt-1.5 block truncate text-xs font-bold text-white/85">{r.themeName}</span>
+              <span className="block truncate text-[11px] text-white/60">
+                — {r.nickname}
+                {r.isSample ? " · 예시" : ""}
+              </span>
+            </span>
           </Link>
         ))}
       </div>

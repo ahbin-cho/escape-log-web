@@ -221,7 +221,7 @@ function slide(n: number, origin: string, page?: string) {
               </div>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 18, marginTop: 60 }}>
-              {["무료, 로그인 없이 바로 시작", "스포는 나만 보는 메모로 따로", "매일 오늘의 미스터리 방"].map((x) => (
+              {["먼저 써 보고, 10초면 가입", "스포는 나만 보는 메모로 따로", "매일 오늘의 미스터리 방"].map((x) => (
                 <div key={x} style={{ display: "flex", alignItems: "center", gap: 20, fontSize: 40, fontWeight: 800 }}>
                   <div style={{ display: "flex", width: 18, height: 18, borderRadius: 9, backgroundColor: ED.accent }} />
                   {x}
@@ -320,7 +320,7 @@ function ad(kind: string, origin: string, page?: string) {
           티켓은 사라져도, 기록은 남아요.
         </div>
         <div style={{ flex: 1 }} />
-        {cta("무료 · 로그인 없이 30초 → 프로필 링크")}
+        {cta("먼저 써 보고 10초 가입 → 프로필 링크")}
       </Frame>
     );
   }
@@ -375,7 +375,7 @@ function ad(kind: string, origin: string, page?: string) {
         <DiaryRow no="#48" day="11.02" name="고양이 탐정 사무소" meta="추리 · 서면 · 4명" result="탈출 8분 남김" />
       </div>
       <div style={{ flex: 1 }} />
-      {cta("무료 · 로그인 없이 30초 → 프로필 링크")}
+      {cta("먼저 써 보고 10초 가입 → 프로필 링크")}
     </Frame>
   );
 }

@@ -109,7 +109,7 @@ export type PostSet = "intro" | "record-story" | "ad-diary" | "ad-recap";
 export const POST_SCHEDULE: { date: string; set: string; extra?: boolean }[] = [
   { date: "2026-11-12", set: "intro" },
   { date: "2026-11-13", set: "static:suwon", extra: true }, // 제미나이 그림으로 다시 만든 수원 모음 6장
-  { date: "2026-11-14", set: "record-story" },
+  { date: "2026-11-14", set: "static:diary" }, // 다이어리 소개 4장(후기 카드·달력·기록으로 본 유형)
 
   // 이 방의 이야기는 카드 대신 릴스로(처음 보는 사람에게 더 퍼진다)
   { date: "2026-11-15", set: "reel:b60b538b-618e-4102-ab57-06f369f56a4b" }, // 성지기숙학원 : 특수교정반
@@ -129,6 +129,22 @@ export function scheduledExtra(kstDay: string): boolean {
 
 // 직접 만든 카드 묶음(public/ig-static/<이름>/1.jpg …). "static:<이름>" 으로 올린다
 export const STATIC_POSTS: Record<string, { count: number; caption: string }> = {
+  diary: {
+    count: 4,
+    caption: [
+      "방켓팅까지 해서 간 방, 1년 뒤에도 기억나요?",
+      "",
+      "예약 전쟁 뚫고 간 방도, 시간이 지나면 이름부터 가물가물해요.",
+      "📸 사진 한 장에 한 줄만 쓰면 후기 카드가 되고",
+      "📅 다녀온 날마다 달력에 포스터가 쌓이고",
+      "🔮 기록 3개면 내 방탈출 유형과 다음에 갈 방까지 나와요.",
+      "",
+      "후기 카드는 그대로 스토리에 공유할 수 있어요.",
+      "먼저 써 보고 10초 가입 → 프로필 링크",
+      "",
+      "#방탈출 #방탈출기록 #방탈출다이어리 #방탈출후기 #방탈출추천 #방탈러 #방린이 #방켓팅 #방탈출스타그램 #이색데이트 #방탈로그",
+    ].join("\n"),
+  },
   suwon: {
     count: 6,
     caption: [
@@ -277,7 +293,7 @@ export const SET_CAPTIONS: Record<PostSet, string> = {
     "방탈로그에 남기면 다이어리로 쌓이고 연말엔 나만의 결산이 나와요.",
     "아직 안 가 본 방은 내 취향으로 골라 드려요.",
     "",
-    "무료 · 로그인 없이 바로 시작 → 프로필 링크",
+    "먼저 써 보고 10초 가입 → 프로필 링크",
     "",
     TAGS_BASE,
   ].join("\n"),
@@ -288,7 +304,7 @@ export const SET_CAPTIONS: Record<PostSet, string> = {
     "다녀온 날 30초만 남겨 두면 몇 번째 방인지 세어 주고, 연말엔 결산까지 나와요.",
     "",
     "티켓은 사라져도, 기록은 남아요.",
-    "무료 · 로그인 없이 30초 → 프로필 링크",
+    "먼저 써 보고 10초 가입 → 프로필 링크",
     "",
     `${TAGS_BASE} #방켓팅`,
   ].join("\n"),
@@ -298,7 +314,7 @@ export const SET_CAPTIONS: Record<PostSet, string> = {
     "다녀온 날 30초만 남겨 두면 몇 번째 방인지 세어 드려요.",
     "50번째, 100번째 방은 따로 축하해요.",
     "",
-    "무료 · 로그인 없이 30초 → 프로필 링크",
+    "먼저 써 보고 10초 가입 → 프로필 링크",
     "",
     TAGS_BASE,
   ].join("\n"),
