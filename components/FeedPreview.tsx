@@ -57,18 +57,16 @@ export default function FeedPreview() {
   if (!ready || reviews.length === 0) return null;
 
   return (
-    <section aria-labelledby="home-feed">
-      <div className="mb-3 flex items-baseline justify-between gap-3">
-        <h2 id="home-feed" className="text-[18px]">
-          💬 모두의 후기
-        </h2>
-        <Link href="/feed" className="text-[13px] text-cream/70">
-          더보기 ›
+    <section className="space-y-3">
+      <div className="flex items-baseline justify-between">
+        <h2 className="text-xl">모두의 후기</h2>
+        <Link href="/feed" className="text-xs font-bold text-candy">
+          더보기 →
         </Link>
       </div>
       <div
         ref={scrollRef}
-        className="no-scrollbar -mx-4 flex cursor-grab snap-x snap-mandatory scroll-px-4 gap-2.5 overflow-x-auto scroll-smooth px-4 sm:-mx-6 sm:scroll-px-6 sm:px-6"
+        className="no-scrollbar -mx-1 flex cursor-grab snap-x snap-mandatory gap-2.5 overflow-x-auto scroll-smooth px-1 pb-1"
         onMouseDown={onMouseDown}
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}

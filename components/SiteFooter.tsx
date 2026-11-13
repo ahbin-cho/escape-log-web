@@ -4,7 +4,7 @@ import { CONTACT_EMAIL } from "@/lib/site";
 export default function SiteFooter() {
   const year = new Date().getFullYear();
   return (
-    <footer className="mt-12 border-t border-line bg-ink pb-4">
+    <footer className="mt-12 border-t-2 border-edge bg-ink">
       <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
         <div className="flex flex-col gap-6 sm:flex-row sm:justify-between">
           <div className="space-y-1.5">
@@ -41,9 +41,6 @@ export default function SiteFooter() {
             <Link href="/diary" className="hover:text-candy">
               방탈출 기록장
             </Link>
-            <a href="https://yunj8649.github.io/minicheon/" target="_blank" rel="noopener noreferrer" className="hover:text-candy">
-              레트로 미니게임
-            </a>
             <a
               href={`mailto:${CONTACT_EMAIL}?subject=%5B%EB%B0%A9%ED%83%88%EB%A1%9C%EA%B7%B8%5D%20%EC%82%AC%EC%97%85%20%EB%AC%B8%EC%9D%98`}
               className="hover:text-candy"

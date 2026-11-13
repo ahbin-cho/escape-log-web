@@ -2,7 +2,7 @@ import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
-import TabBar from "@/components/TabBar";
+import MiniGameFab from "@/components/MiniGameFab";
 import AttributionCapture from "@/components/AttributionCapture";
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/site";
 
@@ -169,7 +169,7 @@ export default function RootLayout({
         >
           {children}
         </main>
-        <TabBar />
+        <MiniGameFab />
         <AttributionCapture />
         <SiteFooter />
       </body>

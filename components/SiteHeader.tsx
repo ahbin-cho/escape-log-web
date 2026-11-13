@@ -8,7 +8,7 @@ import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 
 // 배경색은 각 링크에서 지정(공용 base 에 bg 를 넣으면 bg-candy 등과 충돌해 색이 덮임)
 const navBase =
-  "rounded-xl px-3.5 py-2 text-sm font-extrabold transition active:scale-[0.97]";
+  "rough rounded-xl border-2 border-edge px-3 py-1.5 text-sm font-bold transition active:scale-[0.97]";
 // 보조 메뉴는 테두리 없는 글자 링크로 두고, 버튼 모양은 "기록 추가" 하나만 쓴다.
 const navLink =
   "rounded-lg px-2.5 py-1.5 text-sm font-bold text-cream/80 transition hover:bg-edge/10 hover:text-cream";
@@ -54,7 +54,7 @@ export default function SiteHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-10 border-b-[2px] border-[#1D1D1D] bg-paper/90 backdrop-blur-md">
+    <header className="sticky top-0 z-10 border-b-2 border-edge bg-ink/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-2 px-4 py-3 sm:px-6">
         <Link
           href="/"
@@ -73,7 +73,7 @@ export default function SiteHeader() {
           <Link href="/best" className={`${navLink} hidden sm:inline-block`}>
             방 찾기
           </Link>
-          <Link href="/new" className={`rough ${navBase} mx-1 border-[2px] border-[#1D1D1D] bg-candy text-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D]`}>
+          <Link href="/new" className={`${navBase} mx-1 bg-candy text-white shadow-cute`}>
             기록 추가
           </Link>
           {isAdmin && (
