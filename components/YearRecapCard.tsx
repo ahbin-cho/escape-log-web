@@ -1,19 +1,21 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { GENRE_EMOJI, type EscapeRecord } from "@/lib/store";
+import type { EscapeRecord } from "@/lib/store";
 import { recapShareText, recapYear, yearRecap } from "@/lib/diary";
 import { SITE_URL } from "@/lib/site";
 
-// 올해의 방탈출 결산 카드 + 공유. 연말에 단톡방·SNS로 퍼지게 하는 장치.
-export default function YearRecapCard({ records }: { records: EscapeRecord[] }) {
+// 올해의 방탈출 결산. 평소에는 한 줄("2026년 결산 보기")로 접혀 있고, 누르면 펼쳐진다. 공유는 펼친 안에.
+// note: 줄 왼쪽에 같이 보여 줄 짧은 안내(다음 기념까지 몇 방 등).
+export default function YearRecapCard({ records, note }: { records: EscapeRecord[]; note?: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const year = useMemo(() => recapYear(records, new Date()), [records]);
-  const recap = useMemo(
-    () => (year ? yearRecap(records, year) : null),
-    [records, year]
-  );
-  if (!recap || recap.count === 0) return null;
+  const recap = useMemo(() => (year ? yearRecap(records, year) : null), [records, year]);
+
+  if (!recap || recap.count === 0) {
+    return note ? <p className="pt-3 text-[13px] text-cream/70">{note}</p> : null;
+  }
 
   async function share() {
     if (!recap) return;
@@ -36,70 +38,69 @@ export default function YearRecapCard({ records }: { records: EscapeRecord[] }) 
   }
 
   const life = recap.lifeThemes[0];
+  const lines: [string, string][] = [];
+  if (life) lines.push(["올해의 인생테마", `${life.themeName}${recap.lifeThemes.length > 1 ? ` 외 ${recap.lifeThemes.length - 1}개` : ""}`]);
+  if (recap.busiestMonth && recap.busiestMonth.count > 1)
+    lines.push(["제일 바빴던 달", `${recap.busiestMonth.month}월 (${recap.busiestMonth.count}방)`]);
+  if (recap.firstOfYear) lines.push(["올해 첫 방", recap.firstOfYear.themeName]);
+  if (recap.regions.length > 0) lines.push(["다녀온 지역", recap.regions.join(" · ")]);
 
   return (
-    <section className="rough space-y-4 rounded-2xl border-2 border-edge bg-grape/10 p-5 shadow-cute">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-xs font-bold text-cream/60">나의 방탈출 결산</p>
-          <h2 className="text-xl font-extrabold">📓 {recap.year}년, {recap.count}방</h2>
-        </div>
+    <section aria-label={`${recap.year}년 결산`}>
+      <div className="flex min-h-[44px] items-center justify-between gap-3 pt-1 text-[13px]">
+        <span className="min-w-0 truncate text-cream/70">{note}</span>
         <button
           type="button"
-          onClick={share}
-          className="shrink-0 rounded-xl border-2 border-edge bg-grape px-3 py-2 text-sm font-bold text-white shadow-cute transition active:scale-[0.97]"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          className="flex min-h-[44px] shrink-0 items-center gap-1 font-extrabold"
         >
-          {copied ? "복사됨! 📋" : "📣 결산 공유"}
+          {recap.year}년 결산 {open ? "접기" : "보기"}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={`h-3.5 w-3.5 transition-transform duration-200 ${open ? "rotate-180" : ""}`} aria-hidden>
+            <path d="m6 9 6 6 6-6" />
+          </svg>
         </button>
       </div>
 
-      <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-        <Cell label="탈출 성공률" value={`${recap.successRate}%`} />
-        <Cell label="노힌트 탈출" value={`${recap.noHint}번`} />
-        <Cell
-          label="최애 장르"
-          value={
-            recap.topGenre
-              ? `${GENRE_EMOJI[recap.topGenre.genre]} ${recap.topGenre.genre}`
-              : "–"
-          }
-        />
-        <Cell
-          label="원정 지역"
-          value={recap.regions.length ? `${recap.regions.length}곳` : "–"}
-        />
-      </dl>
-
-      <ul className="space-y-1 text-sm text-cream/80">
-        {life && (
-          <li>
-            🏆 올해의 인생테마 <b>{life.themeName}</b>
-            {recap.lifeThemes.length > 1 ? ` 외 ${recap.lifeThemes.length - 1}개` : ""}
-          </li>
-        )}
-        {recap.busiestMonth && recap.busiestMonth.count > 1 && (
-          <li>
-            🔥 제일 바빴던 달 <b>{recap.busiestMonth.month}월</b> ({recap.busiestMonth.count}방)
-          </li>
-        )}
-        {recap.firstOfYear && (
-          <li>
-            🚪 올해 첫 방 <b>{recap.firstOfYear.themeName}</b>
-          </li>
-        )}
-        {recap.regions.length > 0 && (
-          <li>📍 {recap.regions.join(" · ")}</li>
-        )}
-      </ul>
+      {open && (
+        <div className="rounded-xl bg-ink p-4">
+          <h2 className="text-[17px]">
+            {recap.year}년, {recap.count}방
+          </h2>
+          <dl className="mt-3 grid grid-cols-4 divide-x divide-line text-center">
+            <Cell label="성공률" value={`${recap.successRate}%`} />
+            <Cell label="노힌트" value={`${recap.noHint}번`} />
+            <Cell label="최애 장르" value={recap.topGenre ? recap.topGenre.genre : "–"} />
+            <Cell label="지역" value={recap.regions.length ? `${recap.regions.length}곳` : "–"} />
+          </dl>
+          {lines.length > 0 && (
+            <dl className="mt-3 space-y-1.5 border-t border-line pt-3 text-[13px]">
+              {lines.map(([k, v]) => (
+                <div key={k} className="flex gap-3">
+                  <dt className="w-24 shrink-0 text-cream/70">{k}</dt>
+                  <dd className="min-w-0 flex-1 font-extrabold [word-break:keep-all]">{v}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+          <button
+            type="button"
+            onClick={share}
+            className="mt-4 w-full rounded-xl bg-edge py-3 text-sm font-extrabold text-white transition-opacity duration-200 active:opacity-80"
+          >
+            {copied ? "복사했어요" : "결산 공유하기"}
+          </button>
+        </div>
+      )}
     </section>
   );
 }
 
 function Cell({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl border-2 border-edge/30 bg-panel px-3 py-2">
-      <dt className="text-[11px] font-bold text-cream/55">{label}</dt>
-      <dd className="text-lg font-extrabold tabular-nums">{value}</dd>
+    <div className="px-1">
+      <dt className="text-[11px] text-cream/70">{label}</dt>
+      <dd className="mt-0.5 truncate text-[15px] font-extrabold tabular-nums">{value}</dd>
     </div>
   );
 }

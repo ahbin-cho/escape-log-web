@@ -31,6 +31,29 @@ export function reviewChips(r: ReviewCardData): string[] {
   ].filter(Boolean);
 }
 
+// 후기 카드 이미지(4:5)를 만들어 공유 창을 띄우거나(휴대폰) 파일로 내려받는다. 내 기록 목록도 같이 쓴다.
+export async function shareReviewImage(r: ReviewCardData, byline?: string): Promise<void> {
+  try {
+    const tone = TONE[r.genre] ?? TONE["기타"];
+    const blob = await makeReviewImage({ ...r, chips: reviewChips(r), byline, tone });
+    const file = new File([blob], "bangtallog-review.jpg", { type: "image/jpeg" });
+    const text = `${r.themeName}${r.oneLiner ? ` — “${r.oneLiner}”` : ""} · 방탈로그`;
+    if (navigator.canShare?.({ files: [file] })) {
+      await navigator.share({ files: [file], text });
+    } else {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = file.name;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+    }
+  } catch (err) {
+    // 공유 창을 닫은 경우는 조용히 넘어간다
+    if (!(err instanceof Error && err.name === "AbortError")) alert("이미지를 만들지 못했어요. 잠시 뒤 다시 해 주세요.");
+  }
+}
+
 export default function ReviewCard({
   review: r,
   byline,
@@ -50,26 +73,8 @@ export default function ReviewCard({
     e.stopPropagation();
     if (busy) return;
     setBusy(true);
-    try {
-      const blob = await makeReviewImage({ ...r, chips, byline, tone });
-      const file = new File([blob], "bangtallog-review.jpg", { type: "image/jpeg" });
-      const text = `${r.themeName}${r.oneLiner ? ` — “${r.oneLiner}”` : ""} · 방탈로그`;
-      if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], text });
-      } else {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = file.name;
-        a.click();
-        setTimeout(() => URL.revokeObjectURL(url), 2000);
-      }
-    } catch (err) {
-      // 공유 창을 닫은 경우는 조용히 넘어간다
-      if (!(err instanceof Error && err.name === "AbortError")) alert("이미지를 만들지 못했어요. 잠시 뒤 다시 해 주세요.");
-    } finally {
-      setBusy(false);
-    }
+    await shareReviewImage(r, byline);
+    setBusy(false);
   }
 
   return (

@@ -1,17 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { GENRE_EMOJI, type EscapeRecord } from "@/lib/store";
+import type { EscapeRecord } from "@/lib/store";
 import { ratingLabel } from "@/lib/terms";
 import { groupByMonth, reachedMilestone, recordDate } from "@/lib/diary";
+import { usePosterIndex } from "@/lib/use-poster-index";
+import RecordPoster from "@/components/RecordPoster";
 
 const WEEK = ["일", "월", "화", "수", "목", "금", "토"];
 
-function dayLabel(r: EscapeRecord): { day: string; week: string } {
+function dayLabel(r: EscapeRecord): string {
   const d = recordDate(r);
-  if (!d) return { day: "–", week: "" };
+  if (!d) return "";
   const dt = new Date(`${d}T00:00:00`);
-  return { day: String(dt.getDate()), week: WEEK[dt.getDay()] ?? "" };
+  return `${dt.getDate()}일 ${WEEK[dt.getDay()] ?? ""}요일`;
 }
 
 function hintText(n: number): string {
@@ -30,91 +32,70 @@ export default function DiaryView({
   numbers: Map<string, number>;
 }) {
   const months = groupByMonth(records);
+  const posters = usePosterIndex();
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-7">
       {months.map((m) => (
-        <section key={m.key || "none"} className="space-y-3">
-          <h2 className="flex items-baseline gap-2 border-b-2 border-edge/15 pb-1.5">
-            <span className="text-lg font-extrabold">{m.label}</span>
-            <span className="text-xs font-bold text-cream/55">
+        <section key={m.key || "none"}>
+          <h2 className="flex items-baseline justify-between border-b border-line pb-2">
+            <span className="text-[17px]">{m.label}</span>
+            <span className="text-[13px] font-medium text-cream/70">
               {m.records.length}방 · 탈출 {m.success}
             </span>
           </h2>
 
-          <ol className="space-y-2.5">
+          <ol className="divide-y divide-line">
             {m.records.map((r) => {
               const n = numbers.get(r.id);
               const milestone = n ? reachedMilestone(n) : null;
-              const { day, week } = dayLabel(r);
               const label = ratingLabel(r.rating);
+              const legend = Math.round(r.rating) >= 5;
+              const facts = [
+                r.success ? `탈출${r.remainingTime ? ` · ${r.remainingTime} 남김` : ""}` : "실패",
+                hintText(r.hintCount),
+                legend ? "" : label,
+              ].filter(Boolean);
               return (
                 <li key={r.id}>
                   <Link
                     href={r.id.startsWith("guest-") ? "/login?mode=signup&guest=1&next=/records" : `/edit/${r.id}`}
-                    className={`rough flex gap-3 rounded-2xl border-2 bg-panel p-3.5 transition hover:border-candy active:scale-[0.99] ${
-                      milestone ? "border-candy shadow-cute" : "border-edge"
-                    }`}
+                    className="flex gap-3 py-3.5 transition-opacity duration-200 active:opacity-70"
                   >
-                    <div className="w-10 shrink-0 text-center">
-                      <div className="text-xl font-extrabold leading-none tabular-nums">
-                        {day}
-                      </div>
-                      <div className="mt-0.5 text-xs font-bold text-cream/50">{week}</div>
-                    </div>
+                    <span className="w-12 shrink-0">
+                      <RecordPoster record={r} index={posters} small />
+                    </span>
 
                     <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-1.5">
+                      <div className="flex items-center gap-1.5">
+                        <span className="truncate text-[15px] font-extrabold">{r.themeName || "(제목 없음)"}</span>
+                        {legend && (
+                          <span className="shrink-0 rounded-md bg-[#FFF3E6] px-1.5 py-[3px] text-[10px] font-extrabold leading-none text-[#B5601B]">
+                            인생테마
+                          </span>
+                        )}
+                      </div>
+                      <p className="mt-0.5 truncate text-[13px] text-cream/70">
+                        {[dayLabel(r), r.cafeName || "매장 미입력", r.partySize ? `${r.partySize}명` : ""].filter(Boolean).join(" · ")}
+                      </p>
+                      <p className="mt-1 flex flex-wrap items-center gap-x-1.5 text-xs text-cream/70">
                         {n && (
                           <span
-                            className={`rounded-md px-1.5 py-0.5 text-[11px] font-extrabold tabular-nums ${
-                              milestone ? "bg-candy text-edge" : "bg-ink text-cream/60"
+                            className={`rounded-md px-1.5 py-[3px] font-extrabold leading-none tabular-nums ${
+                              milestone ? "bg-candy text-edge" : "bg-ink"
                             }`}
                           >
-                            {milestone ? `🎉 ${n}번째 방` : `#${n}`}
+                            {n}번째 방
                           </span>
                         )}
-                        <span className="truncate font-extrabold">
-                          {r.themeName || "(제목 없음)"}
-                        </span>
-                      </div>
-                      <p className="mt-0.5 truncate text-xs text-cream/60">
-                        {GENRE_EMOJI[r.genre]} {r.cafeName || "매장 미입력"}
-                        {r.partySize ? ` · ${r.partySize}명` : ""}
+                        <span>{facts.join(" · ")}</span>
                       </p>
-                      <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-xs font-bold">
-                        <span
-                          className={
-                            r.success
-                              ? "rounded-md border border-mint bg-mint/10 px-1.5 py-0.5 text-mint"
-                              : "rounded-md border border-edge/30 bg-ink px-1.5 py-0.5 text-cream/60"
-                          }
-                        >
-                          {r.success
-                            ? `탈출${r.remainingTime ? ` · ${r.remainingTime} 남김` : ""}`
-                            : "실패"}
-                        </span>
-                        <span className="text-cream/60">{hintText(r.hintCount)}</span>
-                        {label && (
-                          <span className="rounded-md bg-candy/10 px-1.5 py-0.5 text-candy">
-                            {label}
-                          </span>
-                        )}
-                      </div>
-                      {r.oneLiner && (
-                        <p className="mt-1.5 line-clamp-2 text-sm text-cream/80">
-                          “{r.oneLiner}”
-                        </p>
-                      )}
+                      {r.oneLiner && <p className="mt-1.5 line-clamp-2 text-sm text-cream/85">“{r.oneLiner}”</p>}
                     </div>
 
                     {r.photoUrl && (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={r.photoUrl}
-                        alt=""
-                        className="h-16 w-16 shrink-0 rounded-xl border-2 border-edge object-cover"
-                      />
+                      <img src={r.photoUrl} alt="" loading="lazy" className="h-[72px] w-[72px] shrink-0 rounded-md object-cover" />
                     )}
                   </Link>
                 </li>
