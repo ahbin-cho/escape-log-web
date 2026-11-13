@@ -60,7 +60,7 @@ export default function FeedPreview() {
     <section aria-labelledby="home-feed">
       <div className="mb-3 flex items-baseline justify-between gap-3">
         <h2 id="home-feed" className="text-[18px]">
-          모두의 후기
+          💬 모두의 후기
         </h2>
         <Link href="/feed" className="text-[13px] text-cream/70">
           더보기 ›

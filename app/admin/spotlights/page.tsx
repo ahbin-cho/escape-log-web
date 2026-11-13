@@ -178,7 +178,7 @@ export default function AdminSpotlights() {
           const live = r.until >= today();
           return (
             <li key={r.slug} className="flex flex-wrap items-center gap-3 rounded-2xl border-2 border-edge bg-panel px-4 py-3">
-              <span className={`rounded-full px-2 py-0.5 text-[11px] font-extrabold ${live ? "bg-mint text-white" : "bg-edge/10 text-cream/50"}`}>
+              <span className={`rounded-full px-2 py-0.5 text-[11px] font-extrabold ${live ? "bg-mint text-[#1D1D1D]" : "bg-candy/10 text-cream/50"} border-[2px] border-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D]`}>
                 {live ? "노출 중" : "종료"}
               </span>
               <span className="min-w-0 flex-1">

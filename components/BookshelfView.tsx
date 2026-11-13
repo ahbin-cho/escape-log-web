@@ -115,7 +115,7 @@ function RecordSheet({ book: b, posters, onClose }: { book: Book; posters: Poste
         <div className="mt-5 flex gap-2">
           <Link
             href={guest ? "/login?mode=signup&guest=1&next=/records" : `/edit/${r.id}`}
-            className="flex-1 rounded-xl bg-edge py-3.5 text-center text-[15px] font-extrabold text-white transition-opacity duration-200 active:opacity-80"
+            className="flex-1 rounded-xl bg-candy py-3.5 text-center text-[15px] font-extrabold text-[#1D1D1D] transition-opacity duration-200 active:opacity-80 border-[2px] border-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D]"
           >
             {guest ? "가입하고 수정하기" : "기록 펼쳐 보기"}
           </Link>

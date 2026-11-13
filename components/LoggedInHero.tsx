@@ -26,7 +26,7 @@ export default function LoggedInHero({ records }: { records: EscapeRecord[] }) {
       </Link>
       <Link
         href="/new"
-        className="shrink-0 rounded-xl bg-edge px-3.5 py-2 text-sm font-extrabold text-white transition active:scale-[0.97]"
+        className="shrink-0 rounded-xl bg-candy px-3.5 py-2 text-sm font-extrabold text-[#1D1D1D] transition active:scale-[0.97] border-[2px] border-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D]"
       >
         기록하기
       </Link>

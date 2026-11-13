@@ -104,7 +104,7 @@ export default function RecommendCard({
 
       <Link
         href={`/theme/${rec.id}?from=recommend`}
-        className="mt-auto rounded-xl bg-edge px-4 py-3 text-center text-sm font-extrabold text-white transition active:scale-[0.98]"
+        className="mt-auto rounded-xl bg-candy px-4 py-3 text-center text-sm font-extrabold text-[#1D1D1D] transition active:scale-[0.98] border-[2px] border-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D]"
       >
         자세히 보고 예약하기
       </Link>

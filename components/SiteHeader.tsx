@@ -54,7 +54,7 @@ export default function SiteHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-10 border-b border-line bg-paper/90 backdrop-blur-md">
+    <header className="sticky top-0 z-10 border-b-[2px] border-[#1D1D1D] bg-paper/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-2 px-4 py-3 sm:px-6">
         <Link
           href="/"
@@ -73,7 +73,7 @@ export default function SiteHeader() {
           <Link href="/best" className={`${navLink} hidden sm:inline-block`}>
             방 찾기
           </Link>
-          <Link href="/new" className={`${navBase} mx-1 bg-edge text-white`}>
+          <Link href="/new" className={`${navBase} mx-1 border-[2px] border-[#1D1D1D] bg-candy text-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D]`}>
             기록 추가
           </Link>
           {isAdmin && (

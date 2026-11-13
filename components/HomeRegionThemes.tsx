@@ -65,7 +65,7 @@ export default function HomeRegionThemes() {
     <section aria-labelledby="home-region">
       <div className="mb-3 flex items-baseline justify-between gap-3">
         <h2 id="home-region" className="text-[18px]">
-          동네별 테마
+          🗺️ 동네별 테마
         </h2>
         <Link href="/region" className="text-[13px] text-cream/70">
           지역 전체 ›
@@ -80,8 +80,8 @@ export default function HomeRegionThemes() {
             onClick={() => setRegion(r)}
             aria-pressed={region === r}
             className={`shrink-0 rounded-lg px-3 py-2 text-[13px] font-bold transition active:scale-[0.97] ${
-              region === r ? "bg-edge text-white" : "bg-ink text-cream"
-            }`}
+              region === r ? "bg-candy text-[#1D1D1D]" : "bg-ink text-cream"
+            } border-[2px] border-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D]`}
           >
             {r}
           </button>

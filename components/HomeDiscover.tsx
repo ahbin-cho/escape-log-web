@@ -17,7 +17,7 @@ export default async function HomeDiscover() {
   return (
     <section aria-labelledby="home-discover">
       <h2 id="home-discover" className="mb-3 text-[18px]">
-        어떤 방 찾아요?
+        🔍 어떤 방 찾아요?
       </h2>
 
       {conditions.length > 0 && (

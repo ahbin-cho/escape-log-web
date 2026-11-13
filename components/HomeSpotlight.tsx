@@ -17,7 +17,7 @@ export default async function HomeSpotlight() {
       <section aria-labelledby="home-spotlight">
         <div className="mb-3 flex items-baseline justify-between gap-3">
           <h2 id="home-spotlight" className="shrink-0 text-[18px]">
-            지금 화제인 방
+            ✨ 지금 화제인 방
           </h2>
           <Link href={`/spotlight/${s.slug}`} className="truncate text-[13px] text-cream/70">
             {s.name} ›

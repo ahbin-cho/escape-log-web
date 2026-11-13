@@ -66,7 +66,7 @@ export default function TabBar() {
       <div className="h-[72px] sm:hidden" aria-hidden />
       <nav
         aria-label="주요 메뉴"
-        className="fixed inset-x-0 bottom-0 z-30 flex border-t border-line bg-paper/95 px-1 pb-[env(safe-area-inset-bottom)] backdrop-blur sm:hidden"
+        className="fixed inset-x-0 bottom-0 z-30 flex border-t-[2px] border-[#1D1D1D] bg-paper/95 px-1 pb-[env(safe-area-inset-bottom)] backdrop-blur sm:hidden"
       >
         {TABS.map((t) => {
           const on = t.match(pathname);

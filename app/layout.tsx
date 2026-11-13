@@ -158,7 +158,7 @@ export default function RootLayout({
 
         <a
           href="#main"
-          className="sr-only rounded-lg bg-edge px-3 py-2 text-sm font-bold text-panel focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50"
+          className="sr-only rounded-lg bg-candy px-3 py-2 text-sm font-bold text-[#1D1D1D] focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 border-[2px] border-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D]"
         >
           본문으로 건너뛰기
         </a>

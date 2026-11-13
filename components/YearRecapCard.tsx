@@ -86,7 +86,7 @@ export default function YearRecapCard({ records, note }: { records: EscapeRecord
           <button
             type="button"
             onClick={share}
-            className="mt-4 w-full rounded-xl bg-edge py-3 text-sm font-extrabold text-white transition-opacity duration-200 active:opacity-80"
+            className="mt-4 w-full rounded-xl bg-candy py-3 text-sm font-extrabold text-[#1D1D1D] transition-opacity duration-200 active:opacity-80 border-[2px] border-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D]"
           >
             {copied ? "복사했어요" : "결산 공유하기"}
           </button>

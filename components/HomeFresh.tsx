@@ -20,7 +20,7 @@ export async function HomeMystery() {
   return (
     <section aria-labelledby="home-mystery">
       <h2 id="home-mystery" className="mb-3 text-[18px]">
-        오늘의 미스터리 방
+        👻 오늘의 미스터리 방
       </h2>
       <details className="group rounded-[14px] border border-line px-4 py-3.5">
         <summary className="flex cursor-pointer list-none items-center gap-3 [&::-webkit-details-marker]:hidden">
@@ -72,7 +72,7 @@ export async function HomeNewAndHot() {
       {fresh.length > 0 && (
         <section aria-labelledby="home-new">
           <h2 id="home-new" className="mb-3 text-[18px]">
-            새로 들어온 테마
+            🆕 새로 들어온 테마
           </h2>
           <PosterRow>
             {fresh.map((t) => (
@@ -93,7 +93,7 @@ export async function HomeNewAndHot() {
         <section aria-labelledby="home-hot">
           <div className="mb-1 flex items-baseline justify-between gap-3">
             <h2 id="home-hot" className="text-[18px]">
-              이번 주 많이 찾는 방
+              🔥 이번 주 많이 찾는 방
             </h2>
             <span className="text-xs text-cream/70">최근 7일 예약 페이지 이동 기준</span>
           </div>

@@ -42,7 +42,7 @@ export default function HomeDiary({
         <div className="mt-4 flex gap-2">
           <Link
             href="/new"
-            className="flex-1 rounded-xl bg-edge px-4 py-3 text-center text-sm font-extrabold text-white transition active:scale-[0.97] sm:flex-none sm:px-6"
+            className="flex-1 rounded-xl bg-candy px-4 py-3 text-center text-sm font-extrabold text-[#1D1D1D] transition active:scale-[0.97] sm:flex-none sm:px-6 border-[2px] border-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D]"
           >
             첫 방 기록하기
           </Link>

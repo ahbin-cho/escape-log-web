@@ -34,13 +34,13 @@ body {
   font-family: "Pretendard", system-ui, sans-serif;
 }
 
-/* 제목·본문 모두 Pretendard(제목은 굵게). 어그로체는 로고(font-display)에만 */
+/* 제목 = 어그로체(원래 사이트의 친근함), 본문 = Pretendard */
 h1,
 h2,
 h3 {
-  font-family: "Pretendard", system-ui, sans-serif;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-family: "SBAggroB", "Pretendard", sans-serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
   text-wrap: balance;
 }
 
