@@ -11,6 +11,7 @@ import RecommendCard from "@/components/RecommendCard";
 import TypeCard from "@/components/quiz/TypeCard";
 import TypeRarity from "@/components/quiz/TypeRarity";
 import ShareButton from "@/components/quiz/ShareButton";
+import StoryCardButton from "@/components/quiz/StoryCardButton";
 import FriendCompat from "@/components/quiz/FriendCompat";
 
 const REGION_KEY = "escapelog:quiz:region";
@@ -79,6 +80,7 @@ export default function QuizResult({
       >
         <TypeRarity typeId={typeId} />
         <ShareButton values={values} />
+        <StoryCardButton typeId={typeId} fear={values.fear} hint={values.hint} players={values.players} />
       </TypeCard>
 
       {friend && (
