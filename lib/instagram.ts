@@ -133,9 +133,9 @@ export const STATIC_POSTS: Record<string, { count: number; caption: string }> = 
   maple: {
     count: 7,
     caption: [
-      "결말이 비어 있는 책 다섯 권이 발견됐다 📖",
+      "홍대에 메이플이 생겼다! 🍁",
       "",
-      "홍대에 메이플스토리 방탈출 카페가 생겼어요. @maplestory.escape",
+      "메이플스토리 방탈출 카페가 홍대에 문을 열었어요. @maplestory.escape",
       "책 속 용사가 되어 '차원의 조각'을 찾아 빈 결말을 채우는 이야기, 테마는 다섯 개예요.",
       "",
       "📕 커닝시티, 사라진 사람들 (스릴러)",
