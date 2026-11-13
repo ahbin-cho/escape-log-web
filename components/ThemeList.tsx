@@ -1,11 +1,13 @@
 import Link from "next/link";
 import Poster from "@/components/Poster";
+import { BookingOpenChip } from "@/components/BookingOpen";
 import { posterSrc } from "@/lib/ui";
 import type { ThemeRow } from "@/lib/catalog-server";
 
 type Item = Pick<ThemeRow, "id" | "name" | "cafe" | "difficulty" | "time_limit"> & {
   genre: string;
   poster_url?: string | null;
+  booking_open?: string | null;
 };
 
 // "장르 · 난이도 n · N분"
@@ -41,6 +43,7 @@ export default function ThemeList({
                 <h3 className="truncate text-sm font-extrabold">{t.name}</h3>
                 <span className="mt-0.5 block truncate text-xs text-cream/60">{t.cafe}</span>
                 <span className="mt-0.5 block truncate text-xs text-cream/60">{themeMeta(t)}</span>
+                <BookingOpenChip rule={t.booking_open} className="mt-1" />
               </span>
             </Link>
           </li>
@@ -58,6 +61,7 @@ export default function ThemeList({
             <h3 className="mt-2 truncate text-sm font-extrabold group-hover:underline">{t.name}</h3>
             <span className="mt-0.5 block truncate text-xs text-cream/60">{t.cafe}</span>
             <span className="mt-0.5 block truncate text-xs text-cream/60">{themeMeta(t)}</span>
+                <BookingOpenChip rule={t.booking_open} className="mt-1" />
           </Link>
         </li>
       ))}

@@ -5,6 +5,7 @@ import { cleanTeaser, teaserPreview } from "@/lib/home-picks";
 import { publicClient } from "@/lib/supabase/public";
 import { regionFromText } from "@/lib/region";
 import { brandOf } from "@/lib/cafe";
+import BookingOpen from "@/components/BookingOpen";
 import ReserveLink from "@/components/ReserveLink";
 import OwnerCTA from "@/components/OwnerCTA";
 import ThemeReviews from "@/components/ThemeReviews";
@@ -278,6 +279,10 @@ export default async function ThemePage({
         )}
       </div>
 
+      <div className="mt-3">
+        <BookingOpen rule={t.booking_open} />
+      </div>
+
       <QuizRow
         className="mt-4"
         title="내 취향과 얼마나 맞을까?"
@@ -304,12 +309,6 @@ export default async function ThemePage({
             <div>
               <dt className="inline text-cream/60">가격 </dt>
               <dd className="inline">{t.price.toLocaleString("ko-KR")}원</dd>
-            </div>
-          ) : null}
-          {t.booking_open ? (
-            <div>
-              <dt className="inline text-cream/60">예약 오픈 </dt>
-              <dd className="inline">{t.booking_open}</dd>
             </div>
           ) : null}
         </dl>
