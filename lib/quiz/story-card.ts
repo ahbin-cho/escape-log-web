@@ -71,11 +71,14 @@ export function storyCardContent(r: StoryCardInput): StoryCardContent {
 }
 
 // ── 그리기(브라우저 전용) ──
+// 유형 그림(따뜻한 수채화·램프 불빛의 서재)과 한 세계로 보이게: 낡은 동화책 한 페이지.
+// 양피지 바탕, 그림은 가장자리가 종이로 번지게, 제목은 명조.
 
-const PAPER = "#F5F0E6";
-const INK = "#1D1D1D";
-const ORANGE = "#E49A4A";
-const M = 96; // 좌우 여백
+const PAPER_TOP = "#F6ECD6";
+const PAPER_BOTTOM = "#ECDDBE";
+const BROWN = "#3B2A1A";
+const SEPIA = "#8A6A45";
+const GOLD = "#B88A3E";
 
 function loadImage(src: string): Promise<HTMLImageElement | null> {
   return new Promise((resolve) => {
@@ -89,10 +92,9 @@ function loadImage(src: string): Promise<HTMLImageElement | null> {
 async function loadFonts() {
   try {
     await Promise.all([
-      document.fonts.load('96px "SBAggroB"', "방탈"),
-      document.fonts.load('500 36px "Pretendard"', "방탈"),
+      document.fonts.load('800 96px "Nanum Myeongjo"', "방탈출유형"),
+      document.fonts.load('500 34px "Pretendard"', "방탈"),
       document.fonts.load('700 24px "Pretendard"', "방탈"),
-      document.fonts.load('800 32px "Pretendard"', "방탈"),
     ]);
     await document.fonts.ready;
   } catch {
@@ -100,11 +102,10 @@ async function loadFonts() {
   }
 }
 
-// 자간을 넓힌 작은 라벨(영문 스몰캡스 느낌). canvas letterSpacing 이 없는 브라우저도 있어 한 글자씩 놓는다.
-function spaced(c: CanvasRenderingContext2D, text: string, x: number, y: number, gap: number, align: "left" | "right" | "center") {
+function spaced(c: CanvasRenderingContext2D, text: string, x: number, y: number, gap: number) {
   const chars = Array.from(text);
   const width = chars.reduce((w, ch) => w + c.measureText(ch).width, 0) + gap * (chars.length - 1);
-  let cx = align === "left" ? x : align === "right" ? x - width : x - width / 2;
+  let cx = x - width / 2;
   c.textAlign = "left";
   for (const ch of chars) {
     c.fillText(ch, cx, y);
@@ -113,9 +114,22 @@ function spaced(c: CanvasRenderingContext2D, text: string, x: number, y: number,
   return width;
 }
 
-function rule(c: CanvasRenderingContext2D, x1: number, x2: number, y: number, w = 2, color = INK) {
-  c.fillStyle = color;
-  c.fillRect(x1, y - w / 2, x2 - x1, w);
+// 가운데 장식 줄: ── ✦ ──
+function ornament(c: CanvasRenderingContext2D, cx: number, y: number, half: number) {
+  c.strokeStyle = GOLD;
+  c.lineWidth = 1.5;
+  c.beginPath();
+  c.moveTo(cx - half, y);
+  c.lineTo(cx - 22, y);
+  c.moveTo(cx + 22, y);
+  c.lineTo(cx + half, y);
+  c.stroke();
+  c.fillStyle = GOLD;
+  c.save();
+  c.translate(cx, y);
+  c.rotate(Math.PI / 4);
+  c.fillRect(-6, -6, 12, 12);
+  c.restore();
 }
 
 export async function drawStoryCard(canvas: HTMLCanvasElement, input: StoryCardInput): Promise<void> {
@@ -124,160 +138,111 @@ export async function drawStoryCard(canvas: HTMLCanvasElement, input: StoryCardI
   canvas.height = STORY_H;
   const c = canvas.getContext("2d")!;
   await loadFonts();
-  const TITLE = '"SBAggroB", "Pretendard", sans-serif';
+  const SERIF = '"Nanum Myeongjo", "AppleMyungjo", serif';
   const BODY = '"Pretendard", system-ui, sans-serif';
   const CX = STORY_W / 2;
 
-  // 종이
-  c.fillStyle = PAPER;
+  // 양피지
+  const bg = c.createLinearGradient(0, 0, 0, STORY_H);
+  bg.addColorStop(0, PAPER_TOP);
+  bg.addColorStop(1, PAPER_BOTTOM);
+  c.fillStyle = bg;
   c.fillRect(0, 0, STORY_W, STORY_H);
-  // 아주 옅은 가장자리 음영(종이 질감 대신)
-  const vg = c.createRadialGradient(CX, STORY_H * 0.45, STORY_H * 0.3, CX, STORY_H * 0.45, STORY_H * 0.75);
-  vg.addColorStop(0, "rgba(29,29,29,0)");
-  vg.addColorStop(1, "rgba(29,29,29,0.06)");
+
+  // 그림: 위쪽을 넓게, 아래 가장자리는 종이로 번지게
+  const img = (await loadImage(d.image)) ?? (await loadImage(MASCOT.image));
+  const IY = 96;
+  const IS = 1080;
+  if (img) {
+    const s = Math.max(IS / img.width, IS / img.height);
+    c.drawImage(img, CX - (img.width * s) / 2, IY, img.width * s, img.height * s);
+  }
+  const fadeTop = c.createLinearGradient(0, IY, 0, IY + 160);
+  fadeTop.addColorStop(0, PAPER_TOP);
+  fadeTop.addColorStop(1, "rgba(246,236,214,0)");
+  c.fillStyle = fadeTop;
+  c.fillRect(0, IY - 2, STORY_W, 162);
+  const fadeBottom = c.createLinearGradient(0, IY + IS - 360, 0, IY + IS);
+  fadeBottom.addColorStop(0, "rgba(240,227,201,0)");
+  fadeBottom.addColorStop(1, "#F0E3C9");
+  c.fillStyle = fadeBottom;
+  c.fillRect(0, IY + IS - 360, STORY_W, 362);
+  c.fillStyle = "#F0E3C9";
+  c.fillRect(0, IY + IS - 1, STORY_W, 6);
+
+  // 종이 가장자리 그늘(오래된 책장)
+  const vg = c.createRadialGradient(CX, STORY_H * 0.5, STORY_H * 0.32, CX, STORY_H * 0.5, STORY_H * 0.78);
+  vg.addColorStop(0, "rgba(90,60,30,0)");
+  vg.addColorStop(1, "rgba(90,60,30,0.22)");
   c.fillStyle = vg;
   c.fillRect(0, 0, STORY_W, STORY_H);
-  // 바깥 테두리(가는 선 한 줄)
-  c.strokeStyle = "rgba(29,29,29,0.35)";
-  c.lineWidth = 1.5;
-  c.strokeRect(40, 40, STORY_W - 80, STORY_H - 80);
 
   c.textBaseline = "alphabetic";
+  c.textAlign = "center";
 
-  // ── 머리말: 브랜드 · 번호 ──
-  let y = 272;
-  c.fillStyle = ORANGE;
-  c.beginPath();
-  c.arc(M + 6, y - 8, 6, 0, Math.PI * 2);
-  c.fill();
-  c.fillStyle = INK;
-  c.font = `800 22px ${BODY}`;
-  spaced(c, "BANGTALLOG", M + 24, y, 6, "left");
-  c.font = `700 22px ${BODY}`;
-  c.fillStyle = "rgba(29,29,29,0.6)";
-  spaced(c, `TYPE ${d.no}`, STORY_W - M, y, 4, "right");
-  y += 28;
-  rule(c, M, STORY_W - M, y, 2);
+  // 장 번호
+  let y = 1112;
+  c.font = `700 24px ${BODY}`;
+  c.fillStyle = SEPIA;
+  spaced(c, `No.${d.no.split(" ")[0]}  ·  ${d.eyebrow}`, CX, y, 5);
 
-  // ── 유형 그림(주인공) ──
-  const S = 640;
-  const ix = CX - S / 2;
-  const iy = 364;
-  const img = (await loadImage(d.image)) ?? (await loadImage(MASCOT.image));
-  c.fillStyle = `${d.tone}1A`;
-  c.fillRect(ix, iy, S, S);
-  if (img) {
-    const s = Math.max(S / img.width, S / img.height);
-    const w = img.width * s;
-    const h = img.height * s;
-    c.save();
-    c.beginPath();
-    c.rect(ix, iy, S, S);
-    c.clip();
-    c.drawImage(img, ix + (S - w) / 2, iy + (S - h) / 2, w, h);
-    c.restore();
-  }
-  // 이중 액자선: 안쪽 굵은 먹선 + 바깥 가는 선
-  c.strokeStyle = INK;
-  c.lineWidth = 3;
-  c.strokeRect(ix, iy, S, S);
-  c.lineWidth = 1.5;
-  c.strokeRect(ix - 16, iy - 16, S + 32, S + 32);
-
-  // ── 라벨: — 나의 방탈출 유형 — ──
-  y = iy + S + 98;
-  c.font = `700 26px ${BODY}`;
-  c.fillStyle = d.tone;
-  const ew = spaced(c, d.eyebrow, CX, y, 6, "center");
-  rule(c, CX - ew / 2 - 72, CX - ew / 2 - 24, y - 9, 1.5, d.tone);
-  rule(c, CX + ew / 2 + 24, CX + ew / 2 + 72, y - 9, 1.5, d.tone);
-
-  // ── 유형 이름(가장 크게, 한 줄에 맞춘다) ──
+  // 유형 이름(명조, 한 줄)
   y += 112;
-  let size = 108;
-  c.font = `${size}px ${TITLE}`;
-  while (c.measureText(d.title).width > STORY_W - M * 2 && size > 56) {
+  let size = 104;
+  c.font = `800 ${size}px ${SERIF}`;
+  while (c.measureText(d.title).width > STORY_W - 160 && size > 56) {
     size -= 4;
-    c.font = `${size}px ${TITLE}`;
+    c.font = `800 ${size}px ${SERIF}`;
   }
-  c.fillStyle = INK;
+  c.fillStyle = BROWN;
   c.textAlign = "center";
   c.fillText(d.title, CX, y);
 
-  // ── 한 줄 설명(최대 2줄) ──
-  y += 72;
+  // 한 줄 설명
+  y += 70;
   c.font = `500 34px ${BODY}`;
-  c.fillStyle = "rgba(29,29,29,0.72)";
-  for (const l of wrapText((s) => c.measureText(s).width, d.tagline, 820, 2)) {
+  c.fillStyle = "rgba(59,42,26,0.78)";
+  for (const l of wrapText((s) => c.measureText(s).width, d.tagline, 840, 2)) {
     c.fillText(l, CX, y);
-    y += 52;
+    y += 50;
   }
 
-  // ── 성향 3칸 ──
-  const top = 1392;
-  rule(c, M, STORY_W - M, top, 2);
-  const colW = (STORY_W - M * 2) / d.traits.length;
+  // 장식 줄
+  y += 22;
+  ornament(c, CX, y, 300);
+
+  // 성향: 세 줄짜리 열람 카드처럼
+  y += 70;
+  const colW = 280;
   for (const [i, t] of d.traits.entries()) {
-    const cx = M + colW * i + colW / 2;
-    if (i > 0) {
-      c.fillStyle = "rgba(29,29,29,0.25)";
-      c.fillRect(M + colW * i, top + 30, 1.5, 104);
-    }
+    const cx = CX + (i - 1) * colW;
     c.font = `700 22px ${BODY}`;
-    c.fillStyle = "rgba(29,29,29,0.55)";
-    spaced(c, t.label, cx, top + 62, 4, "center");
-    c.font = `800 32px ${BODY}`;
-    c.fillStyle = INK;
+    c.fillStyle = SEPIA;
+    spaced(c, t.label, cx, y, 4);
+    c.font = `800 32px ${SERIF}`;
+    c.fillStyle = BROWN;
     c.textAlign = "center";
-    if (t.dots) {
-      const r = 7;
-      const gap = 22;
-      const dotsW = gap * 4;
-      const hasText = !!t.value;
-      const tw = hasText ? c.measureText(t.value).width + 20 : 0;
-      let dx = cx - (dotsW + tw) / 2;
-      for (let k = 1; k <= 5; k++) {
-        c.beginPath();
-        c.arc(dx, top + 108, r, 0, Math.PI * 2);
-        if (k <= t.dots) {
-          c.fillStyle = d.tone;
-          c.fill();
-        } else {
-          c.strokeStyle = "rgba(29,29,29,0.4)";
-          c.lineWidth = 1.5;
-          c.stroke();
-        }
-        dx += gap;
-      }
-      if (hasText) {
-        c.fillStyle = INK;
-        c.textAlign = "left";
-        c.fillText(t.value, dx - gap + r + 20, top + 119);
-      }
-    } else {
-      c.fillText(t.value, cx, top + 119);
+    c.fillText(t.dots ? `${"●".repeat(t.dots)}${"○".repeat(5 - t.dots)}` : t.value, cx, y + 50);
+    if (t.dots && t.value) {
+      c.font = `500 24px ${BODY}`;
+      c.fillStyle = "rgba(59,42,26,0.7)";
+      c.fillText(t.value, cx, y + 88);
+    }
+    if (i > 0) {
+      c.fillStyle = "rgba(138,106,69,0.35)";
+      c.fillRect(cx - colW / 2, y - 26, 1.5, 116);
     }
   }
-  rule(c, M, STORY_W - M, top + 164, 1.5);
 
-  // ── 꼬리말: 사이트 주소(모든 공유가 사이트를 알린다) ──
-  y = STORY_H - STORY_SAFE_BOTTOM - 40;
-  c.textAlign = "left";
+  // 꼬리말
+  y = STORY_H - STORY_SAFE_BOTTOM - 36;
+  c.textAlign = "center";
   c.font = `500 28px ${BODY}`;
-  const lead = "나와 맞는 방 찾기  ·  ";
-  c.font = `800 30px ${BODY}`;
-  const domain = "bangtallog.com";
-  const dw = c.measureText(domain).width;
-  c.font = `500 28px ${BODY}`;
-  const lw = c.measureText(lead).width;
-  let fx = CX - (lw + dw) / 2;
-  c.fillStyle = "rgba(29,29,29,0.6)";
-  c.fillText(lead, fx, y);
-  fx += lw;
-  c.font = `800 30px ${BODY}`;
-  c.fillStyle = INK;
-  c.fillText(domain, fx, y);
-  rule(c, fx, fx + dw, y + 10, 3, ORANGE);
+  c.fillStyle = SEPIA;
+  c.fillText("나와 맞는 방 찾기", CX, y - 44);
+  c.font = `800 34px ${SERIF}`;
+  c.fillStyle = BROWN;
+  c.fillText("bangtallog.com", CX, y);
   c.textAlign = "left";
 }
 

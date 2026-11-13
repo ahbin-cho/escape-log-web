@@ -8,22 +8,22 @@ import type { EscapeRecord } from "./store";
 
 export type Cloth = { base: string; shade: string; foil: string };
 
-// 고급 장정 느낌의 차분한 색(채도 낮게). 금박은 장르마다 살짝 다르게.
+// 달력 미니 포스터(components/PosterTile TONE)와 같은 색: 어두운 바탕 + 장르 강조색
 export const CLOTH: Record<string, Cloth> = {
-  공포: { base: "#6E2229", shade: "#4A151B", foil: "#D9B46A" },
-  스릴러: { base: "#2E3B55", shade: "#1D2639", foil: "#CDB27A" },
-  추리: { base: "#244A40", shade: "#16302A", foil: "#D6B873" },
-  감성: { base: "#8C5563", shade: "#653B47", foil: "#EBCB92" },
-  판타지: { base: "#4C3C6E", shade: "#322750", foil: "#D9C08A" },
-  SF: { base: "#22405F", shade: "#152A40", foil: "#C9C2A0" },
-  모험: { base: "#8A5D30", shade: "#5F3F1F", foil: "#F0D49A" },
-  코믹: { base: "#A07F2A", shade: "#76601C", foil: "#2A2112" },
-  아케이드: { base: "#215E5B", shade: "#143E3C", foil: "#E2C47F" },
-  기타: { base: "#4D4842", shade: "#33302C", foil: "#D3C3A2" },
+  공포: { base: "#2A1215", shade: "#1C0B0D", foil: "#E5604C" },
+  스릴러: { base: "#1A1E2C", shade: "#10131D", foil: "#8FA3D9" },
+  추리: { base: "#17282A", shade: "#0E1A1B", foil: "#6FC2A6" },
+  감성: { base: "#3A2033", shade: "#281522", foil: "#F0A7C0" },
+  판타지: { base: "#2A2142", shade: "#1B152C", foil: "#B9A6F2" },
+  SF: { base: "#11253B", shade: "#0A1827", foil: "#6DB8F2" },
+  모험: { base: "#3A2912", shade: "#271B0B", foil: "#F0B45C" },
+  코믹: { base: "#3B3210", shade: "#28210A", foil: "#F2D75C" },
+  아케이드: { base: "#10302F", shade: "#0A201F", foil: "#5FD0C5" },
+  기타: { base: "#2B2926", shade: "#1D1B19", foil: "#D9CFC0" },
 };
 
-// 인생테마 전용: 짙은 가죽 + 금박
-export const LEGEND: Cloth = { base: "#2B1B12", shade: "#170E09", foil: "#E8C66E" };
+// 인생테마: 주황(사이트 강조색) 장정 + 먹색 글씨
+export const LEGEND: Cloth = { base: "#E49A4A", shade: "#C9792D", foil: "#1D1D1D" };
 
 export type Book = {
   id: string;
