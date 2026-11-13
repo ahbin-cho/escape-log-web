@@ -3,6 +3,9 @@ import Link from "next/link";
 import { listedBrands } from "@/lib/catalog-server";
 import { SITE_NAME, SITE_URL, DEFAULT_OG_IMAGE } from "@/lib/site";
 
+// DB 에 새 브랜드·지역이 생기면 배포 없이 1시간 안에 목록에 나타난다.
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: "방탈출 브랜드별 테마 모음",
   description:

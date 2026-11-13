@@ -18,8 +18,10 @@ import {
 import { REGIONS, type Region } from "@/lib/region";
 import { SITE_NAME, SITE_URL, DEFAULT_OG_IMAGE } from "@/lib/site";
 
-// 순수 SSG: 테마가 충분한 시·도만 빌드 시 생성. 그 외 주소는 404.
-export const dynamicParams = false;
+// 배포 때 있는 것은 미리 만들고, 그 뒤 DB 에 새로 생긴 것도 첫 방문 때 만들어진다(1시간마다 갱신).
+// 테마가 없는 주소는 load() 가 null → 404.
+export const dynamicParams = true;
+export const revalidate = 3600;
 
 export async function generateStaticParams() {
   return (await listedRegions()).map((r) => ({ region: staticParam(r.key) }));
