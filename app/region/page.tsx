@@ -3,6 +3,9 @@ import RegionExplorer from "@/components/RegionExplorer";
 import { CHIP } from "@/lib/ui";
 import { listedRegions } from "@/lib/catalog-server";
 
+// DB 에 새 지역이 생기면 배포 없이 1시간 안에 목록에 나타난다.
+export const revalidate = 3600;
+
 export default async function RegionPage() {
   const regions = await listedRegions();
 
