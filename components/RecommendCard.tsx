@@ -1,6 +1,5 @@
 "use client";
 
-import PosterPlaceholder from "./PosterPlaceholder";
 import { useState } from "react";
 import Link from "next/link";
 import { genreColorClass, genreEmoji, type Recommendation } from "@/lib/store";
@@ -31,15 +30,13 @@ export default function RecommendCard({
 
   return (
     <div className="rough flex flex-col gap-3 rounded-2xl border-2 border-edge bg-panel p-5 shadow-cute">
-      {rec.posterUrl ? (
+      {rec.posterUrl && (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={rec.posterUrl}
           alt={rec.name}
           className="h-44 w-full rounded-xl border-2 border-edge object-cover"
         />
-      ) : (
-        <PosterPlaceholder />
       )}
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">

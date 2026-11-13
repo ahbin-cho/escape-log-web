@@ -1,6 +1,5 @@
 "use client";
 
-import PosterPlaceholder from "./PosterPlaceholder";
 import Link from "next/link";
 import { genreColorClass, genreEmoji, type CandidateTheme } from "@/lib/store";
 
@@ -24,15 +23,13 @@ export default function ThemeCard({
 
   return (
     <div className="flex flex-col gap-2 rounded-2xl border-2 border-edge bg-panel p-4">
-      {theme.posterUrl ? (
+      {theme.posterUrl && (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={theme.posterUrl}
           alt={theme.name}
           className="h-40 w-full rounded-xl border-2 border-edge object-cover"
         />
-      ) : (
-        <PosterPlaceholder />
       )}
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
