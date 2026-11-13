@@ -23,7 +23,7 @@ export default function Poster({
     >
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt={`${name} 포스터`} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
+        <img src={src} alt={`${name} 포스터`} loading="lazy" decoding="async" referrerPolicy="no-referrer" className="absolute inset-0 h-full w-full object-cover" />
       ) : (
         <span className="absolute inset-0 flex flex-col justify-between p-[10%]">
           <span className="text-[10px] font-extrabold" style={{ color: t.accent }}>
