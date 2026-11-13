@@ -1,0 +1,177 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* 릴스: 배우가 나오는 방(이머시브) — 종이 인형극 스톱모션. 그림은 전부 코드(매장 사진·포스터 없음). 17초 녹화. */
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-Medium.woff);font-weight:500}
+@font-face{font-family:A;src:url(../../../assets/fonts/SBAggroB.woff)}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#1B1420;font-family:P;color:#1D1D1D}
+.a{position:absolute}
+.paper{background:#F5F0E6;border:7px solid #1D1D1D;box-shadow:10px 12px 0 rgba(0,0,0,.35)}
+.boil0 .b{filter:url(#b0)}.boil1 .b{filter:url(#b1)}.boil2 .b{filter:url(#b2)}
+
+/* 무대 */
+.wall{inset:0;background:#2C2545}
+.wall:before{content:"";position:absolute;inset:0;opacity:.5;background-image:radial-gradient(#3A3160 18%,transparent 19%),radial-gradient(#3A3160 18%,transparent 19%);background-size:120px 120px;background-position:0 0,60px 60px}
+.wain{left:0;right:0;top:1180px;height:70px;background:#5A3A2A;border-top:7px solid #1D1D1D;border-bottom:7px solid #1D1D1D}
+.floor{left:0;right:0;top:1250px;bottom:0;background:#7A4E36;overflow:hidden}
+.floor i{position:absolute;left:-300px;right:-300px;height:7px;background:#1D1D1D;opacity:.55}
+.floor b{position:absolute;top:0;bottom:0;width:7px;background:#1D1D1D;opacity:.4;transform-origin:top}
+.rug{left:240px;top:1330px;width:600px;height:330px;border-radius:50%;background:#B8433A;border:7px solid #1D1D1D}
+.rug:after{content:"";position:absolute;inset:26px;border-radius:50%;border:6px dashed #F2C879}
+
+/* 문 */
+.dframe{left:345px;top:560px;width:390px;height:690px;background:#3E2A1E;border:7px solid #1D1D1D;border-radius:190px 190px 0 0;overflow:hidden}
+.dlight{inset:22px 22px 0 22px;border-radius:170px 170px 0 0;background:radial-gradient(ellipse at 50% 70%,#FFF3C9 0%,#FFD27A 40%,#E49A4A 100%)}
+.rays{inset:0;opacity:0;animation:fade 1s 4.2s forwards}
+.rays i{position:absolute;left:50%;top:60%;width:10px;height:520px;background:rgba(255,255,255,.55);transform-origin:top center}
+.dleaf{inset:22px 22px 0 22px;border-radius:170px 170px 0 0;background:#8A5A3C;border:7px solid #1D1D1D;box-sizing:border-box;transform-origin:left center;animation:dopen 1.3s 3.5s steps(8) forwards}
+.dleaf:before{content:"";position:absolute;left:40px;right:40px;top:120px;bottom:60px;border:6px solid #1D1D1D;border-radius:110px 110px 0 0;opacity:.6}
+.dleaf:after{content:"";position:absolute;right:30px;top:54%;width:34px;height:34px;border-radius:50%;background:#F2C879;border:6px solid #1D1D1D}
+@keyframes dopen{to{transform:perspective(900px) rotateY(-78deg)}}
+.spill{left:140px;top:1250px;width:800px;height:560px;background:linear-gradient(rgba(255,214,130,.75),rgba(255,214,130,0));clip-path:polygon(30% 0,70% 0,100% 100%,0 100%);opacity:0;animation:fade .8s 4.2s steps(4) forwards}
+
+/* 벽등 */
+.lamp{top:700px;width:90px;height:120px}
+.lamp .sh{position:absolute;left:0;top:0;width:90px;height:80px;background:#F2C879;border:7px solid #1D1D1D;border-radius:50% 50% 12px 12px;box-sizing:border-box}
+.lamp .st{position:absolute;left:38px;top:76px;width:14px;height:44px;background:#1D1D1D}
+.glow{width:420px;height:420px;border-radius:50%;background:radial-gradient(rgba(255,210,122,.5),transparent 65%);animation:flick .9s steps(3) infinite}
+@keyframes flick{0%{opacity:.9;transform:scale(1)}33%{opacity:.6;transform:scale(.94)}66%{opacity:1;transform:scale(1.05)}100%{opacity:.8}}
+.pic{top:860px;width:150px;height:190px;background:#F5F0E6;border:7px solid #1D1D1D;box-shadow:6px 8px 0 rgba(0,0,0,.3)}
+.pic:after{content:"";position:absolute;left:35px;top:40px;width:66px;height:86px;border-radius:50% 50% 40% 40%;background:#1D1D1D;opacity:.8}
+
+/* 인형 공통 */
+.stick{left:50%;width:14px;margin-left:-7px;background:#C99A5B;border:5px solid #1D1D1D;border-radius:8px}
+/* 탈출귀 인형 */
+.ghostwrap{left:150px;top:1120px;width:260px;height:900px;transform:translateY(900px);animation:gin 1.4s 4.6s steps(9) forwards,gjump .5s 9.3s steps(4) 1}
+@keyframes gin{0%{transform:translateY(900px)}55%{transform:translateY(-70px)}75%{transform:translateY(20px)}100%{transform:translateY(0)}}
+@keyframes gjump{0%{transform:translateY(0)}40%{transform:translateY(-120px) rotate(-6deg)}100%{transform:translateY(0)}}
+.ghostbob{inset:0;animation:bob .8s steps(2) infinite}
+@keyframes bob{0%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-14px) rotate(2deg)}100%{transform:translateY(0) rotate(-2deg)}}
+.ghost{left:0;top:0;width:260px;filter:drop-shadow(0 0 0 #fff) drop-shadow(7px 0 0 #FFFCF6) drop-shadow(-7px 0 0 #FFFCF6) drop-shadow(0 7px 0 #FFFCF6) drop-shadow(0 -7px 0 #FFFCF6) drop-shadow(8px 10px 0 rgba(0,0,0,.35))}
+.ghostwrap .stick{top:230px;height:700px}
+.bang{left:210px;top:-90px;width:90px;height:110px;background:#E49A4A;border:7px solid #1D1D1D;border-radius:18px;font-family:A;font-size:80px;text-align:center;line-height:118px;transform:scale(0) rotate(12deg);animation:pop .3s 9.2s steps(3) forwards,bye .2s 10.6s forwards}
+
+/* 배우 인형 */
+.actorwrap{left:560px;top:640px;width:440px;height:1400px;transform:translateX(700px);animation:ain 1.3s 7.2s steps(8) forwards,bow 1.2s 8.5s steps(6) 1}
+@keyframes ain{0%{transform:translateX(700px) rotate(8deg)}70%{transform:translateX(-30px) rotate(-4deg)}100%{transform:translateX(0)}}
+@keyframes bow{0%,100%{transform:rotate(0)}45%{transform:rotate(-13deg) translateY(20px)}}
+.actorbob{inset:0;transform-origin:50% 60%;animation:bob2 1s steps(2) infinite}
+@keyframes bob2{0%{transform:rotate(1.5deg)}50%{transform:rotate(-1.5deg)}100%{transform:rotate(1.5deg)}}
+.actorwrap svg{position:absolute;left:0;top:0;width:440px;filter:drop-shadow(9px 11px 0 rgba(0,0,0,.35))}
+.actorwrap .stick{top:760px;height:700px}
+.arm{transform-origin:118px 300px;animation:wave .7s 8.9s steps(3) 5 alternate}
+@keyframes wave{from{transform:rotate(0)}to{transform:rotate(38deg)}}
+
+/* 말풍선 */
+.bubble{left:150px;top:560px;width:500px;padding:32px 36px;border-radius:44px;font-family:A;font-size:50px;line-height:1.3;transform:scale(0) rotate(-3deg);transform-origin:80% 100%;animation:pop .35s 9.6s steps(4) forwards,bye .2s 12.3s forwards}
+.bubble:after{content:"";position:absolute;right:120px;bottom:-52px;width:60px;height:60px;background:#F5F0E6;border-right:7px solid #1D1D1D;border-bottom:7px solid #1D1D1D;transform:rotate(45deg) translate(-22px,-22px)}
+.bubble b{color:#C7662A;font-weight:400}
+@keyframes pop{0%{transform:scale(0) rotate(-3deg)}70%{transform:scale(1.08) rotate(-3deg)}100%{transform:scale(1) rotate(-3deg)}}
+@keyframes bye{to{opacity:0}}@keyframes fade{to{opacity:1}}
+
+/* 막 */
+.curtain{top:0;bottom:0;width:560px;background:repeating-linear-gradient(90deg,#A8322C 0 46px,#8C2622 46px 70px,#B93C34 70px 112px,#7A1F1C 112px 126px);border:7px solid #1D1D1D;box-sizing:border-box}
+.cl{left:-10px;transform-origin:left;animation:copenL 1.5s 1.5s steps(9) forwards,ccloseL .8s 12.5s steps(6) forwards}
+.cr{right:-10px;transform-origin:right;animation:copenR 1.5s 1.5s steps(9) forwards,ccloseR .8s 12.5s steps(6) forwards}
+@keyframes copenL{to{transform:translateX(-430px) skewY(-2deg)}}@keyframes copenR{to{transform:translateX(430px) skewY(2deg)}}
+@keyframes ccloseL{from{transform:translateX(-430px) skewY(-2deg)}to{transform:none}}@keyframes ccloseR{from{transform:translateX(430px) skewY(2deg)}to{transform:none}}
+.val{left:-10px;right:-10px;top:-10px;height:230px;background:repeating-linear-gradient(90deg,#8C2622 0 60px,#A8322C 60px 120px);border-bottom:7px solid #1D1D1D}
+.val:after{content:"";position:absolute;left:0;right:0;bottom:-50px;height:50px;background:radial-gradient(circle at 30px 0,#F2C879 28px,#1D1D1D 29px 35px,transparent 36px);background-size:60px 50px}
+
+/* 간판 · 띠 글자 */
+.sign{left:140px;top:420px;width:800px;padding:60px 30px;text-align:center;font-family:A;font-size:92px;line-height:1.25;border-radius:26px;transform-origin:50% -300px;animation:swing 1.2s steps(5) infinite alternate,signup .6s 1.3s steps(5) forwards}
+.sign:before,.sign:after{content:"";position:absolute;top:-420px;width:8px;height:420px;background:#1D1D1D}
+.sign:before{left:120px}.sign:after{right:120px}
+.sign b{color:#C7662A;font-weight:400}.sign small{display:block;font-family:P;font-weight:800;font-size:40px;margin-top:22px;color:#5E574F}
+@keyframes swing{from{transform:rotate(-1.6deg)}to{transform:rotate(1.6deg)}}
+@keyframes signup{to{transform:translateY(-1200px)}}
+.band{left:70px;right:70px;top:270px;padding:30px 20px;text-align:center;font-family:A;font-size:66px;line-height:1.25;border-radius:22px;transform:translateY(-700px) rotate(-1.5deg)}
+.band b{color:#C7662A;font-weight:400}
+@keyframes bandin{0%{transform:translateY(-700px) rotate(-1.5deg)}70%{transform:translateY(24px) rotate(-1.5deg)}100%{transform:translateY(0) rotate(-1.5deg)}}
+@keyframes bandout{to{transform:translateY(-700px) rotate(-1.5deg)}}
+.b1{animation:bandin .6s 3.1s steps(5) both,bandout .4s 6.9s steps(4) forwards}
+.b2{animation:bandin .6s 7.4s steps(5) both,bandout .4s 12.3s steps(4) forwards}
+
+/* 표 두 장 */
+.ticket{left:110px;width:860px;height:300px;border-radius:26px;box-sizing:border-box;padding:40px 50px 40px 230px;transform:translateY(-1500px) rotate(var(--r))}
+.ticket .e{position:absolute;left:44px;top:60px;width:150px;height:170px;border-right:6px dashed #1D1D1D;font-size:104px;line-height:170px}
+.ticket .k{font-family:A;font-size:72px}.ticket .d{font-size:40px;font-weight:800;color:#5E574F;margin-top:14px;line-height:1.3;word-break:keep-all}
+@keyframes drop{0%{transform:translateY(-1500px) rotate(var(--r))}75%{transform:translateY(30px) rotate(var(--r))}100%{transform:translateY(0) rotate(var(--r))}}
+@keyframes fall{to{transform:translateY(1900px) rotate(20deg)}}
+.t1{top:520px;--r:-3deg;animation:drop .6s 13.2s steps(6) both,fall .5s 15.3s steps(5) forwards}
+.t2{top:880px;--r:2.5deg;animation:drop .6s 13.5s steps(6) both,fall .5s 15.4s steps(5) forwards}
+.t3{left:200px;right:200px;top:1250px;padding:22px;border-radius:999px;text-align:center;font-weight:800;font-size:44px;background:#F2C879;transform:scale(0);animation:pop2 .3s 13.9s steps(3) forwards,bye .2s 15.3s forwards}
+@keyframes pop2{to{transform:scale(1)}}
+
+/* 끝 카드 */
+.end{left:90px;right:90px;top:470px;padding:60px 50px 70px;border-radius:40px;text-align:center;transform:scale(0) rotate(-2deg);animation:pop .4s 15.6s steps(4) forwards}
+.end img{width:230px;animation:bob .8s steps(2) infinite}
+.end .x{font-family:A;font-size:86px;line-height:1.2;margin-top:10px}.end .x b{color:#C7662A;font-weight:400}
+.end .s{font-size:44px;font-weight:800;color:#5E574F;margin-top:26px;line-height:1.4}
+.end .u{display:inline-block;margin-top:36px;background:#E49A4A;border:7px solid #1D1D1D;border-radius:999px;padding:18px 44px;font-size:46px;font-weight:800;box-shadow:6px 7px 0 #1D1D1D}
+.tex{inset:0;z-index:99;pointer-events:none;opacity:.5;mix-blend-mode:multiply}
+</style></head><body class="boil0">
+<svg width="0" height="0" style="position:absolute"><defs>
+<filter id="b0"><feTurbulence type="fractalNoise" baseFrequency=".03" numOctaves="2" seed="1"/><feDisplacementMap in="SourceGraphic" scale="7"/></filter>
+<filter id="b1"><feTurbulence type="fractalNoise" baseFrequency=".03" numOctaves="2" seed="5"/><feDisplacementMap in="SourceGraphic" scale="7"/></filter>
+<filter id="b2"><feTurbulence type="fractalNoise" baseFrequency=".03" numOctaves="2" seed="9"/><feDisplacementMap in="SourceGraphic" scale="7"/></filter>
+<filter id="pt"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 .55  0 0 0 0 .5  0 0 0 0 .45  0 0 0 .35 0"/></filter>
+</defs></svg>
+
+<div class="a wall"></div>
+<div class="a glow" style="left:-60px;top:560px"></div><div class="a glow" style="left:720px;top:560px"></div>
+<div class="a lamp" style="left:105px"><div class="sh"></div><div class="st"></div></div>
+<div class="a lamp" style="left:885px"><div class="sh"></div><div class="st"></div></div>
+<div class="a pic b" style="left:80px;transform:rotate(-3deg)"></div><div class="a pic b" style="left:850px;transform:rotate(2deg)"></div>
+<div class="a dframe"><div class="a dlight"></div><div class="a rays" id="rays"></div><div class="a dleaf"></div></div>
+<div class="a wain"></div>
+<div class="a floor" id="floor"></div>
+<div class="a spill"></div>
+<div class="a rug b"></div>
+
+<div class="a actorwrap"><div class="a actorbob b">
+  <svg viewBox="0 0 440 800">
+    <g class="arm"><path d="M118 300 Q40 330 22 430 L58 444 Q76 372 140 344Z" fill="#1D1D1D" stroke="#F5F0E6" stroke-width="7"/><circle cx="38" cy="446" r="26" fill="#F5F0E6" stroke="#1D1D1D" stroke-width="7"/></g>
+    <path d="M120 270 Q220 230 320 270 L372 770 L68 770Z" fill="#1D1D1D" stroke="#F5F0E6" stroke-width="7" stroke-linejoin="round"/>
+    <path d="M220 262 L196 770 M220 262 L246 770" stroke="#3A3A3A" stroke-width="6"/>
+    <path d="M140 250 Q220 320 300 250 L316 300 Q220 360 124 300Z" fill="#E49A4A" stroke="#1D1D1D" stroke-width="7" stroke-linejoin="round"/>
+    <path d="M290 296 L330 420 L286 410 L270 310Z" fill="#E49A4A" stroke="#1D1D1D" stroke-width="7" stroke-linejoin="round"/>
+    <ellipse cx="220" cy="170" rx="86" ry="96" fill="#1D1D1D" stroke="#F5F0E6" stroke-width="7"/>
+    <path d="M150 150 Q220 118 290 150 Q296 214 220 236 Q144 214 150 150Z" fill="#F5F0E6" stroke="#1D1D1D" stroke-width="6"/>
+    <path d="M172 168 q18 -16 36 0 M232 168 q18 -16 36 0" fill="none" stroke="#1D1D1D" stroke-width="7" stroke-linecap="round"/>
+    <path d="M196 204 q24 16 48 0" fill="none" stroke="#1D1D1D" stroke-width="6" stroke-linecap="round"/>
+    <rect x="96" y="72" width="248" height="30" rx="15" fill="#1D1D1D" stroke="#F5F0E6" stroke-width="7"/>
+    <path d="M144 76 Q150 -6 220 -4 Q290 -6 296 76Z" fill="#1D1D1D" stroke="#F5F0E6" stroke-width="7"/>
+    <rect x="146" y="52" width="148" height="20" fill="#B8433A"/>
+  </svg>
+  <div class="a stick"></div></div></div>
+
+<div class="a ghostwrap"><div class="a ghostbob">
+  <div class="a stick"></div><img class="a ghost" src="../../../public/mascot.png"><div class="a bang b">!</div></div></div>
+
+<div class="a bubble paper b">“어서 와요.<br>당신 <b>역할</b>은 이미<br>정해져 있어요.”</div>
+
+<div class="a curtain cl"></div><div class="a curtain cr"></div><div class="a val"></div>
+
+<div class="a sign paper b">여기엔<br><b>관객석이 없어요</b><small>배우가 나오는 방, 들어가 볼래요?</small></div>
+<div class="a band paper b b1">문이 열리면<br><b>당신도 등장인물</b></div>
+<div class="a band paper b b2">배우가 <b>처음부터 끝까지</b><br>같이 연기해요</div>
+
+<div class="a ticket paper b t1"><div class="e">🎬</div><div class="k">연극형</div><div class="d">퍼즐 없이 이야기 속으로.<br>처음이어도 OK</div></div>
+<div class="a ticket paper b t2"><div class="e">🗝️</div><div class="k">방탈출형</div><div class="d">배우와 함께 퍼즐까지.<br>몰입 + 머리 쓰기</div></div>
+<div class="a t3 paper">공식 안내로 확인된 곳만 모았어요</div>
+
+<div class="a end paper b"><img src="../../../public/mascot.png">
+  <div class="x">배우가 있는 방<br><b>모아 뒀어요</b></div>
+  <div class="s">다녀오면 방탈로그에 한 줄 기록</div>
+  <div class="u">프로필 링크 · bangtallog.com</div></div>
+
+<svg class="a tex" width="1080" height="1920"><rect width="1080" height="1920" filter="url(#pt)"/></svg>
+<script>
+// 손으로 만든 듯 선이 살짝 떨리게(스톱모션)
+let n=0;setInterval(()=>{n=(n+1)%3;document.body.className='boil'+n},170);
+// 바닥 널빤지(원근)
+const f=document.getElementById('floor');[0,70,170,310,500].forEach(y=>{const i=document.createElement('i');i.style.top=y+'px';f.appendChild(i)});
+for(let k=-6;k<=6;k++){const b=document.createElement('b');b.style.left=(540+k*70)+'px';b.style.transform='skewX('+(-k*9)+'deg)';f.appendChild(b)}
+// 문 안쪽 빛살
+const r=document.getElementById('rays');for(let k=-3;k<=3;k++){const i=document.createElement('i');i.style.transform='rotate('+(k*22)+'deg)';i.style.top='20%';r.appendChild(i)}
+</script></body></html>
