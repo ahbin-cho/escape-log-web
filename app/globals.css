@@ -13,6 +13,14 @@
   font-display: swap;
 }
 
+/* 서재·카드용 명조(책등 제목) */
+@font-face {
+  font-family: "Nanum Myeongjo";
+  src: url("/fonts/nanum-myeongjo-korean-800-normal.woff2") format("woff2");
+  font-weight: 800;
+  font-display: swap;
+}
+
 :root {
   color-scheme: light;
 }

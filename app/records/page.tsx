@@ -17,12 +17,13 @@ import RecordCard from "@/components/RecordCard";
 import Loader from "@/components/Loader";
 import DiaryView from "@/components/DiaryView";
 import CalendarView from "@/components/CalendarView";
+import BookshelfView from "@/components/BookshelfView";
 import InstallHint from "@/components/InstallHint";
 import YearRecapCard from "@/components/YearRecapCard";
 import { nextMilestone, playNumbers } from "@/lib/diary";
 
-type View = "calendar" | "diary" | "list";
-const VIEWS: View[] = ["calendar", "diary", "list"];
+type View = "calendar" | "shelf" | "diary" | "list";
+const VIEWS: View[] = ["calendar", "shelf", "diary", "list"];
 const VIEW_KEY = "escapelog:records:view";
 
 type Result = "전체" | "성공" | "실패";
@@ -167,6 +168,7 @@ export default function RecordsPage() {
         {(
           [
             ["calendar", "📅 달력"],
+            ["shelf", "📚 서재"],
             ["diary", "📓 다이어리"],
             ["list", "🗂️ 카드 목록"],
           ] as [View, string][]
@@ -262,6 +264,8 @@ export default function RecordsPage() {
         </div>
       ) : view === "calendar" ? (
         <CalendarView records={filtered} numbers={numbers} />
+      ) : view === "shelf" ? (
+        <BookshelfView records={filtered} />
       ) : view === "diary" ? (
         <DiaryView records={filtered} numbers={numbers} />
       ) : (
