@@ -1,5 +1,6 @@
 -- 플레이포인트랩 공식 포스터 채우기 (출처: https://www.playpointlab.com/office/detail (이미지 주소는 같은 회사 www.master-key.co.kr), 2026-11-13 확인)
 -- Supabase → SQL Editor 에 붙여 넣고 Run. 비어 있는 것만 채운다.
+-- (.gif 포스터 일부는 움직이는 그림이라 첫 장면이 검게 시작했다가 그림이 나타남 — 정상)
 update public.catalog c set poster_url = v.poster from (values
   ('1e3e6ae4-e926-41bb-895d-70bb893866ad'::uuid, 'https://www.master-key.co.kr/upload/room/184_img1.png'),  -- 플레이포인트랩 노원점 / 이모션 (EMOTION) (600x750 portrait)
   ('bde0a587-dc91-466a-991b-c3d6b3844725'::uuid, 'https://www.master-key.co.kr/upload/room/183_img1.png'),  -- 플레이포인트랩 노원점 / 일탈 (600x750 portrait)

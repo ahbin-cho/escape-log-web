@@ -1,5 +1,6 @@
 -- 상상의문 공식 포스터 채우기 (출처: https://상상의문.com/layout/res/home.php?go=theme.list, 2026-11-13 확인)
 -- Supabase → SQL Editor 에 붙여 넣고 Run. 비어 있는 것만 채운다.
+-- (참고: 상상의문.com 서버가 인증서 중간 단계를 빼고 보내서, 일부 오래된 브라우저에서는 그림이 안 뜰 수 있음. 크롬·사파리는 보통 정상)
 update public.catalog c set poster_url = v.poster from (values
   ('0c4962e8-c3c5-40a3-afbd-78757d3d4f2b'::uuid, 'https://xn--z92b74ha268d.com/file/theme/24_a.jpg'),  -- 상상의문 광주점 / TITAN : 전쟁의경계 [공식 표기: TITAN : 전쟁의경계 (SF)] (285x365 portrait)
   ('b51cce2c-d0be-4e7a-bcf3-c1409dcdd1bb'::uuid, 'https://xn--z92b74ha268d.com/file/theme/22_a.jpg'),  -- 상상의문 광주점 / 그럼에도 불구하고, [공식 표기: 그럼에도 불구하고, (드라마)] (285x363 portrait)

@@ -1,0 +1,26 @@
+-- 지구별방탈출 공식 포스터 채우기 (출처: https://www.지구별방탈출.com/reservation, 2026-11-13 확인)
+-- Supabase → SQL Editor 에 붙여 넣고 Run. 비어 있는 것만 채운다.
+update public.catalog c set poster_url = v.poster from (values
+  ('fc508777-cd01-4f7c-9546-005d4d0a4bb6'::uuid, 'https://www.xn--2e0b040a4xj.com/storage/theme/2024_04/01/4JXmZzaQzbqfz0s348NErqFplKeokgGJgUguNz6k.jpg'),  -- 지구별방탈출 대구점 / 너의 겨울은 가고, 봄은 온다 (700x989 portrait)
+  ('caee6113-ba04-4b56-b5ed-0a834070e172'::uuid, 'https://www.xn--2e0b040a4xj.com/storage/theme/2024_04/01/KlzWazJ8ChIKcVquKRon5Mgzi0FXGCdx0IO4eIoc.jpg'),  -- 지구별방탈출 대구점 / 단디해라 (700x990 portrait)
+  ('b87af764-1b69-4fa4-99d6-9b8afb1ef1f2'::uuid, 'https://www.xn--2e0b040a4xj.com/storage/theme/2024_04/01/3Nl3qjxlqpWsrTamEURAISKnY69hdAJm35eSJBvx.jpg'),  -- 지구별방탈출 대구점 / 만월 <<꿈을 훔치는 요괴>> (600x848 portrait)
+  ('cebd51fc-d8c3-45c5-a281-0989c8575b11'::uuid, 'https://www.xn--2e0b040a4xj.com/storage/theme/2024_04/01/RV7LPtk2N1nKCumHHaHMBDIIVcW2V7a6wFziHui7.jpg'),  -- 지구별방탈출 대구점 / 사명 : 투쟁의 노래 (700x990 portrait)
+  ('d28a5c2f-fd94-47ae-95d6-461115fa45f2'::uuid, 'https://www.xn--2e0b040a4xj.com/storage/theme/2024_04/01/KU0kWKNK32nIQLh4krEF9WuSCYz0UiYbrNYwm8ig.jpg'),  -- 지구별방탈출 대구점 / 우리 아빠 (600x848 portrait)
+  ('079ccbf0-ee7d-448f-9fe9-31f8035dd782'::uuid, 'https://www.xn--2e0b040a4xj.com/storage/theme/2024_10/15/yu2Zmry2A4AZoa5WBJHLyZKj66OyHdpDQweMYg7l.jpg'),  -- 지구별방탈출 대구점 / 잉카 (700x999 portrait)
+  ('843b6217-9748-4f15-a454-89e00de9ab9e'::uuid, 'https://www.xn--2e0b040a4xj.com/storage/theme/2024_04/01/Ns7hO7iDe6P36Vaj78MlKcbq3kZ3wAcaBUnTBNCo.jpg'),  -- 지구별방탈출 대구점 / 펭귄키우기 (700x998 portrait)
+  ('bc872cad-952b-46df-b536-ab4c5f4ba65f'::uuid, 'https://www.xn--2e0b040a4xj.com/storage/theme/2025_04/02/sgprZf5XPQI7ijuV6wX55sluxeIzUBGBxTRYOOZA.png'),  -- 지구별방탈출 홍대라스트시티점 / alone(얼론) (601x846 portrait)
+  ('4983bb0c-b382-4077-870f-abe267b4f8a5'::uuid, 'https://www.xn--2e0b040a4xj.com/storage/theme/2024_08/12/AxjIbWiNl8qQURm4R7rGYJj9ZhawGeq4BxTZrgNe.jpg'),  -- 지구별방탈출 홍대라스트시티점 / 纹身(문신) (700x990 portrait)
+  ('988c7495-47df-4b6a-9e9e-cefb7e7c7402'::uuid, 'https://www.xn--2e0b040a4xj.com/storage/theme/2024_08/12/sMcnvmowtWKavYYLrJsyXlQqD6iRBr9aIcZyUUYH.jpg'),  -- 지구별방탈출 홍대라스트시티점 / 라스트코어 (700x995 portrait)
+  ('017671cc-9e86-4924-bb98-f7d2bcfff227'::uuid, 'https://www.xn--2e0b040a4xj.com/storage/theme/2024_08/12/wwRUAFB6wzTNHW1iUEceA8wXQvgjK2KC6jClLKfk.jpg'),  -- 지구별방탈출 홍대라스트시티점 / 멸종위기종 탐사대 (599x848 portrait)
+  ('fd0eae50-8969-4e9e-a3e1-fb4b42c88154'::uuid, 'https://www.xn--2e0b040a4xj.com/storage/theme/2024_08/12/qCPKAN30TpPvsCU68SUOtj2QynGOczf08qeI633O.jpg'),  -- 지구별방탈출 홍대라스트시티점 / 섀도우 (700x989 portrait)
+  ('3b50a5ee-c286-4585-83d6-fe31c6316133'::uuid, 'https://www.xn--2e0b040a4xj.com/storage/theme/2024_08/12/ICHNrAp5AMEU85LpG30oGIzMPUUGT2FafHFqvQ1W.jpg'),  -- 지구별방탈출 홍대라스트시티점 / 스위티 (665x942 portrait)
+  ('955b6da5-591e-4948-b7d4-1987742d9aec'::uuid, 'https://www.xn--2e0b040a4xj.com/storage/theme/2025_07/16/unjF9iWggG6wE2Vta0LiV9rXKRrXMBzSxz7846fY.jpg'),  -- 지구별방탈출 홍대라스트시티점 / 스텔라 (699x990 portrait)
+  ('64a89645-1fab-4181-88fd-89f1508aa7dd'::uuid, 'https://www.xn--2e0b040a4xj.com/storage/theme/2025_04/29/7269vf7tqHKUQiEVYWVo1TkvQibHm7b5ynaZZeGb.jpg'),  -- 지구별방탈출 홍대라스트시티점 / 카부트 (700x990 portrait)
+  ('49252059-aece-4e21-9237-d1db3b3315fc'::uuid, 'https://www.xn--2e0b040a4xj.com/storage/theme/2025_10/30/I6fkjF81lKgNkyvJaS1d4hoJNEluJWisJsrhg6de.png'),  -- 지구별방탈출 홍대어드벤처점 / PINOCCHIO(피노키오) (700x994 portrait)
+  ('807e0875-c55c-46f0-9d8d-3fa4722bed8f'::uuid, 'https://www.xn--2e0b040a4xj.com/storage/theme/2024_04/01/AsCzKuMAO80qWVWpYcFOW0HF395mOMnuOH6LSntM.jpg'),  -- 지구별방탈출 홍대어드벤처점 / 미스터리 (700x992 portrait)
+  ('923db952-741f-49a4-be83-ae5a74db5ca1'::uuid, 'https://www.xn--2e0b040a4xj.com/storage/theme/2024_08/12/lVhIuQZQ68PyVZ2T5noQXdj26rtXVYGpH0OUtNk2.jpg'),  -- 지구별방탈출 홍대어드벤처점 / 아몬 : 새벽을 여는 소년 (700x996 portrait)
+  ('054b3653-f608-44a5-9dd2-5305634fe8ec'::uuid, 'https://www.xn--2e0b040a4xj.com/storage/theme/2025_06/15/AoGCOqlcspfLAvs40bN58BqXNomzMcl8eCLlkZdN.png'),  -- 지구별방탈출 홍대어드벤처점 / 잔향 (501x708 portrait)
+  ('eebf1a8b-8c40-4555-8e52-bd747410b6e9'::uuid, 'https://www.xn--2e0b040a4xj.com/storage/theme/2024_04/01/Zf0pAzWuiBTsYHkh1TnkC7D9yyILgvNuY3HZG4Li.jpg'),  -- 지구별방탈출 홍대어드벤처점 / 지난날을 잊었다 (700x989 portrait)
+  ('ffb25178-bee5-43b4-a56a-3bf18fc4a01e'::uuid, 'https://www.xn--2e0b040a4xj.com/storage/theme/2024_08/12/WwP3c6jOOOXBRBrwUs1JXepMo4WThUGlCfbHqR5C.jpg')  -- 지구별방탈출 홍대어드벤처점 / 퀘스트 : 여정의 시작 (699x986 portrait)
+) as v(id, poster) where c.id = v.id and coalesce(c.poster_url,'') = '';
+select count(*) filter (where coalesce(poster_url,'')<>'') as 포스터있음, count(*) as 전체 from public.catalog where cafe like '지구별방탈출%';
