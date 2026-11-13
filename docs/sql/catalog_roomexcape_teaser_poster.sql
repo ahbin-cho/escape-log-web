@@ -1,9 +1,10 @@
--- 룸익스케이프 신촌 블랙·화이트·올리브점 테마 11개에 줄거리와 포스터 주소를 채운다(선택 사항).
+-- 룸익스케이프 신촌 블랙·화이트·올리브점 테마 11개에 줄거리를 채운다.
 -- Supabase → SQL Editor 에 붙여 넣고 Run. 여러 번 실행해도 안전(고치기만 한다).
 -- ⚠️ 공식 사이트(www.ex-cape.com) 하단에 "허가된 요청 외에 크롤링 등 무단 수집을 금지합니다"라는 문구가 있다.
 --    줄거리 문장과 포스터는 매장이 만든 창작물이라, 처음 SQL 에서는 일부러 뺐다. 넣을지는 운영자 판단.
 --    값은 2026-11-13 에 이미 받아 둔 지점 테마 페이지에서 읽었다(추가 접속 없음). 포스터는 매장 서버의 그림 주소를 그대로 건다.
---    포스터 없이 줄거리만 넣으려면 아래 update 의 ", poster_url = v.poster_url" 부분을 지우고 실행.
+--    지금은 줄거리만 넣는다(운영자 결정 2026-11-13). 포스터도 넣으려면 update 줄을
+--    "set teaser = v.teaser, poster_url = v.poster_url" 로 바꿔 실행.
 
 with v(name, cafe, teaser, poster_url) as (values
   ('대저택 레테 : 잠겨버린 출구', '룸익스케이프 신촌 화이트점',
@@ -89,7 +90,7 @@ with v(name, cafe, teaser, poster_url) as (values
 가사도우미가 이걸 그대로 두고 퇴근한 거야?"',
    'https://www.ex-cape.com/assets/themes/112.jpg')
 )
-update public.catalog c set teaser = v.teaser, poster_url = v.poster_url
+update public.catalog c set teaser = v.teaser
 from v where c.name = v.name and c.cafe = v.cafe;
 
 select cafe, name, left(teaser, 30) as teaser, poster_url <> '' as has_poster from public.catalog where cafe like '룸익스케이프 신촌%' order by cafe, name;
