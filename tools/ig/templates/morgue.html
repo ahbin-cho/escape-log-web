@@ -28,7 +28,10 @@ html,body{margin:0;width:1080px;height:1920px;background:#050506;overflow:hidden
 .chip{border:4px solid #D4182F;border-radius:999px;padding:12px 26px;color:#EDE6E1;font-weight:800;font-size:34px}
 .shake{animation:shake .5s 4.6s 1}
 @keyframes shake{0%,100%{transform:none}20%{transform:translate(-8px,3px)}40%{transform:translate(7px,-4px)}60%{transform:translate(-5px,2px)}80%{transform:translate(4px,0)}}
-.stage{background:radial-gradient(ellipse at 50% 0%,#2E4A48 0%,#0C1615 45%,#040606 78%)}.bar,.drip{background:#B9D6CF}.label,.reveal .k,.cta .x{color:#7FD1C1}.chip{border-color:#7FD1C1}.reveal{top:1110px}.cta{top:1480px}</style></head><body><div class="stage shake" id="s">
+.stage{background:radial-gradient(ellipse at 50% 0%,#2E4A48 0%,#0C1615 45%,#040606 78%)}.bar,.drip{background:#B9D6CF}.label,.reveal .k,.cta .x{color:#7FD1C1}.chip{border-color:#7FD1C1}.reveal{top:1110px}.cta{top:1480px}.hook{position:absolute;left:96px;right:170px;top:560px;z-index:30;color:#fff;font-weight:800;font-size:104px;line-height:1.25;letter-spacing:-.04em;word-break:keep-all;animation:hookout .35s 1.45s forwards}
+.hook b{color:#7FD1C1}.hook small{display:block;margin-top:26px;font-size:40px;font-weight:800;color:#CFC6C0;letter-spacing:0}
+@keyframes hookout{to{opacity:0;transform:translateY(-30px)}}
+</style></head><body><div class="stage shake" id="s">
 <div class="bar"></div>
 <div class="grain"></div>
 <div class="label">이 방의 이야기</div>
@@ -42,6 +45,7 @@ html,body{margin:0;width:1080px;height:1920px;background:#050506;overflow:hidden
   <div class="chips"><div class="chip">공포</div><div class="chip">난이도 ●●●●○</div><div class="chip">공포도 ●●●●○</div></div></div>
 <div class="cta"><img src="../../../public/mascot.png" width="130" height="130"><div><div class="x">줄거리·후기 → 프로필 링크</div><div class="s">방탈로그 · bangtallog.com</div></div></div>
 <div class="flicker"></div>
+<div class="hook">이 병원,<br><b>밤에 가 본 적 있어요?</b><small>줄거리 10초 ▶</small></div>
 </div>
 <script>
 const s=document.getElementById('s');let seed=7;const r=()=>(seed=(seed*1103515245+12345)&0x7fffffff)/0x7fffffff;
