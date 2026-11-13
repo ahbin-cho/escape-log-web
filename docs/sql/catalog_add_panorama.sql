@@ -9,7 +9,7 @@
 --     예약은 6일 뒤 날짜가 매일 00시에 열림(공지: 9월 30일 예약은 9월 24일 00시 오픈)
 --   공포도는 두 곳 다 공식 표기가 없어 임시값(미래재난리포트 1, 퍼펫 플레이 2). 알게 되면 고칠 것.
 --   포스터는 메이플과 같은 방식으로 네이버 예약의 공식 테마 이미지 주소를 연결(사이트 테마 페이지용, 인스타 카드에는 안 씀)
--- 홍대입구점(룰더데이, Combo)은 예약·플레이스 어디에도 난이도·장르·시간·가격이 없어(후기에만 있음) 아직 넣지 않았다.
+-- 홍대입구점(룰더데이, Combo)은 장르·난이도·공포도가 공식으로 없어 맨 아래에 실행 안 되는 형태로만 준비해 둠.
 
 with v(name, cafe, genre, difficulty, fear_level, tags, teaser, time_limit, players, price, reservation_url, poster_url, booking_open) as (values
   ('미래재난리포트', '파노라마 부산점', '아케이드', 2::int2, 1::int2, array['아케이드','입문','부산'],
@@ -29,3 +29,23 @@ insert into public.catalog (name, cafe, genre, difficulty, fear_level, tags, tea
 select v.* from v where not exists (select 1 from public.catalog c where c.name=v.name and c.cafe=v.cafe);
 
 select name, cafe, genre, difficulty, fear_level, time_limit, players, price from public.catalog where cafe like '파노라마%';
+
+-- ─────────────────────────────────────────────────────────────
+-- 홍대입구점(서울 마포구 양화로18길 12, 3층) — 아직 실행하지 말 것
+-- 네이버 예약에서 확인된 것(2026-11-13): 이름·소개 문구·이용 시간·요금(2인 예약금 기준)·포스터, Combo 추천 2~3인
+--   룰더데이 https://m.booking.naver.com/booking/12/bizes/1628384/items/7566410  1시간 5분, 2인 56,000원(1인 28,000원)
+--   Combo     https://m.booking.naver.com/booking/12/bizes/1628384/items/8070680  1시간, 2인 48,000원(1인 24,000원)
+-- 확인 안 된 것: 장르·난이도·공포도 → 매장 인스타(@panorama_escape) 공지 등에서 확인되면
+--   아래 ?? 를 채우고 맨 앞의 -- 를 지운 뒤 실행.
+-- insert into public.catalog (name, cafe, genre, difficulty, fear_level, tags, teaser, time_limit, players, price, reservation_url, poster_url)
+-- select v.* from (values
+--   ('룰더데이', '파노라마 홍대입구점', '??', ??::int2, ??::int2, array['홍대'],
+--    '세상은 규칙으로 이루어져 있다. 규칙은 절대적이며, 반드시 지켜져야 한다. (Combo와 세계관을 공유하는 테마)',
+--    65::int2, '', 28000, 'https://m.booking.naver.com/booking/12/bizes/1628384/items/7566410',
+--    'https://naverbooking-phinf.pstatic.net/20260403_244/1775153770106yWKrP_PNG/image.png'),
+--   ('Combo', '파노라마 홍대입구점', '??', ??::int2, ??::int2, array['홍대'],
+--    '신작 게임 팩 Combo 절찬리 판매 중! 최고 점수를 노려보세요. (룰더데이와 세계관을 공유하는 테마)',
+--    60::int2, '2~3', 24000, 'https://m.booking.naver.com/booking/12/bizes/1628384/items/8070680',
+--    'https://naverbooking-phinf.pstatic.net/20260917_185/1789619015799KaiPO_PNG/image.png')
+-- ) as v(name, cafe, genre, difficulty, fear_level, tags, teaser, time_limit, players, price, reservation_url, poster_url)
+-- where not exists (select 1 from public.catalog c where c.name = v.name and c.cafe = v.cafe);
