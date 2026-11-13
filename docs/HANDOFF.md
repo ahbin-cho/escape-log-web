@@ -43,7 +43,7 @@ IG 토큰이 `IGAA…` 종류면 약 60일마다 만료된다. 게시가 갑자�
 | "어떤 소개에 더 끌려요?" 5장 | hk1~5 | 미게시(후킹 규칙 샘플) |
 | 방자전 2장(소개 + 시간표·가격) | bj1, bj2 | 미게시. 먼저 SQL 실행 필요(아래) |
 | ESCAPE SCHOOL 오픈 예고 | ed-school | 오픈일 확정되면 |
-| 메이플스토리 이스케이프(홍대) 3장 | maple1~3 | 11/13 운영자가 직접 올림. 테마 5개 SQL: `docs/sql/catalog_add_maplestory.sql`(난이도·공포도는 임시값) |
+| 메이플스토리 이스케이프(홍대) 7장 | maple1~7 | 표지 + 테마 5장 + 이용 정보. 공식 사이트 maplestoryescape.com 기준. SQL: `docs/sql/catalog_add_maplestory.sql` |
 | 시크릿 왕국의 스캔들·신데렐라 초대장 | (템플릿 미보관) | 미게시 |
 
 ## 4. 남은 일
