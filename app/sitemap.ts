@@ -7,6 +7,7 @@ import {
   listedRegions,
 } from "@/lib/catalog-server";
 import { listedConditions } from "@/lib/best";
+import { SPOTLIGHTS } from "@/lib/spotlight";
 
 // 하루마다 사이트맵 재생성 (새 테마가 색인 대상에 자동 편입되도록)
 export const revalidate = 86400;
@@ -66,6 +67,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...listedConditions(all).map(
       (x) => `/best/${encodeURIComponent(x.condition.slug)}`
     ),
+    ...SPOTLIGHTS.map((s) => `/spotlight/${s.slug}`),
   ].map((path) => ({
     url: `${SITE_URL}${path}`,
     lastModified,
