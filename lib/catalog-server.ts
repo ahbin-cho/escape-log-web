@@ -28,6 +28,8 @@ export type ThemeRow = {
 
 // 이보다 테마가 적은 지역·브랜드는 페이지를 만들지 않는다(얇은 페이지 방지).
 export const MIN_THEMES = 3;
+// 브랜드는 작은 매장(테마 1~2개)도 찾을 수 있어야 해서 1개부터 보여 준다.
+export const MIN_BRAND_THEMES = 1;
 
 // DB 못 읽으면 빈 배열 → 목록 페이지가 생성되지 않을 뿐 빌드는 통과.
 export const getAllThemes = cache(async (): Promise<ThemeRow[]> => {
@@ -80,7 +82,7 @@ export async function listedBrands(): Promise<Listed<string>[]> {
   const map = await themesByBrand();
   return [...map.entries()]
     .map(([key, list]) => ({ key, count: list.length }))
-    .filter((b) => b.count >= MIN_THEMES)
+    .filter((b) => b.count >= MIN_BRAND_THEMES)
     .sort((a, b) => b.count - a.count || a.key.localeCompare(b.key, "ko"));
 }
 

@@ -15,7 +15,7 @@ import {
 import { regionFromText } from "@/lib/region";
 import { SITE_NAME, SITE_URL, DEFAULT_OG_IMAGE } from "@/lib/site";
 
-// 순수 SSG: 테마가 충분한 브랜드만 빌드 시 생성. 그 외 주소는 404.
+// 순수 SSG: 테마가 있는 브랜드는 빌드 시 생성. 그 외 주소는 404.
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
