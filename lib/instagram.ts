@@ -109,13 +109,17 @@ export type PostSet = "intro" | "record-story" | "ad-diary" | "ad-recap";
 export const POST_SCHEDULE: { date: string; set: string; extra?: boolean }[] = [
   // 11/13: 수원 모음은 운영자가 직접 올리고, 자동 게시는 메이플스토리 이스케이프 7장
   { date: "2026-11-13", set: "static:maple", extra: true },
-  { date: "2026-11-14", set: "static:diary" }, // 다이어리 소개 4장(후기 카드·달력·기록으로 본 유형)
+  // 11/14·15: 운영자가 저녁에 직접(미명도감 3장 / 이머시브 캐러셀 6장) → 자동은 쉼
+  { date: "2026-11-14", set: "skip" },
+  { date: "2026-11-15", set: "skip" },
+  { date: "2026-11-16", set: "static:diary" }, // 다이어리 소개 4장(후기 카드·달력·기록으로 본 유형)
 
   // 이 방의 이야기는 카드 대신 릴스로(처음 보는 사람에게 더 퍼진다)
-  { date: "2026-11-15", set: "reel:b60b538b-618e-4102-ab57-06f369f56a4b" }, // 성지기숙학원 : 특수교정반
-  { date: "2026-11-16", set: "reel:4451205b-df5a-462f-9f62-4461c59f9440" }, // 영안실
-  { date: "2026-11-17", set: "reel:5bcecef5-c59b-41a4-bb31-dda03276f724" }, // 춘화각 : 피할 수 없는 저주
-  { date: "2026-11-18", set: "cafes:yearend" },
+  { date: "2026-11-17", set: "reel:b60b538b-618e-4102-ab57-06f369f56a4b" }, // 성지기숙학원 : 특수교정반
+  { date: "2026-11-18", set: "skip" }, // 운영자가 저녁에 수능 이벤트 3장 직접
+  { date: "2026-11-19", set: "reel:4451205b-df5a-462f-9f62-4461c59f9440" }, // 영안실
+  { date: "2026-11-20", set: "reel:5bcecef5-c59b-41a4-bb31-dda03276f724" }, // 춘화각 : 피할 수 없는 저주
+  { date: "2026-11-21", set: "cafes:yearend" },
   { date: "2026-12-01", set: "ad-recap" },
 ];
 
