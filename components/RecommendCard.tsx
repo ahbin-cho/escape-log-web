@@ -41,7 +41,7 @@ export default function RecommendCard({
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
           {brand && (
-            <span className="mb-1 inline-block rounded-md border-2 border-edge bg-candy px-2 py-0.5 text-[11px] font-extrabold text-white">
+            <span className="mb-1 inline-block rounded-md border-2 border-edge bg-candy px-2 py-0.5 text-[11px] font-extrabold text-edge">
               {brand}
             </span>
           )}
@@ -121,7 +121,7 @@ export default function RecommendCard({
 
       <Link
         href={`/theme/${rec.id}?from=recommend`}
-        className="rough rounded-xl border-2 border-edge bg-candy px-4 py-2 text-center text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
+        className="rough rounded-xl border-2 border-edge bg-candy px-4 py-2 text-center text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.97]"
       >
         자세히 보고 예약하기 →
       </Link>

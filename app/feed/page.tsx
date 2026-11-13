@@ -30,7 +30,7 @@ export default async function FeedPage() {
           <p className="text-sm text-cream/60">아직 공개된 후기가 없어요</p>
           <Link
             href="/new"
-            className="rough mt-3 inline-block rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-white shadow-cute transition active:scale-[0.97]"
+            className="rough mt-3 inline-block rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-edge shadow-cute transition active:scale-[0.97]"
           >
             첫 후기 남기기
           </Link>

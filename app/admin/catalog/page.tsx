@@ -103,7 +103,7 @@ export default function AdminCatalog() {
         <p className="text-sm text-cream/70">추천 후보 테마 {items.length}개</p>
         <button
           onClick={startNew}
-          className="rough rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
+          className="rough rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.97]"
         >
           + 테마 추가
         </button>
@@ -127,7 +127,7 @@ export default function AdminCatalog() {
               <div className="flex min-w-0 flex-1 items-start justify-between gap-2">
                 <div className="min-w-0">
                   {splitCafe(c.cafe).brand && (
-                    <span className="mb-1 inline-block rounded-md border-2 border-edge bg-candy px-2 py-0.5 text-[11px] font-extrabold text-white">
+                    <span className="mb-1 inline-block rounded-md border-2 border-edge bg-candy px-2 py-0.5 text-[11px] font-extrabold text-edge">
                       {splitCafe(c.cafe).brand}
                     </span>
                   )}
@@ -384,7 +384,7 @@ export default function AdminCatalog() {
               <button
                 onClick={save}
                 disabled={saving}
-                className="rough rounded-xl border-2 border-edge bg-candy px-5 py-2 text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97] disabled:opacity-50"
+                className="rough rounded-xl border-2 border-edge bg-candy px-5 py-2 text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.97] disabled:opacity-50"
               >
                 {saving ? "저장 중…" : "저장"}
               </button>

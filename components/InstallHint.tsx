@@ -88,7 +88,7 @@ export default function InstallHint() {
                   await evt.userChoice.catch(() => null);
                   close();
                 }}
-                className="rough mt-2 rounded-xl border-2 border-edge bg-candy px-4 py-1.5 text-sm font-extrabold text-white shadow-cute"
+                className="rough mt-2 rounded-xl border-2 border-edge bg-candy px-4 py-1.5 text-sm font-extrabold text-edge shadow-cute"
               >
                 홈 화면에 추가
               </button>

@@ -93,7 +93,7 @@ export default function QuestionView({
           </div>
           <button
             onClick={() => onAnswer(level)}
-            className="rough mt-5 w-full rounded-xl border-2 border-edge bg-candy px-4 py-3 text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
+            className="rough mt-5 w-full rounded-xl border-2 border-edge bg-candy px-4 py-3 text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.97]"
           >
             이걸로
           </button>

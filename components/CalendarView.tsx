@@ -104,7 +104,7 @@ export default function CalendarView({
               <span
                 className={`mx-auto flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-extrabold tabular-nums ${
                   isToday
-                    ? "bg-candy text-white"
+                    ? "bg-candy text-edge"
                     : cover
                       ? "text-cream"
                       : week === 0

@@ -48,7 +48,7 @@ export default function LoggedOutCTA() {
         <div className="mt-6 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-4">
           <Link
             href="/quiz"
-            className="rough rounded-xl border-2 border-edge bg-candy px-6 py-3 text-center text-sm font-extrabold text-white shadow-cute transition hover:-translate-y-0.5 active:scale-[0.97]"
+            className="rough rounded-xl border-2 border-edge bg-candy px-6 py-3 text-center text-sm font-extrabold text-edge shadow-cute transition hover:-translate-y-0.5 active:scale-[0.97]"
           >
             취향 찾기 시작
           </Link>

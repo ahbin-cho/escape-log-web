@@ -73,7 +73,7 @@ export default function SiteHeader() {
           <Link href="/best" className={`${navLink} hidden sm:inline-block`}>
             방 찾기
           </Link>
-          <Link href="/new" className={`${navBase} mx-1 bg-candy text-white shadow-cute`}>
+          <Link href="/new" className={`${navBase} mx-1 bg-candy text-edge shadow-cute`}>
             기록 추가
           </Link>
           {isAdmin && (

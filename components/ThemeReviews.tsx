@@ -147,7 +147,7 @@ export default function ThemeReviews({
                       </span>
                     )}
                     {first?.id === r.id && (
-                      <span className="rounded-md bg-candy px-1.5 py-0.5 text-[11px] font-extrabold text-white">
+                      <span className="rounded-md bg-candy px-1.5 py-0.5 text-[11px] font-extrabold text-edge">
                         🥇 첫 후기
                       </span>
                     )}

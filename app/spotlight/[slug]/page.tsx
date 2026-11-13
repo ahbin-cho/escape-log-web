@@ -189,7 +189,7 @@ export default async function SpotlightPage({ params }: Props) {
           몇 번째 방이었는지, 탈출했는지, 누구와 갔는지. 기록 3개면 내 방탈출 유형과 다음에 갈 방까지 나와요.
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
-          <Link href="/new" className="rounded-xl bg-candy px-5 py-2.5 text-sm font-extrabold text-white">
+          <Link href="/new" className="rounded-xl bg-candy px-5 py-2.5 text-sm font-extrabold text-edge">
             기록 남기기
           </Link>
           <Link href="/quiz" className="rounded-xl border border-ink/30 px-5 py-2.5 text-sm font-extrabold">

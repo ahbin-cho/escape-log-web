@@ -194,7 +194,7 @@ export default async function BestConditionPage({ params }: Props) {
         <div className="mt-3 flex flex-wrap justify-center gap-2">
           <Link
             href="/quiz"
-            className="rough inline-block rounded-xl border-2 border-edge bg-candy px-5 py-2.5 text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
+            className="rough inline-block rounded-xl border-2 border-edge bg-candy px-5 py-2.5 text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.97]"
           >
             🔮 취향 찾기 (무료)
           </Link>

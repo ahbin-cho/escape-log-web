@@ -186,7 +186,7 @@ export default function DiaryLandingPage() {
         <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-4">
           <Link
             href="/new"
-            className="rough rounded-xl border-2 border-edge bg-candy px-6 py-3 text-center text-sm font-extrabold text-white shadow-cute transition hover:-translate-y-0.5 active:scale-[0.97]"
+            className="rough rounded-xl border-2 border-edge bg-candy px-6 py-3 text-center text-sm font-extrabold text-edge shadow-cute transition hover:-translate-y-0.5 active:scale-[0.97]"
           >
             ✍️ 첫 방 기록하기
           </Link>
@@ -265,7 +265,7 @@ export default function DiaryLandingPage() {
                   <div className="flex flex-wrap items-center gap-1.5">
                     <span
                       className={`rounded-md px-1.5 py-0.5 text-[11px] font-extrabold ${
-                        s.milestone ? "bg-candy text-white" : "bg-ink text-cream/60"
+                        s.milestone ? "bg-candy text-edge" : "bg-ink text-cream/60"
                       }`}
                     >
                       {s.milestone ? `🎉 ${s.n}번째 방` : `#${s.n}`}
@@ -378,7 +378,7 @@ export default function DiaryLandingPage() {
         <div className="mt-4 flex flex-wrap justify-center gap-2">
           <Link
             href="/new"
-            className="rough inline-block rounded-xl border-2 border-edge bg-candy px-5 py-2.5 text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
+            className="rough inline-block rounded-xl border-2 border-edge bg-candy px-5 py-2.5 text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.97]"
           >
             ✍️ 기록 시작하기 (무료)
           </Link>

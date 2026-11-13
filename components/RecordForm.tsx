@@ -53,7 +53,7 @@ function RatingPicker({ value, onChange }: { value: number; onChange: (v: number
             onClick={() => onChange(on ? 0 : n)}
             className={`flex flex-col items-center gap-1 rounded-xl border-2 py-2.5 transition active:scale-[0.95] ${
               on
-                ? "border-edge bg-candy text-white shadow-cute"
+                ? "border-edge bg-candy text-edge shadow-cute"
                 : under
                   ? "border-edge/40 bg-candy/15"
                   : "border-edge/15 hover:border-edge/40"
@@ -386,7 +386,7 @@ export default function RecordForm({
                     setPickerOpen(true);
                   }}
                   className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-bold transition active:scale-[0.97] ${
-                    brandFilter === b ? "border-2 border-edge bg-candy text-white" : "border-2 border-transparent bg-edge/[0.06] text-cream/60"
+                    brandFilter === b ? "border-2 border-edge bg-candy text-edge" : "border-2 border-transparent bg-edge/[0.06] text-cream/60"
                   }`}
                 >
                   {b || "전체"}
@@ -585,7 +585,7 @@ export default function RecordForm({
                 aria-pressed={form.themeType === t}
                 onClick={() => set("themeType", form.themeType === t ? "" : t)}
                 className={`rounded-full px-3.5 py-1.5 text-[13px] font-bold transition active:scale-[0.97] ${
-                  form.themeType === t ? "border-2 border-edge bg-candy text-white" : "border-2 border-edge/15 text-cream/60"
+                  form.themeType === t ? "border-2 border-edge bg-candy text-edge" : "border-2 border-edge/15 text-cream/60"
                 }`}
               >
                 {t}방
@@ -673,7 +673,7 @@ export default function RecordForm({
           <button
             type="submit"
             disabled={saving}
-            className="rough flex-1 rounded-xl border-2 border-edge bg-candy py-3.5 text-[15px] font-extrabold text-white shadow-cute transition active:scale-[0.98] disabled:opacity-50"
+            className="rough flex-1 rounded-xl border-2 border-edge bg-candy py-3.5 text-[15px] font-extrabold text-edge shadow-cute transition active:scale-[0.98] disabled:opacity-50"
           >
             {saving ? "저장 중…" : mode === "new" ? "저장하고 내 유형 보기" : "기록 저장"}
           </button>

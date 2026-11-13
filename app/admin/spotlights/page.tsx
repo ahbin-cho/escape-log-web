@@ -167,7 +167,7 @@ export default function AdminSpotlights() {
         <p className="text-sm text-cream/60">
           홈 “지금 화제인 방”에는 노출 기간이 남은 것 중 맨 위 하나가 나와요. 저장 후 최대 1시간 안에 반영돼요.
         </p>
-        <button onClick={() => setForm(empty())} className="rough shrink-0 rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-extrabold text-white shadow-cute">
+        <button onClick={() => setForm(empty())} className="rough shrink-0 rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-extrabold text-edge shadow-cute">
           + 새로 올리기
         </button>
       </div>
@@ -283,7 +283,7 @@ export default function AdminSpotlights() {
             <button onClick={() => setForm(null)} className="rounded-xl px-4 py-2 text-sm font-bold text-cream/60">
               취소
             </button>
-            <button onClick={save} disabled={saving} className="rough rounded-xl border-2 border-edge bg-candy px-5 py-2 text-sm font-extrabold text-white shadow-cute disabled:opacity-50">
+            <button onClick={save} disabled={saving} className="rough rounded-xl border-2 border-edge bg-candy px-5 py-2 text-sm font-extrabold text-edge shadow-cute disabled:opacity-50">
               {saving ? "저장 중…" : "저장"}
             </button>
           </div>

@@ -68,7 +68,7 @@ export default function DiaryView({
                         {n && (
                           <span
                             className={`rounded-md px-1.5 py-0.5 text-[11px] font-extrabold tabular-nums ${
-                              milestone ? "bg-candy text-white" : "bg-ink text-cream/60"
+                              milestone ? "bg-candy text-edge" : "bg-ink text-cream/60"
                             }`}
                           >
                             {milestone ? `🎉 ${n}번째 방` : `#${n}`}

@@ -130,7 +130,7 @@ export default function LoginPage() {
               setMessage("");
             }}
             className={`rough flex-1 rounded-xl border-2 border-edge px-3 py-2 text-sm font-extrabold transition active:scale-[0.98] ${
-              mode === m ? "bg-candy text-white shadow-cute" : "bg-panel"
+              mode === m ? "bg-candy text-edge shadow-cute" : "bg-panel"
             }`}
           >
             {m === "signin" ? "로그인" : "회원가입"}
@@ -199,7 +199,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={busy || !configured}
-          className="rough w-full rounded-xl border-2 border-edge bg-candy px-4 py-2.5 text-sm font-extrabold text-white shadow-cute transition active:scale-[0.98] disabled:opacity-50"
+          className="rough w-full rounded-xl border-2 border-edge bg-candy px-4 py-2.5 text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.98] disabled:opacity-50"
         >
           {busy
             ? "처리 중…"

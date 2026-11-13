@@ -49,7 +49,7 @@ export default function ImportBanner() {
         </div>
         <Link
           href="/login?mode=signup&guest=1&next=/records"
-          className="rough shrink-0 rounded-xl border-2 border-edge bg-candy px-4 py-2 text-center text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
+          className="rough shrink-0 rounded-xl border-2 border-edge bg-candy px-4 py-2 text-center text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.97]"
         >
           가입하고 기록 지키기
         </Link>
@@ -87,7 +87,7 @@ export default function ImportBanner() {
         </p>
         <button
           onClick={() => window.location.reload()}
-          className="rough rounded-xl border-2 border-edge bg-candy px-3 py-1.5 text-sm font-bold text-white shadow-cute transition active:scale-[0.97]"
+          className="rough rounded-xl border-2 border-edge bg-candy px-3 py-1.5 text-sm font-bold text-edge shadow-cute transition active:scale-[0.97]"
         >
           새로고침해서 보기
         </button>
@@ -117,7 +117,7 @@ export default function ImportBanner() {
         <button
           onClick={doImport}
           disabled={status === "importing"}
-          className="rough rounded-xl border-2 border-edge bg-candy px-3 py-1.5 text-sm font-bold text-white shadow-cute transition active:scale-[0.97] disabled:opacity-50"
+          className="rough rounded-xl border-2 border-edge bg-candy px-3 py-1.5 text-sm font-bold text-edge shadow-cute transition active:scale-[0.97] disabled:opacity-50"
         >
           {status === "importing" ? "가져오는 중…" : "가져오기"}
         </button>

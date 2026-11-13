@@ -43,7 +43,7 @@ export default function FriendCompat({
         </p>
         <Link
           href={`/quiz?from=${encodeShare(friend)}`}
-          className="rough mt-4 inline-block rounded-xl border-2 border-edge bg-candy px-6 py-3 text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
+          className="rough mt-4 inline-block rounded-xl border-2 border-edge bg-candy px-6 py-3 text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.97]"
         >
           나도 해보고 궁합 보기
         </Link>

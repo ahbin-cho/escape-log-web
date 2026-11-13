@@ -116,7 +116,7 @@ export default function RegionExplorer() {
           </p>
           <Link
             href="/new"
-            className="rough mt-3 inline-block rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-white shadow-cute"
+            className="rough mt-3 inline-block rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-edge shadow-cute"
           >
             첫 기록 추가하기
           </Link>

@@ -145,7 +145,7 @@ export default function MatchPage() {
           </p>
           <Link
             href="/quiz"
-            className="mt-4 inline-block rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-white shadow-cute"
+            className="mt-4 inline-block rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-edge shadow-cute"
           >
             내 취향 찾고 팀 합류하기
           </Link>
@@ -161,7 +161,7 @@ export default function MatchPage() {
         <p className="mt-3 font-bold">먼저 내 취향부터 찾아야 궁합을 보지!</p>
         <Link
           href="/quiz"
-          className="mt-4 inline-block rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-white shadow-cute"
+          className="mt-4 inline-block rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-edge shadow-cute"
         >
           취향 찾기 하러 가기
         </Link>
@@ -253,7 +253,7 @@ export default function MatchPage() {
           </div>
           <button
             onClick={addManual}
-            className="w-full rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-white shadow-cute transition active:scale-[0.97]"
+            className="w-full rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-edge shadow-cute transition active:scale-[0.97]"
           >
             추가
           </button>

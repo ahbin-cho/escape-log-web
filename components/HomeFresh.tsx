@@ -43,7 +43,7 @@ export async function HomeMystery() {
               “{teaserPreview(cleanTeaser(t.teaser ?? ""), 80)}”
             </span>
           </span>
-          <span className="shrink-0 rounded-xl border-2 border-edge bg-candy px-3 py-1.5 text-xs font-extrabold text-white transition active:scale-[0.97] group-open:hidden">
+          <span className="shrink-0 rounded-xl border-2 border-edge bg-candy px-3 py-1.5 text-xs font-extrabold text-edge transition active:scale-[0.97] group-open:hidden">
             정체 공개 👀
           </span>
         </summary>
@@ -142,7 +142,7 @@ export async function HomeNewAndHot() {
                   >
                     <span className="flex items-center gap-1.5 text-xs font-bold">
                       {isNew && (
-                        <span className="rounded-md bg-candy px-1.5 py-0.5 text-[11px] font-extrabold text-white">
+                        <span className="rounded-md bg-candy px-1.5 py-0.5 text-[11px] font-extrabold text-edge">
                           NEW
                         </span>
                       )}

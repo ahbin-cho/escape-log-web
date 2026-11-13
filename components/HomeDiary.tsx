@@ -49,7 +49,7 @@ export default function HomeDiary({
           </Link>
           <Link
             href="/new"
-            className="rough rounded-xl border-2 border-edge bg-candy px-4 py-2.5 text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
+            className="rough rounded-xl border-2 border-edge bg-candy px-4 py-2.5 text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.97]"
           >
             ✍️ 첫 방 기록하기
           </Link>
@@ -90,7 +90,7 @@ export default function HomeDiary({
       <div className="flex gap-2">
         <Link
           href="/new"
-          className="rough flex-1 rounded-xl border-2 border-edge bg-candy px-4 py-2.5 text-center text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
+          className="rough flex-1 rounded-xl border-2 border-edge bg-candy px-4 py-2.5 text-center text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.97]"
         >
           + 기록 추가
         </Link>

@@ -120,7 +120,7 @@ export default function TeamPicks({ members }: { members: MateTaste[] }) {
                   </div>
                   <Link
                     href={`/theme/${t.id}?from=recommend`}
-                    className="shrink-0 rounded-lg border-2 border-edge bg-candy px-2.5 py-1 text-xs font-extrabold text-white"
+                    className="shrink-0 rounded-lg border-2 border-edge bg-candy px-2.5 py-1 text-xs font-extrabold text-edge"
                   >
                     보기 →
                   </Link>

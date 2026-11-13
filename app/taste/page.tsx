@@ -136,7 +136,7 @@ export default function TastePage() {
           </p>
           <Link
             href="/login?mode=signup&guest=1&next=/taste"
-            className="rough shrink-0 rounded-xl border-2 border-edge bg-candy px-4 py-2 text-center text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
+            className="rough shrink-0 rounded-xl border-2 border-edge bg-candy px-4 py-2 text-center text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.97]"
           >
             가입하고 기록 지키기
           </Link>
@@ -201,7 +201,7 @@ export default function TastePage() {
                 <span
                   key={i}
                   className={`flex h-9 w-9 items-center justify-center rounded-full border-2 text-sm font-extrabold ${
-                    i < records.length ? "border-edge bg-candy text-white" : "border-edge/25 text-cream/35"
+                    i < records.length ? "border-edge bg-candy text-edge" : "border-edge/25 text-cream/35"
                   }`}
                 >
                   {i < records.length ? "✓" : i + 1}
@@ -209,7 +209,7 @@ export default function TastePage() {
               ))}
               <Link
                 href="/new"
-                className="rough ml-2 rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
+                className="rough ml-2 rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.97]"
               >
                 {records.length === 0 ? "첫 기록 남기기" : "다음 방 기록하기"}
               </Link>
@@ -225,7 +225,7 @@ export default function TastePage() {
             <p className="text-sm text-cream/60">기록이 쌓이면 취향을 분석해드립니다</p>
             <Link
               href="/new"
-              className="rough mt-3 inline-block rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-white shadow-cute transition active:scale-[0.97]"
+              className="rough mt-3 inline-block rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-edge shadow-cute transition active:scale-[0.97]"
             >
               첫 기록 남기기
             </Link>

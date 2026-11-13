@@ -57,7 +57,7 @@ export default function BrandReportView({ brand }: { brand: string }) {
         <button
           type="button"
           onClick={() => window.print()}
-          className="rough rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-extrabold text-white shadow-cute active:scale-[0.97]"
+          className="rough rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-extrabold text-edge shadow-cute active:scale-[0.97]"
         >
           🖨️ 인쇄 / PDF 저장
         </button>

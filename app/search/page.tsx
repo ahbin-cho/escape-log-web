@@ -34,7 +34,7 @@ export default async function SearchPage({ searchParams }: Props) {
         />
         <button
           type="submit"
-          className="rough shrink-0 rounded-xl border-2 border-edge bg-candy px-4 py-2.5 text-sm font-extrabold text-white shadow-cute"
+          className="rough shrink-0 rounded-xl border-2 border-edge bg-candy px-4 py-2.5 text-sm font-extrabold text-edge shadow-cute"
         >
           검색
         </button>

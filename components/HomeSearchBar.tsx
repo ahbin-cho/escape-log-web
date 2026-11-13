@@ -37,7 +37,7 @@ export default function HomeSearchBar() {
         />
         <button
           type="submit"
-          className="rough shrink-0 rounded-xl border-2 border-edge bg-candy px-3.5 py-1.5 text-sm font-extrabold text-white"
+          className="rough shrink-0 rounded-xl border-2 border-edge bg-candy px-3.5 py-1.5 text-sm font-extrabold text-edge"
         >
           검색
         </button>

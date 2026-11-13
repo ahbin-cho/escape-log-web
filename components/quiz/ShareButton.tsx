@@ -71,7 +71,7 @@ export default function ShareButton({ values }: { values: QuizValues }) {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="rough mt-6 rounded-xl border-2 border-edge bg-candy px-6 py-3 text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
+        className="rough mt-6 rounded-xl border-2 border-edge bg-candy px-6 py-3 text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.97]"
       >
         결과 공유하기
       </button>
@@ -101,7 +101,7 @@ export default function ShareButton({ values }: { values: QuizValues }) {
         />
         <button
           type="submit"
-          className="rough shrink-0 rounded-xl border-2 border-edge bg-candy px-4 py-2.5 text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
+          className="rough shrink-0 rounded-xl border-2 border-edge bg-candy px-4 py-2.5 text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.97]"
         >
           공유
         </button>

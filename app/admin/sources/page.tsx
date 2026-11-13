@@ -179,7 +179,7 @@ function LinkBuilder() {
           <button
             type="button"
             onClick={copy}
-            className="rough shrink-0 rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-extrabold text-white shadow-cute active:scale-[0.97]"
+            className="rough shrink-0 rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-extrabold text-edge shadow-cute active:scale-[0.97]"
           >
             {copied ? "복사했어요" : "복사"}
           </button>

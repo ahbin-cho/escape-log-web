@@ -181,7 +181,7 @@ export default async function BrandPage({ params }: Props) {
         </p>
         <Link
           href="/quiz"
-          className="rough mt-3 inline-block rounded-xl border-2 border-edge bg-candy px-5 py-2.5 text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
+          className="rough mt-3 inline-block rounded-xl border-2 border-edge bg-candy px-5 py-2.5 text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.97]"
         >
           🔮 취향 찾기
         </Link>

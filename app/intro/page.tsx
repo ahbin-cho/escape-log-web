@@ -43,7 +43,7 @@ export default function IntroPage() {
         <div className="mt-5 flex flex-wrap justify-center gap-3">
           <Link
             href="/quiz"
-            className="rounded-xl border-2 border-edge bg-candy px-5 py-2.5 text-sm font-bold text-white shadow-cute transition active:scale-[0.97]"
+            className="rounded-xl border-2 border-edge bg-candy px-5 py-2.5 text-sm font-bold text-edge shadow-cute transition active:scale-[0.97]"
           >
             취향 찾기 시작 →
           </Link>
@@ -104,7 +104,7 @@ export default function IntroPage() {
           </p>
           <Link
             href="/quiz"
-            className="mt-4 inline-block rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-white shadow-cute transition active:scale-[0.97]"
+            className="mt-4 inline-block rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-edge shadow-cute transition active:scale-[0.97]"
           >
             내 취향 진단받기 →
           </Link>

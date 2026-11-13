@@ -144,7 +144,7 @@ export default function RecordsPage() {
           </p>
           <Link
             href="/login?mode=signup&guest=1&next=/records"
-            className="rough shrink-0 rounded-xl border-2 border-edge bg-candy px-4 py-2 text-center text-sm font-extrabold text-white shadow-cute transition active:scale-[0.97]"
+            className="rough shrink-0 rounded-xl border-2 border-edge bg-candy px-4 py-2 text-center text-sm font-extrabold text-edge shadow-cute transition active:scale-[0.97]"
           >
             가입하고 기록 지키기
           </Link>
@@ -179,7 +179,7 @@ export default function RecordsPage() {
             aria-selected={view === v}
             onClick={() => changeView(v)}
             className={`rough flex-1 rounded-xl border-2 border-edge px-3 py-2 text-sm font-extrabold transition active:scale-[0.98] sm:flex-none ${
-              view === v ? "bg-candy text-white shadow-cute" : "bg-panel"
+              view === v ? "bg-candy text-edge shadow-cute" : "bg-panel"
             }`}
           >
             {label}
@@ -257,7 +257,7 @@ export default function RecordsPage() {
           </p>
           <Link
             href="/new"
-            className="rough mt-3 inline-block rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-white shadow-cute transition active:scale-[0.97]"
+            className="rough mt-3 inline-block rounded-xl border-2 border-edge bg-candy px-4 py-2 text-sm font-bold text-edge shadow-cute transition active:scale-[0.97]"
           >
             첫 기록 추가하기
           </Link>

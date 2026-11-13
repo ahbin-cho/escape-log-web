@@ -40,7 +40,7 @@ export default function BookshelfView({ records }: { records: EscapeRecord[] }) 
         <h2 className="text-lg sm:text-xl">📚 나의 서재</h2>
         <div className="flex gap-1.5 text-xs font-extrabold">
           <span className="rounded-full border-2 border-edge bg-ink px-2.5 py-1">{stats.total}권</span>
-          <span className="rounded-full border-2 border-edge bg-candy px-2.5 py-1 text-white">🏆 인생테마 {stats.legends}</span>
+          <span className="rounded-full border-2 border-edge bg-candy px-2.5 py-1 text-edge">🏆 인생테마 {stats.legends}</span>
           <span className="rounded-full border-2 border-edge bg-ink px-2.5 py-1">탈출 {stats.escaped}</span>
         </div>
       </header>
