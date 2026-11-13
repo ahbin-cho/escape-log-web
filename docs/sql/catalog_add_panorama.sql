@@ -2,13 +2,14 @@
 -- Supabase → SQL Editor 에 붙여 넣고 Run. 여러 번 실행해도 안전(있으면 고치고, 없으면 넣는다).
 -- 출처: 각 지점 네이버 예약 테마 안내·유의사항 (2026-11-13 확인)
 --   부산점(부산 남구 용소로14번길 9 지하1층) https://m.booking.naver.com/booking/12/bizes/1481465
---     미래재난리포트: 난이도 ★★☆☆☆, 장르 아케이드, 60분, 권장 2인 이상, 2인 44,000원(1인 22,000원), 추가 인원 현장 결제
+--     미래재난리포트: 난이도 ★★☆☆☆, 장르 아케이드, 60분, 권장 2인 이상, 2인 44,000원(1인 22,000원, 플레이스 가격과 같음), 추가 인원 현장 결제
 --   홍대삼거리점(서울 마포구 와우산로 77, 2층) https://m.booking.naver.com/booking/12/bizes/1515624
---     Puppet Play: 난이도 3, 장르 다크/판타지, 70분, 적정 2~4인, 예약금은 날짜·회차별로 달라 가격은 비움
+--     Puppet Play: 난이도 3, 장르 다크/판타지, 70분, 적정 2~4인
+--     요금: 네이버 플레이스 가격 1인 30,000원(평일 첫·두 번째 타임 27,000원) https://m.place.naver.com/place/2035168181/home
 --     예약은 6일 뒤 날짜가 매일 00시에 열림(공지: 9월 30일 예약은 9월 24일 00시 오픈)
 --   공포도는 두 곳 다 공식 표기가 없어 임시값(미래재난리포트 1, 퍼펫 플레이 2). 알게 되면 고칠 것.
 --   포스터는 메이플과 같은 방식으로 네이버 예약의 공식 테마 이미지 주소를 연결(사이트 테마 페이지용, 인스타 카드에는 안 씀)
--- 홍대입구점(룰더데이, Combo)은 난이도·장르·시간이 예약 페이지에 없어 아직 넣지 않았다.
+-- 홍대입구점(룰더데이, Combo)은 예약·플레이스 어디에도 난이도·장르·시간·가격이 없어(후기에만 있음) 아직 넣지 않았다.
 
 with v(name, cafe, genre, difficulty, fear_level, tags, teaser, time_limit, players, price, reservation_url, poster_url, booking_open) as (values
   ('미래재난리포트', '파노라마 부산점', '아케이드', 2::int2, 1::int2, array['아케이드','입문','부산'],
@@ -16,7 +17,7 @@ with v(name, cafe, genre, difficulty, fear_level, tags, teaser, time_limit, play
    60::int2, '2~6', 22000, 'https://m.booking.naver.com/booking/12/bizes/1481465/items/7022523', 'https://naverbooking-phinf.pstatic.net/20250827_15/17562607254271YxW2_PNG/%C8%AD%B8%E9_%C4%B8%C3%B3_2025-08-25_174831.png', ''),
   ('Puppet Play (퍼펫 플레이)', '파노라마 홍대삼거리점', '판타지', 3::int2, 2::int2, array['다크','판타지','홍대'],
    '퍼펫 플레이에서 마지막 공연이 시작됩니다..',
-   70::int2, '2~4', 0, 'https://m.booking.naver.com/booking/12/bizes/1515624/items/7127177', 'https://naverbooking-phinf.pstatic.net/20251014_140/1760419414858SL0rO_PNG/%C4%B8%C3%B3.PNG', '6일 전 00시')
+   70::int2, '2~4', 30000, 'https://m.booking.naver.com/booking/12/bizes/1515624/items/7127177', 'https://naverbooking-phinf.pstatic.net/20251014_140/1760419414858SL0rO_PNG/%C4%B8%C3%B3.PNG', '6일 전 00시')
 ),
 upd as (
   update public.catalog c set genre=v.genre, difficulty=v.difficulty, fear_level=v.fear_level, tags=v.tags, teaser=v.teaser,
