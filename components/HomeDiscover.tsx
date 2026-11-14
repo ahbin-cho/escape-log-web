@@ -84,7 +84,7 @@ export default async function HomeDiscover() {
           <span className="min-w-0 flex-1">
             <span className="block font-extrabold">자물쇠 대신 배우가 있는 방</span>
             <span className="mt-0.5 block text-sm text-cream/70 [word-break:keep-all]">
-              배우가 처음부터 끝까지 같이 연기하는 이머시브 연극·방탈출 {immersiveCount}곳
+              배우와 함께 이야기 안으로 들어가는 이머시브 연극·방탈출 {immersiveCount}곳
             </span>
           </span>
           <span className="shrink-0 text-sm font-extrabold text-candy">보기 →</span>

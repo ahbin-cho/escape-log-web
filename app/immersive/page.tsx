@@ -10,13 +10,14 @@ import { regionFromText } from "@/lib/region";
 import { IMMERSIVE_TAG, THEATRE_TAG, priceLabel, splitImmersive, untilLabel } from "@/lib/immersive";
 
 // 배우가 나오는 방(이머시브) 모음.
-// 배우가 처음부터 끝까지 같이 연기하는 곳만, 공식 안내로 확인된 것만 싣는다(docs/immersive.md).
+// 공식 소개에서 이머시브·체험형(배우와 함께)이라고 밝힌 곳만 싣는다(docs/immersive.md).
+// "퍼즐 없음"·"처음부터 끝까지"처럼 공식 문구로 확인되지 않은 표현은 쓰지 않는다(2026-11-14 재검증).
 // 내용은 DB(catalog.tags) 로 바뀌므로 배포 없이 1시간 안에 반영된다.
 export const revalidate = 3600;
 
 const TITLE = "배우가 나오는 방 · 이머시브 연극·방탈출 모음";
 const DESC =
-  "배우가 처음부터 끝까지 함께 연기하는 이머시브 연극과 방탈출을 한곳에 모았어요. 퍼즐 없는 연극형과 퍼즐이 있는 방탈출형으로 나눠, 시간·인원·가격을 공식 정보 기준으로 정리했어요.";
+  "배우와 함께 이야기 안으로 들어가는 이머시브 연극과 방탈출을 한곳에 모았어요. 공연장에서 하는 연극형과 방탈출 매장의 방탈출형으로 나눠, 시간·인원·가격을 공식 정보 기준으로 정리했어요.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -116,14 +117,14 @@ export default async function ImmersivePage() {
             <span className="text-candy">배우가 있는 방</span>
           </h1>
           <p className="mx-auto mt-3 max-w-[22rem] text-[14px] leading-[1.65] text-[#F5F0E6]/80 [word-break:keep-all]">
-            관객석은 없어요. 배우가 처음부터 끝까지 같이 연기하고, 나는 그 이야기 속 등장인물이 돼요.
+            객석에 앉아서 보는 대신, 배우가 있는 이야기 안으로 직접 걸어 들어가요.
           </p>
           <div className="relative mx-auto mt-5 h-32 w-32">
             <span aria-hidden className="absolute inset-x-0 bottom-0 mx-auto h-5 w-28 rounded-[50%] bg-[#F2C879]/40 blur-[2px]" />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/mascot.png" alt="" className="stage-bob relative mx-auto w-24" />
           </div>
-          <p className="mt-1 text-[12px] text-[#F5F0E6]/60">공식 안내로 확인된 곳만 · 배우가 잠깐 나오는 곳은 뺐어요</p>
+          <p className="mt-1 text-[12px] text-[#F5F0E6]/60">공식 소개에서 이머시브·체험형이라고 밝힌 곳만</p>
         </div>
 
         {/* 표 두 장: 연극형 / 방탈출형 */}
@@ -131,27 +132,27 @@ export default async function ImmersivePage() {
           <a href="#theatre" className="ticket-mini rough rounded-xl border-2 border-edge bg-[#F5F0E6] px-3 py-3 text-[#1D1D1D] transition active:scale-[0.97]">
             <span className="block text-[11px] font-extrabold tracking-[0.15em] text-[#A85A14]">ADMIT ONE</span>
             <span className="mt-0.5 block text-[17px] font-extrabold">🎬 연극형</span>
-            <span className="mt-0.5 block text-[12px] leading-snug text-[#1D1D1D]/70 [word-break:keep-all]">퍼즐 없이 이야기 속으로</span>
+            <span className="mt-0.5 block text-[12px] leading-snug text-[#1D1D1D]/70 [word-break:keep-all]">이야기·연기 중심</span>
             <span className="mt-1.5 block text-xs font-extrabold text-[#A85A14]">{theatre.length}곳 →</span>
           </a>
           <a href="#escape" className="ticket-mini rough rounded-xl border-2 border-edge bg-[#F5F0E6] px-3 py-3 text-[#1D1D1D] transition active:scale-[0.97]">
             <span className="block text-[11px] font-extrabold tracking-[0.15em] text-[#A85A14]">ADMIT ONE</span>
             <span className="mt-0.5 block text-[17px] font-extrabold">🗝️ 방탈출형</span>
-            <span className="mt-0.5 block text-[12px] leading-snug text-[#1D1D1D]/70 [word-break:keep-all]">배우와 함께 퍼즐까지</span>
+            <span className="mt-0.5 block text-[12px] leading-snug text-[#1D1D1D]/70 [word-break:keep-all]">방탈출 매장의 배우 테마</span>
             <span className="mt-1.5 block text-xs font-extrabold text-[#A85A14]">{escape.length}곳 →</span>
           </a>
         </div>
       </header>
 
       {limited.length > 0 && <Group id="limited" act="SPECIAL · 기간 한정" title="끝나기 전에 가야 하는 공연" rows={limited} />}
-      <Group id="theatre" act="ACT 1" title="연극형 · 퍼즐 없이 이야기 속으로" rows={theatre} />
+      <Group id="theatre" act="ACT 1" title="연극형 · 객석 없이 이야기 속으로" rows={theatre} />
       <Group id="escape" act="ACT 2" title="방탈출형 · 배우와 함께 푸는 방" rows={escape} />
 
       <Tips />
 
       <section className="space-y-2 border-t border-line pt-6 text-[13px] leading-relaxed text-cream/60 [word-break:keep-all]">
         <p>각 곳의 공식 홈페이지·예약 페이지에 적힌 내용만 옮겼어요. 회차·가격은 자주 바뀌니 예약 전에 한 번 더 확인해 주세요.</p>
-        <p>배우가 끝까지 함께하는 곳인데 여기 없다면, 인스타 @bangtal_log 로 알려 주세요. 공식 안내를 확인하고 넣을게요.</p>
+        <p>배우와 함께하는 이머시브인데 여기 없다면, 인스타 @bangtal_log 로 알려 주세요. 공식 안내를 확인하고 넣을게요.</p>
       </section>
 
       <section className="border-t border-line pt-7">
@@ -214,7 +215,7 @@ function Group({ id, act, title, rows }: { id: string; act: string; title: strin
                       {t.name}
                     </Link>
                     <p className="mt-2 flex flex-wrap gap-1.5 text-xs font-bold">
-                      <span className="rounded-full border-2 border-edge bg-candy px-2 py-0.5 text-edge">🎭 배우가 끝까지 함께</span>
+                      <span className="rounded-full border-2 border-edge bg-candy px-2 py-0.5 text-edge">🎭 배우와 함께</span>
                       {untilLabel(t.run_until) ? (
                         <span className="rounded-full border-2 border-edge bg-[#1B1420] px-2 py-0.5 text-[#F5F0E6]">⏳ {untilLabel(t.run_until)}</span>
                       ) : null}
