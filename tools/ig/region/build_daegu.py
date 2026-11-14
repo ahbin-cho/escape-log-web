@@ -3,7 +3,7 @@
 카드 값은 daegu.json 그대로(공식 예약 페이지로 확인한 값만 넣을 것)."""
 import json, sys, os, html
 sys.path.insert(0, os.path.dirname(__file__))
-from daegu_art import motif, COVER
+from daegu_art import motif, COVER, POSTER_ART
 
 T = os.path.join(os.path.dirname(__file__), "..", "templates")
 e = html.escape
@@ -56,7 +56,7 @@ def card(t, tag, line):
         return f'''<div class="cd pc"><div class="po"><img src="file://{pf}"></div>
 <div class="bd"><span class="tg2">{e(tag)}</span><div class="nm">{e(t.get("short") or t["name"])}</div><div class="q">{e(line)}</div><div class="cf">📍 {e(t["cafe"])}</div></div></div>'''
     if POSTERS:
-        return f'''<div class="cd pc"><div class="po dr">{motif(t["name"], t["genre"])}</div>
+        return f'''<div class="cd pc"><div class="po dr">{POSTER_ART.get(t["name"]) or motif(t["name"], t["genre"])}</div>
 <div class="bd"><span class="tg2">{e(tag)}</span><div class="nm">{e(t.get("short") or t["name"])}</div><div class="q">{e(line)}</div><div class="cf">📍 {e(t["cafe"])}</div></div></div>'''
     return f'''<div class="cd"><div class="art">{motif(t["name"], t["genre"])}<span class="tg">{e(tag)}</span></div>
 <div class="bd"><div class="nm">{e(t.get("short") or t["name"])}</div><div class="q">{e(line)}</div><div class="cf">📍 {e(t["cafe"])}</div></div></div>'''

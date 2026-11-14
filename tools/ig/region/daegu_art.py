@@ -108,3 +108,71 @@ COVER = '''<svg viewBox="0 0 1080 1350" preserveAspectRatio="xMidYMid slice" sty
 <g fill="#7A2A24"><path d="M380 860l40-130 40 130z"/><path d="M560 860l40-130 40 130z"/><rect x="430" y="930" width="160" height="200" rx="80"/></g>
 <g fill="#FFE27A" opacity=".85"><rect x="330" y="960" width="50" height="70" rx="25"/><rect x="640" y="960" width="50" height="70" rx="25"/></g>
 </svg>'''
+
+# ── 셜록홈즈 4칸: 세로 포스터형 새 그림(공식 포스터를 쓰지 않음, 제목·공식 소개 문장에서 떠오르는 장면) ──
+PV = 'viewBox="0 0 300 450" preserveAspectRatio="xMidYMid slice"'
+GRAIN = '''<filter id="gr{k}"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="{k}"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .22 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>'''
+def pv(k, defs, body):
+    return f'<svg {PV}><defs>{GRAIN.format(k=k)}{defs}</defs>{body}<rect width="300" height="450" filter="url(#gr{k})"/></svg>'
+
+POSTER_ART = {
+ "단잠": pv(1, '''<linearGradient id="d1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0E1A33"/><stop offset="1" stop-color="#1F3555"/></linearGradient>
+<radialGradient id="d2" cx=".5" cy=".5" r=".6"><stop offset="0" stop-color="#FFE7B0" stop-opacity=".9"/><stop offset="1" stop-color="#FFE7B0" stop-opacity="0"/></radialGradient>
+<linearGradient id="d3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2B3F7A"/><stop offset="1" stop-color="#9C7FC4"/></linearGradient>''', '''
+<rect width="300" height="450" fill="url(#d1)"/>
+<g stroke="#2C4466" stroke-width="1.5">''' + "".join(f'<path d="M0 {y}h300"/>' for y in range(40, 330, 22)) + "".join(f'<path d="M{x} 40v290"/>' for x in range(0, 300, 30)) + '''</g>
+<circle cx="150" cy="170" r="130" fill="url(#d2)"/>
+<rect x="88" y="78" width="124" height="176" rx="4" fill="#F5EBDD" stroke="#C9A36A" stroke-width="5"/>
+<rect x="98" y="88" width="104" height="156" fill="url(#d3)"/>
+<circle cx="168" cy="122" r="18" fill="#FFF1C8"/><circle cx="176" cy="116" r="16" fill="#3A4C8C"/>
+<g fill="#FFF1C8" opacity=".9"><circle cx="118" cy="110" r="2"/><circle cx="190" cy="160" r="1.6"/><circle cx="128" cy="150" r="1.4"/></g>
+<path d="M98 214q22-22 52-8t52-6v44H98z" fill="#F7F0FF" opacity=".85"/><path d="M98 228q30-14 60-2t44-2v20H98z" fill="#fff"/>
+<rect x="0" y="330" width="300" height="120" fill="#101828"/><path d="M0 330h300" stroke="#E8C35A" stroke-width="6" stroke-dasharray="14 8"/>
+<g fill="#0A0F1C"><circle cx="70" cy="262" r="17"/><path d="M42 345q-4-62 28-66t32 30l4 36z"/><rect x="92" y="300" width="34" height="26" rx="5" fill="#2A2F3E"/></g>
+<path d="M70 262l-8 -2" stroke="#0A0F1C"/><g fill="#FFE7B0" font-family="serif" font-size="18" font-weight="700" opacity=".85"><text x="226" y="96">z</text><text x="240" y="76" font-size="24">z</text><text x="258" y="52" font-size="30">Z</text></g>
+<g fill="#FFE7B0" opacity=".5"><rect x="180" y="352" width="110" height="10" rx="5"/><rect x="200" y="370" width="90" height="6" rx="3"/></g>'''),
+ "황금 감옥 : 와캄": pv(2, '''<radialGradient id="w1" cx=".5" cy=".45" r=".7"><stop offset="0" stop-color="#2C4A52"/><stop offset="1" stop-color="#0F1A22"/></radialGradient>
+<linearGradient id="w2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8A6216"/><stop offset=".5" stop-color="#FFE08A"/><stop offset="1" stop-color="#8A6216"/></linearGradient>
+<radialGradient id="w3" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFD873" stop-opacity=".55"/><stop offset="1" stop-color="#FFD873" stop-opacity="0"/></radialGradient>''', '''
+<rect width="300" height="450" fill="url(#w1)"/>
+<g fill="none" stroke="#3E6670" stroke-width="2" opacity=".6">''' + "".join(f'<path d="M{x} 0q20 30 0 60t0 60t0 60t0 60t0 60t0 60t0 60t0 60"/>' for x in range(15, 300, 45)) + '''</g>
+<circle cx="150" cy="250" r="140" fill="url(#w3)"/>
+<path d="M60 380V200q0-110 90-130 90 20 90 130v180z" fill="#132A30" stroke="url(#w2)" stroke-width="8"/>
+<g stroke="url(#w2)" stroke-width="7">''' + "".join(f'<path d="M{x} {195 - abs(x-150)*0.0} V380"/>' for x in range(84, 230, 22)) + '''</g>
+<path d="M60 200q90-40 180 0" stroke="url(#w2)" stroke-width="7" fill="none"/>
+<path d="M150 70v-24" stroke="url(#w2)" stroke-width="6"/><circle cx="150" cy="40" r="10" fill="#FFE08A"/>
+<path d="M140 30l10-18 10 18" fill="#FFE08A"/>
+<rect x="40" y="378" width="220" height="22" rx="6" fill="url(#w2)"/>
+<g transform="translate(150 300)"><circle r="16" fill="#0B1418"/><path d="M-14 50q0-38 14-38t14 38z" fill="#0B1418"/><g fill="#FFE08A"><circle cx="-5" cy="-2" r="2.5"/><circle cx="5" cy="-2" r="2.5"/></g></g>
+<g fill="#FFE08A" opacity=".9" transform="translate(236 110) rotate(25)"><circle r="9" fill="none" stroke="#FFE08A" stroke-width="4"/><rect x="-2" y="8" width="4" height="26"/><rect x="2" y="24" width="8" height="4"/><rect x="2" y="30" width="6" height="4"/></g>
+<g fill="#FFE08A">''' + "".join(f'<path d="M{x} {y}l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z"/>' for x, y in [(52, 120), (250, 250), (40, 300), (220, 60)]) + '</g>'),
+ "랑슈 뷰티연구소": pv(3, '''<linearGradient id="r1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F8DCE6"/><stop offset="1" stop-color="#E4A9BE"/></linearGradient>
+<radialGradient id="r2" cx=".5" cy=".4" r=".6"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".7" stop-color="#F3D3E0"/><stop offset="1" stop-color="#C98BA6"/></radialGradient>
+<linearGradient id="r3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E9C77A"/><stop offset="1" stop-color="#9E7A2E"/></linearGradient>''', '''
+<rect width="300" height="450" fill="url(#r1)"/>
+<g stroke="#F1C3D3" stroke-width="10" opacity=".7">''' + "".join(f'<path d="M{x} 0v330"/>' for x in range(20, 300, 40)) + '''</g>
+<rect y="330" width="300" height="120" fill="#B97A93"/><rect y="330" width="300" height="10" fill="#9E6680"/>
+<ellipse cx="150" cy="190" rx="92" ry="124" fill="url(#r3)"/><ellipse cx="150" cy="190" rx="78" ry="110" fill="url(#r2)"/>
+<g fill="#E9C77A">''' + "".join(f'<circle cx="{150 + 98*__import__("math").cos(a*0.5236)}" cy="{190 + 130*__import__("math").sin(a*0.5236)}" r="6"/>' for a in range(12)) + '''</g>
+<path d="M150 110c-24 0-36 22-34 44 2 22 16 34 34 34s32-12 34-34c2-22-10-44-34-44z" fill="#E8B7C8" opacity=".55"/>
+<path d="M112 250q38-30 76 0v40h-76z" fill="#E8B7C8" opacity=".45"/>
+<path d="M150 82l6 40-12 26 14 30-8 34" stroke="#fff" stroke-width="2.5" fill="none" opacity=".9"/>
+<g transform="translate(40 290)"><rect x="8" y="0" width="16" height="12" fill="#9E7A2E"/><path d="M0 12h32l4 40H-4z" fill="#FFB7CB" stroke="#9E6680" stroke-width="3"/></g>
+<g transform="translate(236 280)"><rect x="6" y="0" width="12" height="16" fill="#9E7A2E"/><ellipse cx="12" cy="42" rx="22" ry="26" fill="#D9F0F2" stroke="#9E6680" stroke-width="3"/><ellipse cx="12" cy="50" rx="16" ry="14" fill="#C5375E" opacity=".85"/></g>
+<g fill="#fff">''' + "".join(f'<path d="M{x} {y}l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/>' for x, y in [(60, 60), (246, 96), (226, 40)]) + '''</g>
+<path d="M150 314q4 14 0 22q-4-8 0-22z" fill="#C5375E"/>'''),
+ "지프리트의 심장 (동성로점)": pv(4, '''<radialGradient id="z1" cx=".5" cy=".42" r=".75"><stop offset="0" stop-color="#25334F"/><stop offset="1" stop-color="#0B0F1C"/></radialGradient>
+<radialGradient id="z2" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#7DF3E4" stop-opacity=".75"/><stop offset="1" stop-color="#7DF3E4" stop-opacity="0"/></radialGradient>
+<linearGradient id="z3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D9F9FF"/><stop offset=".5" stop-color="#5FE0D0"/><stop offset="1" stop-color="#1F8F92"/></linearGradient>
+<linearGradient id="z4" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6B4A22"/><stop offset=".5" stop-color="#C9973F"/><stop offset="1" stop-color="#6B4A22"/></linearGradient>''', '''
+<rect width="300" height="450" fill="url(#z1)"/>
+<g fill="none" stroke="url(#z4)" stroke-width="12"><path d="M-10 90h80q20 0 20 20v60"/><path d="M310 300h-70q-20 0-20-20v-60"/><path d="M40 460v-90q0-14 14-14h40"/></g>
+<g fill="none" stroke="#8A6A3A" stroke-width="10" stroke-dasharray="10 7" opacity=".85"><circle cx="58" cy="330" r="44"/><circle cx="252" cy="110" r="36"/><circle cx="236" cy="380" r="26"/></g>
+<g fill="#5A4322"><circle cx="58" cy="330" r="14"/><circle cx="252" cy="110" r="11"/><circle cx="236" cy="380" r="8"/></g>
+<circle cx="150" cy="210" r="120" fill="url(#z2)"/>
+<g stroke="#9FF7EA" stroke-width="2" opacity=".55">''' + "".join(f'<path d="M150 210L{150 + 150*__import__("math").cos(a*0.3927)} {210 + 150*__import__("math").sin(a*0.3927)}"/>' for a in range(16)) + '''</g>
+<path d="M150 120c-10-18-44-22-56 2-14 28 14 60 56 96 42-36 70-68 56-96-12-24-46-20-56-2z" fill="url(#z3)" stroke="#E9FFFF" stroke-width="3"/>
+<path d="M150 120v96M94 122l56 94M206 122l-56 94" stroke="#E9FFFF" stroke-width="1.6" opacity=".7"/>
+<g transform="translate(150 360) rotate(12)"><rect x="-22" y="-22" width="44" height="44" rx="7" fill="#0A0A0E" stroke="#3B3F55" stroke-width="3"/><g fill="#E9E9F2"><circle cx="-9" cy="-9" r="4"/><circle cx="9" cy="9" r="4"/><circle cx="0" cy="0" r="4"/></g></g>
+<g fill="#E9FFFF">''' + "".join(f'<path d="M{x} {y}l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z"/>' for x, y in [(96, 80), (210, 70), (70, 210), (232, 236)]) + '</g>'),
+}
