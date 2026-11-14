@@ -33,3 +33,7 @@ ffmpeg -y -i <webm> -f lavfi -i anullsrc=r=44100:cl=stereo -t 10 \
 2. 그림을 폭 1080 으로 줄여 `assets/` 에 넣고, body 배경으로 깐다(`background: <띠 색> url(...) no-repeat 0 -80px/1080px auto`).
 3. 그림의 위·아래 빈 띠 색을 찍어 같은 색으로 아래 영역을 덮고(제미나이 ✦ 표시도 가려짐) 그 위에 카드를 놓는다.
 4. 뽑은 뒤 반드시 이미지를 열어 글자 겹침·잘림을 확인한다.
+
+## 운영자 직접 올리기 묶음(zip)
+`python3 tools/ig/pack.py <출력 폴더> [릴스 mp4]` → 날짜순 폴더(1.jpg… + 캡션.txt + 올리는법.txt) + 00_일정표.txt 를 zip 으로.
+새 게시물은 pack.py 의 POSTS 에 한 줄 추가. 여러 장 렌더는 `node tools/ig/render.cjs jobs.json`.
