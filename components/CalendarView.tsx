@@ -7,12 +7,13 @@ import { initialMonth, monthCells, recordsByDay, shiftMonth } from "@/lib/calend
 import { findPoster } from "@/lib/poster";
 import { usePosterIndex } from "@/lib/use-poster-index";
 import DiaryView from "./DiaryView";
-import PosterTile from "./PosterTile";
+import PosterTile, { TONE } from "./PosterTile";
 import MonthCardButton from "./MonthCardButton";
 
 const WEEK = ["일", "월", "화", "수", "목", "금", "토"];
 
-// 기록 달력: 다녀온 날 칸에 그 방의 공식 포스터를 채운다(없으면 인증샷, 그것도 없으면 장르 색 표지).
+// 기록 달력: 다녀온 날 칸은 날짜 숫자 대신 그림으로 채운다(내 사진 → 공식 포스터 → 장르 색 표지).
+// 하루에 여러 방을 갔으면 칸을 나눠 담고, 4방부터는 3장 + "+N".
 // 아래에는 고른 날(없으면 그 달 전체)의 기록을 다이어리 모양으로 보여 준다.
 export default function CalendarView({
   records,
@@ -37,13 +38,9 @@ export default function CalendarView({
     setPicked(null);
   }
 
-  // 하루 칸의 대표 기록: 포스터(또는 인증샷)가 있는 기록을 먼저, 없으면 그날 첫 기록
-  function cover(list: EscapeRecord[]): { record: EscapeRecord; image: string } {
-    for (const record of list) {
-      const image = record.photoUrl || findPoster(posters, record.themeName, record.cafeName)?.poster;
-      if (image) return { record, image };
-    }
-    return { record: list[0], image: "" };
+  // 기록 한 건의 그림: 내가 올린 사진 → 공식 포스터 → (없으면 빈 값, 장르 색 표지가 보인다)
+  function imageOf(record: EscapeRecord): string {
+    return record.photoUrl || findPoster(posters, record.themeName, record.cafeName)?.poster || "";
   }
 
   return (
@@ -100,7 +97,10 @@ export default function CalendarView({
               );
             }
 
-            const { record, image } = cover(list);
+            // 하루에 여러 방(연방)이면 칸을 나눠 담는다: 1=통째, 2=위아래, 3=위 1+아래 2, 4방부터는 3장 + "+N"
+            const tiles = list.length > 3 ? list.slice(0, 3) : list;
+            const more = list.length - tiles.length;
+            const split = list.length > 1;
             const isPicked = picked === day;
             return (
               <button
@@ -108,31 +108,39 @@ export default function CalendarView({
                 onClick={() => setPicked(isPicked ? null : day)}
                 aria-pressed={isPicked}
                 aria-label={`${m}월 ${dayNum}일 ${list.length}방: ${list.map((r) => r.themeName).join(", ")}`}
-                className={`relative block aspect-[2/3] overflow-hidden rounded-md transition-opacity duration-200 active:opacity-80 ${
-                  isPicked ? "ring-2 ring-edge ring-offset-2 ring-offset-white" : ""
-                }`}
+                className={`relative grid aspect-[2/3] overflow-hidden rounded-md bg-white transition-opacity duration-200 active:opacity-80 ${
+                  split ? "grid-cols-2 grid-rows-2 gap-px" : ""
+                } ${isPicked ? "ring-2 ring-edge ring-offset-2 ring-offset-white" : ""}`}
               >
-                {/* 장르 색 표지를 깔고 그 위에 그림: 그림이 없거나 깨지면 표지가 보인다 */}
-                <PosterTile genre={record.genre} name={record.themeName} />
-                {image && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={image}
-                    alt=""
-                    loading="lazy"
-                    referrerPolicy="no-referrer"
-                    onError={(e) => (e.currentTarget.style.display = "none")}
-                    className="absolute inset-0 h-full w-full object-cover"
-                  />
-                )}
-                {/* 날짜가 어떤 그림 위에서도 읽히게 위쪽만 살짝 어둡게 */}
-                <span className="absolute inset-x-0 top-0 h-2/5 bg-gradient-to-b from-black/55 to-transparent" aria-hidden />
-                <span className="absolute left-1 top-[3px] text-[10px] font-extrabold tabular-nums text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.6)]">
-                  {dayNum}
-                </span>
-                {list.length > 1 && (
-                  <span className="absolute bottom-1 right-1 rounded-full bg-black/70 px-1.5 text-[10px] font-extrabold leading-4 text-white">
-                    +{list.length - 1}
+                {tiles.map((record, k) => {
+                  const image = imageOf(record);
+                  // 2방: 두 칸 다 가로로 길게 / 3방: 첫 칸만 가로로 길게
+                  const wide = list.length === 2 || (list.length === 3 && k === 0);
+                  return (
+                    <span key={record.id} className={`relative overflow-hidden ${wide ? "col-span-2" : ""}`}>
+                      {/* 장르 색 표지를 깔고 그 위에 그림: 그림이 없거나 깨지면 표지가 보인다 */}
+                      {split ? (
+                        <MiniTile genre={record.genre} name={record.themeName} />
+                      ) : (
+                        <PosterTile genre={record.genre} name={record.themeName} />
+                      )}
+                      {image && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={image}
+                          alt=""
+                          loading="lazy"
+                          referrerPolicy="no-referrer"
+                          onError={(e) => (e.currentTarget.style.display = "none")}
+                          className="absolute inset-0 h-full w-full object-cover"
+                        />
+                      )}
+                    </span>
+                  );
+                })}
+                {more > 0 && (
+                  <span className="flex items-center justify-center bg-ink text-[11px] font-extrabold tabular-nums text-cream sm:text-[13px]">
+                    +{more}
                   </span>
                 )}
               </button>
@@ -159,5 +167,20 @@ export default function CalendarView({
         <p className="py-8 text-center text-sm text-cream/70">이 달엔 기록이 없어요</p>
       )}
     </div>
+  );
+}
+
+// 나뉜 칸용 작은 표지: 자리가 좁아 장르 색 바탕에 테마 이름만 넣는다
+function MiniTile({ genre, name }: { genre: string; name: string }) {
+  const t = TONE[genre] ?? TONE["기타"];
+  return (
+    <span
+      className="absolute inset-0 flex items-end p-[8%] text-left"
+      style={{ backgroundColor: t.bg, backgroundImage: `linear-gradient(160deg, ${t.accent}33 0%, transparent 60%)` }}
+    >
+      <span className="line-clamp-2 text-[7px] font-extrabold leading-[1.15] text-[#F5F0E6] [word-break:keep-all] sm:text-[9px]">
+        {name}
+      </span>
+    </span>
   );
 }
