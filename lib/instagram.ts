@@ -177,7 +177,8 @@ export const STATIC_POSTS: Record<string, { count: number; caption: string }> = 
 // 매장 공식 인스타 계정(캡션 멘션용). 매장 이름이 이 글자로 시작하면 캡션에 @계정을 붙인다.
 // 운영자가 매장 공식 계정을 직접 확인한 것만 넣는다(DM·협업 초대는 하지 않는다).
 export const STORE_HANDLES: Record<string, string> = {
-  // "상상의문 수원": "확인 필요",
+  "상상의문 수원점": "sangsang_sw", // 운영자 확인 11/14
+  "상상의문 수원 2호점": "sangsang_sw2", // 운영자 확인 11/14
 };
 
 export function storeHandle(cafe: string): string | null {
