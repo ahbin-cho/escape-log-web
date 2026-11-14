@@ -235,6 +235,16 @@ EVENT 4 티켓투이스케이프 — 수험생 1명만 같이 와도 팀 전원 
 4. 하이라이트 📍대구 를 새로 만들어 넣어 두면 좋아요
 (날짜는 바꿔도 돼요. 금요일 저녁이 주말 계획 세우는 사람한테 잘 닿아요)""",
   },
+  {
+    "dir": "08c_11-20_피드직후_스토리_대구모음",
+    "pages": [f"{T}/dgs{i}.html" for i in range(1, 6)], "size": STORY,
+    "how": """08b 피드를 올린 뒤 이어서, 스토리 5장을 한 장씩
+1. [+] → [스토리] → 1.jpg(표지) → 스티커 [링크] https://bangtallog.com/region/대구?utm_source=instagram&utm_medium=story&utm_campaign=daegu
+   (링크 스티커는 아래 '눌러서 대구 테마 다 보기' 글씨 위에)
+2. 2~5.jpg 도 차례로. 장마다 아래 빈 곳에 같은 링크 스티커를 붙이면 좋아요
+3. 4장·5장(서울이스케이프룸 테마가 있는 장)에는 [@멘션] @seoulescape_official
+4. 다 올리면 하이라이트 📍대구 에 5장 모두 넣기""",
+  },
   {"dir": "09_11-23_스토리_비공식클래스_D-7", "pages": [f"{T}/tk-klass-d7.html"], "size": STORY,
    "how": f"스토리 → 1.jpg → 스티커 [링크] {IMM_LINK}. NOL 앱에서 '알림받기' 해 두라고 [텍스트] 한 줄 추가해도 좋아요"},
   {"dir": "10_11-24_스토리_스얼인_마지막주", "pages": [f"{T}/tk-stay.html"], "size": STORY,

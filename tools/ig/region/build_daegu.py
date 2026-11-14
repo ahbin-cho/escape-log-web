@@ -152,3 +152,38 @@ def main(p, posters=None):
 
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else None)
+
+
+def stories(p, posters=None):
+    """스토리(1080×1920) 5장: 표지 + 장르별 4장. 아래 330px 는 링크 스티커 자리로 비워 둔다."""
+    if posters: POSTERS.update(json.load(open(posters)))
+    c = json.load(open(p)); S = c["sections"]; chk = c.get("checked_on", "")
+    head = HEAD.replace("height:1350px", "height:1920px")
+    note = f"정보는 매장 공식 예약 페이지 기준{(' · ' + chk + ' 확인') if chk else ''}"
+    s1 = head + f'''<div style="position:absolute;inset:0;background:#1b1440"></div>
+<img src="../assets/dg-deco.jpg" style="position:absolute;left:0;top:420px;width:1080px;height:1350px">
+<div style="position:absolute;left:0;right:0;top:420px;height:420px;background:linear-gradient(#1b1440,rgba(27,20,64,0))"></div>
+<div style="position:absolute;left:0;right:0;top:1640px;bottom:0;background:linear-gradient(rgba(20,10,34,0),#140a22 40%)"></div>
+<div class="top" style="top:120px"><span class="chip" style="background:#FFFBF2;border:4px solid #1D1D1D;padding:8px 20px;font-size:28px">📍 대구 방탈출 · 동성로</span></div>
+<h1 style="position:absolute;left:64px;top:220px;font-size:128px;color:#FFF3DA;-webkit-text-stroke:11px #1D1D1D;paint-order:stroke fill">대구 방탈출,<br><span style="color:#FFD25A">어데 갈래?</span></h1>
+<p style="position:absolute;left:68px;top:530px;font-weight:800;font-size:36px;color:#FFF3DA;text-shadow:0 2px 8px rgba(0,0,0,.6)">대프리카 더위 피해서 들어갈 방 16곳 🥵</p>
+<img src="../../../public/mascot.png" style="position:absolute;left:470px;top:1350px;width:170px;transform:rotate(-6deg)">
+<p style="position:absolute;left:0;right:0;top:1660px;text-align:center;font-weight:800;font-size:34px;color:#FFF3DA">👇 눌러서 대구 테마 다 보기</p></body></html>'''
+    open(os.path.join(T, "dgs1.html"), "w").write(s1)
+    for i, (key, bg, fg, ac, chip, title, sub, fn) in enumerate(PAGES, 2):
+        cards = "".join(card(t, *((t["tag"], t["line"]) if "tag" in t else fn(t))) for t in S[key])
+        dark = key == "fear"
+        s = head + f'''<style>body{{background:{bg};color:{fg}}} .grid{{top:490px;grid-template-columns:1fr;gap:20px}} .cd.pc{{height:232px}} .po{{flex:0 0 166px}} .pc .q{{-webkit-line-clamp:2}}</style>
+<div style="position:absolute;inset:0;background-image:radial-gradient({'rgba(255,255,255,.05)' if dark else 'rgba(0,0,0,.05)'} 2px,transparent 2px);background-size:26px 26px"></div>
+<div class="top" style="top:120px"><span class="chip" style="background:{ac};color:#fff;border:4px solid {'#F5E9F0' if dark else '#1D1D1D'};padding:8px 20px;font-size:28px">{chip}</span>
+<span class="chip" style="background:{'#F5E9F0' if dark else '#1D1D1D'};color:{bg};padding:8px 18px;font-size:26px">📍 대구</span></div>
+<h1 style="position:absolute;left:64px;top:220px;font-size:112px">{title.replace('<br>', ' ')}</h1>
+<p style="position:absolute;left:68px;top:420px;font-weight:500;font-size:28px;opacity:.75">{sub}</p>
+<div class="grid">{cards}</div>
+<p style="position:absolute;left:64px;right:64px;top:1545px;font-size:20px;font-weight:800;opacity:.7">{note}</p>
+{credit(S[key]).replace('top:1250px', 'top:1512px')}</body></html>'''
+        open(os.path.join(T, f"dgs{i}.html"), "w").write(s)
+    print("dgs1~5 written")
+
+if __name__ == "__main__" and len(sys.argv) > 3 and sys.argv[3] == "stories":
+    stories(sys.argv[1], sys.argv[2])
