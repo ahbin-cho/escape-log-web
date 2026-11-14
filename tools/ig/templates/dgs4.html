@@ -4,37 +4,26 @@
 @font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-Medium.woff);font-weight:500}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:1080px;height:1920px;overflow:hidden;font-family:P;letter-spacing:-.02em}
-h1{font-family:A;font-weight:400;line-height:1.08}
+h1{font-family:A;font-weight:400;line-height:1.1}
 .chip{display:inline-flex;align-items:center;gap:8px;border-radius:999px;font-weight:800}
 .top{position:absolute;left:64px;right:64px;top:52px;display:flex;justify-content:space-between;align-items:center}
-.grid{position:absolute;left:44px;right:44px;top:360px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
-.cd{background:#FFFBF2;border:4px solid #1D1D1D;border-radius:22px;overflow:hidden;box-shadow:7px 8px 0 #1D1D1D;display:flex;flex-direction:column}
-.cd .art{height:208px;border-bottom:4px solid #1D1D1D;position:relative}
-.cd .art svg{width:100%;height:100%;display:block}
-.cd .art .tg{position:absolute;right:12px;top:12px;background:#1D1D1D;color:#fff;font-weight:800;font-size:20px;border-radius:999px;padding:5px 13px}
-.cd .bd{padding:16px 20px 18px;color:#1D1D1D}
-.cd .nm{font-family:A;font-size:32px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cd .q{font-weight:500;font-size:20px;color:#4A4038;line-height:1.4;margin-top:8px;height:56px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:keep-all}
-.cd .cf{margin-top:10px;font-weight:800;font-size:21px;color:#1D1D1D;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cd.pc{flex-direction:row;height:380px}
-.po{flex:0 0 236px;background:#141414;border-right:4px solid #1D1D1D;display:flex;align-items:center;justify-content:center}
-.po img{max-width:100%;max-height:100%;display:block}
-.po.dr svg{width:100%;height:100%}
-.pc .bd{flex:1;min-width:0;display:flex;flex-direction:column;padding:16px 18px}
-.pc .nm{font-size:30px;word-break:keep-all;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;margin-top:8px}
-.pc .q{height:auto;-webkit-line-clamp:4;font-size:21px;flex:1}
-.pc .cf{font-size:18px}
-.tg2{align-self:flex-start;background:#1D1D1D;color:#fff;font-weight:800;font-size:17px;border-radius:999px;padding:4px 11px}
-.foot{position:absolute;left:64px;right:64px;bottom:40px;display:flex;justify-content:space-between;align-items:baseline;font-size:21px}
-.foot b{font-family:A;font-weight:400;font-size:26px}
-</style></head><body><style>body{background:#FFF1C2;color:#1D1D1D} .grid{top:490px;grid-template-columns:1fr;gap:20px} .cd.pc{height:232px} .po{flex:0 0 166px} .pc .q{-webkit-line-clamp:2}</style>
-<div style="position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.05) 2px,transparent 2px);background-size:26px 26px"></div>
-<div class="top" style="top:120px"><span class="chip" style="background:#D9771C;color:#fff;border:4px solid #1D1D1D;padding:8px 20px;font-size:28px">🐣 입문</span>
-<span class="chip" style="background:#1D1D1D;color:#FFF1C2;padding:8px 18px;font-size:26px">📍 대구</span></div>
-<h1 style="position:absolute;left:64px;top:220px;font-size:112px">방탈출 <span style='color:#D9771C'>처음이가?</span></h1>
-<p style="position:absolute;left:68px;top:420px;font-weight:500;font-size:28px;opacity:.75">난이도 낮은 방 · 고를 수 있는 방까지</p>
-<div class="grid"><div class="cd pc"><div class="po"><img src="file:///tmp/claude-0/-home-user-escape-log-web/34d067db-b895-5380-b0b0-c3f179b99546/scratchpad/dgp/e6c5296a4e.jpg"></div>
-<div class="bd"><span class="tg2">난이도 2/5 · 60분</span><div class="nm">신스틸러</div><div class="q">“이봐 신입, 이번 작전은 말이지...” 잠입 테마</div><div class="cf">📍 서울이스케이프룸 리틀보이</div></div></div><div class="cd pc"><div class="po dr"><svg viewBox="0 0 300 450" preserveAspectRatio="xMidYMid slice"><defs><filter id="gr3"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .22 0"/><feComposite in2="SourceGraphic" operator="in"/></filter><linearGradient id="r1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F8DCE6"/><stop offset="1" stop-color="#E4A9BE"/></linearGradient>
+.grid{position:absolute;left:48px;right:48px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.c{display:flex;gap:12px;background:rgba(255,251,242,.97);border:3px solid #3A2E28;border-radius:16px;padding:10px;box-shadow:4px 4px 0 var(--ac)}
+.th{flex:0 0 74px;height:111px;background:#1a1a1a;border-radius:7px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.th img{max-width:100%;max-height:100%;display:block}.th svg{width:100%;height:100%}
+.b{min-width:0;flex:1;display:flex;flex-direction:column;justify-content:center;gap:5px;color:#2E2622}
+.nm{font-family:A;font-size:25px;line-height:1.15;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:keep-all}
+.tg{align-self:flex-start;font-weight:800;font-size:15px;color:#fff;background:var(--ac);border-radius:999px;padding:2px 10px;white-space:nowrap}
+.cf{font-weight:800;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.85}
+.ft{position:absolute;left:64px;right:64px;display:flex;justify-content:space-between;align-items:baseline;font-size:17px;font-weight:800}
+.ft b{font-family:A;font-weight:400;font-size:24px}
+</style></head><body><div style="position:absolute;inset:0;background:#EDDBC8"></div>
+<div style="position:absolute;left:0;right:0;top:0;height:420px;background:#EDDBC8"></div>
+<img src="../assets/dg-first.jpg" style="position:absolute;left:0;top:160px;width:1080px;height:1340px">
+<div class="top" style="top:120px"><span class="chip" style="background:#D9771C;color:#fff;border:3px solid #3A2E28;padding:7px 20px;font-size:27px">🐣 입문</span></div>
+<h1 style="position:absolute;left:64px;top:220px;font-size:100px;color:#3A2E28">방탈출 <span style='color:#D9771C'>처음이가?</span></h1>
+<p style="position:absolute;left:68px;top:340px;font-weight:800;font-size:27px;color:#3A2E28;opacity:.8">📍 대구 동성로 일대 · 공식 예약 페이지 기준(11/14 확인)</p>
+<div class="grid" style="top:1090px;grid-template-columns:1fr;--ac:#D9771C"><div class="c"><div class="th"><img src="file:///tmp/claude-0/-home-user-escape-log-web/34d067db-b895-5380-b0b0-c3f179b99546/scratchpad/dgp/e6c5296a4e.jpg"></div><div class="b"><span class="tg">난이도 2/5 · 60분</span><div class="nm">신스틸러</div><div class="cf">📍 서울이스케이프룸 리틀보이</div></div></div><div class="c"><div class="th"><svg viewBox="0 0 300 450" preserveAspectRatio="xMidYMid slice"><defs><filter id="gr3"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .22 0"/><feComposite in2="SourceGraphic" operator="in"/></filter><linearGradient id="r1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F8DCE6"/><stop offset="1" stop-color="#E4A9BE"/></linearGradient>
 <radialGradient id="r2" cx=".5" cy=".4" r=".6"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".7" stop-color="#F3D3E0"/><stop offset="1" stop-color="#C98BA6"/></radialGradient>
 <linearGradient id="r3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E9C77A"/><stop offset="1" stop-color="#9E7A2E"/></linearGradient></defs>
 <rect width="300" height="450" fill="url(#r1)"/>
@@ -48,8 +37,7 @@ h1{font-family:A;font-weight:400;line-height:1.08}
 <g transform="translate(40 290)"><rect x="8" y="0" width="16" height="12" fill="#9E7A2E"/><path d="M0 12h32l4 40H-4z" fill="#FFB7CB" stroke="#9E6680" stroke-width="3"/></g>
 <g transform="translate(236 280)"><rect x="6" y="0" width="12" height="16" fill="#9E7A2E"/><ellipse cx="12" cy="42" rx="22" ry="26" fill="#D9F0F2" stroke="#9E6680" stroke-width="3"/><ellipse cx="12" cy="50" rx="16" ry="14" fill="#C5375E" opacity=".85"/></g>
 <g fill="#fff"><path d="M60 60l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/><path d="M246 96l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/><path d="M226 40l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/></g>
-<path d="M150 314q4 14 0 22q-4-8 0-22z" fill="#C5375E"/><rect width="300" height="450" filter="url(#gr3)"/></svg></div>
-<div class="bd"><span class="tg2">드라마 · 난이도 2</span><div class="nm">랑슈 뷰티연구소</div><div class="q">“당신의 아름다움을 찾아드립니다.”</div><div class="cf">📍 셜록홈즈 동성로</div></div></div><div class="cd pc"><div class="po dr"><svg viewBox="0 0 300 450" preserveAspectRatio="xMidYMid slice"><defs><filter id="gr4"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .22 0"/><feComposite in2="SourceGraphic" operator="in"/></filter><radialGradient id="z1" cx=".5" cy=".42" r=".75"><stop offset="0" stop-color="#25334F"/><stop offset="1" stop-color="#0B0F1C"/></radialGradient>
+<path d="M150 314q4 14 0 22q-4-8 0-22z" fill="#C5375E"/><rect width="300" height="450" filter="url(#gr3)"/></svg></div><div class="b"><span class="tg">드라마 · 난이도 2</span><div class="nm">랑슈 뷰티연구소</div><div class="cf">📍 셜록홈즈 동성로</div></div></div><div class="c"><div class="th"><svg viewBox="0 0 300 450" preserveAspectRatio="xMidYMid slice"><defs><filter id="gr4"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .22 0"/><feComposite in2="SourceGraphic" operator="in"/></filter><radialGradient id="z1" cx=".5" cy=".42" r=".75"><stop offset="0" stop-color="#25334F"/><stop offset="1" stop-color="#0B0F1C"/></radialGradient>
 <radialGradient id="z2" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#7DF3E4" stop-opacity=".75"/><stop offset="1" stop-color="#7DF3E4" stop-opacity="0"/></radialGradient>
 <linearGradient id="z3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D9F9FF"/><stop offset=".5" stop-color="#5FE0D0"/><stop offset="1" stop-color="#1F8F92"/></linearGradient>
 <linearGradient id="z4" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6B4A22"/><stop offset=".5" stop-color="#C9973F"/><stop offset="1" stop-color="#6B4A22"/></linearGradient></defs>
@@ -62,8 +50,5 @@ h1{font-family:A;font-weight:400;line-height:1.08}
 <path d="M150 120c-10-18-44-22-56 2-14 28 14 60 56 96 42-36 70-68 56-96-12-24-46-20-56-2z" fill="url(#z3)" stroke="#E9FFFF" stroke-width="3"/>
 <path d="M150 120v96M94 122l56 94M206 122l-56 94" stroke="#E9FFFF" stroke-width="1.6" opacity=".7"/>
 <g transform="translate(150 360) rotate(12)"><rect x="-22" y="-22" width="44" height="44" rx="7" fill="#0A0A0E" stroke="#3B3F55" stroke-width="3"/><g fill="#E9E9F2"><circle cx="-9" cy="-9" r="4"/><circle cx="9" cy="9" r="4"/><circle cx="0" cy="0" r="4"/></g></g>
-<g fill="#E9FFFF"><path d="M96 80l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z"/><path d="M210 70l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z"/><path d="M70 210l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z"/><path d="M232 236l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z"/></g><rect width="300" height="450" filter="url(#gr4)"/></svg></div>
-<div class="bd"><span class="tg2">판타지 · 노멀 모드</span><div class="nm">지프리트의 심장</div><div class="q">난이도를 고를 수 있어요(노멀 ☆3 / 하드 ☆4) · 공포 0%</div><div class="cf">📍 셜록홈즈 동성로</div></div></div><div class="cd pc"><div class="po"><img src="file:///tmp/claude-0/-home-user-escape-log-web/34d067db-b895-5380-b0b0-c3f179b99546/scratchpad/dgp/8f9a7003b5.jpg"></div>
-<div class="bd"><span class="tg2">코믹 · 난이도 3 · 65분</span><div class="nm">단디해라</div><div class="q">“멸종 위기의 지구별. 드디어 인간이 살 수 있는 외계 행성을…”</div><div class="cf">📍 지구별방탈출 대구</div></div></div></div>
-<p style="position:absolute;left:64px;right:64px;top:1545px;font-size:20px;font-weight:800;opacity:.7">정보는 매장 공식 예약 페이지 기준 · 11/14 확인</p>
-<p style="position:absolute;left:64px;right:64px;top:1512px;font-size:18px;font-weight:800;opacity:.7">포스터: 서울이스케이프룸 · 지구별방탈출 공식 홈페이지 · 셜록홈즈는 방탈로그가 새로 그린 그림</p></body></html>
+<g fill="#E9FFFF"><path d="M96 80l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z"/><path d="M210 70l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z"/><path d="M70 210l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z"/><path d="M232 236l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z"/></g><rect width="300" height="450" filter="url(#gr4)"/></svg></div><div class="b"><span class="tg">판타지 · 노멀 모드</span><div class="nm">지프리트의 심장</div><div class="cf">📍 셜록홈즈 동성로</div></div></div><div class="c"><div class="th"><img src="file:///tmp/claude-0/-home-user-escape-log-web/34d067db-b895-5380-b0b0-c3f179b99546/scratchpad/dgp/8f9a7003b5.jpg"></div><div class="b"><span class="tg">코믹 · 난이도 3 · 65분</span><div class="nm">단디해라</div><div class="cf">📍 지구별방탈출 대구</div></div></div></div>
+<div class="ft" style="top:1700px;color:#3A2E28;opacity:.75"><span>포스터: 서울이스케이프룸 · 지구별방탈출 공식 · 셜록홈즈 칸은 방탈로그 그림</span></div></body></html>
