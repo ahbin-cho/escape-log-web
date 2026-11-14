@@ -37,7 +37,7 @@ export default function ThemeList({
           <li key={t.id}>
             <Link href={href(t.id)} className="flex items-center gap-3 py-3">
               <span className="block w-12 shrink-0 overflow-hidden rounded-md text-[0px]">
-                <Poster src={posterSrc(t.poster_url)} name={t.name} genre={t.genre} rounded="rounded-md" />
+                <Poster src={posterSrc(t.poster_url)} name={t.name} genre={t.genre} rounded="rounded-md" compact />
               </span>
               <span className="min-w-0 flex-1">
                 <h3 className="truncate text-sm font-extrabold">{t.name}</h3>

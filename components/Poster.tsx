@@ -29,12 +29,15 @@ export default function Poster({
   genre,
   className = "",
   rounded = "rounded-[10px]",
+  compact = false,
 }: {
   src?: string | null;
   name: string;
   genre?: string;
   className?: string;
   rounded?: string;
+  /** 작은 썸네일(검색·목록): 제목은 옆에 따로 있으니 표지엔 장르 색과 무늬만 */
+  compact?: boolean;
 }) {
   const [broken, setBroken] = useState(false);
   const url = (src ?? "").trim(); // 빈칸·줄바꿈만 든 주소는 없는 것으로 본다
@@ -57,6 +60,25 @@ export default function Poster({
           onError={() => setBroken(true)}
           className="absolute inset-0 h-full w-full object-cover"
         />
+      ) : compact ? (
+        <span className="absolute inset-0" aria-label={`${name} (포스터 준비 중)`}>
+          <span
+            className="absolute inset-0"
+            style={{ background: `radial-gradient(90% 60% at 50% 40%, ${t.accent}40 0%, transparent 70%)` }}
+          />
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={t.accent}
+            strokeWidth="1.4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="absolute left-1/2 top-1/2 w-[58%] -translate-x-1/2 -translate-y-1/2 opacity-90"
+            aria-hidden
+          >
+            <path d={motif} />
+          </svg>
+        </span>
       ) : (
         <span className="absolute inset-0" aria-label={`${name} (포스터 준비 중)`}>
           {/* 은은한 빛 + 아래쪽 그늘 */}

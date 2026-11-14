@@ -224,7 +224,7 @@ export default function SearchButton() {
                         className="flex items-center gap-3 rounded-xl border-2 border-transparent px-3 py-2 hover:border-edge/30 hover:bg-ink"
                       >
                         <span className="block w-9 shrink-0 overflow-hidden rounded-md text-[0px]">
-                          <Poster src={posterSrc(t.poster_url)} name={t.name} genre={t.genre} rounded="rounded-md" />
+                          <Poster src={posterSrc(t.poster_url)} name={t.name} genre={t.genre} rounded="rounded-md" compact />
                         </span>
                         <span className="min-w-0 flex-1">
                           <span className="block truncate text-sm font-extrabold">{t.name}</span>

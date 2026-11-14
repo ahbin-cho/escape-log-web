@@ -143,7 +143,7 @@ export async function HomeNewAndHot() {
                     className="flex h-full items-center gap-3 rounded-2xl border-2 border-edge bg-panel px-3 py-3 transition hover:border-candy active:scale-[0.99]"
                   >
                     <span className="block w-12 shrink-0">
-                      <Poster src={posterSrc(t.poster_url)} name={t.name} genre={t.genre} rounded="rounded-md" />
+                      <Poster src={posterSrc(t.poster_url)} name={t.name} genre={t.genre} rounded="rounded-md" compact />
                     </span>
                     <span className="flex min-w-0 flex-1 flex-col gap-1">
                     <span className="flex items-center gap-1.5 text-xs font-bold">
