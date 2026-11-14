@@ -14,7 +14,12 @@ IMM_LINK = "https://bangtallog.com/immersive"
 POSTS = [
   {
     "dir": "00_11-14_오늘_스토리_서울이스케이프룸_신작공유",
-    "how": """1. 서울이스케이프룸(@seoulescape_official) 박스오피스 게시물 → 종이비행기 → [스토리에 추가]
+    "pages": [f"{T}/lb-story.html"], "size": STORY,
+    "how": """방법 A(추천): 우리 스토리 이미지 1.jpg 올리기 → 스티커 [@멘션] @seoulescape_official → [링크] 박스오피스 테마 페이지
+   https://bangtallog.com/theme/1b9c9268-fc6d-40e1-886a-6d03af377a8a
+
+방법 B: 1.jpg 대신 매장 게시물을 공유(이미지 파일 필요 없음)
+1. 서울이스케이프룸(@seoulescape_official) 박스오피스 게시물 → 종이비행기 → [스토리에 추가]
 2. 스티커 → [링크] → https://bangtallog.com/theme/1b9c9268-fc6d-40e1-886a-6d03af377a8a
 3. [텍스트] '홍대 새 지점 리틀보이 신작 📦 방탈로그에 바로 올려 뒀어요'""",
   },
