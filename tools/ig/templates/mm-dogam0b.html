@@ -1,0 +1,62 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-Medium.woff);font-weight:500}
+@font-face{font-family:Hand;src:url(../assets/fonts/nanum-brush-script-korean-400-normal.woff2)}
+@font-face{font-family:M;src:url(../assets/fonts/nanum-myeongjo-korean-800-normal.woff2);font-weight:800}
+@font-face{font-family:BH;src:url(../assets/fonts/black-han-sans-korean-400-normal.woff2)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1350px;overflow:hidden;background:#1F2624;font-family:P;color:#2A211A}
+.page{position:absolute;left:54px;right:54px;top:54px;bottom:54px;background:#E8DCC0;box-shadow:0 0 0 4px #2A211A,14px 16px 0 #0E1211;overflow:hidden}
+.page:before{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.03' numOctaves='4' seed='11'/%3E%3CfeColorMatrix values='0 0 0 0 0.42  0 0 0 0 0.32  0 0 0 0 0.18  0 0 0 0.28 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");mix-blend-mode:multiply}
+.frame{position:absolute;inset:34px;border:3px solid #2A211A;outline:1px solid #2A211A;outline-offset:-12px}
+.a{position:absolute}
+.seal{border:5px solid #A3302A;color:#A3302A;font-family:M;font-weight:800;text-align:center;line-height:1.05;background:rgba(163,48,42,.06)}
+.lab{font-family:M;font-weight:800;color:#2F5F5B;font-size:26px;letter-spacing:.1em}
+.ent{display:flex;gap:22px;padding:14px 0;border-bottom:2px solid rgba(42,33,26,.35);font-size:27px;line-height:1.45;word-break:keep-all}
+.ent b{font-family:M;font-weight:800;color:#A3302A;width:80px;flex:none;font-size:26px}
+</style></head><body>
+<div class="a" style="inset:0;background:radial-gradient(ellipse at 50% 28%,#5E9690 0%,#355F5B 45%,#1B302E 100%)"></div>
+<svg class="a" viewBox="0 0 1080 1350" style="inset:0;width:1080px;height:1350px">
+ <defs><filter id="ink"><feTurbulence type="fractalNoise" baseFrequency=".02" numOctaves="3" seed="5"/><feDisplacementMap in="SourceGraphic" scale="22"/></filter>
+ <linearGradient id="g" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#050606" stop-opacity=".2"/><stop offset=".3" stop-color="#050606" stop-opacity=".92"/><stop offset="1" stop-color="#020303"/></linearGradient>
+ <radialGradient id="moon"><stop offset="0" stop-color="#F3C8A8"/><stop offset="1" stop-color="#F3C8A8" stop-opacity="0"/></radialGradient></defs>
+ <circle cx="860" cy="210" r="140" fill="url(#moon)" opacity=".35"/><circle cx="860" cy="210" r="56" fill="#E8907E"/>
+ <!-- 어둑시니: 지붕 위로 솟는 거대한 어둠 -->
+ <g filter="url(#ink)"><path d="M380 1100 Q330 900 300 760 Q200 560 260 400 Q330 230 540 220 Q760 230 820 410 Q870 570 760 760 Q730 900 700 1100Z" fill="url(#g)"/></g>
+ <ellipse cx="470" cy="470" rx="34" ry="14" fill="#E8DCC0"/><ellipse cx="610" cy="470" rx="34" ry="14" fill="#E8DCC0"/>
+ <circle cx="470" cy="470" r="9" fill="#C2392F"/><circle cx="610" cy="470" r="9" fill="#C2392F"/>
+ <!-- 기와 지붕·담 실루엣 -->
+ <path d="M0 980 L120 940 L260 960 L330 930 L470 960 L470 1350 L0 1350Z" fill="#142422"/>
+ <path d="M600 970 Q700 930 820 950 Q900 920 1080 960 L1080 1350 L600 1350Z" fill="#142422"/>
+ <path d="M90 960 Q200 900 320 955 M640 965 Q760 905 900 955" stroke="#142422" stroke-width="30" fill="none" stroke-linecap="round"/>
+ <rect x="0" y="1060" width="1080" height="290" fill="#0F1C1B"/>
+ <!-- 전봇대·전선 -->
+ <rect x="930" y="520" width="16" height="560" fill="#0F1C1B"/><path d="M0 560 Q480 640 938 560 M938 590 Q1010 600 1080 620" stroke="#0F1C1B" stroke-width="4" fill="none"/>
+ <!-- 올려다보는 방역 요원(뒷모습) -->
+ <g fill="#1C2725" stroke="#C9D9D4" stroke-width="2.5"><circle cx="545" cy="960" r="18"/><path d="M521 980 Q545 972 569 980 L577 1045 L513 1045Z"/><rect x="572" y="982" width="18" height="40" rx="5" fill="#C2392F"/></g>
+ <path d="M545 935 L545 880" stroke="#E8DCC0" stroke-width="3" stroke-dasharray="6 8" opacity=".6"/>
+</svg>
+<svg class="a" viewBox="0 0 1080 1350" style="inset:0;width:1080px;height:1350px">
+ <path d="M0 610 Q470 700 940 600 L1080 640" stroke="#0F1C1B" stroke-width="4" fill="none"/>
+ <g stroke="#0F1C1B" stroke-width="3">
+  <rect x="90" y="628" width="44" height="96" fill="#F3E7CF" transform="rotate(4 112 628)"/>
+  <rect x="230" y="652" width="44" height="96" fill="#E0A93D" transform="rotate(2 252 652)"/>
+  <rect x="380" y="664" width="44" height="96" fill="#F3E7CF"/>
+  <rect x="660" y="652" width="44" height="96" fill="#F3E7CF" transform="rotate(-3 682 652)"/>
+  <rect x="800" y="626" width="44" height="96" fill="#E0A93D" transform="rotate(-5 822 626)"/>
+ </g>
+ <g stroke="#B8322A" stroke-width="3" fill="none">
+  <path d="M100 660 l12 -10 l12 10 M100 684 l12 -10 l12 10"/><path d="M240 684 l12 -10 l12 10 M240 708 l12 -10 l12 10"/>
+  <path d="M390 696 l12 -10 l12 10 M390 720 l12 -10 l12 10"/><path d="M670 684 l12 -10 l12 10 M670 708 l12 -10 l12 10"/>
+  <path d="M810 658 l12 -10 l12 10 M810 682 l12 -10 l12 10"/>
+ </g>
+</svg>
+<div class="a" style="inset:0;pointer-events:none;mix-blend-mode:multiply;opacity:.28;background-image:radial-gradient(#0F1C1B 1.1px,transparent 1.6px);background-size:9px 9px"></div>
+<div class="a" style="inset:0;pointer-events:none;border:26px solid #F3E7CF;box-shadow:inset 0 0 0 3px #0F1C1B"></div>
+<div class="a" style="left:80px;top:80px;font-family:M;font-weight:800;font-size:28px;letter-spacing:.35em;color:#F3E7CF">未命圖鑑</div>
+<div class="a" style="right:80px;top:76px;border:3px solid #C2392F;color:#F3E7CF;background:#B8322A;font-weight:800;font-size:24px;padding:6px 16px">요즘 다들 올리는 방</div>
+<div class="a" style="left:80px;top:130px;font-family:M;font-weight:800;font-size:64px;line-height:1.25;color:#E8DCC0;letter-spacing:-.02em">어둑시니 출몰 신고,<br><span style="color:#F3C8A8">요즘 왜 이렇게 많죠?</span></div>
+<div class="a" style="right:96px;top:640px;writing-mode:vertical-rl;font-family:Hand;font-size:64px;color:#E8DCC0;opacity:.85">올려다보지 마세요</div>
+<div class="a" style="left:80px;right:80px;bottom:150px;font-family:M;font-weight:800;font-size:34px;color:#E8DCC0">키이스케이프 백산방역<br><span style="font-size:46px">「미명도감: 최초의 어둑시니」</span></div>
+<div class="a" style="left:80px;right:80px;bottom:70px;display:flex;justify-content:space-between;font-size:22px;color:#9FC4BE"><span>그림은 방탈로그가 새로 그렸어요</span><span style="font-weight:800;color:#E8DCC0">옆으로 →</span></div>
+</body></html>

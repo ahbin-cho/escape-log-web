@@ -65,7 +65,7 @@ POSTS = [
   },
   {
     "dir": "01_11-14_19시_피드_미명도감",
-    "pages": [f"{T}/mm-dogam0.html", f"{T}/mm-dogam.html", f"{T}/mm-dogam2.html"], "size": FEED,
+    "pages": [f"{T}/mm-dogam0b.html", f"{T}/mm-dogam.html", f"{T}/mm-dogam2.html"], "size": FEED,
     "caption": """어둑시니 출몰 신고, 요즘 왜 이렇게 많죠? 🌑 올려다보지 마세요.
 키이스케이프 백산방역 「미명도감: 최초의 어둑시니」 @keyescape_official
 
