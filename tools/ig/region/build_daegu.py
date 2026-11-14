@@ -111,15 +111,14 @@ def main(p, posters=None):
     toc = "".join(f'<div style="background:#FFFBF2;border:4px solid #1D1D1D;border-radius:18px;padding:12px 18px;font-weight:800;font-size:26px;box-shadow:4px 5px 0 #1D1D1D">{x}</div>'
                   for x in ["2 😱 쫄깃한 거 좋아하나?", "3 🌿 무서븐 건 싫나?", "4 🐣 방탈출 처음이가?", "5 📖 이야기 좋아하제?"])
     cov = (COVER[:COVER.index('<path d="M0 820')] + '<path d="M0 1060q260-40 540-10t540-10V1350H0z" fill="#B8463C"/></svg>') if POSTERS else COVER
-    s1 = HEAD + cov + f'''
+    s1 = HEAD + '<img src="../assets/dg-deco.jpg" style="position:absolute;inset:0;width:1080px;height:1350px">' + f'''
 <div class="top"><span class="chip" style="background:#FFFBF2;border:4px solid #1D1D1D;padding:8px 20px;font-size:26px">📍 대구 방탈출 · 동성로</span>
 <span class="chip" style="background:#1D1D1D;color:#FFE27A;padding:7px 16px;font-size:23px">1 / 6</span></div>
-<h1 style="position:absolute;left:64px;top:150px;font-size:104px;color:#1D1D1D">대구 방탈출,<br><span style="color:#FFFBF2;-webkit-text-stroke:4px #1D1D1D;paint-order:stroke fill">어데 갈래?</span></h1>
-<p style="position:absolute;left:68px;top:400px;font-weight:800;font-size:32px;color:#1D1D1D">대프리카 더위 피해서 들어갈 방, 골라 봤다 아이가 🥵</p>
-{fan()}
-<img src="../../../public/mascot.png" style="position:absolute;left:30px;top:{'760' if POSTERS else '560'}px;width:{'250' if POSTERS else '330'}px;transform:rotate(-6deg);z-index:5">
-<div style="position:absolute;left:64px;right:64px;top:1080px;display:grid;grid-template-columns:1fr 1fr;gap:14px">{toc}</div>
-<div class="foot" style="color:#FFFBF2"><span style="font-weight:800">테마 {total}개 중에서 골랐어요 · 옆으로 넘겨 보세요 →</span><b>방탈로그</b></div></body></html>'''
+<h1 style="position:absolute;left:64px;top:140px;font-size:110px;color:#FFF3DA;-webkit-text-stroke:10px #1D1D1D;paint-order:stroke fill;text-shadow:0 8px 0 rgba(0,0,0,.25)">대구 방탈출,<br><span style="color:#FFD25A">어데 갈래?</span></h1>
+<p style="position:absolute;left:68px;top:405px;font-weight:800;font-size:31px;color:#FFF3DA;text-shadow:0 2px 8px rgba(0,0,0,.6)">대프리카 더위 피해서 들어갈 방, 골라 봤다 아이가 🥵</p>
+<img src="../../../public/mascot.png" style="position:absolute;left:470px;top:930px;width:150px;transform:rotate(-6deg);z-index:5">
+<div style="position:absolute;left:64px;right:64px;top:1100px;display:grid;grid-template-columns:1fr 1fr;gap:14px">{toc}</div>
+<div class="foot" style="color:#FFFBF2;bottom:44px"><span style="font-weight:800;text-shadow:0 2px 6px rgba(0,0,0,.6)">테마 {total}개 중에서 골랐어요 · 옆으로 넘겨 보세요 → · 그림: 방탈로그</span><b>방탈로그</b></div></body></html>'''
     open(os.path.join(T, "dg1.html"), "w").write(s1)
     for i, (key, bg, fg, ac, chip, title, sub, fn) in enumerate(PAGES, 2):
         cards = "".join(card(t, *((t["tag"], t["line"]) if "tag" in t else fn(t))) for t in S[key])
@@ -134,12 +133,12 @@ def main(p, posters=None):
 <div class="foot" style="color:{fg};opacity:.85"><span style="font-weight:800;font-size:19px">{foot_note}</span><b>방탈로그</b></div></body></html>'''
         open(os.path.join(T, f"dg{i}.html"), "w").write(s)
     # 6 마무리
-    s6 = HEAD + (cov if POSTERS else COVER) + row() + f'''
+    s6 = HEAD + '<img src="../assets/dg-deco.jpg" style="position:absolute;inset:0;width:1080px;height:1350px"><div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,10,34,.15),rgba(20,10,34,.05) 40%,rgba(20,10,34,.55))"></div>' + row() + f'''
 <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,251,242,.0),rgba(255,251,242,0) 50%)"></div>
 <div class="top"><span class="chip" style="background:#1D1D1D;color:#FFE27A;padding:8px 20px;font-size:26px">📌 저장해 두기</span>
 <span class="chip" style="background:#1D1D1D;color:#FFE27A;padding:7px 16px;font-size:23px">6 / 6</span></div>
-<h1 style="position:absolute;left:64px;top:150px;font-size:96px;color:#1D1D1D">대구 테마 {total}개,<br><span style="color:#FFFBF2;-webkit-text-stroke:4px #1D1D1D;paint-order:stroke fill">다 보고 싶제?</span></h1>
-<p style="position:absolute;left:68px;top:390px;font-weight:800;font-size:34px;color:#1D1D1D">단디 저장해 두고, 다녀온 방은 다이어리에 적어 두이소 📒</p>
+<h1 style="position:absolute;left:64px;top:140px;font-size:100px;color:#FFF3DA;-webkit-text-stroke:10px #1D1D1D;paint-order:stroke fill">대구 테마 {total}개,<br><span style="color:#FFD25A">다 보고 싶제?</span></h1>
+<p style="position:absolute;left:68px;top:395px;font-weight:800;font-size:32px;color:#FFF3DA;text-shadow:0 2px 8px rgba(0,0,0,.6)">단디 저장해 두고, 다녀온 방은 다이어리에 적어 두이소 📒</p>
 <img src="../../../public/mascot.png" style="position:absolute;right:40px;top:{'860' if POSTERS else '520'}px;width:{'200' if POSTERS else '320'}px;transform:rotate(8deg);z-index:5">
 <div style="position:absolute;left:64px;right:64px;top:1060px;display:flex;flex-direction:column;gap:16px">
 <div style="display:flex;gap:12px;flex-wrap:wrap">
