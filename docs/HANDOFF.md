@@ -11,6 +11,7 @@
 | GitHub Secrets | CRON_SECRET (Vercel 과 같은 값) — "인스타 지금 올리기" 워크플로용 |
 | 검색 등록 | Google Search Console(주소 변경 신청함, 수주~수개월 걸림), 네이버 서치어드바이저, Bing 웹마스터 + IndexNow |
 | DB | Supabase. 스키마는 `supabase/schema.sql` (운영 DB 에 적용됨) |
+| 메일 | Resend 무료(no-reply@bangtallog.com) → Supabase Custom SMTP. DNS 3줄(send·rsend·resend._domainkey)은 Vercel DNS. 비밀번호 찾기(/login → 비밀번호를 잊었어요 → /login/new-password) 2026-11-14 운영자 확인 완료. 템플릿 `docs/email-reset-password.md` |
 
 IG 토큰이 `IGAA…` 종류면 약 60일마다 만료된다. 게시가 갑자기 전부 실패하면 토큰부터 의심.
 
