@@ -174,6 +174,19 @@ export const STATIC_POSTS: Record<string, { count: number; caption: string }> = 
   },
 };
 
+// 매장 공식 인스타 계정(캡션 멘션용). 매장 이름이 이 글자로 시작하면 캡션에 @계정을 붙인다.
+// 운영자가 매장 공식 계정을 직접 확인한 것만 넣는다(DM·협업 초대는 하지 않는다).
+export const STORE_HANDLES: Record<string, string> = {
+  // "상상의문 수원": "확인 필요",
+};
+
+export function storeHandle(cafe: string): string | null {
+  const key = Object.keys(STORE_HANDLES)
+    .filter((k) => cafe.startsWith(k))
+    .sort((a, b) => b.length - a.length)[0];
+  return key ? STORE_HANDLES[key] : null;
+}
+
 // 릴스 영상 파일(public/reels/). 테마 id → 파일 이름
 export const REEL_FILES: Record<string, string> = {
   "b60b538b-618e-4102-ab57-06f369f56a4b": "sungji",
@@ -256,7 +269,7 @@ export function resolvePost(set: string, themes: ThemeRow[]): ResolvedPost | nul
         "",
         `“${t.teaser.trim().replace(/\s+/g, " ")}”`,
         "",
-        `${t.cafe} · ${t.genre} · 난이도 ${t.difficulty}/5 · 공포도 ${t.fear_level}/5`,
+        `${t.cafe}${storeHandle(t.cafe) ? ` @${storeHandle(t.cafe)}` : ""} · ${t.genre} · 난이도 ${t.difficulty}/5 · 공포도 ${t.fear_level}/5`,
         "다녀왔다면 어땠는지 댓글로 알려 주세요. 기록은 프로필 링크에서.",
         "",
         "(줄거리는 매장 공식 소개 기준)",
