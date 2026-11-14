@@ -1,18 +1,14 @@
 import Link from "next/link";
 import { getAllThemes, popularThemes } from "@/lib/catalog-server";
-import { agoLabel, cleanTeaser, dailyMystery, freshPicks, teaserPreview } from "@/lib/home-picks";
+import { cleanTeaser, dailyMystery, teaserPreview } from "@/lib/home-picks";
 import { regionFromText } from "@/lib/region";
-import { branchOf, brandOf } from "@/lib/cafe";
 import { genreEmoji } from "@/lib/store";
-import Poster from "@/components/Poster";
-import { posterSrc } from "@/lib/ui";
 
 // 홈의 "궁금증" 영역(서버 컴포넌트, 검색엔진 HTML 에도 실림).
 // - 오늘의 미스터리 방: 줄거리만 보여 주고 이름은 가려 둔다
 // - 이번 주 많이 찾는 방: 실제 예약 페이지 이동 집계(적으면 숨김)
 // - 새로 들어온 테마: 최신 등록 묶음에서 브랜드를 섞어 고른다
 
-const NEW_DAYS = 14; // 이 기간 안에 들어온 테마에 NEW 표시
 const HOT_MIN_THEMES = 3; // 클릭이 2회 이상인 테마가 이만큼은 있어야 "인기" 영역을 보여 줌
 
 export async function HomeMystery() {
@@ -79,9 +75,8 @@ export async function HomeNewAndHot() {
     .map((h) => ({ theme: byId.get(h.themeId)!, clicks: h.clicks }));
   const showHot = hotList.length >= HOT_MIN_THEMES;
 
-  const fresh = freshPicks(themes, 6);
-
-  if (!showHot && fresh.length === 0) return null;
+  // 새로 들어온 테마는 홈 맨 위 HomeNewStrip 으로 옮겼다(2026-11-14)
+  if (!showHot) return null;
 
   return (
     <div className="space-y-8">
@@ -125,52 +120,6 @@ export async function HomeNewAndHot() {
         </section>
       )}
 
-      {fresh.length > 0 && (
-        <section aria-labelledby="home-new" className="space-y-3">
-          <h2 id="home-new" className="text-xl">
-            🆕 새로 들어온 테마
-          </h2>
-          <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {fresh.map((t, i) => {
-              const created = t.created_at ?? "";
-              const isNew =
-                created && now.getTime() - Date.parse(created) < NEW_DAYS * 86400000;
-              return (
-                // 모바일은 세로로 쌓여 길어지므로 4장까지만
-                <li key={t.id} className={i >= 4 ? "max-sm:hidden" : undefined}>
-                  <Link
-                    href={`/theme/${t.id}?from=home`}
-                    className="flex h-full items-center gap-3 rounded-2xl border-2 border-edge bg-panel px-3 py-3 transition hover:border-candy active:scale-[0.99]"
-                  >
-                    <span className="block w-12 shrink-0">
-                      <Poster src={posterSrc(t.poster_url)} name={t.name} genre={t.genre} rounded="rounded-md" compact />
-                    </span>
-                    <span className="flex min-w-0 flex-1 flex-col gap-1">
-                    <span className="flex items-center gap-1.5 text-xs font-bold">
-                      {isNew && (
-                        <span className="rounded-md bg-candy px-1.5 py-0.5 text-[11px] font-extrabold text-white">
-                          NEW
-                        </span>
-                      )}
-                      <span className="text-candy">{brandOf(t.cafe)}</span>
-                      {created && (
-                        <span className="text-cream/45">· {agoLabel(created, now)} 등록</span>
-                      )}
-                    </span>
-                    <span className="truncate font-extrabold">
-                      {genreEmoji(t.genre)} {t.name}
-                    </span>
-                    <span className="truncate text-xs text-cream/60">
-                      {branchOf(t.cafe) || t.cafe} · {t.genre} · 난이도 {t.difficulty}/5
-                    </span>
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      )}
     </div>
   );
 }
