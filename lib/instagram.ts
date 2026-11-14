@@ -214,7 +214,12 @@ export function resolvePost(set: string, themes: ThemeRow[]): ResolvedPost | nul
     const file = REEL_FILES[id];
     const story = file ? resolvePost(`story:${id}`, themes) : null;
     if (!file || !story) return null;
-    return { imagePaths: [], videoPath: `/reels/${file}.mp4`, caption: story.caption };
+    // 릴스 그림은 줄거리에서 떠올린 장면이라 실제 방 모습이 아니다 → 캡션에 밝혀 둔다(운영자 결정 2026-11-14)
+    const caption = story.caption.replace(
+      "(줄거리는 매장 공식 소개 기준)",
+      "(줄거리는 매장 공식 소개 기준 · 그림은 줄거리에서 떠올린 분위기예요, 실제 방 모습과 달라요)"
+    );
+    return { imagePaths: [], videoPath: `/reels/${file}.mp4`, caption };
   }
   if (set in SET_CAPTIONS) {
     return { imagePaths: setImagePaths(set as PostSet), caption: SET_CAPTIONS[set as PostSet] };
