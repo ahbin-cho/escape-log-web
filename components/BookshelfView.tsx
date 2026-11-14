@@ -8,6 +8,7 @@ import { coverDate, shelvesByYear, type Book } from "@/lib/bookshelf";
 import type { PosterIndex } from "@/lib/poster";
 import { usePosterIndex } from "@/lib/use-poster-index";
 import RecordPoster from "@/components/RecordPoster";
+import ShareRecordButton from "@/components/ShareRecordButton";
 
 // 내 서재: 기록 하나가 포스터 표지 한 장. 최근에 다녀온 방이 먼저, 해가 바뀌면 얇은 연도 줄.
 // 표지를 누르면 그날 기록이 아래에서 올라온다.
@@ -113,11 +114,15 @@ function RecordSheet({ book: b, posters, onClose }: { book: Book; posters: Poste
         {r.oneLiner && <p className="mt-4 text-[15px] leading-relaxed text-cream/85 [word-break:keep-all]">“{r.oneLiner}”</p>}
 
         <div className="mt-5 flex gap-2">
+          <ShareRecordButton
+            record={r}
+            className="rough flex-1 rounded-xl bg-candy py-3.5 text-center text-[15px] font-extrabold text-[#1D1D1D] transition-opacity duration-200 active:opacity-80 border-[2px] border-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D] disabled:opacity-60"
+          />
           <Link
             href={guest ? "/login?mode=signup&guest=1&next=/records" : `/edit/${r.id}`}
-            className="rough flex-1 rounded-xl bg-candy py-3.5 text-center text-[15px] font-extrabold text-[#1D1D1D] transition-opacity duration-200 active:opacity-80 border-[2px] border-[#1D1D1D] shadow-[3px_3px_0_0_#1D1D1D]"
+            className="rounded-xl border border-line px-4 py-3.5 text-center text-[15px] font-extrabold transition-opacity duration-200 active:opacity-70"
           >
-            {guest ? "가입하고 수정하기" : "기록 펼쳐 보기"}
+            {guest ? "가입하고 수정" : "수정"}
           </Link>
           <button
             type="button"

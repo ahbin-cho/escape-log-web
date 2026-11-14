@@ -6,6 +6,7 @@ import { ratingLabel } from "@/lib/terms";
 import { groupByMonth, reachedMilestone, recordDate } from "@/lib/diary";
 import { usePosterIndex } from "@/lib/use-poster-index";
 import RecordPoster from "@/components/RecordPoster";
+import ShareRecordButton from "@/components/ShareRecordButton";
 
 const WEEK = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -58,10 +59,8 @@ export default function DiaryView({
               ].filter(Boolean);
               return (
                 <li key={r.id}>
-                  <Link
-                    href={r.id.startsWith("guest-") ? "/login?mode=signup&guest=1&next=/records" : `/edit/${r.id}`}
-                    className="flex gap-3 py-3.5 transition-opacity duration-200 active:opacity-70"
-                  >
+                  {/* 줄을 눌러도 바로 수정으로 가지 않게: 아래 '공유'·'수정' 버튼으로 나눈다(운영자 요청 11/14) */}
+                  <div className="flex gap-3 pt-3.5">
                     <span className="w-12 shrink-0">
                       <RecordPoster record={r} index={posters} small />
                     </span>
@@ -97,7 +96,21 @@ export default function DiaryView({
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={r.photoUrl} alt="" loading="lazy" className="h-[72px] w-[72px] shrink-0 rounded-md object-cover" />
                     )}
-                  </Link>
+                  </div>
+                  <div className="flex justify-end gap-2 pb-3 pt-1.5">
+                    <ShareRecordButton
+                      record={r}
+                      number={n}
+                      label="공유"
+                      className="rounded-lg border border-line px-3 py-1.5 text-xs font-extrabold disabled:opacity-60"
+                    />
+                    <Link
+                      href={r.id.startsWith("guest-") ? "/login?mode=signup&guest=1&next=/records" : `/edit/${r.id}`}
+                      className="rounded-lg border border-line px-3 py-1.5 text-xs font-extrabold text-cream/70"
+                    >
+                      {r.id.startsWith("guest-") ? "가입하고 수정" : "수정"}
+                    </Link>
+                  </div>
                 </li>
               );
             })}
