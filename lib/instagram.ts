@@ -179,6 +179,7 @@ export const STATIC_POSTS: Record<string, { count: number; caption: string }> = 
 export const STORE_HANDLES: Record<string, string> = {
   "상상의문 수원점": "sangsang_sw", // 운영자 확인 11/14
   "상상의문 수원 2호점": "sangsang_sw2", // 운영자 확인 11/14
+  "서울이스케이프룸": "seoulescape_official", // 운영자 확인 11/14(리틀보이 신작을 이 계정이 올림)
 };
 
 export function storeHandle(cafe: string): string | null {
