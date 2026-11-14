@@ -1,0 +1,184 @@
+{
+ "area": "대구",
+ "prefix": "dg",
+ "total": 45,
+ "art": {
+  "cover": "sw-cover.jpg",
+  "fear": "sw-fear.jpg",
+  "calm": "sw-calm.jpg",
+  "first": "sw-first.jpg",
+  "story": "sw-story.jpg",
+  "end": "sw-end.jpg"
+ },
+ "checked": "초안 — 공식 대조 전",
+ "sections": {
+  "fear": [
+   {
+    "name": "노블리스트",
+    "cafe": "룸즈에이 대구동성로점",
+    "genre": "공포",
+    "difficulty": 4,
+    "fear": 4,
+    "time": 70,
+    "players": null,
+    "story": "만년 작가 지망생 '송설'은 어느 날 BOOKS A 출판사에서…"
+   },
+   {
+    "name": "우리 아빠",
+    "cafe": "지구별방탈출 대구점",
+    "genre": "공포",
+    "difficulty": 3,
+    "fear": 4,
+    "time": 70,
+    "players": "2~6",
+    "story": "어느 날 아빠가 나에게 물었다. 내 딸, 기분이 어떠니? 나는…"
+   },
+   {
+    "name": "아이돌 남친",
+    "cafe": "룸즈에이 대구동성로점",
+    "genre": "감성",
+    "difficulty": 4,
+    "fear": 4,
+    "time": 60,
+    "players": null,
+    "story": "내 사랑스러운 남자친구는 아이돌이다."
+   },
+   {
+    "name": "행복 고시원",
+    "cafe": "룸즈에이 대구스테이지점",
+    "genre": "공포",
+    "difficulty": 4,
+    "fear": 4,
+    "time": 90,
+    "players": "2~4",
+    "story": "행복고시원에서 새로운 총무를 구합니다."
+   }
+  ],
+  "calm": [
+   {
+    "name": "너의 겨울은 가고, 봄은 온다",
+    "cafe": "지구별방탈출 대구점",
+    "genre": "감성",
+    "difficulty": 2,
+    "fear": 0,
+    "time": 60,
+    "players": "2~6",
+    "story": "내 이름은 인카. 핀란드 산타마을 로바니에미의 산타클로스다.…"
+   },
+   {
+    "name": "X됐다",
+    "cafe": "황금열쇠 대구동성로점(본점)",
+    "genre": "코믹",
+    "difficulty": 2,
+    "fear": 1,
+    "time": 60,
+    "players": "2~4",
+    "story": "아.. X됐다"
+   },
+   {
+    "name": "33: DOOR RUN (도어런)",
+    "cafe": "룸즈에이 대구스테이지점",
+    "genre": "아케이드",
+    "difficulty": 3,
+    "fear": 1,
+    "time": 33,
+    "players": "2~4",
+    "story": "PRESS or SOLVE. DO or RUN."
+   },
+   {
+    "name": "단잠",
+    "cafe": "셜록홈즈 대구동성로점",
+    "genre": "감성",
+    "difficulty": 3,
+    "fear": 1,
+    "time": null,
+    "players": null,
+    "story": "몸도 마음도 지친 퇴근길, 지하철역에서 마주한 낯선 포스터 하…"
+   }
+  ],
+  "first": [
+   {
+    "name": "신스틸러",
+    "cafe": "서울이스케이프룸 대구 리틀보이",
+    "genre": "기타",
+    "difficulty": 2,
+    "fear": 1,
+    "time": 60,
+    "players": "2~5",
+    "story": "이봐 신입, 이번 작전은 말이지..."
+   },
+   {
+    "name": "랑슈 뷰티연구소",
+    "cafe": "셜록홈즈 대구동성로점",
+    "genre": "감성",
+    "difficulty": 2,
+    "fear": 2,
+    "time": null,
+    "players": null,
+    "story": "당신의 아름다움을 찾아드립니다."
+   },
+   {
+    "name": "단디해라",
+    "cafe": "지구별방탈출 대구점",
+    "genre": "코믹",
+    "difficulty": 3,
+    "fear": 0,
+    "time": 65,
+    "players": "2~6",
+    "story": "멸종 위기의 지구별. 드디어 우리는 인간이 살 수 있는 외계행…"
+   },
+   {
+    "name": "가이아 기적의땅",
+    "cafe": "황금열쇠 대구동성로점(본점)",
+    "genre": "판타지",
+    "difficulty": 3,
+    "fear": 1,
+    "time": 60,
+    "players": "2~6",
+    "story": "모든 것이 이 곳에서 시작된다."
+   }
+  ],
+  "story": [
+   {
+    "name": "냥탐정 셜록캣",
+    "cafe": "황금열쇠 대구동성로2호점(더킹)",
+    "genre": "추리",
+    "difficulty": 3,
+    "fear": 1,
+    "time": 60,
+    "players": "2~4",
+    "story": "어느 날 도착한 누가 보낸건지 알수없는 편지 한통.... \"내…"
+   },
+   {
+    "name": "접견",
+    "cafe": "서울이스케이프룸 대구 동성로점",
+    "genre": "추리",
+    "difficulty": 3,
+    "fear": 1,
+    "time": 60,
+    "players": "2~5",
+    "story": "그날 있었던 일... 진술해 주실 수 있겠습니까?"
+   },
+   {
+    "name": "만월 <<꿈을 훔치는 요괴>>",
+    "cafe": "지구별방탈출 대구점",
+    "genre": "추리",
+    "difficulty": 4,
+    "fear": 1,
+    "time": 75,
+    "players": "2~6",
+    "story": "베트남 꽝남성 호이안 외곽의 작은 마을 빈디엔. 보름달이 뜨는…"
+   },
+   {
+    "name": "뽀득뽀득",
+    "cafe": "룸즈에이 대구동성로점",
+    "genre": "판타지",
+    "difficulty": 4,
+    "fear": 1,
+    "time": 60,
+    "players": null,
+    "story": "우리 아빠는 술만 마시면 맨날 목욕탕에 가자고 한다. 목욕은…"
+   }
+  ]
+ }
+}
