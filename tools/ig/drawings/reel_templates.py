@@ -29,7 +29,7 @@ def page(key, css, body, script=""):
 
 # ── 성지기숙학원: 칠판 분필 ──
 page("sungji", '''.scene{background-image:url(../assets/reel-sungji.jpg);animation:zoom 10.5s linear forwards,dim 1s 1.5s forwards}
-@keyframes dim{to{filter:brightness(.5) blur(2px)}}
+@keyframes dim{to{filter:brightness(.3) blur(4px)}}
 .chalk{font-family:Dokdo;color:#F4F1E8;filter:url(#rough);text-shadow:0 0 6px rgba(244,241,232,.35)}
 .hook{position:absolute;left:90px;right:60px;top:560px;font-size:190px;line-height:1.02;animation:out .3s 1.45s forwards;z-index:30}
 .hook b{font-weight:400;color:#F2776A}
@@ -94,7 +94,7 @@ page("chunhwa", '''.scene{background-image:url(../assets/reel-chunhwa.jpg);filte
 .v{position:absolute;top:150px;writing-mode:vertical-rl;font-size:98px;letter-spacing:.06em;line-height:1;opacity:0;filter:blur(14px);animation:ink 1.1s var(--t) forwards,inkout .5s 6s forwards}
 @keyframes inkout{to{opacity:0;filter:blur(10px)}}
 @keyframes ink{to{opacity:1;filter:blur(0)}}
-.v.s{font-size:78px;color:#F08A3C}
+.v.s{font-size:64px;color:#F08A3C}
 .seal{position:absolute;left:80px;top:150px;opacity:0;animation:fade .7s 6.5s forwards}
 .seal .t{writing-mode:vertical-rl;font-family:Myeongjo;font-size:120px;color:#fff;background:#B5341F;padding:34px 20px;border-radius:10px;letter-spacing:.04em;box-shadow:0 0 0 6px rgba(181,52,31,.35)}
 .meta{position:absolute;left:270px;top:170px;opacity:0;animation:fade .7s 6.9s forwards}
