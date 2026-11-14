@@ -7,7 +7,7 @@ html,body{width:1080px;height:1350px;overflow:hidden;font-family:P;letter-spacin
 h1{font-family:A;font-weight:400;line-height:1.08}
 .chip{display:inline-flex;align-items:center;gap:8px;border-radius:999px;font-weight:800}
 .top{position:absolute;left:64px;right:64px;top:52px;display:flex;justify-content:space-between;align-items:center}
-.grid{position:absolute;left:52px;right:52px;top:370px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.grid{position:absolute;left:44px;right:44px;top:360px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
 .cd{background:#FFFBF2;border:4px solid #1D1D1D;border-radius:22px;overflow:hidden;box-shadow:7px 8px 0 #1D1D1D;display:flex;flex-direction:column}
 .cd .art{height:208px;border-bottom:4px solid #1D1D1D;position:relative}
 .cd .art svg{width:100%;height:100%;display:block}
@@ -16,6 +16,15 @@ h1{font-family:A;font-weight:400;line-height:1.08}
 .cd .nm{font-family:A;font-size:32px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cd .q{font-weight:500;font-size:20px;color:#4A4038;line-height:1.4;margin-top:8px;height:56px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:keep-all}
 .cd .cf{margin-top:10px;font-weight:800;font-size:21px;color:#1D1D1D;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cd.pc{flex-direction:row;height:380px}
+.po{flex:0 0 236px;background:#141414;border-right:4px solid #1D1D1D;display:flex;align-items:center;justify-content:center}
+.po img{max-width:100%;max-height:100%;display:block}
+.po.dr svg{width:100%;height:100%}
+.pc .bd{flex:1;min-width:0;display:flex;flex-direction:column;padding:16px 18px}
+.pc .nm{font-size:30px;word-break:keep-all;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;margin-top:8px}
+.pc .q{height:auto;-webkit-line-clamp:4;font-size:21px;flex:1}
+.pc .cf{font-size:18px}
+.tg2{align-self:flex-start;background:#1D1D1D;color:#fff;font-weight:800;font-size:17px;border-radius:999px;padding:4px 11px}
 .foot{position:absolute;left:64px;right:64px;bottom:40px;display:flex;justify-content:space-between;align-items:baseline;font-size:21px}
 .foot b{font-family:A;font-weight:400;font-size:26px}
 </style></head><body><style>body{background:#1A1420;color:#F5E9F0}</style>
@@ -24,21 +33,9 @@ h1{font-family:A;font-weight:400;line-height:1.08}
 <span class="chip" style="background:#F5E9F0;color:#1A1420;padding:7px 16px;font-size:23px">2 / 6</span></div>
 <h1 style="position:absolute;left:64px;top:130px;font-size:92px">쫄깃한 거<br><span style='color:#FF5A4E'>좋아하나?</span></h1>
 <p style="position:absolute;right:64px;top:290px;font-weight:500;font-size:24px;opacity:.75;text-align:right">공포·스릴러 · 줄거리 첫 문장만 살짝</p>
-<div class="grid"><div class="cd"><div class="art"><svg viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice"><rect width="400" height="220" fill="#1E2430"/><rect x="0" y="150" width="400" height="70" fill="#151A24"/><rect x="250" y="40" width="90" height="70" fill="#F3D9A0" opacity=".85"/>
-<path d="M295 40v70M250 75h90" stroke="#1E2430" stroke-width="5"/>
-<circle cx="150" cy="80" r="26" fill="#0B0E14"/><path d="M104 180q0-70 46-70t46 70z" fill="#0B0E14"/><path d="M150 112l-8 14 8 40 8-40z" fill="#8B1E2B"/>
-<g fill="#E8E2D2"><circle cx="141" cy="78" r="4"/><circle cx="159" cy="78" r="4"/></g></svg><span class="tg">공포 4 · 70분</span></div>
-<div class="bd"><div class="nm">우리 아빠</div><div class="q">“어느 날 아빠가 나에게 물었다. 내 딸, 기분이 어떠니?” (자극적인 요소 있음)</div><div class="cf">📍 지구별방탈출 대구점</div></div></div><div class="cd"><div class="art"><svg viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice"><rect width="400" height="220" fill="#2A1E24"/><path d="M40 200C120 150 160 100 230 70" stroke="#5A3A2E" stroke-width="10" fill="none"/>
-<g fill="#F4B6C2"><circle cx="110" cy="150" r="14"/><circle cx="150" cy="118" r="12"/><circle cx="190" cy="92" r="13"/><circle cx="90" cy="175" r="10"/></g>
-<path d="M230 70l50-30" stroke="#5A3A2E" stroke-width="10" stroke-dasharray="4 10"/><path d="M228 52l22 34" stroke="#E8E2D2" stroke-width="4"/>
-<g fill="#F4B6C2" opacity=".8"><circle cx="300" cy="150" r="9"/><circle cx="330" cy="190" r="7"/><circle cx="270" cy="200" r="6"/></g></svg><span class="tg">스릴러·드라마 · 70분</span></div>
-<div class="bd"><div class="nm">춘단화</div><div class="q">“나는 하루를 잊었다. 응당 있어야 할, 기억해 내야 할 그 하루를.”</div><div class="cf">📍 서울이스케이프룸 대구 동성로점</div></div></div><div class="cd"><div class="art"><svg viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice"><rect width="400" height="220" fill="#1E2A2A"/><rect y="150" width="400" height="70" fill="#2F4A44"/><path d="M60 150h280l-30-60H90z" fill="#3B2A22"/><path d="M40 92h320l-40-34H80z" fill="#1A1210"/>
-<g fill="#F3D9A0" opacity=".85"><rect x="110" y="104" width="40" height="40"/><rect x="180" y="104" width="40" height="40"/><rect x="250" y="104" width="40" height="40"/></g>
-<g transform="translate(345 120)"><rect x="-14" y="-10" width="28" height="44" rx="12" fill="#E2554A"/><path d="M0-10v-14" stroke="#1A1210" stroke-width="3"/></g>
-<g stroke="#E8E2D2" stroke-width="4" fill="none" opacity=".5"><path d="M150 190q-10-14 0-26t0-26M200 196q-10-14 0-26t0-26"/></g></svg><span class="tg">스릴러 · 77분</span></div>
-<div class="bd"><div class="nm">오모테나시</div><div class="q">“어서 오세요. 쇼타 료칸입니다.” 코끝을 스치는 온천의 약초향…</div><div class="cf">📍 서울이스케이프룸 대구 동성로점</div></div></div><div class="cd"><div class="art"><svg viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice"><rect width="400" height="220" fill="#2A1A16"/><rect y="130" width="400" height="90" fill="#5A2E22"/><ellipse cx="200" cy="150" rx="80" ry="26" fill="#F2EAD8"/><ellipse cx="200" cy="148" rx="54" ry="16" fill="#C9572F"/>
-<g transform="translate(320 70)"><path d="M-16 0h32q0 34-16 40-16-6-16-40z" fill="#8B1E2B" opacity=".9"/><path d="M0 40v30M-14 70h28" stroke="#E8E2D2" stroke-width="4"/></g>
-<g stroke="#C9C3B4" stroke-width="5" stroke-linecap="round"><path d="M100 120v40M90 120v14M110 120v14"/><path d="M300 125v40"/></g>
-<g transform="translate(70 40)"><path d="M0 30v-20M-10 30h20" stroke="#F3D9A0" stroke-width="3"/><path d="M0 10q-6-10 0-18 6 8 0 18z" fill="#FFB347"/></g></svg><span class="tg">스릴러 · 60분</span></div>
-<div class="bd"><div class="nm">만찬</div><div class="q">“배도 채웠겠다, 제가 재밌는 이야기를 하나 들려드려도 될까요?”</div><div class="cf">📍 서울이스케이프룸 대구 동성로점</div></div></div></div>
-<div class="foot" style="color:#F5E9F0;opacity:.85"><span style="font-weight:800;font-size:19px">정보는 매장 공식 예약 페이지 기준 · 11/14 확인 · 그림은 방탈로그가 새로 그렸어요</span><b>방탈로그</b></div></body></html>
+<div class="grid"><div class="cd pc"><div class="po"><img src="file:///tmp/claude-0/-home-user-escape-log-web/34d067db-b895-5380-b0b0-c3f179b99546/scratchpad/dgp/902c42df6b.jpg"></div>
+<div class="bd"><span class="tg2">공포 4 · 70분</span><div class="nm">우리 아빠</div><div class="q">“어느 날 아빠가 나에게 물었다. 내 딸, 기분이 어떠니?” (자극적인 요소 있음)</div><div class="cf">📍 지구별방탈출 대구</div></div></div><div class="cd pc"><div class="po"><img src="file:///tmp/claude-0/-home-user-escape-log-web/34d067db-b895-5380-b0b0-c3f179b99546/scratchpad/dgp/a8af3db074.jpg"></div>
+<div class="bd"><span class="tg2">스릴러·드라마 · 70분</span><div class="nm">춘단화</div><div class="q">“나는 하루를 잊었다. 응당 있어야 할, 기억해 내야 할 그 하루를.”</div><div class="cf">📍 서울이스케이프룸 동성로</div></div></div><div class="cd pc"><div class="po"><img src="file:///tmp/claude-0/-home-user-escape-log-web/34d067db-b895-5380-b0b0-c3f179b99546/scratchpad/dgp/f9b2855079.jpg"></div>
+<div class="bd"><span class="tg2">스릴러 · 77분</span><div class="nm">오모테나시</div><div class="q">“어서 오세요. 쇼타 료칸입니다.” 코끝을 스치는 온천의 약초향…</div><div class="cf">📍 서울이스케이프룸 동성로</div></div></div><div class="cd pc"><div class="po"><img src="file:///tmp/claude-0/-home-user-escape-log-web/34d067db-b895-5380-b0b0-c3f179b99546/scratchpad/dgp/d355835405.jpg"></div>
+<div class="bd"><span class="tg2">스릴러 · 60분</span><div class="nm">만찬</div><div class="q">“배도 채웠겠다, 제가 재밌는 이야기를 하나 들려드려도 될까요?”</div><div class="cf">📍 서울이스케이프룸 동성로</div></div></div></div><p style="position:absolute;left:64px;right:64px;top:1250px;font-size:18px;font-weight:800;opacity:.7">포스터: 서울이스케이프룸 · 지구별방탈출 공식 홈페이지</p>
+<div class="foot" style="color:#F5E9F0;opacity:.85"><span style="font-weight:800;font-size:19px">정보는 매장 공식 예약 페이지 기준 · 11/14 확인</span><b>방탈로그</b></div></body></html>

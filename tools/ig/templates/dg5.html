@@ -7,7 +7,7 @@ html,body{width:1080px;height:1350px;overflow:hidden;font-family:P;letter-spacin
 h1{font-family:A;font-weight:400;line-height:1.08}
 .chip{display:inline-flex;align-items:center;gap:8px;border-radius:999px;font-weight:800}
 .top{position:absolute;left:64px;right:64px;top:52px;display:flex;justify-content:space-between;align-items:center}
-.grid{position:absolute;left:52px;right:52px;top:370px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.grid{position:absolute;left:44px;right:44px;top:360px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
 .cd{background:#FFFBF2;border:4px solid #1D1D1D;border-radius:22px;overflow:hidden;box-shadow:7px 8px 0 #1D1D1D;display:flex;flex-direction:column}
 .cd .art{height:208px;border-bottom:4px solid #1D1D1D;position:relative}
 .cd .art svg{width:100%;height:100%;display:block}
@@ -16,6 +16,15 @@ h1{font-family:A;font-weight:400;line-height:1.08}
 .cd .nm{font-family:A;font-size:32px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cd .q{font-weight:500;font-size:20px;color:#4A4038;line-height:1.4;margin-top:8px;height:56px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:keep-all}
 .cd .cf{margin-top:10px;font-weight:800;font-size:21px;color:#1D1D1D;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cd.pc{flex-direction:row;height:380px}
+.po{flex:0 0 236px;background:#141414;border-right:4px solid #1D1D1D;display:flex;align-items:center;justify-content:center}
+.po img{max-width:100%;max-height:100%;display:block}
+.po.dr svg{width:100%;height:100%}
+.pc .bd{flex:1;min-width:0;display:flex;flex-direction:column;padding:16px 18px}
+.pc .nm{font-size:30px;word-break:keep-all;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;margin-top:8px}
+.pc .q{height:auto;-webkit-line-clamp:4;font-size:21px;flex:1}
+.pc .cf{font-size:18px}
+.tg2{align-self:flex-start;background:#1D1D1D;color:#fff;font-weight:800;font-size:17px;border-radius:999px;padding:4px 11px}
 .foot{position:absolute;left:64px;right:64px;bottom:40px;display:flex;justify-content:space-between;align-items:baseline;font-size:21px}
 .foot b{font-family:A;font-weight:400;font-size:26px}
 </style></head><body><style>body{background:#ECE6FA;color:#1D1D1D}</style>
@@ -24,17 +33,9 @@ h1{font-family:A;font-weight:400;line-height:1.08}
 <span class="chip" style="background:#1D1D1D;color:#ECE6FA;padding:7px 16px;font-size:23px">5 / 6</span></div>
 <h1 style="position:absolute;left:64px;top:130px;font-size:92px">이야기<br><span style='color:#6A55C2'>좋아하제?</span></h1>
 <p style="position:absolute;right:64px;top:290px;font-weight:500;font-size:24px;opacity:.75;text-align:right">줄거리 첫 문장 미리보기</p>
-<div class="grid"><div class="cd"><div class="art"><svg viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice"><rect width="400" height="220" fill="#2B2F33"/><rect x="0" y="0" width="400" height="220" fill="#3A3F44"/><rect x="40" y="30" width="320" height="130" fill="#9FB7C2" opacity=".35" stroke="#C7D3D8" stroke-width="5"/>
-<path d="M200 30v130" stroke="#C7D3D8" stroke-width="5"/><g fill="#C7D3D8"><circle cx="190" cy="90" r="3"/><circle cx="190" cy="100" r="3"/><circle cx="190" cy="110" r="3"/><circle cx="200" cy="90" r="3"/><circle cx="200" cy="100" r="3"/><circle cx="200" cy="110" r="3"/><circle cx="210" cy="90" r="3"/><circle cx="210" cy="100" r="3"/><circle cx="210" cy="110" r="3"/></g>
-<rect x="0" y="160" width="400" height="60" fill="#22262A"/><g transform="translate(90 120)"><path d="M0 0q-10 30 10 40h20q-14-20-4-36z" fill="#1D1D1D"/></g><g transform="translate(300 120)"><path d="M0 0q10 30-10 40h-20q14-20 4-36z" fill="#1D1D1D"/></g></svg><span class="tg">스릴러 · 공포 1/5</span></div>
-<div class="bd"><div class="nm">접견</div><div class="q">“그날 있었던 일... 진술해 주실 수 있겠습니까?”</div><div class="cf">📍 서울이스케이프룸 대구 동성로점</div></div></div><div class="cd"><div class="art"><svg viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice"><rect width="400" height="220" fill="#1B1F3A"/><circle cx="200" cy="96" r="70" fill="#F6E7B0"/><circle cx="200" cy="96" r="70" fill="none" stroke="#FFF6D0" stroke-width="3" opacity=".6"/>
-<g fill="#E2554A"><ellipse cx="60" cy="80" rx="16" ry="22"/><ellipse cx="110" cy="60" rx="16" ry="22"/><ellipse cx="300" cy="60" rx="16" ry="22"/><ellipse cx="345" cy="85" rx="16" ry="22"/></g>
-<g stroke="#6B1E1E" stroke-width="2"><path d="M60 52v8"/><path d="M110 32v8"/><path d="M300 32v8"/><path d="M345 57v8"/></g>
-<path d="M0 190q100-30 200 0t200 0v30H0z" fill="#0F1226"/><path d="M180 150q20-40 40 0q-6 20-20 30q-14-10-20-30z" fill="#0F1226"/><g fill="#F6E7B0"><circle cx="193" cy="150" r="3"/><circle cx="207" cy="150" r="3"/></g></svg><span class="tg">잠입·미스터리 · 75분</span></div>
-<div class="bd"><div class="nm">만월</div><div class="q">“베트남 호이안 외곽의 작은 마을 빈디엔. 보름달이 뜨는 밤…”</div><div class="cf">📍 지구별방탈출 대구점</div></div></div><div class="cd"><div class="art"><svg viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice"><rect width="400" height="220" fill="#FF8FB8"/><g stroke="#1D1D1D" stroke-width="4"><rect x="80" y="120" width="100" height="80" fill="#D9A066"/><rect x="190" y="130" width="90" height="70" fill="#C98E52"/><rect x="120" y="50" width="90" height="70" fill="#E0AE76"/><rect x="290" y="150" width="60" height="50" fill="#D9A066"/></g>
-<g stroke="#1D1D1D" stroke-width="3"><path d="M130 120v80M235 130v70M165 50v70"/></g><text x="300" y="80" font-family="sans-serif" font-weight="900" font-size="64" fill="#1D1D1D">?</text></svg><span class="tg">코믹·추리 · 60분</span></div>
-<div class="bd"><div class="nm">박스오피스</div><div class="q">“누가 박스를 옮겼을까?” 리틀보이 신작</div><div class="cf">📍 서울이스케이프룸 대구 리틀보이</div></div></div><div class="cd"><div class="art"><svg viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice"><rect width="400" height="220" fill="#30241E"/><rect x="60" y="40" width="280" height="160" fill="#3E302A"/>
-<g stroke="#9A9AA6" stroke-width="8"><path d="M90 40v160"/><path d="M130 40v160"/><path d="M170 40v160"/><path d="M210 40v160"/><path d="M250 40v160"/><path d="M290 40v160"/><path d="M330 40v160"/></g>
-<g transform="translate(200 130)"><path d="M-22 40v-50q0-12 10-12h24q10 0 10 12v50z" fill="#E2554A" stroke="#1D1D1D" stroke-width="4"/><g fill="#E2554A" stroke="#1D1D1D" stroke-width="3"><rect x="-22" y="-34" width="12" height="20" rx="5"/><rect x="-9" y="-38" width="12" height="24" rx="5"/><rect x="4" y="-36" width="12" height="22" rx="5"/></g></g></svg><span class="tg">탈옥 · 난이도 4 · 69분</span></div>
-<div class="bd"><div class="nm">사명</div><div class="q">“그날의 모든 것은 우리의 선택이었다. 처절하게 울려 퍼졌던 투쟁의 노래.”</div><div class="cf">📍 지구별방탈출 대구점</div></div></div></div>
-<div class="foot" style="color:#1D1D1D;opacity:.85"><span style="font-weight:800;font-size:19px">정보는 매장 공식 예약 페이지 기준 · 11/14 확인 · 그림은 방탈로그가 새로 그렸어요</span><b>방탈로그</b></div></body></html>
+<div class="grid"><div class="cd pc"><div class="po"><img src="file:///tmp/claude-0/-home-user-escape-log-web/34d067db-b895-5380-b0b0-c3f179b99546/scratchpad/dgp/e50282b0d9.jpg"></div>
+<div class="bd"><span class="tg2">스릴러 · 공포 1/5</span><div class="nm">접견</div><div class="q">“그날 있었던 일... 진술해 주실 수 있겠습니까?”</div><div class="cf">📍 서울이스케이프룸 동성로</div></div></div><div class="cd pc"><div class="po"><img src="file:///tmp/claude-0/-home-user-escape-log-web/34d067db-b895-5380-b0b0-c3f179b99546/scratchpad/dgp/17fd26639b.jpg"></div>
+<div class="bd"><span class="tg2">잠입·미스터리 · 75분</span><div class="nm">만월</div><div class="q">“베트남 호이안 외곽의 작은 마을 빈디엔. 보름달이 뜨는 밤…”</div><div class="cf">📍 지구별방탈출 대구</div></div></div><div class="cd pc"><div class="po"><img src="file:///tmp/claude-0/-home-user-escape-log-web/34d067db-b895-5380-b0b0-c3f179b99546/scratchpad/dgp/ffcf0b4335.jpg"></div>
+<div class="bd"><span class="tg2">코믹·추리 · 60분</span><div class="nm">박스오피스</div><div class="q">“누가 박스를 옮겼을까?” 리틀보이 신작</div><div class="cf">📍 서울이스케이프룸 리틀보이</div></div></div><div class="cd pc"><div class="po"><img src="file:///tmp/claude-0/-home-user-escape-log-web/34d067db-b895-5380-b0b0-c3f179b99546/scratchpad/dgp/7853a97fa9.jpg"></div>
+<div class="bd"><span class="tg2">탈옥 · 난이도 4 · 69분</span><div class="nm">사명</div><div class="q">“그날의 모든 것은 우리의 선택이었다. 처절하게 울려 퍼졌던 투쟁의 노래.”</div><div class="cf">📍 지구별방탈출 대구</div></div></div></div><p style="position:absolute;left:64px;right:64px;top:1250px;font-size:18px;font-weight:800;opacity:.7">포스터: 서울이스케이프룸 · 지구별방탈출 공식 홈페이지</p>
+<div class="foot" style="color:#1D1D1D;opacity:.85"><span style="font-weight:800;font-size:19px">정보는 매장 공식 예약 페이지 기준 · 11/14 확인</span><b>방탈로그</b></div></body></html>

@@ -7,7 +7,7 @@ html,body{width:1080px;height:1350px;overflow:hidden;font-family:P;letter-spacin
 h1{font-family:A;font-weight:400;line-height:1.08}
 .chip{display:inline-flex;align-items:center;gap:8px;border-radius:999px;font-weight:800}
 .top{position:absolute;left:64px;right:64px;top:52px;display:flex;justify-content:space-between;align-items:center}
-.grid{position:absolute;left:52px;right:52px;top:370px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.grid{position:absolute;left:44px;right:44px;top:360px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
 .cd{background:#FFFBF2;border:4px solid #1D1D1D;border-radius:22px;overflow:hidden;box-shadow:7px 8px 0 #1D1D1D;display:flex;flex-direction:column}
 .cd .art{height:208px;border-bottom:4px solid #1D1D1D;position:relative}
 .cd .art svg{width:100%;height:100%;display:block}
@@ -16,24 +16,27 @@ h1{font-family:A;font-weight:400;line-height:1.08}
 .cd .nm{font-family:A;font-size:32px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cd .q{font-weight:500;font-size:20px;color:#4A4038;line-height:1.4;margin-top:8px;height:56px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:keep-all}
 .cd .cf{margin-top:10px;font-weight:800;font-size:21px;color:#1D1D1D;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cd.pc{flex-direction:row;height:380px}
+.po{flex:0 0 236px;background:#141414;border-right:4px solid #1D1D1D;display:flex;align-items:center;justify-content:center}
+.po img{max-width:100%;max-height:100%;display:block}
+.po.dr svg{width:100%;height:100%}
+.pc .bd{flex:1;min-width:0;display:flex;flex-direction:column;padding:16px 18px}
+.pc .nm{font-size:30px;word-break:keep-all;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;margin-top:8px}
+.pc .q{height:auto;-webkit-line-clamp:4;font-size:21px;flex:1}
+.pc .cf{font-size:18px}
+.tg2{align-self:flex-start;background:#1D1D1D;color:#fff;font-weight:800;font-size:17px;border-radius:999px;padding:4px 11px}
 .foot{position:absolute;left:64px;right:64px;bottom:40px;display:flex;justify-content:space-between;align-items:baseline;font-size:21px}
 .foot b{font-family:A;font-weight:400;font-size:26px}
 </style></head><body><svg viewBox="0 0 1080 1350" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
 <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFB347"/><stop offset=".55" stop-color="#FF7A45"/><stop offset="1" stop-color="#E2554A"/></linearGradient></defs>
 <rect width="1080" height="1350" fill="url(#sky)"/><circle cx="760" cy="520" r="190" fill="#FFE27A"/><circle cx="760" cy="520" r="240" fill="#FFE27A" opacity=".25"/>
 <g stroke="#FFE27A" stroke-width="6" fill="none" opacity=".55" stroke-linecap="round"><path d="M120 470q30-20 60 0t60 0t60 0"/><path d="M160 540q30-20 60 0t60 0t60 0"/></g>
-<path d="M0 820q260-90 540-40t540-20V1350H0z" fill="#B8463C"/>
-<g transform="translate(830 560)"><rect x="-9" y="0" width="18" height="250" fill="#5A2A2A"/><ellipse cx="0" cy="40" rx="40" ry="22" fill="#5A2A2A"/><rect x="-4" y="-80" width="8" height="80" fill="#5A2A2A"/><circle cy="-84" r="6" fill="#FFE27A"/></g>
-<g fill="#9E3A33"><rect x="0" y="900" width="180" height="450"/><rect x="170" y="960" width="140" height="390"/><rect x="860" y="930" width="220" height="420"/><rect x="700" y="990" width="170" height="360"/></g>
-<g fill="#C9573F" stroke="#7A2A24" stroke-width="3"><rect x="300" y="860" width="420" height="490"/></g>
-<g stroke="#7A2A24" stroke-width="2" opacity=".6"><path d="M300 880h420"/><path d="M300 906h420"/><path d="M300 932h420"/><path d="M300 958h420"/><path d="M300 984h420"/><path d="M300 1010h420"/><path d="M300 1036h420"/><path d="M300 1062h420"/><path d="M300 1088h420"/><path d="M300 1114h420"/><path d="M300 1140h420"/><path d="M300 1166h420"/><path d="M300 1192h420"/><path d="M300 1218h420"/><path d="M300 1244h420"/><path d="M300 1270h420"/><path d="M300 1296h420"/><path d="M300 1322h420"/><path d="M300 1348h420"/></g>
-<g fill="#7A2A24"><path d="M380 860l40-130 40 130z"/><path d="M560 860l40-130 40 130z"/><rect x="430" y="930" width="160" height="200" rx="80"/></g>
-<g fill="#FFE27A" opacity=".85"><rect x="330" y="960" width="50" height="70" rx="25"/><rect x="640" y="960" width="50" height="70" rx="25"/></g>
-</svg>
+<path d="M0 1060q260-40 540-10t540-10V1350H0z" fill="#B8463C"/></svg>
 <div class="top"><span class="chip" style="background:#FFFBF2;border:4px solid #1D1D1D;padding:8px 20px;font-size:26px">📍 대구 방탈출 · 동성로</span>
 <span class="chip" style="background:#1D1D1D;color:#FFE27A;padding:7px 16px;font-size:23px">1 / 6</span></div>
 <h1 style="position:absolute;left:64px;top:150px;font-size:104px;color:#1D1D1D">대구 방탈출,<br><span style="color:#FFFBF2;-webkit-text-stroke:4px #1D1D1D;paint-order:stroke fill">어데 갈래?</span></h1>
 <p style="position:absolute;left:68px;top:400px;font-weight:800;font-size:32px;color:#1D1D1D">대프리카 더위 피해서 들어갈 방, 골라 봤다 아이가 🥵</p>
-<img src="../../../public/mascot.png" style="position:absolute;left:40px;top:560px;width:330px;transform:rotate(-6deg)">
+<img src="file:///tmp/claude-0/-home-user-escape-log-web/34d067db-b895-5380-b0b0-c3f179b99546/scratchpad/dgp/902c42df6b.jpg" style="position:absolute;left:120px;top:575px;width:240px;border:5px solid #1D1D1D;border-radius:10px;box-shadow:8px 10px 0 rgba(0,0,0,.35);transform:rotate(-17.5deg);background:#111;z-index:3"><img src="file:///tmp/claude-0/-home-user-escape-log-web/34d067db-b895-5380-b0b0-c3f179b99546/scratchpad/dgp/a8af3db074.jpg" style="position:absolute;left:240px;top:553px;width:240px;border:5px solid #1D1D1D;border-radius:10px;box-shadow:8px 10px 0 rgba(0,0,0,.35);transform:rotate(-10.5deg);background:#111;z-index:4"><img src="file:///tmp/claude-0/-home-user-escape-log-web/34d067db-b895-5380-b0b0-c3f179b99546/scratchpad/dgp/17fd26639b.jpg" style="position:absolute;left:360px;top:531px;width:240px;border:5px solid #1D1D1D;border-radius:10px;box-shadow:8px 10px 0 rgba(0,0,0,.35);transform:rotate(-3.5deg);background:#111;z-index:5"><img src="file:///tmp/claude-0/-home-user-escape-log-web/34d067db-b895-5380-b0b0-c3f179b99546/scratchpad/dgp/ffcf0b4335.jpg" style="position:absolute;left:480px;top:531px;width:240px;border:5px solid #1D1D1D;border-radius:10px;box-shadow:8px 10px 0 rgba(0,0,0,.35);transform:rotate(3.5deg);background:#111;z-index:6"><img src="file:///tmp/claude-0/-home-user-escape-log-web/34d067db-b895-5380-b0b0-c3f179b99546/scratchpad/dgp/991ce16e1e.jpg" style="position:absolute;left:600px;top:553px;width:240px;border:5px solid #1D1D1D;border-radius:10px;box-shadow:8px 10px 0 rgba(0,0,0,.35);transform:rotate(10.5deg);background:#111;z-index:7"><img src="file:///tmp/claude-0/-home-user-escape-log-web/34d067db-b895-5380-b0b0-c3f179b99546/scratchpad/dgp/f9b2855079.jpg" style="position:absolute;left:720px;top:575px;width:240px;border:5px solid #1D1D1D;border-radius:10px;box-shadow:8px 10px 0 rgba(0,0,0,.35);transform:rotate(17.5deg);background:#111;z-index:8"><p style="position:absolute;right:64px;top:1030px;font-size:17px;font-weight:800;color:#FFFBF2;opacity:.85;z-index:9">포스터: 지구별방탈출 · 서울이스케이프룸 공식 홈페이지</p>
+<img src="../../../public/mascot.png" style="position:absolute;left:30px;top:760px;width:250px;transform:rotate(-6deg);z-index:5">
 <div style="position:absolute;left:64px;right:64px;top:1080px;display:grid;grid-template-columns:1fr 1fr;gap:14px"><div style="background:#FFFBF2;border:4px solid #1D1D1D;border-radius:18px;padding:12px 18px;font-weight:800;font-size:26px;box-shadow:4px 5px 0 #1D1D1D">2 😱 쫄깃한 거 좋아하나?</div><div style="background:#FFFBF2;border:4px solid #1D1D1D;border-radius:18px;padding:12px 18px;font-weight:800;font-size:26px;box-shadow:4px 5px 0 #1D1D1D">3 🌿 무서븐 건 싫나?</div><div style="background:#FFFBF2;border:4px solid #1D1D1D;border-radius:18px;padding:12px 18px;font-weight:800;font-size:26px;box-shadow:4px 5px 0 #1D1D1D">4 🐣 방탈출 처음이가?</div><div style="background:#FFFBF2;border:4px solid #1D1D1D;border-radius:18px;padding:12px 18px;font-weight:800;font-size:26px;box-shadow:4px 5px 0 #1D1D1D">5 📖 이야기 좋아하제?</div></div>
 <div class="foot" style="color:#FFFBF2"><span style="font-weight:800">테마 45개 중에서 골랐어요 · 옆으로 넘겨 보세요 →</span><b>방탈로그</b></div></body></html>
