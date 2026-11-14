@@ -48,6 +48,9 @@ export default async function AdminLayout({
         <Link href="/admin/sources" className={tab}>
           유입 출처
         </Link>
+        <Link href="/admin/refresh" className={tab}>
+          🔄 지금 새로고침
+        </Link>
       </div>
       {children}
     </div>
