@@ -213,6 +213,16 @@ POSTS = [
 2. 올린 뒤 스토리에 공유하고 '나도 뽑아 보기' 링크 스티커 https://bangtallog.com/new?utm_source=instagram&utm_medium=story&utm_campaign=sheet""",
   },
   {
+    "dir": "17_아무때나_스토리_수원모음",
+    "pages": [f"{T}/sws{i}.html" for i in range(1, 6)], "size": STORY,
+    "how": """이미 올린 수원 피드와 같은 내용의 스토리 5장이에요(하이라이트 📍수원 용)
+1. [+] → [스토리] → 1.jpg(표지) → 스티커 [링크] https://bangtallog.com/region/경기?utm_source=instagram&utm_medium=story&utm_campaign=suwon
+   (링크 스티커는 아래 '눌러서 수원 테마 다 보기' 글씨 위에)
+2. 2~5.jpg 도 차례로, 같은 링크 스티커
+3. 2장(상상의문 테마)에는 [@멘션] @sangsang_sw @sangsang_sw2
+4. 다 올리면 하이라이트 📍수원 을 만들어 5장 모두 넣기""",
+  },
+  {
     "dir": "06_11-18_저녁_피드_수능이벤트",
     "pages": [f"{T}/sp1b.html", f"{T}/sp2c.html", f"{T}/sp3.html"], "size": FEED,
     "caption": """수험표 들고 방탈출 가자! 🎟️ 수능 끝난 날 저장해 두세요.
