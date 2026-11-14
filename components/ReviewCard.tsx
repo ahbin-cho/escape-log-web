@@ -4,6 +4,9 @@ import { useState } from "react";
 import { TONE } from "@/components/PosterTile";
 import { makeReviewImage } from "@/lib/review-image";
 import { ratingLabel, achievements } from "@/lib/terms";
+import { makeReviewSheet } from "@/lib/review-sheet";
+import { findPoster, type PosterIndex } from "@/lib/poster";
+import { brandOf } from "@/lib/cafe";
 
 // 후기 카드: 사진이 있으면 살짝 어둡게 깔고 그 위에 한줄 후기를 얹는다. 없으면 장르 색 바탕.
 // 오른쪽 위 버튼으로 같은 모양의 이미지(4:5)를 만들어 공유하거나 저장한다.
@@ -19,7 +22,15 @@ export type ReviewCardData = {
   oneLiner: string;
   photoUrl: string;
   playedAt: string;
+  difficulty?: number; // 난이도·공포도가 있으면(내 기록) 리뷰 시트로 그린다
+  fearLevel?: number;
 };
+
+let posterIndex: Promise<PosterIndex> | null = null;
+function loadPosterIndex(): Promise<PosterIndex> {
+  posterIndex ??= fetch("/api/poster-index").then((r) => (r.ok ? r.json() : {})).catch(() => ({}));
+  return posterIndex;
+}
 
 export function reviewChips(r: ReviewCardData): string[] {
   return [
@@ -35,7 +46,23 @@ export function reviewChips(r: ReviewCardData): string[] {
 export async function shareReviewImage(r: ReviewCardData, byline?: string): Promise<void> {
   try {
     const tone = TONE[r.genre] ?? TONE["기타"];
-    const blob = await makeReviewImage({ ...r, chips: reviewChips(r), byline, tone });
+    let blob: Blob;
+    if (typeof r.difficulty === "number") {
+      // 내 기록: 방탈출 리뷰 시트(공식 포스터가 있으면 출처와 함께 넣는다)
+      const found = findPoster(await loadPosterIndex(), r.themeName, r.cafeName);
+      const nth = Number((byline?.match(/(\d+)번째/) || [])[1]) || undefined;
+      blob = await makeReviewSheet({
+        ...r,
+        difficulty: r.difficulty,
+        fearLevel: r.fearLevel ?? 0,
+        nth,
+        posterUrl: found?.poster ? `/api/poster-img?id=${found.id}` : undefined,
+        posterCredit: brandOf(r.cafeName),
+        tone,
+      });
+    } else {
+      blob = await makeReviewImage({ ...r, chips: reviewChips(r), byline, tone });
+    }
     const file = new File([blob], "bangtallog-review.jpg", { type: "image/jpeg" });
     const text = `${r.themeName}${r.oneLiner ? ` — “${r.oneLiner}”` : ""} · 방탈로그`;
     if (navigator.canShare?.({ files: [file] })) {
