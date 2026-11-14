@@ -162,6 +162,20 @@ POSTS = [
 2. 사람 태그·멘션은 하지 않아도 돼요(개인 기록 게시물)""",
   },
   {
+    "dir": "13_아무때나_릴스_테마짤",
+    "video_file": os.path.join(os.path.dirname(OUT), "reel", "theme-meme.mp4"),
+    "caption": """웬만한 방 다 가 봤다고 생각했는데요… 😇
+방탈출 테마 791개, 이번 주에만 458개 늘었어요. 여러분은 몇 개 깨셨어요?
+
+포스터: 각 매장 공식 홈페이지
+
+#방탈출 #방탈출추천 #방탈출짤 #방린이 #방탈러 #방탈로그""",
+    "how": """1. [+] → [릴스] → theme-meme.mp4 고르기(14초, 소리 없음)
+2. [음악] → 요즘 뜨는 곡(↗ 표시) 하나. 2.6초쯤 '791개 있음?!' 장면에 '쿵' 박자가 오면 최고
+3. 캡션.txt 붙여 넣기 → [공유]
+4. 피드 게시물이 없는 날 저녁에 올리면 좋아요""",
+  },
+  {
     "dir": "06_11-18_저녁_피드_수능이벤트",
     "pages": [f"{T}/sp1b.html", f"{T}/sp2c.html", f"{T}/sp3.html"], "size": FEED,
     "caption": """수험표 들고 방탈출 가자! 🎟️ 수능 끝난 날 저장해 두세요.
@@ -255,6 +269,8 @@ def main(reel_path):
             jobs.append({"html": html, "out": os.path.join(d, f"{i}.jpg"), "w": w, "h": h})
         if p.get("video") == "REEL" and reel_path:
             shutil.copy(reel_path, os.path.join(d, "무대_이머시브.mp4"))
+        if p.get("video_file") and os.path.exists(p["video_file"]):
+            shutil.copy(p["video_file"], os.path.join(d, os.path.basename(p["video_file"])))
         if p.get("caption"):
             open(os.path.join(d, "캡션.txt"), "w").write(p["caption"] + "\n")
         open(os.path.join(d, "올리는법.txt"), "w").write(p["how"] + "\n")
