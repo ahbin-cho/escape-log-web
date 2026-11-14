@@ -2,25 +2,38 @@
 @font-face{font-family:A;src:url(../../../assets/fonts/SBAggroB.woff)}
 @font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
 @font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-Medium.woff);font-weight:500}
-html,body{margin:0;width:1080px;height:1350px;font-family:P;overflow:hidden}
-h1{font-family:A;font-weight:400;margin:0}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1350px;overflow:hidden;font-family:P;letter-spacing:-.02em}
+h1{font-family:A;font-weight:400;line-height:1.08}
 .chip{display:inline-flex;align-items:center;gap:8px;border-radius:999px;font-weight:800}
-
-body{background:#FCECB2 url(../assets/sw-cover.jpg) no-repeat 0 -80px/1080px 1341px;color:#4A3B30}
-.fill{position:absolute;left:0;right:0;top:1080px;bottom:0;background:#FCECB2}
-.toc{display:flex;align-items:center;gap:10px;background:#FFFBF0;border:3px solid #4A3B30;border-radius:16px;padding:10px 16px;font-weight:800;font-size:24px;box-shadow:3px 3px 0 rgba(74,59,48,.8)}
-.toc i{font-style:normal;display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;border:2.5px solid #4A3B30;font-size:18px}
-</style></head><body><div style="position:absolute;left:0;right:0;top:0;height:341px;background:linear-gradient(to bottom,#FCECB2 0,#FCECB2 245px,rgba(252,236,178,0) 100%)"></div><div class="fill"></div>
-<div style="position:absolute;left:72px;right:72px;top:56px;display:flex;justify-content:space-between;align-items:center">
- <span class="chip" style="background:#FFFBF0;border:3px solid #4A3B30;padding:6px 18px;font-size:24px">📍 대구 방탈출</span>
- <span class="chip" style="background:#4A3B30;color:#FCECB2;padding:6px 16px;font-size:22px">1 / 6</span></div>
-<h1 style="position:absolute;left:72px;top:120px;font-size:74px;line-height:1.12">대구 방탈출, 어디 갈지<br><span style="color:#D9763C">고민이라면?</span></h1>
-<div style="position:absolute;left:72px;right:72px;top:1100px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
- <div class="toc"><i style="background:#F6D5CC">2</i>👻 무서운 게 좋다면</div>
- <div class="toc"><i style="background:#D3ECDD">3</i>🌿 무서운 건 싫다면</div>
- <div class="toc"><i style="background:#FBE3A6">4</i>🐣 방탈출이 처음이라면</div>
- <div class="toc"><i style="background:#E2DAF5">5</i>📖 이야기가 좋다면</div>
-</div>
-<div style="position:absolute;left:72px;right:72px;top:1268px;display:flex;justify-content:space-between;align-items:baseline;font-size:22px">
- <span style="font-weight:800">테마 45개 중에서 골랐어요 · 옆으로 넘겨 보세요 →</span><span style="font-family:A;font-size:24px">방탈로그</span></div>
-</body></html>
+.top{position:absolute;left:64px;right:64px;top:52px;display:flex;justify-content:space-between;align-items:center}
+.grid{position:absolute;left:52px;right:52px;top:370px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.cd{background:#FFFBF2;border:4px solid #1D1D1D;border-radius:22px;overflow:hidden;box-shadow:7px 8px 0 #1D1D1D;display:flex;flex-direction:column}
+.cd .art{height:208px;border-bottom:4px solid #1D1D1D;position:relative}
+.cd .art svg{width:100%;height:100%;display:block}
+.cd .art .tg{position:absolute;right:12px;top:12px;background:#1D1D1D;color:#fff;font-weight:800;font-size:20px;border-radius:999px;padding:5px 13px}
+.cd .bd{padding:16px 20px 18px;color:#1D1D1D}
+.cd .nm{font-family:A;font-size:32px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cd .q{font-weight:500;font-size:20px;color:#4A4038;line-height:1.4;margin-top:8px;height:56px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:keep-all}
+.cd .cf{margin-top:10px;font-weight:800;font-size:21px;color:#1D1D1D;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.foot{position:absolute;left:64px;right:64px;bottom:40px;display:flex;justify-content:space-between;align-items:baseline;font-size:21px}
+.foot b{font-family:A;font-weight:400;font-size:26px}
+</style></head><body><svg viewBox="0 0 1080 1350" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFB347"/><stop offset=".55" stop-color="#FF7A45"/><stop offset="1" stop-color="#E2554A"/></linearGradient></defs>
+<rect width="1080" height="1350" fill="url(#sky)"/><circle cx="760" cy="520" r="190" fill="#FFE27A"/><circle cx="760" cy="520" r="240" fill="#FFE27A" opacity=".25"/>
+<g stroke="#FFE27A" stroke-width="6" fill="none" opacity=".55" stroke-linecap="round"><path d="M120 470q30-20 60 0t60 0t60 0"/><path d="M160 540q30-20 60 0t60 0t60 0"/></g>
+<path d="M0 820q260-90 540-40t540-20V1350H0z" fill="#B8463C"/>
+<g transform="translate(830 560)"><rect x="-9" y="0" width="18" height="250" fill="#5A2A2A"/><ellipse cx="0" cy="40" rx="40" ry="22" fill="#5A2A2A"/><rect x="-4" y="-80" width="8" height="80" fill="#5A2A2A"/><circle cy="-84" r="6" fill="#FFE27A"/></g>
+<g fill="#9E3A33"><rect x="0" y="900" width="180" height="450"/><rect x="170" y="960" width="140" height="390"/><rect x="860" y="930" width="220" height="420"/><rect x="700" y="990" width="170" height="360"/></g>
+<g fill="#C9573F" stroke="#7A2A24" stroke-width="3"><rect x="300" y="860" width="420" height="490"/></g>
+<g stroke="#7A2A24" stroke-width="2" opacity=".6"><path d="M300 880h420"/><path d="M300 906h420"/><path d="M300 932h420"/><path d="M300 958h420"/><path d="M300 984h420"/><path d="M300 1010h420"/><path d="M300 1036h420"/><path d="M300 1062h420"/><path d="M300 1088h420"/><path d="M300 1114h420"/><path d="M300 1140h420"/><path d="M300 1166h420"/><path d="M300 1192h420"/><path d="M300 1218h420"/><path d="M300 1244h420"/><path d="M300 1270h420"/><path d="M300 1296h420"/><path d="M300 1322h420"/><path d="M300 1348h420"/></g>
+<g fill="#7A2A24"><path d="M380 860l40-130 40 130z"/><path d="M560 860l40-130 40 130z"/><rect x="430" y="930" width="160" height="200" rx="80"/></g>
+<g fill="#FFE27A" opacity=".85"><rect x="330" y="960" width="50" height="70" rx="25"/><rect x="640" y="960" width="50" height="70" rx="25"/></g>
+</svg>
+<div class="top"><span class="chip" style="background:#FFFBF2;border:4px solid #1D1D1D;padding:8px 20px;font-size:26px">📍 대구 방탈출 · 동성로</span>
+<span class="chip" style="background:#1D1D1D;color:#FFE27A;padding:7px 16px;font-size:23px">1 / 6</span></div>
+<h1 style="position:absolute;left:64px;top:150px;font-size:104px;color:#1D1D1D">대구 방탈출,<br><span style="color:#FFFBF2;-webkit-text-stroke:4px #1D1D1D;paint-order:stroke fill">어데 갈래?</span></h1>
+<p style="position:absolute;left:68px;top:400px;font-weight:800;font-size:32px;color:#1D1D1D">대프리카 더위 피해서 들어갈 방, 골라 봤다 아이가 🥵</p>
+<img src="../../../public/mascot.png" style="position:absolute;left:40px;top:560px;width:330px;transform:rotate(-6deg)">
+<div style="position:absolute;left:64px;right:64px;top:1080px;display:grid;grid-template-columns:1fr 1fr;gap:14px"><div style="background:#FFFBF2;border:4px solid #1D1D1D;border-radius:18px;padding:12px 18px;font-weight:800;font-size:26px;box-shadow:4px 5px 0 #1D1D1D">2 👻 무서븐 거 좋아하나?</div><div style="background:#FFFBF2;border:4px solid #1D1D1D;border-radius:18px;padding:12px 18px;font-weight:800;font-size:26px;box-shadow:4px 5px 0 #1D1D1D">3 🌿 무서븐 건 싫나?</div><div style="background:#FFFBF2;border:4px solid #1D1D1D;border-radius:18px;padding:12px 18px;font-weight:800;font-size:26px;box-shadow:4px 5px 0 #1D1D1D">4 🐣 방탈출 처음이가?</div><div style="background:#FFFBF2;border:4px solid #1D1D1D;border-radius:18px;padding:12px 18px;font-weight:800;font-size:26px;box-shadow:4px 5px 0 #1D1D1D">5 📖 이야기 좋아하제?</div></div>
+<div class="foot" style="color:#FFFBF2"><span style="font-weight:800">테마 45개 중에서 골랐어요 · 옆으로 넘겨 보세요 →</span><b>방탈로그</b></div></body></html>
