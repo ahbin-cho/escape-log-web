@@ -1,0 +1,39 @@
+<!doctype html><html><head><meta charset="utf-8"><style>@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-Medium.woff);font-weight:500}
+@font-face{font-family:Dokdo;src:url(../assets/fonts/east-sea-dokdo-korean-400-normal.woff2)}
+@font-face{font-family:Myeongjo;src:url(../assets/fonts/nanum-myeongjo-korean-800-normal.woff2)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;background:#000;overflow:hidden;font-family:P}
+.stage{position:relative;width:1080px;height:1920px;overflow:hidden}
+.scene{position:absolute;inset:0;background-position:center;background-size:cover;transform-origin:50% 60%;animation:zoom 10.5s linear forwards}
+@keyframes zoom{from{transform:scale(1)}to{transform:scale(1.1)}}
+@keyframes fade{to{opacity:1}}
+@keyframes out{to{opacity:0}}
+.cta{position:absolute;left:72px;right:72px;top:1600px;display:flex;align-items:center;gap:24px;background:#F5F0E6;border:5px solid #1D1D1D;border-radius:30px;padding:22px 30px;box-shadow:8px 9px 0 #1D1D1D;opacity:0;transform:translateY(50px);animation:card .6s 8.3s cubic-bezier(.22,1,.36,1) forwards;z-index:40}
+@keyframes card{to{opacity:1;transform:none}}
+.cta .x{color:#1D1D1D;font-weight:800;font-size:44px;letter-spacing:-.03em}.cta .x b{color:#E0782A}
+.cta .s{color:#6B665D;font-weight:500;font-size:28px;margin-top:6px}
+.scene{background-image:url(../assets/reel-morgue.jpg);filter:brightness(1.7);animation:zoom 10.5s linear forwards,roll 3.7s steps(1) infinite}
+@keyframes roll{0%,100%{transform:scale(1.04)}48%{transform:scale(1.04) translateY(0)}49%{transform:scale(1.04) translateY(-34px)}50%{transform:scale(1.04) translateY(22px)}51%{transform:scale(1.04)}}
+.scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 2px,transparent 2px 6px);z-index:5}
+.bar{position:absolute;left:0;right:0;height:140px;background:linear-gradient(transparent,rgba(200,255,240,.13),transparent);animation:barm 4.2s linear infinite;z-index:6}
+@keyframes barm{from{top:-160px}to{top:1920px}}
+.osd{font-family:Unifont,monospace;color:#EAF7F1;text-shadow:3px 3px 0 #000,-1px -1px 0 #000;letter-spacing:.02em}
+.hook{position:absolute;left:80px;right:60px;top:600px;font-family:P;font-weight:800;font-size:100px;line-height:1.28;letter-spacing:-.02em;animation:out .1s 1.5s forwards;z-index:30}
+.hook b{color:#7FE0CF}.hook small{display:block;font-family:Unifont,monospace;font-weight:400;font-size:44px;margin-top:26px;color:#BFD6CF}
+.sub{position:absolute;left:60px;right:60px;top:1010px;background:rgba(0,0,0,.72);border-left:10px solid #7FE0CF;padding:34px 36px 40px;opacity:0;animation:fade .2s 1.7s forwards;z-index:20}
+.sub .who{font-size:40px;color:#7FE0CF;margin-bottom:18px}
+.sub .tx{font-size:64px;line-height:1.5;min-height:480px;word-break:keep-all}
+.cur{display:inline-block;width:30px;height:58px;background:#EAF7F1;vertical-align:-8px;animation:bl .5s steps(1) infinite}
+@keyframes bl{50%{opacity:0}}
+.meta{position:absolute;left:70px;top:330px;opacity:0;animation:fade .1s 6.4s forwards;z-index:20}
+.meta .t{font-family:P;font-weight:800;font-size:150px;color:#fff;letter-spacing:.08em}.meta{background:rgba(0,0,0,.6);padding:20px 30px 26px;left:50px!important}.meta .k{font-family:P;font-weight:800;font-size:44px;color:#7FE0CF;margin-top:8px}.meta .c{font-family:P;font-weight:800;font-size:40px;margin-top:10px;color:#EAF7F1}
+.glitch{position:absolute;inset:0;background:#DFFFF4;opacity:0;animation:gl 10s steps(1) forwards;z-index:35;mix-blend-mode:screen}
+@keyframes gl{15%{opacity:.5}15.6%{opacity:0}64%{opacity:.35}64.5%{opacity:0}}</style></head><body><div class="stage"><div class="scene"></div><div class="scan"></div><div class="bar"></div><div class="glitch"></div>
+<div class="hook osd">이 병원,<br><b>밤에 가 본 적 있어요?</b><small>줄거리 10초 ▶</small></div>
+<div class="meta osd"><div class="t">영안실</div><div class="k">상상의문 수원점</div><div class="c">공포 · 난이도 4/5 · 공포도 4/5</div></div>
+<div class="sub osd"><div class="who">♪ 안내 방송</div><div class="tx"><span id="tx"></span><span class="cur"></span></div></div><div class="cta"><img src="../../../public/mascot.png" width="110" height="110"><div><div class="x">다녀왔다면 <b>한 줄 기록</b></div><div class="s">줄거리·후기는 프로필 링크 · bangtallog.com</div></div></div></div><script>
+const full="안녕하십니까, 고객님의 마지막 여정을 함께하는 인계병원 영안실입니다.\n편안한 밤 되시길 바랍니다.";
+const el=document.getElementById('tx');let i=0;
+setTimeout(()=>{const iv=setInterval(()=>{i++;el.innerHTML=full.slice(0,i).replace(/\n/g,'<br><br>');if(i>=full.length)clearInterval(iv);},68);},1900);
+</script></body></html>

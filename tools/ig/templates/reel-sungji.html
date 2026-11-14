@@ -1,0 +1,40 @@
+<!doctype html><html><head><meta charset="utf-8"><style>@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-Medium.woff);font-weight:500}
+@font-face{font-family:Dokdo;src:url(../assets/fonts/east-sea-dokdo-korean-400-normal.woff2)}
+@font-face{font-family:Myeongjo;src:url(../assets/fonts/nanum-myeongjo-korean-800-normal.woff2)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;background:#000;overflow:hidden;font-family:P}
+.stage{position:relative;width:1080px;height:1920px;overflow:hidden}
+.scene{position:absolute;inset:0;background-position:center;background-size:cover;transform-origin:50% 60%;animation:zoom 10.5s linear forwards}
+@keyframes zoom{from{transform:scale(1)}to{transform:scale(1.1)}}
+@keyframes fade{to{opacity:1}}
+@keyframes out{to{opacity:0}}
+.cta{position:absolute;left:72px;right:72px;top:1600px;display:flex;align-items:center;gap:24px;background:#F5F0E6;border:5px solid #1D1D1D;border-radius:30px;padding:22px 30px;box-shadow:8px 9px 0 #1D1D1D;opacity:0;transform:translateY(50px);animation:card .6s 8.3s cubic-bezier(.22,1,.36,1) forwards;z-index:40}
+@keyframes card{to{opacity:1;transform:none}}
+.cta .x{color:#1D1D1D;font-weight:800;font-size:44px;letter-spacing:-.03em}.cta .x b{color:#E0782A}
+.cta .s{color:#6B665D;font-weight:500;font-size:28px;margin-top:6px}
+.scene{background-image:url(../assets/reel-sungji.jpg);animation:zoom 10.5s linear forwards,dim 1s 1.5s forwards}
+@keyframes dim{to{filter:brightness(.5) blur(2px)}}
+.chalk{font-family:Dokdo;color:#F4F1E8;filter:url(#rough);text-shadow:0 0 6px rgba(244,241,232,.35)}
+.hook{position:absolute;left:90px;right:60px;top:560px;font-size:190px;line-height:1.02;animation:out .3s 1.45s forwards;z-index:30}
+.hook b{font-weight:400;color:#F2776A}
+.hook small{display:block;font-family:P;font-weight:800;font-size:38px;color:#D9D4C4;margin-top:30px;filter:none}
+.w{position:absolute;left:90px;white-space:nowrap;clip-path:inset(-20% 100% -20% 0);animation:write var(--d,.8s) var(--t) steps(14) forwards}
+@keyframes write{to{clip-path:inset(-20% -5% -20% 0)}}
+.under{position:absolute;left:90px;height:10px;background:#F2776A;border-radius:6px;width:0;animation:ul .5s 6.1s forwards;filter:url(#rough)}
+@keyframes ul{to{width:700px}}
+.meta{position:absolute;left:94px;top:1210px;opacity:0;animation:fade .6s 6.3s forwards}
+.meta .t{font-family:Dokdo;font-size:132px;line-height:1;color:#FFE27A;filter:url(#rough)}
+.meta .k{font-weight:800;font-size:36px;color:#F4F1E8;margin-top:22px}
+.meta .c{font-weight:800;font-size:34px;color:#CFE0D3;margin-top:10px}
+.erase{position:absolute;inset:0;background:linear-gradient(100deg,transparent 40%,rgba(244,241,232,.16) 50%,transparent 60%);transform:translateX(-120%);animation:sw .5s 1.45s forwards}
+@keyframes sw{to{transform:translateX(120%)}}</style></head><body><div class="stage"><svg width="0" height="0" style="position:absolute"><filter id="rough"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="5"/></filter></svg>
+<div class="scene"></div><div class="erase"></div>
+<div class="hook chalk">눈을 떴는데,<br><b>또 여기라면?</b><small>줄거리 10초 ▶</small></div>
+<div class="w chalk" style="top:330px;font-size:150px;--t:1.9s">같은 기척,</div>
+<div class="w chalk" style="top:500px;font-size:150px;--t:2.8s">같은 냄새,</div>
+<div class="w chalk" style="top:670px;font-size:150px;--t:3.7s">같은 어둠.</div>
+<div class="w chalk" style="top:880px;font-size:96px;color:#F2776A;--t:4.7s;--d:1.2s">나는 또다시 이 기숙학원에서</div>
+<div class="w chalk" style="top:990px;font-size:96px;color:#F2776A;--t:5.5s;--d:.6s">깨어났다.</div>
+<div class="under" style="top:1100px"></div>
+<div class="meta"><div class="t">성지기숙학원 : 특수교정반</div><div class="k">상상의문 수원 2호점</div><div class="c">공포 · 난이도 4/5 · 공포도 4/5</div></div><div class="cta"><img src="../../../public/mascot.png" width="110" height="110"><div><div class="x">다녀왔다면 <b>한 줄 기록</b></div><div class="s">줄거리·후기는 프로필 링크 · bangtallog.com</div></div></div></div></body></html>
