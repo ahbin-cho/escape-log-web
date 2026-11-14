@@ -103,12 +103,9 @@ describe("resolvePost", () => {
 
   it("매장 계정 멘션: 등록된 매장만, 더 긴 이름이 우선", async () => {
     const m = await import("./instagram");
-    m.STORE_HANDLES["상상의문 수원"] = "test_a";
-    m.STORE_HANDLES["상상의문 수원 2호점"] = "test_b";
-    expect(m.storeHandle("상상의문 수원점")).toBe("test_a");
-    expect(m.storeHandle("상상의문 수원 2호점")).toBe("test_b");
+    expect(m.storeHandle("상상의문 수원점")).toBe("sangsang_sw");
+    expect(m.storeHandle("상상의문 수원 2호점")).toBe("sangsang_sw2");
+    expect(m.storeHandle("상상의문 수원 2호점 별관")).toBe("sangsang_sw2");
     expect(m.storeHandle("다른 매장")).toBeNull();
-    delete m.STORE_HANDLES["상상의문 수원"];
-    delete m.STORE_HANDLES["상상의문 수원 2호점"];
   });
 });
