@@ -111,9 +111,9 @@ POSTS = [
 3. 이어서 03 폴더(스토리) 올리기""",
   },
   {
-    "dir": "03_11-15_피드직후_스토리_종이인형극릴스",
+    "dir": "03_11-15_피드직후_스토리_무대영상",
     "video": "REEL",
-    "how": f"""1. [+] → [스토리] → 종이인형극.mp4 고르기
+    "how": f"""1. [+] → [스토리] → 무대_이머시브.mp4 고르기(13초, 소리 없음)
 2. 위쪽 스티커(네모 웃는 얼굴) → [음악] 미스터리한 곡 하나
 3. 스티커 → [링크] → {IMM_LINK}
 4. 링크 스티커는 화면 아래 어두운 곳에""",
@@ -166,7 +166,7 @@ SCHEDULE = """방탈로그 직접 올리기 묶음 (자동 게시는 따로 매�
 
 날짜        자동(12시~1시)                  직접 올리기(폴더 번호)
 11/14 토   다이어리 4장 (올라감 ✅)          스토리 00 서울이스케이프룸 신작 공유 · 오후 3시 피드 00b 리틀보이 신작 · 19시 피드 01 미명도감
-11/15 일   릴스 성지기숙학원 @sangsang_sw2   19시 피드 02 이머시브 → 스토리 03 종이인형극
+11/15 일   릴스 성지기숙학원 @sangsang_sw2   19시 피드 02 이머시브 → 스토리 03 무대 영상
 11/16 월   릴스 영안실 @sangsang_sw          스토리 04 다크 어드벤처 미리 알림
 11/17 화   릴스 춘화각 @sangsang_sw2         스토리 05 스얼인 앵콜 2주 남음
 11/18 수   연말 카페 모음                    저녁 피드 06 수능 → 스토리 07 매장별
@@ -202,7 +202,7 @@ def main(reel_path):
             w, h = p["size"]
             jobs.append({"html": html, "out": os.path.join(d, f"{i}.jpg"), "w": w, "h": h})
         if p.get("video") == "REEL" and reel_path:
-            shutil.copy(reel_path, os.path.join(d, "종이인형극.mp4"))
+            shutil.copy(reel_path, os.path.join(d, "무대_이머시브.mp4"))
         if p.get("caption"):
             open(os.path.join(d, "캡션.txt"), "w").write(p["caption"] + "\n")
         open(os.path.join(d, "올리는법.txt"), "w").write(p["how"] + "\n")
