@@ -34,6 +34,7 @@ def q(s, n=40):
     return s if len(s) <= n else s[:n].rstrip() + "…"
 
 def card(t, tag, line):
+    tag = t.get("tag", tag); line = t.get("line", line)
     return f'''<div class="cd"><div class="art">{motif(t["name"], t["genre"])}<span class="tg">{e(tag)}</span></div>
 <div class="bd"><div class="nm">{e(t.get("short") or t["name"])}</div><div class="q">{e(line)}</div><div class="cf">📍 {e(t["cafe"])}</div></div></div>'''
 
@@ -43,13 +44,13 @@ def first_tag(t):
     return " · ".join(p)
 
 PAGES = [
- ("fear", "#1A1420", "#F5E9F0", "#FF5A4E", "👻 무서븐 맛", "무서븐 거<br><span style='color:#FF5A4E'>좋아하나?</span>", "대구에서 제일 매운 방 · 줄거리 첫 문장만 살짝",
+ ("fear", "#1A1420", "#F5E9F0", "#FF5A4E", "😱 쫄깃한 맛", "쫄깃한 거<br><span style='color:#FF5A4E'>좋아하나?</span>", "공포·스릴러 · 줄거리 첫 문장만 살짝",
   lambda t: (f'공포 {t["fear"]}/5', "“" + q(t["story"]) + "”")),
  ("calm", "#DFF2E6", "#1D1D1D", "#2E8B57", "🌿 안 무서븐 맛", "무서븐 건<br><span style='color:#2E8B57'>싫나?</span>", "공포도 낮은 방 · 장르 골고루",
   lambda t: (f'{t["genre"]} · 난이도 {t["difficulty"]}/5', "“" + q(t["story"]) + "”")),
- ("first", "#FFF1C2", "#1D1D1D", "#D9771C", "🐣 입문", "방탈출<br><span style='color:#D9771C'>처음이가?</span>", "난이도 낮고 덜 무서븐 순 · 시간까지 확인",
+ ("first", "#FFF1C2", "#1D1D1D", "#D9771C", "🐣 입문", "방탈출<br><span style='color:#D9771C'>처음이가?</span>", "난이도 낮은 방 · 고를 수 있는 방까지",
   lambda t: (first_tag(t), "“" + q(t["story"]) + "”")),
- ("story", "#ECE6FA", "#1D1D1D", "#6A55C2", "📖 이야기 맛집", "이야기<br><span style='color:#6A55C2'>좋아하제?</span>", "추리 · 감성 · 판타지 · 줄거리 미리보기",
+ ("story", "#ECE6FA", "#1D1D1D", "#6A55C2", "📖 이야기 맛집", "이야기<br><span style='color:#6A55C2'>좋아하제?</span>", "줄거리 첫 문장 미리보기",
   lambda t: (t["genre"], "“" + q(t["story"]) + "”")),
 ]
 
@@ -58,7 +59,7 @@ def main(p):
     foot_note = f"정보는 매장 공식 예약 페이지 기준{(' · ' + chk + ' 확인') if chk else ''} · 그림은 방탈로그가 새로 그렸어요"
     # 1 표지
     toc = "".join(f'<div style="background:#FFFBF2;border:4px solid #1D1D1D;border-radius:18px;padding:12px 18px;font-weight:800;font-size:26px;box-shadow:4px 5px 0 #1D1D1D">{x}</div>'
-                  for x in ["2 👻 무서븐 거 좋아하나?", "3 🌿 무서븐 건 싫나?", "4 🐣 방탈출 처음이가?", "5 📖 이야기 좋아하제?"])
+                  for x in ["2 😱 쫄깃한 거 좋아하나?", "3 🌿 무서븐 건 싫나?", "4 🐣 방탈출 처음이가?", "5 📖 이야기 좋아하제?"])
     s1 = HEAD + COVER + f'''
 <div class="top"><span class="chip" style="background:#FFFBF2;border:4px solid #1D1D1D;padding:8px 20px;font-size:26px">📍 대구 방탈출 · 동성로</span>
 <span class="chip" style="background:#1D1D1D;color:#FFE27A;padding:7px 16px;font-size:23px">1 / 6</span></div>
@@ -69,7 +70,7 @@ def main(p):
 <div class="foot" style="color:#FFFBF2"><span style="font-weight:800">테마 {total}개 중에서 골랐어요 · 옆으로 넘겨 보세요 →</span><b>방탈로그</b></div></body></html>'''
     open(os.path.join(T, "dg1.html"), "w").write(s1)
     for i, (key, bg, fg, ac, chip, title, sub, fn) in enumerate(PAGES, 2):
-        cards = "".join(card(t, *fn(t)) for t in S[key])
+        cards = "".join(card(t, *((t["tag"], t["line"]) if "tag" in t else fn(t))) for t in S[key])
         dark = key == "fear"
         s = HEAD + f'''<style>body{{background:{bg};color:{fg}}}</style>
 <div style="position:absolute;inset:0;background-image:radial-gradient({'rgba(255,255,255,.05)' if dark else 'rgba(0,0,0,.05)'} 2px,transparent 2px);background-size:26px 26px"></div>

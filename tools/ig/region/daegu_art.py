@@ -63,6 +63,35 @@ MOTIF = {
 <g transform="translate(190 92)"><ellipse cx="0" cy="20" rx="34" ry="22" fill="#FFD84D"/><circle cx="20" cy="-4" r="16" fill="#FFD84D"/><path d="M34-6l14 4-14 4z" fill="#FF9A3C"/><circle cx="24" cy="-8" r="3" fill="#1D1D1D"/></g>'''),
 }
 
+MOTIF.update({
+ "춘단화 : 봄을 잘라낸 꽃": svg("#2A1E24", '''<path d="M40 200C120 150 160 100 230 70" stroke="#5A3A2E" stroke-width="10" fill="none"/>
+<g fill="#F4B6C2">''' + "".join(f'<circle cx="{x}" cy="{y}" r="{r}"/>' for x,y,r in [(110,150,14),(150,118,12),(190,92,13),(90,175,10)]) + '''</g>
+<path d="M230 70l50-30" stroke="#5A3A2E" stroke-width="10" stroke-dasharray="4 10"/><path d="M228 52l22 34" stroke="#E8E2D2" stroke-width="4"/>
+<g fill="#F4B6C2" opacity=".8"><circle cx="300" cy="150" r="9"/><circle cx="330" cy="190" r="7"/><circle cx="270" cy="200" r="6"/></g>'''),
+ "오모테나시": svg("#1E2A2A", '''<rect y="150" width="400" height="70" fill="#2F4A44"/><path d="M60 150h280l-30-60H90z" fill="#3B2A22"/><path d="M40 92h320l-40-34H80z" fill="#1A1210"/>
+<g fill="#F3D9A0" opacity=".85"><rect x="110" y="104" width="40" height="40"/><rect x="180" y="104" width="40" height="40"/><rect x="250" y="104" width="40" height="40"/></g>
+<g transform="translate(345 120)"><rect x="-14" y="-10" width="28" height="44" rx="12" fill="#E2554A"/><path d="M0-10v-14" stroke="#1A1210" stroke-width="3"/></g>
+<g stroke="#E8E2D2" stroke-width="4" fill="none" opacity=".5"><path d="M150 190q-10-14 0-26t0-26M200 196q-10-14 0-26t0-26"/></g>'''),
+ "만찬": svg("#2A1A16", '''<rect y="130" width="400" height="90" fill="#5A2E22"/><ellipse cx="200" cy="150" rx="80" ry="26" fill="#F2EAD8"/><ellipse cx="200" cy="148" rx="54" ry="16" fill="#C9572F"/>
+<g transform="translate(320 70)"><path d="M-16 0h32q0 34-16 40-16-6-16-40z" fill="#8B1E2B" opacity=".9"/><path d="M0 40v30M-14 70h28" stroke="#E8E2D2" stroke-width="4"/></g>
+<g stroke="#C9C3B4" stroke-width="5" stroke-linecap="round"><path d="M100 120v40M90 120v14M110 120v14"/><path d="M300 125v40"/></g>
+<g transform="translate(70 40)"><path d="M0 30v-20M-10 30h20" stroke="#F3D9A0" stroke-width="3"/><path d="M0 10q-6-10 0-18 6 8 0 18z" fill="#FFB347"/></g>'''),
+ "황금 감옥 : 와캄": svg("#2A2214", '''<rect x="70" y="30" width="260" height="170" fill="#3E3220"/>
+<g stroke="#E8C14B" stroke-width="10">''' + "".join(f'<path d="M{x} 30v170"/>' for x in range(100,320,36)) + '''</g><path d="M70 30h260M70 200h260" stroke="#E8C14B" stroke-width="12"/>
+<g transform="translate(200 120)"><circle r="18" fill="#E8C14B"/><rect x="-5" y="10" width="10" height="20" fill="#E8C14B"/></g>'''),
+ "잉카": svg("#F2C94C", '''<circle cx="200" cy="70" r="40" fill="#FFF3B0"/><g stroke="#FFF3B0" stroke-width="6">''' + "".join(f'<path d="M{200+55*__import__("math").cos(a/6*3.14159)} {70+55*__import__("math").sin(a/6*3.14159)}L{200+75*__import__("math").cos(a/6*3.14159)} {70+75*__import__("math").sin(a/6*3.14159)}"/>' for a in range(12)) + '''</g>
+<g fill="#A0703A" stroke="#6B4423" stroke-width="3"><rect x="80" y="180" width="240" height="40"/><rect x="110" y="150" width="180" height="30"/><rect x="140" y="124" width="120" height="26"/><rect x="175" y="104" width="50" height="20"/></g>
+<path d="M190 220v-40h20v40z" fill="#3A2614"/>'''),
+ "지프리트의 심장 (동성로점)": svg("#1E2238", '''<g fill="none" stroke="#7A86B8" stroke-width="10" opacity=".6"><circle cx="80" cy="170" r="40" stroke-dasharray="14 10"/><circle cx="330" cy="60" r="32" stroke-dasharray="12 9"/></g>
+<path d="M200 40l46 50-46 110-46-110z" fill="#6EE7D8"/><path d="M200 40l46 50h-92z" fill="#B8FFF4"/><path d="M200 200l-46-110h92z" fill="#3FB9AC" opacity=".6"/>
+<g fill="#fff">''' + "".join(f'<path d="M{x} {y}l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/>' for x,y in [(140,60),(270,140),(250,40)]) + '</g>'),
+ "박스오피스": svg("#FF8FB8", '''<g stroke="#1D1D1D" stroke-width="4"><rect x="80" y="120" width="100" height="80" fill="#D9A066"/><rect x="190" y="130" width="90" height="70" fill="#C98E52"/><rect x="120" y="50" width="90" height="70" fill="#E0AE76"/><rect x="290" y="150" width="60" height="50" fill="#D9A066"/></g>
+<g stroke="#1D1D1D" stroke-width="3"><path d="M130 120v80M235 130v70M165 50v70"/></g><text x="300" y="80" font-family="sans-serif" font-weight="900" font-size="64" fill="#1D1D1D">?</text>'''),
+ "사명 : 투쟁의 노래": svg("#30241E", '''<rect x="60" y="40" width="280" height="160" fill="#3E302A"/>
+<g stroke="#9A9AA6" stroke-width="8">''' + "".join(f'<path d="M{x} 40v160"/>' for x in range(90,340,40)) + '''</g>
+<g transform="translate(200 130)"><path d="M-22 40v-50q0-12 10-12h24q10 0 10 12v50z" fill="#E2554A" stroke="#1D1D1D" stroke-width="4"/><g fill="#E2554A" stroke="#1D1D1D" stroke-width="3"><rect x="-22" y="-34" width="12" height="20" rx="5"/><rect x="-9" y="-38" width="12" height="24" rx="5"/><rect x="4" y="-36" width="12" height="22" rx="5"/></g></g>'''),
+})
+
 def motif(name, genre):
     if name in MOTIF: return MOTIF[name]
     return svg("#3A3F4A", f'<text x="200" y="130" text-anchor="middle" font-size="64">{ {"공포":"👻","감성":"🌙","추리":"🔍","판타지":"✨","코믹":"😂","아케이드":"🕹️"}.get(genre,"🗝️") }</text>')
