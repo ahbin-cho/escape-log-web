@@ -54,6 +54,25 @@ PAGES = [
  ("story", "dg-story.jpg", "#3A2E28", "#7A68C2", "📖 이야기 맛집", "이야기 <span style='color:#7A68C2'>좋아하제?</span>", "#E9D8C5", "#3A2E28"),
 ]
 
+def cover(c):
+    toc = "".join(f'<div style="background:#FFFBF2;border:3px solid #3A2E28;border-radius:14px;padding:9px 16px;font-weight:800;font-size:23px;box-shadow:3px 3px 0 #3A2E28">{x}</div>'
+                  for x in ["2 😱 쫄깃한 거 좋아하나?", "3 🌿 무서븐 건 싫나?", "4 🐣 방탈출 처음이가?", "5 📖 이야기 좋아하제?"])
+    s1 = (HEAD % 1350) + f'''<div style="position:absolute;inset:0;background:#F7EEDD"></div>
+<img src="../assets/dg-cover.jpg" style="position:absolute;left:0;top:0;width:1080px;height:1340px">
+<div class="top"><span class="chip" style="background:#FFFBF2;border:3px solid #3A2E28;padding:6px 18px;font-size:24px">📍 대구 방탈출 · 동성로</span>
+<span class="chip" style="background:#3A2E28;color:#F7EEDD;padding:6px 16px;font-size:22px">1 / 6</span></div>
+<h1 style="position:absolute;left:64px;top:118px;font-size:80px;color:#3A2E28">대구 방탈출,<br><span style="color:#E2603F">어데 갈래?</span></h1>
+<div style="position:absolute;left:64px;right:64px;top:1105px;display:grid;grid-template-columns:1fr 1fr;gap:10px">{toc}</div>
+<div class="ft" style="top:1300px;color:#3A2E28;opacity:.8"><span>대프리카 더위 피해서 들어갈 방, 테마 {c["total"]}개 중에 골라 봤다 아이가 🥵 →</span><b>방탈로그</b></div></body></html>'''
+    open(os.path.join(T, "dg1.html"), "w").write(s1)
+    s = (HEAD % 1920) + f'''<div style="position:absolute;inset:0;background:#F7EEDD"></div>
+<img src="../assets/dg-cover.jpg" style="position:absolute;left:0;top:250px;width:1080px;height:1340px">
+<div class="top" style="top:120px"><span class="chip" style="background:#FFFBF2;border:3px solid #3A2E28;padding:7px 20px;font-size:27px">📍 대구 방탈출 · 동성로</span></div>
+<h1 style="position:absolute;left:64px;top:220px;font-size:112px;color:#3A2E28">대구 방탈출,<br><span style="color:#E2603F">어데 갈래?</span></h1>
+<p style="position:absolute;left:68px;top:1380px;right:64px;font-weight:800;font-size:34px;color:#3A2E28">대프리카 더위 피해서 들어갈 방 16곳, 골라 봤다 아이가 🥵</p>
+<p style="position:absolute;left:0;right:0;top:1660px;text-align:center;font-weight:800;font-size:34px;color:#3A2E28">👇 눌러서 대구 테마 다 보기</p></body></html>'''
+    open(os.path.join(T, "dgs1.html"), "w").write(s)
+
 def feed(c):
     S = c["sections"]; chk = c.get("checked_on", "")
     for i, (key, art, fg, ac, chip, title, bot, bfg) in enumerate(PAGES, 2):
@@ -100,4 +119,5 @@ def stories(c):
 if __name__ == "__main__":
     c = json.load(open(sys.argv[1]))
     if len(sys.argv) > 2: POSTERS.update(json.load(open(sys.argv[2])))
+    cover(c)
     (stories if len(sys.argv) > 3 and sys.argv[3] == "stories" else feed)(c)
