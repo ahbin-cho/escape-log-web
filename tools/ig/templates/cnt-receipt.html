@@ -1,0 +1,25 @@
+<!doctype html><html><head><meta charset="utf-8"><style>@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
+@font-face{font-family:A;src:url(../../../assets/fonts/SBAggroB.woff)}
+@font-face{font-family:Dokdo;src:url(../assets/fonts/east-sea-dokdo-korean-400-normal.woff2)}
+*{box-sizing:border-box;margin:0;padding:0}html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+.st{position:relative;width:1080px;height:1920px;overflow:hidden}
+#bg{position:absolute;inset:0;width:1080px;height:1920px}
+#paper{position:absolute;inset:0}
+.ln{position:absolute;left:200px;right:200px;font-family:Unifont,monospace;color:#4f525a;opacity:0;white-space:nowrap}
+.row{display:flex;align-items:baseline;gap:14px}.row i{flex:1;border-bottom:5px dotted #8a8d94;transform:translateY(-10px)}.row b{font-weight:400}
+#stamp{position:absolute;left:400px;top:1250px;white-space:nowrap;border:12px solid #D8412B;color:#D8412B;font:84px A;padding:14px 30px;border-radius:22px;transform:rotate(-12deg) scale(3);opacity:0;mix-blend-mode:multiply}
+#pen{position:absolute;left:150px;right:120px;top:1640px;font:108px Dokdo;color:#C9302A;transform:rotate(-3deg);white-space:nowrap}
+#hook{position:absolute;inset:0;background:#1D1D1D;color:#F5F0E6;display:flex;flex-direction:column;justify-content:center;padding:0 90px;font:800 104px/1.25 P;letter-spacing:-.03em}#hook em{font-style:normal;color:#E49A4A}
+</style></head><body><div class="st"><div id="paper"><img id="bg" src="../assets/cnt-receipt.png"><div class="ln" data-t="1" style="top:250px;text-align:center;font:110px A;color:#1D1D1D">방탈로그</div><div class="ln" data-t="1.5" style="top:400px;text-align:center;font-size:40px">방탈출 영수증</div><div class="ln" data-t="2.0" style="top:470px;text-align:center;font-size:40px">2026.11.14 · bangtallog.com</div><div class="ln" data-t="2.4" style="top:540px;border-top:5px dashed #4f525a;height:0"></div><div class="ln row" data-t="2.9" style="top:584px;font-size:50px"><span>전국 방탈출 테마</span><i></i><b>801개</b></div><div class="ln row" data-t="3.5" style="top:680px;font-size:50px"><span>매장</span><i></i><b>182곳</b></div><div class="ln" data-t="3.9" style="top:776px;border-top:5px dashed #4f525a;height:0"></div><div class="ln row" data-t="4.5" style="top:820px;font-size:50px"><span>주인장이 깬 방</span><i></i><b>아직 조금</b></div><div class="ln row" data-t="5.3" style="top:916px;font-size:50px"><span>주인장이 못 깬 방</span><i></i><b>한참</b></div><div class="ln" data-t="5.8" style="top:1012px;border-top:5px dashed #4f525a;height:0"></div><div class="ln row" data-t="6.4" style="top:1056px;font-size:66px;color:#1D1D1D"><span>합계</span><i style="border:0"></i><b>평생 방탈출</b></div><div class="ln" data-t="7.0" style="top:1176px;border-top:5px dashed #4f525a;height:0"></div><div class="ln" data-t="7.5" style="top:1220px;text-align:center;font-size:40px">※ 주인장도 아직 즐기는 중입니다</div><div class="ln" data-t="8.1" style="top:1290px;text-align:center;font-size:40px">※ 테마는 계속 추가됩니다</div>
+<div id="stamp">아직 멀었음</div></div><div id="pen"></div>
+<div id="hook">방탈출 다 깨려면<br><em>얼마나</em> 남았을까?<div style="font-size:44px;margin-top:30px;color:#B9B4A8">영수증 뽑아 봤어요 🧾</div></div>
+</div><script>const $=i=>document.getElementById(i);const cl=x=>Math.max(0,Math.min(1,x));const e=t=>1-Math.pow(1-t,3);
+const lines=[...document.querySelectorAll('.ln')];const PEN="주인장도 아직 즐기는 중!";
+function seek(t){
+ $('hook').style.opacity=t<1.2?1:cl(1-(t-1.2)/.2);
+ $('paper').style.transform=`translateY(${-(1-e(cl((t-1.0)/1.0)))*1900}px)`;
+ lines.forEach(l=>l.style.opacity=t>=+l.dataset.t+.6?1:0);
+ const k=cl((t-9.2)/.18);$('stamp').style.opacity=k;$('stamp').style.transform=`rotate(-12deg) scale(${3-2*e(k)})`;
+ const sh=t>9.38&&t<9.7?Math.sin(t*90)*8:0;$('paper').style.marginLeft=sh+'px';
+ $('pen').textContent=PEN.slice(0,Math.floor(cl((t-10.3)/1.2)*PEN.length));
+}window.seek=seek;seek(0);</script></body></html>

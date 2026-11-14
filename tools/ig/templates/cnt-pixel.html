@@ -1,0 +1,33 @@
+<!doctype html><html><head><meta charset="utf-8"><style>@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
+@font-face{font-family:A;src:url(../../../assets/fonts/SBAggroB.woff)}
+@font-face{font-family:Dokdo;src:url(../assets/fonts/east-sea-dokdo-korean-400-normal.woff2)}
+*{box-sizing:border-box;margin:0;padding:0}html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+.st{position:relative;width:1080px;height:1920px;overflow:hidden}
+.px{font-family:Unifont,monospace;color:#F5F0E6;text-shadow:4px 4px 0 #000}
+#bg{position:absolute;left:0;top:0;width:4320px;height:1920px;image-rendering:pixelated}
+#gh{position:absolute;left:330px;top:1130px;width:336px;image-rendering:pixelated}
+.box{position:absolute;background:#14122a;border:8px solid #F5F0E6;box-shadow:0 0 0 8px #14122a}
+.bar{display:inline-block;width:520px;height:44px;border:6px solid #F5F0E6;vertical-align:middle;position:relative}.bar i{position:absolute;left:0;top:0;bottom:0;background:#E49A4A}
+</style></head><body><div class="st"><img id="bg" src="../assets/cnt-pixel.png"><img id="gh" src="../assets/mascot-pixel.png">
+<div class="box px" style="left:40px;right:40px;top:90px;padding:26px 32px;font-size:52px;line-height:1.5">
+ <div>▶ 방탈출 QUEST</div>
+ <div>전체 테마 <span style="color:#FFE27A" id="tot">801</span>개</div>
+ <div style="font-size:44px">깬 방 <span class="bar"><i id="prog"></i></span></div>
+ <div style="font-size:40px;color:#B9B4D8" id="door">문 1 / 801</div></div>
+<div class="box" id="hook" style="left:90px;right:90px;top:560px;padding:40px 20px;text-align:center;font:104px/1.25 A;color:#F5F0E6">방탈출 테마가<br><span style="color:#FFE27A">801개</span>?!</div>
+<div class="box px" id="dlg" style="left:40px;right:40px;top:1480px;height:330px;padding:28px 34px;font-size:50px;line-height:1.45"><span id="tx"></span><div id="ch" style="margin-top:14px;font-size:48px;opacity:0"><span id="cur" style="color:#FFE27A">▶</span> 계속 즐긴다　　포기한다</div></div>
+<div class="px" id="end" style="position:absolute;inset:0;background:#000;opacity:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:76px;text-align:center;line-height:1.5"><div>TO BE CONTINUED…</div><div style="font-size:50px;color:#FFE27A;margin-top:30px">테마는 계속 담는 중 · @bangtal_log</div></div>
+</div><script>const $=i=>document.getElementById(i);const cl=x=>Math.max(0,Math.min(1,x));const e=t=>1-Math.pow(1-t,3);
+const L1="주인장: 801개라니…",L2="아직 한참 멀었네. (즐거움)";
+function seek(t){
+ $('bg').style.transform=`translateX(${-Math.round((t*250)/6)*6}px)`;
+ $('gh').style.transform=`translateY(${Math.round(Math.sin(t*9)*3)*6}px)`;
+ $('hook').style.opacity=t<1.7?1:0;
+ const n=1+Math.floor(t*250/288);$('door').textContent=`문 ${n} / 801`;
+ $('prog').style.width=(n/801*100).toFixed(2)+'%';
+ $('dlg').style.opacity=t>5?1:0;
+ const k=Math.floor(cl((t-5.3)/1.5)*L1.length),k2=Math.floor(cl((t-7.2)/1.6)*L2.length);
+ $('tx').innerHTML=L1.slice(0,k)+(k2>0?'<br>'+L2.slice(0,k2):'');
+ $('ch').style.opacity=t>9.3?1:0;$('cur').style.opacity=(Math.floor(t*3)%2||t>11)?1:0;
+ $('end').style.opacity=cl((t-12)/.4);
+}window.seek=seek;seek(0);</script></body></html>

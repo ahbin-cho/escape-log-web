@@ -1,0 +1,29 @@
+<!doctype html><html><head><meta charset="utf-8"><style>@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
+@font-face{font-family:A;src:url(../../../assets/fonts/SBAggroB.woff)}
+@font-face{font-family:Dokdo;src:url(../assets/fonts/east-sea-dokdo-korean-400-normal.woff2)}
+*{box-sizing:border-box;margin:0;padding:0}html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+.st{position:relative;width:1080px;height:1920px;overflow:hidden}
+#bg{position:absolute;inset:0;width:1080px;height:1920px}
+.w{position:absolute;left:100px;font-family:Dokdo;color:#F4F1E8;white-space:nowrap;filter:url(#rough);text-shadow:0 0 6px rgba(244,241,232,.3)}
+#ring{position:absolute;left:70px;top:1090px;width:900px;height:230px;border:10px solid #F2776A;border-radius:50%;transform:rotate(-3deg);filter:url(#rough)}
+#hook{position:absolute;left:0;right:0;top:620px;text-align:center}
+</style></head><body><div class="st"><svg width="0" height="0" style="position:absolute"><filter id="rough"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="5"/></filter></svg>
+<img id="bg" src="../assets/cnt-chalk.png">
+<div class="w" id="hook" style="left:0;font-size:170px;line-height:1.05">방탈출,<br><span style="color:#FFE27A">다 깰 수 있을까?</span></div>
+<div class="w ln" data-t="1.8" data-d=".7" style="top:170px;font-size:120px;color:#FFE27A">오늘의 문제</div>
+<div class="w ln" data-t="2.8" data-d="1.1" style="top:380px;font-size:150px">방탈출 테마 801개</div>
+<div class="w ln" data-t="4.2" data-d="1.1" style="top:560px;font-size:150px">− 주인장이 깬 방</div>
+<div class="w ln" data-t="5.6" data-d=".5" style="top:740px;font-size:150px">= ?</div>
+<div class="w ln" data-t="6.6" data-d="1.0" style="top:960px;font-size:92px;color:#CFE0D3">풀이: 세다가 포기… (너무 많음)</div>
+<div class="w ln" data-t="8.0" data-d="1.0" style="top:1130px;left:150px;font-size:150px;color:#F2776A">답: 아직 한참!</div>
+<div id="ring"></div>
+<div class="w ln" data-t="10.2" data-d="1.2" style="top:1400px;font-size:110px">그래서 주인장도</div>
+<div class="w ln" data-t="11.2" data-d="1.0" style="top:1520px;font-size:110px;color:#FFE27A">아직 즐기는 중 :)</div>
+<div class="w ln" data-t="12.4" data-d=".6" style="top:1660px;left:620px;font-size:72px;color:#CFE0D3">@bangtal_log</div>
+</div><script>const $=i=>document.getElementById(i);const cl=x=>Math.max(0,Math.min(1,x));const e=t=>1-Math.pow(1-t,3);
+const lines=[...document.querySelectorAll('.ln')];
+function seek(t){
+ $('hook').style.opacity=t<1.5?1:cl(1-(t-1.5)/.2);
+ lines.forEach(l=>{const k=cl((t-+l.dataset.t)/+l.dataset.d);l.style.clipPath=`inset(-20% ${(1-k)*105}% -20% 0)`;});
+ const r=cl((t-9.0)/.6);$('ring').style.clipPath=`inset(0 ${(1-r)*100}% 0 0)`;
+}window.seek=seek;seek(0);</script></body></html>
