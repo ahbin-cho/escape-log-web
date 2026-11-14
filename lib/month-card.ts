@@ -156,6 +156,34 @@ function card(
   c.stroke();
 }
 
+// 나뉜 칸용 작은 표지: 장르 색 바탕에 테마 이름만(자리가 좁다)
+function miniTile(c: CanvasRenderingContext2D, r: EscapeRecord, x: number, y: number, w: number, h: number) {
+  const t = TONE[r.genre] ?? TONE["기타"];
+  c.save();
+  c.beginPath();
+  c.rect(x, y, w, h);
+  c.clip();
+  c.fillStyle = t.bg;
+  c.fillRect(x, y, w, h);
+  const g = c.createLinearGradient(x, y, x + w * 0.6, y + h);
+  g.addColorStop(0, `${t.accent}33`);
+  g.addColorStop(1, `${t.accent}00`);
+  c.fillStyle = g;
+  c.fillRect(x, y, w, h);
+  const p = 7;
+  const size = Math.max(13, Math.min(19, Math.round(w * 0.17)));
+  const lh = Math.round(size * 1.18);
+  c.font = `800 ${size}px ${BODY}`;
+  c.fillStyle = PAPER;
+  c.textAlign = "left";
+  c.textBaseline = "top";
+  const maxLines = Math.max(1, Math.min(2, Math.floor((h - p * 2) / lh)));
+  const lines = wrapWords((s) => c.measureText(s).width, r.themeName || "제목 없음", w - p * 2, maxLines);
+  lines.forEach((l, i) => c.fillText(l, x + p, y + h - p - (lines.length - i) * lh));
+  c.textBaseline = "alphabetic";
+  c.restore();
+}
+
 // 미니 포스터(PosterTile 과 같은 모양): 장르 색 바탕, 위에 장르, 가운데 테마 이름, 아래 주황 줄 + 탈출 점
 function posterTile(c: CanvasRenderingContext2D, r: EscapeRecord, x: number, y: number, w: number, h: number) {
   const t = TONE[r.genre] ?? TONE["기타"];
@@ -327,19 +355,40 @@ export async function drawMonthCard(canvas: HTMLCanvasElement, month: string, re
         c.fill();
         return;
       }
-      posterTile(c, cell.records[0], x, py, colW, posterH);
-      if (cell.records.length > 1) {
-        const label = `+${cell.records.length - 1}`;
-        c.font = `800 22px ${BODY}`;
-        const bw = c.measureText(label).width + 20;
-        const bx = x + colW - bw + 8;
-        const by = py + posterH - 22;
-        card(c, bx, by, bw, 34, 17, ORANGE, { line: 3 });
+      // 하루 여러 방이면 달력 화면처럼 칸을 나눈다: 2=위아래, 3=위 1+아래 2, 4방부터는 3장 + "+N"
+      const list = cell.records;
+      if (list.length === 1) {
+        posterTile(c, list[0], x, py, colW, posterH);
+        return;
+      }
+      const g = 4;
+      const hh = (posterH - g) / 2;
+      const hw = (colW - g) / 2;
+      c.save();
+      c.beginPath();
+      c.roundRect(x, py, colW, posterH, Math.round(colW * 0.1));
+      c.clip();
+      if (list.length === 2) {
+        miniTile(c, list[0], x, py, colW, hh);
+        miniTile(c, list[1], x, py + hh + g, colW, hh);
+      } else if (list.length === 3) {
+        miniTile(c, list[0], x, py, colW, hh);
+        miniTile(c, list[1], x, py + hh + g, hw, hh);
+        miniTile(c, list[2], x + hw + g, py + hh + g, hw, hh);
+      } else {
+        miniTile(c, list[0], x, py, hw, hh);
+        miniTile(c, list[1], x + hw + g, py, hw, hh);
+        miniTile(c, list[2], x, py + hh + g, hw, hh);
+        c.fillStyle = ORANGE;
+        c.fillRect(x + hw + g, py + hh + g, hw, hh);
         c.fillStyle = INK;
+        c.textAlign = "center";
         c.textBaseline = "middle";
-        c.fillText(label, bx + bw / 2, by + 18);
+        c.font = `800 ${Math.round(hw * 0.42)}px ${BODY}`;
+        c.fillText(`+${list.length - 3}`, x + hw + g + hw / 2, py + hh + g + hh / 2 + 1);
         c.textBaseline = "alphabetic";
       }
+      c.restore();
     });
   });
 

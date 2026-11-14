@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import PosterTile from "@/components/PosterTile";
+import PosterTile, { TONE } from "@/components/PosterTile";
 import Link from "next/link";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
 };
 
 // 달력 예시 한 주 (실제 사용자 데이터 아님)
-type CalCell = { day: number; genre?: string; name?: string; success?: boolean; more?: number };
+type CalCell = { day: number; genre?: string; name?: string; success?: boolean; also?: { genre: string; name: string }[] };
 const CAL_SAMPLE: CalCell[] = [
   ...[2, 3, 4, 5, 6, 7].map((day) => ({ day })),
   { day: 8, genre: "추리", name: "고양이 탐정 사무소", success: false },
@@ -44,7 +44,7 @@ const CAL_SAMPLE: CalCell[] = [
   ...[16, 17, 18].map((day) => ({ day })),
   { day: 19, genre: "감성", name: "달빛 편지", success: true },
   { day: 20 },
-  { day: 21, genre: "판타지", name: "마법사의 서재", success: true, more: 1 },
+  { day: 21, genre: "판타지", name: "마법사의 서재", success: true, also: [{ genre: "모험", name: "보물섬 지도" }, { genre: "코믹", name: "수상한 분식집" }] },
   { day: 22, genre: "공포", name: "어느 폐가의 기록", success: true },
 ];
 
@@ -114,7 +114,7 @@ const FAQ = [
   },
   {
     q: "달력으로도 볼 수 있나요?",
-    a: "네. 기록하면 다녀온 날짜 칸이 테마 포스터로 채워지는 달력이 기본 화면이에요. 인증샷을 올리면 그 사진으로 채워지고, 하루에 여러 방을 했으면 +2처럼 표시돼요. 날짜를 누르면 그날 기록이 바로 펼쳐져요.",
+    a: "네. 기록하면 다녀온 날짜 칸이 테마 포스터로 채워지는 달력이 기본 화면이에요. 인증샷을 올리면 그 사진으로 채워지고, 하루에 여러 방을 했으면 칸을 나눠서 다 보여 주고, 4방부터는 +1처럼 표시돼요. 날짜를 누르면 그날 기록이 바로 펼쳐져요.",
   },
   {
     q: "몇 번째 방인지 자동으로 세 주나요?",
@@ -204,11 +204,11 @@ export default function DiaryLandingPage() {
         <h2 className="text-xl font-extrabold">📅 달력으로 한눈에</h2>
         <p className="text-sm text-cream/60">
           예시 화면이에요. 다녀온 날짜 칸이 테마 포스터(또는 내 인증샷)로
-          채워져서, 이번 달 얼마나 달렸는지 한눈에 보여요.
+          채워지고, 하루에 여러 방을 한 날은 칸이 나뉘어 담겨요.
         </p>
         <div className="rough mx-auto max-w-sm rounded-2xl border-2 border-edge bg-panel p-3">
           <p className="mb-2 text-center text-sm font-extrabold">
-            11월 <span className="text-xs font-bold text-cream/55">· 6방 · 탈출 5</span>
+            11월 <span className="text-xs font-bold text-cream/55">· 7방 · 탈출 6</span>
           </p>
           <div className="grid grid-cols-7 gap-1.5 text-center text-[11px] font-extrabold">
             {["일", "월", "화", "수", "목", "금", "토"].map((w) => (
@@ -220,14 +220,24 @@ export default function DiaryLandingPage() {
               <div key={c.day} className="flex flex-col gap-1">
                 <span className={c.name ? "text-cream" : "text-cream/35"}>{c.day}</span>
                 {c.name ? (
-                  <span className="relative block aspect-[3/4] overflow-hidden rounded-md shadow-sm ring-1 ring-edge/20">
-                    <PosterTile genre={c.genre ?? "기타"} name={c.name} success={c.success} />
-                    {c.more && (
-                      <span className="absolute bottom-1 right-1 rounded-full bg-panel/90 px-1 text-[9px] font-extrabold leading-3 text-edge">
-                        +{c.more}
-                      </span>
-                    )}
-                  </span>
+                  c.also ? (
+                    // 하루 여러 방: 실제 달력처럼 칸을 나눠 담는다
+                    <span className="grid aspect-[3/4] grid-cols-2 grid-rows-2 gap-px overflow-hidden rounded-md shadow-sm ring-1 ring-edge/20">
+                      {[{ genre: c.genre ?? "기타", name: c.name }, ...c.also].map((t, k) => (
+                        <span
+                          key={t.name}
+                          className={`flex items-end p-[3px] text-left text-[7px] font-extrabold leading-[1.1] text-[#F5F0E6] ${k === 0 ? "col-span-2" : ""}`}
+                          style={{ backgroundColor: (TONE[t.genre] ?? TONE["기타"]).bg }}
+                        >
+                          <span className="line-clamp-2 [word-break:keep-all]">{t.name}</span>
+                        </span>
+                      ))}
+                    </span>
+                  ) : (
+                    <span className="relative block aspect-[3/4] overflow-hidden rounded-md shadow-sm ring-1 ring-edge/20">
+                      <PosterTile genre={c.genre ?? "기타"} name={c.name} success={c.success} />
+                    </span>
+                  )
                 ) : (
                   <span className="block aspect-[3/4]" />
                 )}
