@@ -7,7 +7,7 @@ import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { hasGuestPending, importGuestRecords } from "@/lib/store";
 import { trackAttributionEvent } from "@/lib/track";
 
-type Mode = "signin" | "signup";
+type Mode = "signin" | "signup" | "reset";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -17,6 +17,7 @@ export default function LoginPage() {
   const [nickname, setNickname] = useState("");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const [sent, setSent] = useState(false);
 
   const configured = isSupabaseConfigured();
 
@@ -25,6 +26,8 @@ export default function LoginPage() {
   useEffect(() => {
     const q = new URLSearchParams(window.location.search);
     if (q.get("mode") === "signup") setMode("signup");
+    if (q.get("mode") === "reset") setMode("reset");
+    if (q.get("error") === "link") setMessage("링크가 만료됐거나 이미 쓰였어요. 아래에서 메일을 다시 받아 주세요.");
     if (hasGuestPending()) {
       try {
         const raw = window.localStorage.getItem("escapelog:records:v1");
@@ -55,8 +58,29 @@ export default function LoginPage() {
       : "로그인에 실패했어요. 잠시 후 다시 시도해 주세요.";
   }
 
+  // 비밀번호 찾기: 메일로 재설정 링크를 보낸다. 가입 여부는 알려 주지 않는다(남의 이메일 가입 여부 확인 방지).
+  async function handleReset(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email.trim()) return;
+    setBusy(true);
+    setMessage("");
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+        redirectTo: `${window.location.origin}/auth/callback?next=/login/new-password`,
+      });
+      if (error && /rate limit|too many|seconds/i.test(error.message)) throw error;
+      setSent(true);
+    } catch (err) {
+      setMessage(friendlyError(err));
+    } finally {
+      setBusy(false);
+    }
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (mode === "reset") return handleReset(e);
     if (!email.trim() || !password) return;
     setBusy(true);
     setMessage("");
@@ -101,10 +125,12 @@ export default function LoginPage() {
     <div className="mx-auto max-w-md space-y-6 py-8">
       <div className="text-center">
         <h1 className="text-xl font-extrabold sm:text-2xl">
-          {mode === "signin" ? "로그인" : "회원가입"}
+          {mode === "signin" ? "로그인" : mode === "signup" ? "회원가입" : "비밀번호 찾기"}
         </h1>
         <p className="mt-2 text-sm text-cream/70">
-          이메일과 비밀번호로 간단하게 시작해요.
+          {mode === "reset"
+            ? "가입한 이메일로 새 비밀번호를 정하는 링크를 보내 드려요."
+            : "이메일과 비밀번호로 간단하게 시작해요."}
         </p>
       </div>
 
@@ -128,6 +154,7 @@ export default function LoginPage() {
             onClick={() => {
               setMode(m);
               setMessage("");
+              setSent(false);
             }}
             className={`rough flex-1 rounded-xl border-2 border-edge px-3 py-2 text-sm font-extrabold transition active:scale-[0.98] ${
               mode === m ? "bg-candy text-edge shadow-cute" : "bg-panel"
@@ -145,6 +172,16 @@ export default function LoginPage() {
         </div>
       )}
 
+      {mode === "reset" && sent ? (
+        <div className="space-y-3 rounded-2xl border-2 border-edge bg-panel p-6 text-sm shadow-cute">
+          <p className="font-extrabold">📮 메일을 보냈어요</p>
+          <p className="text-cream/70">
+            <b className="text-cream">{email.trim()}</b> 로 가입돼 있다면 몇 분 안에 메일이 와요.
+            메일 속 <b className="text-cream">‘비밀번호 다시 정하기’</b> 링크를 누르면 새 비밀번호를 정할 수 있어요.
+          </p>
+          <p className="text-cream/70">메일이 안 보이면 스팸함도 확인해 주세요. 링크는 한 번만 쓸 수 있어요.</p>
+        </div>
+      ) : (
       <form
         onSubmit={handleSubmit}
         className="space-y-4 rounded-2xl border-2 border-edge bg-panel p-6 shadow-cute"
@@ -178,6 +215,7 @@ export default function LoginPage() {
             className="w-full rounded-xl border-2 border-edge bg-ink px-4 py-2.5 text-sm font-bold outline-none placeholder:text-cream/45 focus:border-candy"
           />
         </div>
+        {mode !== "reset" && (
         <div>
           <label className="mb-1.5 block text-sm font-bold text-cream/70">
             비밀번호 <span className="font-normal text-cream/55">(6자 이상)</span>
@@ -193,6 +231,7 @@ export default function LoginPage() {
             className="w-full rounded-xl border-2 border-edge bg-ink px-4 py-2.5 text-sm font-bold outline-none placeholder:text-cream/45 focus:border-candy"
           />
         </div>
+        )}
         {message && (
           <p className="text-sm font-bold text-red-500">{message}</p>
         )}
@@ -205,9 +244,37 @@ export default function LoginPage() {
             ? "처리 중…"
             : mode === "signin"
               ? "로그인"
-              : "가입하고 시작하기"}
+              : mode === "signup"
+                ? "가입하고 시작하기"
+                : "재설정 메일 받기"}
         </button>
+        {mode === "signin" && (
+          <button
+            type="button"
+            onClick={() => {
+              setMode("reset");
+              setMessage("");
+              setSent(false);
+            }}
+            className="block w-full text-center text-[13px] font-bold text-cream/60 underline underline-offset-2"
+          >
+            비밀번호를 잊었어요
+          </button>
+        )}
+        {mode === "reset" && (
+          <button
+            type="button"
+            onClick={() => {
+              setMode("signin");
+              setMessage("");
+            }}
+            className="block w-full text-center text-[13px] font-bold text-cream/60 underline underline-offset-2"
+          >
+            ← 로그인으로
+          </button>
+        )}
       </form>
+      )}
 
       <p className="text-center text-sm">
         <Link href="/" className="font-bold text-cream/60 underline">

@@ -5,7 +5,9 @@ import { createClient } from "@/lib/supabase/server";
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/";
+  // next 는 우리 사이트 안 경로만 허용(//evil.com, @evil.com 같은 바깥 주소로 튕기지 않게)
+  const rawNext = searchParams.get("next") ?? "/";
+  const next = rawNext.startsWith("/") && !rawNext.startsWith("//") && !rawNext.startsWith("/\\") ? rawNext : "/";
 
   if (code) {
     const supabase = createClient();
@@ -14,6 +16,7 @@ export async function GET(request: Request) {
       return NextResponse.redirect(`${origin}${next}`);
     }
   }
-  // 실패 시 로그인 페이지로.
+  // 실패 시 로그인 페이지로. 비밀번호 재설정 링크였다면 다시 받는 화면으로.
+  if (next.startsWith("/login/new-password")) return NextResponse.redirect(`${origin}/login?mode=reset&error=link`);
   return NextResponse.redirect(`${origin}/login?error=1`);
 }
