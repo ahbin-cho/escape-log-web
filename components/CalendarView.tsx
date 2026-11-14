@@ -40,7 +40,7 @@ export default function CalendarView({
   // 하루 칸의 대표 기록: 포스터(또는 인증샷)가 있는 기록을 먼저, 없으면 그날 첫 기록
   function cover(list: EscapeRecord[]): { record: EscapeRecord; image: string } {
     for (const record of list) {
-      const image = findPoster(posters, record.themeName, record.cafeName)?.poster || record.photoUrl;
+      const image = record.photoUrl || findPoster(posters, record.themeName, record.cafeName)?.poster;
       if (image) return { record, image };
     }
     return { record: list[0], image: "" };

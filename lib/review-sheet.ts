@@ -1,5 +1,5 @@
 // 리뷰 시트(1080×1350): 방탈러들이 인스타에 올리는 '방탈출 리뷰' 양식 한 장을 브라우저에서 그린다.
-// 포스터(공식 포스터 → 내가 올린 사진 → 장르 색 표지) · 테마/매장/날짜 · 탈출 결과 · 플레이 정보 · 체감 난이도 · 공포도 · 평점 · 한줄 후기.
+// 표지(내가 올린 사진 → 공식 포스터 → 장르 색 표지) · 테마/매장/날짜 · 탈출 결과 · 플레이 정보 · 체감 난이도 · 공포도 · 평점 · 한줄 후기.
 // 공식 포스터는 자르지 않고 그대로 넣고 아래에 출처를 적는다.
 import { wrapText } from "./review-image";
 import { RATING_LABELS, RATING_EMOJI } from "./terms";
@@ -91,8 +91,9 @@ export async function makeReviewSheet(r: ReviewSheetInput): Promise<Blob> {
   // 포스터(왼쪽): 자르지 않고 칸 안에 맞춘다
   const PX = 56, PY = 130, PW = 400, PH = 540;
   box(PX, PY, PW, PH, r.tone.bg);
-  const poster = r.posterUrl ? await loadImage(r.posterUrl) : null;
-  const photo = !poster && r.photoUrl ? await loadImage(r.photoUrl) : null;
+  // 내가 올린 사진 → 공식 포스터 → 장르 색 표지
+  const photo = r.photoUrl ? await loadImage(r.photoUrl) : null;
+  const poster = !photo && r.posterUrl ? await loadImage(r.posterUrl) : null;
   const img = poster ?? photo;
   c.save();
   c.beginPath(); c.roundRect(PX + 2, PY + 2, PW - 4, PH - 4, 20); c.clip();

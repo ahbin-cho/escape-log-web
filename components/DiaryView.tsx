@@ -92,10 +92,6 @@ export default function DiaryView({
                       {r.oneLiner && <p className="mt-1.5 line-clamp-2 text-sm text-cream/85">“{r.oneLiner}”</p>}
                     </div>
 
-                    {r.photoUrl && (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={r.photoUrl} alt="" loading="lazy" className="h-[72px] w-[72px] shrink-0 rounded-md object-cover" />
-                    )}
                   </div>
                   <div className="flex justify-end gap-2 pb-3 pt-1.5">
                     <ShareRecordButton
