@@ -1,9 +1,11 @@
--- 룸익스케이프 신촌 블랙점(서대문구 연세로4길 6, 3층) 4개 · 신촌 화이트점(서대문구 명물길 66, 2층) 5개 추가/갱신
+-- 룸익스케이프 신촌 블랙점(서대문구 연세로4길 6, 3층) 4개 · 신촌 화이트점(서대문구 명물길 66, 2층) 5개
+--   · 신촌 올리브점(서대문구 연세로9길 25, 지하 1층) 2개 추가/갱신
+--   (올리브점 값은 화이트점 페이지를 받을 때 함께 들어 있던 지점 목록에서 읽었다. 추가 접속은 하지 않았다.)
 -- Supabase → SQL Editor 에 붙여 넣고 Run. 여러 번 실행해도 안전.
 -- 출처: 공식 사이트 https://www.ex-cape.com (2026-11-13, 지점 테마 페이지)
 --   ⚠️ 이 사이트는 하단에 "허가된 요청 외에 크롤링 등 무단 수집을 금지합니다"라고 적어 두었다.
 --      그래서 테마명·난이도·60분·예약 링크(사실 정보)만 넣고, 소개 문구와 포스터는 넣지 않았다. 더 긁어 오지 않는다.
---   난이도는 정수로 올림(4.5 → 5, 3.5 → 4). 장르·공포도·인원은 표기가 없어 '기타'·임시 3·빈칸. 가격은 넣지 않았다(0).
+--   제한시간: 블랙·화이트 60분, 올리브점 오즈 75분·JUDGE 60분(공식 값). 난이도는 정수로 올림(4.5 → 5, 3.5 → 4). 장르·공포도·인원은 표기가 없어 '기타'·임시 3·빈칸. 가격은 넣지 않았다(0).
 
 with v(name, cafe, genre, difficulty, fear_level, tags, teaser, time_limit, players, price, reservation_url, poster_url) as (values
   ('냥이점집', '룸익스케이프 신촌 블랙점', '기타', 4::int2, 3::int2, array[]::text[],
@@ -23,6 +25,10 @@ with v(name, cafe, genre, difficulty, fear_level, tags, teaser, time_limit, play
   ('비폴로 17호 : 우주로의 확장', '룸익스케이프 신촌 화이트점', '기타', 3::int2, 3::int2, array[]::text[],
    '', 60::int2, '', 0, 'https://www.ex-cape.com/reservation/', ''),
   ('마카오 : 꼭두각시 광시곡', '룸익스케이프 신촌 화이트점', '기타', 5::int2, 3::int2, array[]::text[],
+   '', 60::int2, '', 0, 'https://www.ex-cape.com/reservation/', ''),
+  ('오즈 : 익시드 드림', '룸익스케이프 신촌 올리브점', '기타', 4::int2, 3::int2, array[]::text[],
+   '', 75::int2, '', 0, 'https://www.ex-cape.com/reservation/', ''),
+  ('JUDGE : 정의 집행', '룸익스케이프 신촌 올리브점', '기타', 3::int2, 3::int2, array[]::text[],
    '', 60::int2, '', 0, 'https://www.ex-cape.com/reservation/', '')
 ),
 upd as (
@@ -33,5 +39,5 @@ upd as (
 insert into public.catalog (name, cafe, genre, difficulty, fear_level, tags, teaser, time_limit, players, price, reservation_url, poster_url)
 select v.* from v where not exists (select 1 from public.catalog c where c.name=v.name and c.cafe=v.cafe);
 
--- 결과 확인(9줄이 나와야 한다)
+-- 결과 확인(11줄이 나와야 한다)
 select cafe, name, genre, difficulty, fear_level, time_limit, players from public.catalog where cafe like '룸익스케이프 신촌%' order by cafe, name;

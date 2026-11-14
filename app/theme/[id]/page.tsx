@@ -22,9 +22,9 @@ import {
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from "@/lib/site";
 import { listedConditions } from "@/lib/best";
 
-// 순수 SSG: 배포 시 generateStaticParams 의 전 테마를 미리 구움.
-// 크롤링 데이터라 거의 안 바뀌므로 자동 재생성(ISR)은 안 씀 → 갱신은 재배포로.
+// 배포 시 전 테마를 미리 굽고, DB 를 고치면 10분 안에 다시 굽는다(재배포 불필요).
 // dynamicParams(기본 true): 배포 후 새로 추가된 테마도 첫 요청 때 생성되어 캐시됨.
+export const revalidate = 600;
 export const dynamicParams = true;
 
 type ThemeDetail = ThemeRow & {
@@ -33,8 +33,35 @@ type ThemeDetail = ThemeRow & {
   price?: number | null;
 };
 
+// DB 에 확인된 값만으로 만드는 "자주 묻는 것". 화면과 구조화 데이터(FAQPage)가 같은 내용을 쓴다.
+// 값이 없는 항목은 질문 자체를 만들지 않는다(추측 금지).
+function themeFaq(t: ThemeDetail): { q: string; a: string }[] {
+  const faq: { q: string; a: string }[] = [];
+  if (t.booking_open) {
+    faq.push({
+      q: `${t.name} 예약은 언제 열리나요?`,
+      a: t.booking_open.startsWith("매주")
+        ? `${t.booking_open}에 열려요. 바뀔 수 있으니 예약 페이지에서 한 번 더 확인하세요.`
+        : `방문일 ${t.booking_open}부터 예약할 수 있어요. 바뀔 수 있으니 예약 페이지에서 한 번 더 확인하세요.`,
+    });
+  }
+  if (t.players) {
+    faq.push({ q: `${t.name}, 몇 명이서 할 수 있나요?`, a: `${t.players}인이 할 수 있어요.` });
+  }
+  if (t.time_limit) {
+    faq.push({ q: `${t.name} 플레이 시간은 얼마나 되나요?`, a: `제한 시간은 ${t.time_limit}분이에요.` });
+  }
+  if (t.price) {
+    faq.push({
+      q: `${t.name} 가격은 얼마인가요?`,
+      a: `1인 ${t.price.toLocaleString("ko-KR")}원이에요. 인원·요일에 따라 달라질 수 있어요.`,
+    });
+  }
+  return faq.length >= 2 ? faq : [];
+}
+
 const THEME_COLUMNS =
-  "id,name,cafe,genre,difficulty,fear_level,tags,teaser,time_limit,players,reservation_url,poster_url";
+  "id,name,cafe,genre,difficulty,fear_level,tags,teaser,time_limit,players,reservation_url,poster_url,price";
 
 async function getTheme(id: string): Promise<ThemeDetail | null> {
   try {
@@ -82,12 +109,21 @@ export async function generateMetadata({
     t.time_limit ? `${t.time_limit}분` : null,
     t.players ? `${t.players}` : null,
   ].filter(Boolean);
-  const description =
-    // 크롤링 원문의 예약·이용 안내를 걷어낸 줄거리로 검색 결과 요약을 만든다
-    teaserPreview(cleanTeaser(t.teaser || ""), 120) ||
-    `${t.cafe}의 방탈출 테마 '${t.name}'. ${bits.join(
-      " · "
-    )}. 방탈로그에서 취향 진단과 맞춤 추천을 받아보세요.`;
+  // 검색 결과 요약: 사람들이 찾는 값(시간·인원·가격·예약 오픈)을 앞에, 줄거리를 뒤에 둔다.
+  const facts = [
+    `난이도 ${t.difficulty}/5`,
+    t.time_limit ? `${t.time_limit}분` : null,
+    t.players ? `${t.players}인` : null,
+    t.price ? `1인 ${t.price.toLocaleString("ko-KR")}원` : null,
+    t.booking_open ? `예약 오픈 ${t.booking_open}` : null,
+  ].filter(Boolean);
+  // 크롤링 원문의 예약·이용 안내를 걷어낸 줄거리
+  const story = teaserPreview(cleanTeaser(t.teaser || ""), 90);
+  const description = story
+    ? `${t.cafe} · ${facts.join(" · ")}. ${story}`
+    : `${t.cafe}의 방탈출 테마 '${t.name}'. ${bits.join(
+        " · "
+      )}. 방탈로그에서 취향 진단과 맞춤 추천을 받아보세요.`;
 
   return {
     title: `${t.name} — ${t.cafe} 방탈출${region ? ` (${region})` : ""}`,
@@ -184,12 +220,29 @@ export default async function ThemePage({
     ],
   };
 
+  const faq = themeFaq(t);
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((x) => ({
+      "@type": "Question",
+      name: x.q,
+      acceptedAnswer: { "@type": "Answer", text: x.a },
+    })),
+  };
+
   return (
     <article className="mx-auto max-w-2xl">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {faq.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
+        />
+      )}
 
       {/* 빵부스러기 내비 (내부 링크 + 사용자 경로) */}
       <nav aria-label="경로" className={CRUMB}>
@@ -282,6 +335,20 @@ export default async function ThemePage({
       <div className="mt-3">
         <BookingOpen rule={t.booking_open} />
       </div>
+
+      {faq.length > 0 && (
+        <section className="mt-8">
+          <h2 className={H2}>자주 묻는 것</h2>
+          <dl className="mt-2.5 space-y-3 text-[15px]">
+            {faq.map((x) => (
+              <div key={x.q}>
+                <dt className="font-extrabold">{x.q}</dt>
+                <dd className="mt-0.5 leading-relaxed text-cream/80">{x.a}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )}
 
       <QuizRow
         className="mt-4"

@@ -45,7 +45,7 @@
 
 ## 인스타 카드 기준 (2026-11-13 운영자 확정)
 - **이미 올린 시리즈에 이어지는 것은 그 시리즈의 원래 스타일을 유지한다.**
-  예: 수능 이벤트(노란 쿠폰 스타일, `tools/ig/templates/sp*.html`·`sps*.html`) — EVENT 5 해피앤딩은 `sps5.html`.
+  예: 수능 이벤트(노란 쿠폰 스타일, `tools/ig/templates/sp*.html`·`sps*.html`) — EVENT 해피앤딩은 `sps6-happyanding.html`(sps5 는 룸익스케이프 올리브점).
 - **새로 시작하는 것은 디자인 D + 유쾌한 느낌으로 만든다.**
   종이 바탕·Pretendard 제목·주황 한 단어 + 물결 밑줄, 기울인 화면, 노랑/주황 스티커, 주황 붓글씨 한마디, 탈출귀 말풍선.
   기준 예시: `tools/ig/templates/diary1~4.html`.
