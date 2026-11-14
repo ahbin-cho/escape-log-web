@@ -116,7 +116,7 @@ def stories(c):
         open(os.path.join(T, f"dgs{i}.html"), "w").write(s)
     print("dgs2~5 written (v3)")
 
-if __name__ == "__main__":
+if __name__ == "__main__" and os.path.basename(sys.argv[0]) == "build_daegu2.py":
     c = json.load(open(sys.argv[1]))
     if len(sys.argv) > 2: POSTERS.update(json.load(open(sys.argv[2])))
     cover(c)
