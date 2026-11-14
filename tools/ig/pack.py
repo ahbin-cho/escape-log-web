@@ -200,7 +200,14 @@ def main(reel_path):
     root = os.path.join(OUT, "방탈로그_직접올리기")
     shutil.rmtree(root, ignore_errors=True)
     jobs = []
-    for p in sorted(POSTS, key=lambda x: x["dir"]):
+    today = (datetime.datetime.utcnow() + datetime.timedelta(hours=9)).date()
+
+    def post_date(p):
+        m = re.match(r"\d+[a-z]?_(\d+)-(\d+)", p["dir"])
+        return datetime.date(2026, int(m.group(1)), int(m.group(2))) if m else today
+
+    # 지난 날짜 게시물은 묶음에서 뺀다(운영자 요청 11/14). 오늘 것은 남긴다.
+    for p in sorted([p for p in POSTS if post_date(p) >= today], key=lambda x: x["dir"]):
         d = os.path.join(root, with_weekday(p["dir"])); os.makedirs(d, exist_ok=True)
         for i, html in enumerate(p.get("pages", []), 1):
             w, h = p["size"]
