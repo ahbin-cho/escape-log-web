@@ -435,7 +435,11 @@ def with_weekday(name):
     wd = WD[datetime.date(2026, int(mo), int(dd)).weekday()]
     return f"{n}_{mo}-{dd}({wd})_{rest}"
 
-def main(reel_path):
+def main(reel_path=None):
+    # 두 번째 인자는 스토리 03 의 '무대 영상'(이머시브). 영수증 릴스를 넣는 실수가 있었다(11/15) → 기본값을 두고 잘못 넣으면 멈춘다
+    reel_path = reel_path or os.path.join(os.path.dirname(OUT), "reel", "immersive-motion.mp4")
+    assert "receipt" not in os.path.basename(reel_path), "두 번째 인자는 무대 영상(immersive-motion.mp4)이에요. 영수증 릴스는 13번 폴더가 따로 챙겨요."
+
     root = os.path.join(OUT, "방탈로그_직접올리기")
     shutil.rmtree(root, ignore_errors=True)
     jobs = []
