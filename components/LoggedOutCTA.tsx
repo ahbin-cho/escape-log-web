@@ -29,7 +29,7 @@ export default function LoggedOutCTA() {
   if (loggedIn === true) return null;
 
   return (
-    <section className="flex flex-col-reverse items-start gap-4 pb-2 sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:py-6">
+    <section className="flex flex-col-reverse items-start gap-4 pb-2 sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:py-2">
       <div className="max-w-xl">
         <p className="mb-2 text-sm font-extrabold text-candy">
           방탈출 기록장 · 취향 진단 · 맞춤 추천

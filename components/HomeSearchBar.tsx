@@ -1,14 +1,44 @@
 "use client";
 
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { publicClient } from "@/lib/supabase/public";
+import { kstDate } from "@/lib/home-picks";
+
 // 홈 맨 위 큰 검색창. 누르면 헤더의 검색(바로 결과가 뜨는 창)을 연다.
 // 자바스크립트가 안 돌면 /search 로 그냥 넘어가도록 form 으로 감쌌다.
-const QUICK = ["강남", "홍대", "안 무서운", "공포", "감성", "키이스케이프"];
+// '많이 찾는' 칩: Supabase 표 home_chips 에서 읽는다(운영자가 SQL 로 바꿈, docs/sql/home_chips.sql).
+// 표가 없거나 비었거나 못 읽으면 아래 기본 칩. href 가 있으면 그 페이지로, 없으면 그 말로 검색창을 연다.
+type Chip = { label: string; href: string };
+const QUICK: Chip[] = ["강남", "홍대", "안 무서운", "공포", "감성", "키이스케이프"].map((label) => ({ label, href: "" }));
 
 function openSearch(preset?: string) {
   window.dispatchEvent(new CustomEvent("open-search", { detail: preset }));
 }
 
 export default function HomeSearchBar() {
+  const [chips, setChips] = useState<Chip[]>(QUICK);
+  useEffect(() => {
+    let alive = true;
+    const today = kstDate(new Date());
+    publicClient()
+      .from("home_chips")
+      .select("label,href,until")
+      .eq("active", true)
+      .order("sort")
+      .order("id")
+      .then(({ data, error }) => {
+        if (!alive || error || !data) return;
+        const list = (data as { label: string; href: string | null; until: string | null }[])
+          .filter((c) => c.label?.trim() && (!c.until || c.until >= today))
+          // 사이트 안 경로만(바깥 주소로 내보내지 않는다)
+          .map((c) => ({ label: c.label.trim(), href: (c.href ?? "").trim().startsWith("/") ? (c.href ?? "").trim() : "" }));
+        if (list.length) setChips(list);
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
   return (
     <div className="space-y-2.5">
       <form
@@ -44,16 +74,26 @@ export default function HomeSearchBar() {
       </form>
       <div className="no-scrollbar -mx-1 flex gap-1.5 overflow-x-auto px-1">
         <span className="shrink-0 self-center text-xs font-bold text-cream/45">많이 찾는</span>
-        {QUICK.map((k) => (
-          <button
-            key={k}
-            type="button"
-            onClick={() => openSearch(k)}
-            className="shrink-0 rounded-full border-2 border-edge/20 bg-panel px-3 py-1 text-xs font-bold text-cream/70 transition hover:border-edge active:scale-[0.97]"
-          >
-            {k}
-          </button>
-        ))}
+        {chips.map((c) =>
+          c.href ? (
+            <Link
+              key={c.label}
+              href={c.href}
+              className="shrink-0 rounded-full border-2 border-edge/20 bg-panel px-3 py-1 text-xs font-bold text-cream/70 transition hover:border-edge active:scale-[0.97]"
+            >
+              {c.label}
+            </Link>
+          ) : (
+            <button
+              key={c.label}
+              type="button"
+              onClick={() => openSearch(c.label)}
+              className="shrink-0 rounded-full border-2 border-edge/20 bg-panel px-3 py-1 text-xs font-bold text-cream/70 transition hover:border-edge active:scale-[0.97]"
+            >
+              {c.label}
+            </button>
+          )
+        )}
       </div>
     </div>
   );

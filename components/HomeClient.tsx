@@ -45,7 +45,7 @@ export default function HomeClient({ discover }: { discover: ReactNode }) {
 
 
   return (
-    <div className="space-y-8 sm:space-y-10">
+    <div className="space-y-6 sm:space-y-7">
       {/* 검색은 첫 화면 맨 위에: 찾는 방이 있는 사람은 바로 찾게 */}
       <HomeSearchBar />
       <LoggedOutCTA />
