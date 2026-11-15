@@ -12,6 +12,7 @@ where c.id in (
   'ee05926c-93d1-4dd6-8290-784e1bdc7c92', -- 아바타
   'a8427c14-e634-4b4c-b7ae-93d94c8cb794', -- 리바이벌 REVIVER
   'ab5d5167-2b31-4a13-8132-bd973484b10c', -- 카지노: 게임의 법칙
-  '4eba7208-dd09-4dd6-ba91-316972c36059'  -- 비공식클래스: 기억표백의 진실편
+  '4eba7208-dd09-4dd6-ba91-316972c36059', -- 비공식클래스: 기억표백의 진실편
+  '73830bc1-d8e1-4f22-ac70-fad65db9d5ee'  -- 인사이드 더 플레이: 카지노X
 );
 select name, cafe, poster_url from public.catalog where poster_url like '%/posters/immersive/%' order by name;
