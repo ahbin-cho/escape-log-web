@@ -115,7 +115,8 @@ export const POST_SCHEDULE: { date: string; set: string; extra?: boolean }[] = [
 
   // 이 방의 이야기는 카드 대신 릴스로(처음 보는 사람에게 더 퍼진다)
   { date: "2026-11-15", set: "reel:b60b538b-618e-4102-ab57-06f369f56a4b", extra: true }, // 성지기숙학원 : 특수교정반
-  { date: "2026-11-16", set: "reel:4451205b-df5a-462f-9f62-4461c59f9440" }, // 영안실
+  // 11/16 영안실 릴스: 자동 게시가 인스타 "Fatal" 로 실패해서 운영자 요청으로 쉼(운영자가 직접 올림)
+  { date: "2026-11-16", set: "skip" },
   { date: "2026-11-17", set: "reel:5bcecef5-c59b-41a4-bb31-dda03276f724" }, // 춘화각 : 피할 수 없는 저주
   { date: "2026-11-18", set: "cafes:yearend", extra: true },
   { date: "2026-12-01", set: "ad-recap" },
