@@ -34,7 +34,13 @@ async function graph(path: string, init?: RequestInit) {
   const res = await fetch(`${base}${path}`, init);
   const body = await res.json().catch(() => ({}));
   if (!res.ok || body.error) {
-    throw new Error(body.error?.message || `인스타 API 오류 ${res.status}`);
+    // 원인 찾기용: 인스타가 준 오류 번호·세부 번호·사용자용 문구까지 남긴다(토큰 등 비밀값은 넣지 않음)
+    const e = body.error ?? {};
+    const step = path.split("?")[0].replace(/\/\d+/g, "/:id");
+    const detail = [e.code && `code ${e.code}`, e.error_subcode && `sub ${e.error_subcode}`, e.error_user_title, e.error_user_msg, e.fbtrace_id && `trace ${e.fbtrace_id}`]
+      .filter(Boolean)
+      .join(" · ");
+    throw new Error(`${e.message || `인스타 API 오류 ${res.status}`} [${step}]${detail ? ` (${detail})` : ""}`);
   }
   return body;
 }
