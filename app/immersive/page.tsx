@@ -92,7 +92,7 @@ export default async function ImmersivePage() {
   return (
     <article className="mx-auto max-w-3xl space-y-10">
       {jsonLd.map((j, i) => (
-        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(j) }} />
+        <script key={i} hidden type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(j) }} />
       ))}
 
       <nav aria-label="현재 위치" className={CRUMB}>

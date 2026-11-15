@@ -84,7 +84,7 @@ export default async function SpotlightPage({ params }: Props) {
   return (
     <article className="mx-auto max-w-3xl space-y-10">
       {jsonLd.map((j, i) => (
-        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(j) }} />
+        <script key={i} hidden type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(j) }} />
       ))}
 
       <header className="space-y-3 border-b border-line pb-6">

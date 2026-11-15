@@ -132,7 +132,7 @@ export default async function BestConditionPage({ params }: Props) {
   return (
     <article className="space-y-8">
       <script
-        type="application/ld+json"
+        hidden type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 

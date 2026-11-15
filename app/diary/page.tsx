@@ -165,7 +165,7 @@ export default function DiaryLandingPage() {
   return (
     <article className="space-y-12">
       <script
-        type="application/ld+json"
+        hidden type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 

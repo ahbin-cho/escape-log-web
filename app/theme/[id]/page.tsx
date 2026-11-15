@@ -238,12 +238,12 @@ export default async function ThemePage({
   return (
     <article className="mx-auto max-w-2xl">
       <script
-        type="application/ld+json"
+        hidden type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       {faq.length > 0 && (
         <script
-          type="application/ld+json"
+          hidden type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
         />
       )}
