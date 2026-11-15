@@ -2,6 +2,9 @@ import Link from "next/link";
 import { getPublicFeed } from "@/lib/store";
 import ReviewCard from "@/components/ReviewCard";
 import { publicClient } from "@/lib/supabase/public";
+import { buildPosterIndex, findPoster } from "@/lib/poster";
+import { posterSrc } from "@/lib/ui";
+import { brandOf } from "@/lib/cafe";
 
 // 공개 후기는 서버에서 그려 검색엔진이 받는 HTML 에도 실리게 한다.
 // 새 후기가 배포 없이도 보이도록 10분마다 다시 만든다.
@@ -14,6 +17,18 @@ export default async function FeedPage() {
   } catch {
     reviews = []; // DB 못 읽으면 빈 목록(빌드는 통과)
   }
+  // 사진 없는 후기는 공식 포스터를 깔아 준다(출처 표기). 못 읽으면 장르 색 그대로
+  let posters: ReturnType<typeof buildPosterIndex> = {};
+  try {
+    const { data } = await publicClient().from("catalog").select("id,name,cafe,poster_url").neq("poster_url", "");
+    posters = buildPosterIndex((data as { id: string; name: string; cafe: string; poster_url: string | null }[]) ?? []);
+  } catch {
+    posters = {};
+  }
+  const posterFor = (name: string, cafe: string) => {
+    const src = posterSrc(findPoster(posters, name, cafe)?.poster);
+    return src ? { src, credit: `포스터: ${brandOf(cafe) || cafe} 공식` } : undefined;
+  };
 
   return (
     <div className="space-y-6">
@@ -38,7 +53,7 @@ export default async function FeedPage() {
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {reviews.map((r) => (
-            <ReviewCard key={r.id} review={r} byline={`— ${r.nickname}${r.isSample ? " · 예시" : ""}`} />
+            <ReviewCard key={r.id} review={r} poster={posterFor(r.themeName, r.cafeName)} byline={`— ${r.nickname}${r.isSample ? " · 예시" : ""}`} />
           ))}
         </div>
       )}

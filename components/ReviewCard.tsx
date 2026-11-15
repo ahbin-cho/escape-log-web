@@ -85,9 +85,11 @@ export async function shareReviewImage(r: ReviewCardData, byline?: string): Prom
 export default function ReviewCard({
   review: r,
   byline,
+  poster,
   children,
 }: {
   review: ReviewCardData;
+  poster?: { src: string; credit: string }; // 사진이 없을 때 깔 공식 포스터(출처 표기)
   byline?: string; // "— 닉네임", "47번째 방" 등
   children?: React.ReactNode; // 카드 아래에 붙일 것(수정 링크 등)
 }) {
@@ -95,6 +97,7 @@ export default function ReviewCard({
   const chips = reviewChips(r);
   const [busy, setBusy] = useState(false);
   const [photoOk, setPhotoOk] = useState(true);
+  const [posterOk, setPosterOk] = useState(true);
   const photos = r.photoUrls?.length ? r.photoUrls : r.photoUrl ? [r.photoUrl] : [];
   const [shown, setShown] = useState(0);
 
@@ -135,6 +138,19 @@ export default function ReviewCard({
             onError={() => setPhotoOk(false)}
             className="absolute inset-0 h-full w-full object-cover opacity-[0.65]"
           />
+        ) : poster && posterOk ? (
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={poster.src}
+              alt={`${r.themeName} 포스터`}
+              loading="lazy"
+              referrerPolicy="no-referrer"
+              onError={() => setPosterOk(false)}
+              className="absolute inset-0 h-full w-full object-cover opacity-[0.5]"
+            />
+            <span className="pointer-events-none absolute bottom-1.5 right-3 z-10 text-[9px] font-bold text-white/55">{poster.credit}</span>
+          </>
         ) : (
           <span className="absolute inset-0" style={{ backgroundImage: `linear-gradient(150deg, ${tone.accent}55 0%, transparent 60%)` }} />
         )}
