@@ -46,7 +46,7 @@ def main(cfg, posters):
 <span class="chip" style="background:#3A2E28;color:#EAD6C4;padding:6px 16px;font-size:22px">1 / 6</span></div>
 <h1 style="position:absolute;left:64px;top:118px;font-size:80px;color:#3A2E28">부산 방탈출,<br><span style="color:#3B6FD9">어데 갈끼고?</span></h1>
 <div style="position:absolute;left:64px;right:64px;top:1105px;display:grid;grid-template-columns:1fr 1fr;gap:10px">{toc}</div>
-<div class="ft" style="top:1300px;color:#3A2E28;opacity:.8"><span>바다 보고 방탈출까지, 테마 {c["total"]}개 중에 골라 봤다 아이가 🌊 →</span><b>탈깍.로그</b></div></body></html>'''
+<div class="ft" style="top:1300px;color:#3A2E28;opacity:.8"><span>바다 보고 방탈출까지, 테마 {c["total"]}개 중에 골라 봤다 아이가 🌊 →</span><b>탈깍노트</b></div></body></html>'''
     open(os.path.join(T, "bs1.html"), "w").write(s1)
     ss1 = (B.HEAD % 1920) + f'''<div style="position:absolute;inset:0;background:#EAD6C4"></div><div style="position:absolute;left:0;right:0;top:0;height:600px;background:#D6CED8"></div>
 <img src="../assets/bs-cover.jpg" style="position:absolute;left:0;top:250px;width:1080px;height:1340px">
@@ -62,7 +62,7 @@ def main(cfg, posters):
 <h1 style="position:absolute;left:64px;top:126px;font-size:86px;color:#FFF6EA;{TS}">{title}</h1>
 <p style="position:absolute;left:60px;top:238px;font-weight:800;font-size:22px;color:#FFF6EA;background:rgba(18,14,34,.72);border-radius:999px;padding:6px 16px">{note} · {sub}</p>
 <div class="grid" style="top:1008px;--ac:{ac}">{cards}</div>
-<div class="ft" style="top:1300px;color:#FFF6EA;opacity:.9"><span>{cr}</span><b>탈깍.로그</b></div>'''
+<div class="ft" style="top:1300px;color:#FFF6EA;opacity:.9"><span>{cr}</span><b>탈깍노트</b></div>'''
         open(os.path.join(T, f"bs{i}.html"), "w").write(page(1350, art, shift, inner))
         st = 1050 - (985 + shift)  # 스토리: 유령 발끝이 카드 위(1050)에 오게
         bc = band(art)
@@ -85,8 +85,8 @@ def main(cfg, posters):
 <span class="chip" style="background:#FFFBF2;border:3px solid #3A2E28;padding:7px 16px;font-size:23px">🔍 검색창에 "부산"</span>
 <span class="chip" style="background:#FFFBF2;border:3px solid #3A2E28;padding:7px 16px;font-size:23px">📖 줄거리·난이도·후기</span>
 <span class="chip" style="background:#FFFBF2;border:3px solid #3A2E28;padding:7px 16px;font-size:23px">🎯 취향 추천</span></div>
-<div><span class="chip" style="background:#E2603F;color:#fff;border:3px solid #3A2E28;padding:11px 24px;font-size:29px;box-shadow:5px 5px 0 #3A2E28">프로필 링크 → talkkak.com</span></div></div>
-<div class="ft" style="top:1300px;color:#FFF6EA;opacity:.9"><span>먼저 써 보고 10초 가입</span><b>탈깍.로그</b></div>'''
+<div><span class="chip" style="background:#E2603F;color:#fff;border:3px solid #3A2E28;padding:11px 24px;font-size:29px;box-shadow:5px 5px 0 #3A2E28">프로필 링크 → talkkaknote.com</span></div></div>
+<div class="ft" style="top:1300px;color:#FFF6EA;opacity:.9"><span>먼저 써 보고 10초 가입</span><b>탈깍노트</b></div>'''
     open(os.path.join(T, "bs6.html"), "w").write(page(1350, "bs-end.jpg", 135, inner))
     print("bs1~6, bss1~5 written")
 

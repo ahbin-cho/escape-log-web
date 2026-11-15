@@ -60,7 +60,7 @@ export default function SiteHeader() {
           href="/"
           className="shrink-0 whitespace-nowrap font-display text-lg tracking-tight"
         >
-          탈깍<span className="text-candy">.</span>로그
+          탈깍노트
         </Link>
         <nav className="flex flex-wrap items-center justify-end gap-0.5 sm:gap-1.5">
           <SearchButton />

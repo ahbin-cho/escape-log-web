@@ -65,7 +65,7 @@ export async function shareReviewImage(r: ReviewCardData, byline?: string): Prom
       blob = await makeReviewImage({ ...r, chips: reviewChips(r), byline, tone });
     }
     const file = new File([blob], "talkkak-review.jpg", { type: "image/jpeg" });
-    const text = `${r.themeName}${r.oneLiner ? ` — “${r.oneLiner}”` : ""} · 탈깍.로그`;
+    const text = `${r.themeName}${r.oneLiner ? ` — “${r.oneLiner}”` : ""} · 탈깍노트`;
     if (navigator.canShare?.({ files: [file] })) {
       await navigator.share({ files: [file], text });
     } else {

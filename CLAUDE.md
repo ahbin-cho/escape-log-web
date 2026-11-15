@@ -1,4 +1,8 @@
-# 방탈로그 (bangtallog.com)
+# 탈깍노트 (talkkaknote.com)
+
+> 2026-11-15 이름 변경: 방탈로그(bangtallog.com · @bangtal_log) → **탈깍노트**(talkkaknote.com · @talkkak.note).
+> 같은 이름 "방탈로그"(bangtalog.com · @bangtalog · 앱)가 먼저 있어서 바꿨다. 예전 주소는 2027-11-11 만료까지 새 주소로 301 이동.
+> 바꾸는 날 할 일·진행 상황은 `docs/rebrand/README.md`.
 
 방탈출 다녀온 기록을 남기는 다이어리 + 취향 진단·맞춤 추천·친구 궁합 서비스.
 Next.js 14(App Router) · TypeScript · Tailwind · Supabase · Vercel(Hobby).

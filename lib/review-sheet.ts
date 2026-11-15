@@ -79,7 +79,7 @@ export async function makeReviewSheet(r: ReviewSheetInput): Promise<Blob> {
   for (let y = 14; y < H; y += 28) for (let x = 14; x < W; x += 28) { c.beginPath(); c.arc(x, y, 2, 0, 7); c.fill(); }
 
   // 머리: 로고 · N번째 방
-  c.fillStyle = INK; c.font = `36px ${TITLE}`; c.fillText("탈깍.로그", 56, 88);
+  c.fillStyle = INK; c.font = `36px ${TITLE}`; c.fillText("탈깍노트", 56, 88);
   if (r.nth) {
     const t = `${r.nth}번째 방`;
     c.font = `800 28px ${BODY}`;

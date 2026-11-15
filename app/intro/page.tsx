@@ -5,13 +5,13 @@ import Mascot from "@/components/Mascot";
 import { DEFAULT_OG_IMAGE } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "탈깍.로그 소개 — 방탈러를 위한 올인원",
+  title: "탈깍노트 소개 — 방탈러를 위한 올인원",
   description:
-    "인기순 말고 내 취향 저격. 방탈출 기록·취향 진단·맞춤 추천·친구 궁합까지 무료로. 방탈러를 위한 올인원 서비스 탈깍.로그를 소개합니다.",
+    "인기순 말고 내 취향 저격. 방탈출 기록·취향 진단·맞춤 추천·친구 궁합까지 무료로. 방탈러를 위한 올인원 서비스 탈깍노트를 소개합니다.",
   alternates: { canonical: "/intro" },
   openGraph: {
     images: [DEFAULT_OG_IMAGE],
-    title: "탈깍.로그 — 방 좀 깨봤어? 취향 딱 짚어줄게",
+    title: "탈깍노트 — 방 좀 깨봤어? 취향 딱 짚어줄게",
     description:
       "기록·취향 진단·맞춤 추천·친구 궁합까지. 방탈러를 위한 올인원, 무료.",
   },
@@ -33,7 +33,7 @@ export default function IntroPage() {
       <section className="rounded-2xl border-2 border-edge bg-panel p-8 text-center shadow-cute">
         <Mascot className="mx-auto h-24 w-24" />
         <h1 className="mt-3 text-2xl font-extrabold sm:text-3xl">
-          탈깍.로그 소개 <br className="sm:hidden" />
+          탈깍노트 소개 <br className="sm:hidden" />
           방탈러를 위한 올인원
         </h1>
         <p className="mt-3 text-sm text-cream/70">

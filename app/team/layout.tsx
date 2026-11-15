@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/team" },
   openGraph: {
     images: [DEFAULT_OG_IMAGE],
-    title: "방탈출 팀 조합 진단 | 탈깍.로그",
+    title: "방탈출 팀 조합 진단 | 탈깍노트",
     description: "우리 팀은 어떤 원정대? 방 안 역할이랑 같이 갈 방까지.",
   },
 };

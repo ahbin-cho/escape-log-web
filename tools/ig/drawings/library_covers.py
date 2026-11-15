@@ -1,4 +1,4 @@
-"""운영자 기록 캐러셀(서재·달력·리뷰 시트)의 탈깍.로그 표지 — 책 표지처럼 글자 중심으로.
+"""운영자 기록 캐러셀(서재·달력·리뷰 시트)의 탈깍노트 표지 — 책 표지처럼 글자 중심으로.
 공식 포스터를 못 쓰는 방(키이스케이프처럼 조심할 곳, 포스터 주소에 접속이 안 되는 곳)에 쓴다.
 짠해는 공식 포스터(넥스트에디션)를 그대로 쓴다.
 
@@ -48,7 +48,7 @@ html,body{{width:400px;height:600px;overflow:hidden;background:{bg}}}
 .s{{position:absolute;left:0;right:0;bottom:48px;text-align:center;font:500 14px P;letter-spacing:.18em;color:#F6EEDCaa}}
 .g{{position:absolute;inset:0;opacity:.16;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}}
 </style></head><body><div class="c"></div><div class="f"></div><div class="f2"></div>
-<div class="k">TALKKAK.LOG</div>
+<div class="k">TALKKAK NOTE</div>
 <div class="e"><svg viewBox="0 0 120 120">{emb}</svg></div>
 <div class="r"></div>
 <div class="t">{title}{sub}</div>

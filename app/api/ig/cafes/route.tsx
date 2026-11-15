@@ -9,7 +9,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const pageLabel = (page: number, total: number) => `${page} / ${total}`;
-const SOURCE = "탈깍.로그 테마 데이터 기준";
+const SOURCE = "탈깍노트 테마 데이터 기준";
 
 export async function GET(req: Request) {
   const url = new URL(req.url);

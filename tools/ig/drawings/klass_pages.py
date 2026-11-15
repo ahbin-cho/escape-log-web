@@ -63,7 +63,7 @@ def scene(w, h, ground, moon=None, bolt_x=None, bscale=None, seed=None, case_y=N
             f'</defs>{briefcase(w*0.05, cy, w/1080*0.95) if cy > 0 else ""}</svg>')
 
 
-FOOT = """<div class="a foot" style="left:72px;right:72px;bottom:%dpx"><span>TALKKAK.LOG · IMMERSIVE</span><span>@talkkak.log</span></div>
+FOOT = """<div class="a foot" style="left:72px;right:72px;bottom:%dpx"><span>TALKKAK NOTE · IMMERSIVE</span><span>@talkkak.note</span></div>
 <div class="a vig"></div><div class="a grain"></div></body></html>"""
 
 INFO = "11.26–12.27 · KBS스포츠월드 생활체육관 · 85분 · 만 16세 이상 · 55,000원"
@@ -162,7 +162,7 @@ feed("klass-f3.html", f"""
 <div class="a kick" style="left:72px;right:72px;top:80px">BEFORE 11.30 12:00</div>
 <div class="a ttl" style="left:72px;right:72px;top:126px;font-size:76px">신입 탐정<br><em>입단 준비물</em></div>
 <div class="a plate" style="left:72px;right:72px;top:440px;padding:6px 34px">{st}</div>
-<div class="a" style="left:72px;right:72px;top:1130px;font-size:27px;font-weight:800;text-align:center">다른 이머시브 공연도 → talkkak.com/immersive</div>
+<div class="a" style="left:72px;right:72px;top:1130px;font-size:27px;font-weight:800;text-align:center">다른 이머시브 공연도 → talkkaknote.com/immersive</div>
 <div class="a note" style="left:72px;right:72px;top:1180px;font-size:19px;text-align:center">2차 오픈 일시는 보도자료 기준 · 배경 그림은 공식 포스터 분위기로 새로 그렸어요</div>
 """, ground=900, case_y=-1)
 print("ok")

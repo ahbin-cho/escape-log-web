@@ -7,7 +7,7 @@ import { brandOf, branchOf } from "@/lib/cafe";
 import Poster from "@/components/Poster";
 import { posterSrc } from "@/lib/ui";
 
-// 홈 맨 위 "새로 들어온 방": 탈깍.로그에 최근 등록된 테마를 화제의 방(스포트라이트)과 같은 잡지 지면 모양으로.
+// 홈 맨 위 "새로 들어온 방": 탈깍노트에 최근 등록된 테마를 화제의 방(스포트라이트)과 같은 잡지 지면 모양으로.
 // 포스터가 있는 테마를 앞에, 한 브랜드가 몰리지 않게 섞는다(freshPicks). 아래에 지금 화제인 정리 페이지 바로가기.
 // 서버 컴포넌트라 테마 링크가 HTML 에 실려 검색엔진이 따라간다. (운영자 요청 2026-11-14)
 const LIMIT = 12;
@@ -25,7 +25,7 @@ export default async function HomeNewStrip() {
       <div className="px-5 pb-4 pt-5 sm:px-7 sm:pt-7">
         <p className="flex items-center gap-2 text-[11px] font-extrabold tracking-[0.22em] text-candy">
           <span className="h-px w-6 bg-candy" />
-          NEW · 탈깍.로그에 새로 들어온 테마
+          NEW · 탈깍노트에 새로 들어온 테마
         </p>
         <h2 id="home-newstrip" className="mt-3 text-2xl leading-snug sm:text-3xl [word-break:keep-all]">
           이번 주 새로 담은 방, 먼저 구경해요

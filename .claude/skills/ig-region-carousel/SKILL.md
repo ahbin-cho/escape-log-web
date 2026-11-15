@@ -7,7 +7,7 @@ description: 지역별 방탈출 모음 캐러셀(예: 수원·강남·홍대 �
 수원편이 기준이다: `tools/ig/templates/sw1~6.html`, 결과 `public/ig-static/suwon/`.
 
 ## 1. 테마 고르기
-`https://talkkak.com/api/ig/collection?area=<지역>&page=1..6` 가 조건별로 고른 결과를 보여 준다
+`https://talkkaknote.com/api/ig/collection?area=<지역>&page=1..6` 가 조건별로 고른 결과를 보여 준다
 (고르는 규칙은 `lib/collection.ts`: 공포 / 무공포 / 입문 / 이야기, 섹션당 4개, 같은 매장 최대 2개).
 장마다 목적에 맞는 정보만: 공포=무서운 정도, 무공포=장르·난이도, 입문=난이도·시간·인원, 이야기=공식 줄거리 첫 문장.
 

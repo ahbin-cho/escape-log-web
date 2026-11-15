@@ -95,7 +95,7 @@ export async function makeReviewImage(r: ReviewImageInput): Promise<Blob> {
   // 위: 브랜드 · 날짜
   c.fillStyle = "#FFFFFF";
   c.font = `34px ${TITLE}`;
-  c.fillText("탈깍.로그", PAD, 118);
+  c.fillText("탈깍노트", PAD, 118);
   c.font = `800 28px ${BODY}`;
   c.fillStyle = "rgba(255,255,255,0.8)";
   const top = [r.genre, r.playedAt?.replaceAll("-", ".")].filter(Boolean).join(" · ");

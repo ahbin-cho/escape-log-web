@@ -337,7 +337,7 @@ export function genreCard(p: {
           <div style={{ fontSize: 40, fontWeight: 800, color: key === "pop" ? m.text : m.accent }}>
             {p.reveal ? "줄거리·후기 → 프로필 링크" : "정답은 프로필 링크에서"}
           </div>
-          <div style={{ marginTop: 8, fontSize: 28, fontWeight: 500, color: m.dim }}>탈깍.로그 · {SITE_HOST}</div>
+          <div style={{ marginTop: 8, fontSize: 28, fontWeight: 500, color: m.dim }}>탈깍노트 · {SITE_HOST}</div>
         </div>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={`${p.origin}/mascot.png`} alt="" width={120} height={120} />

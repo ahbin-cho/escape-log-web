@@ -21,7 +21,7 @@ html,body{width:1080px;height:1920px;background:#000;overflow:hidden;font-family
 .cta .x{color:#1D1D1D;font-weight:800;font-size:44px;letter-spacing:-.03em}.cta .x b{color:#E0782A}
 .cta .s{color:#6B665D;font-weight:500;font-size:28px;margin-top:6px}
 '''
-CTA = '<div class="cta"><img src="../../../public/mascot.png" width="110" height="110"><div><div class="x">다녀왔다면 <b>한 줄 기록</b></div><div class="s">줄거리·후기는 프로필 링크 · talkkak.com</div></div></div>'
+CTA = '<div class="cta"><img src="../../../public/mascot.png" width="110" height="110"><div><div class="x">다녀왔다면 <b>한 줄 기록</b></div><div class="s">줄거리·후기는 프로필 링크 · talkkaknote.com</div></div></div>'
 
 def page(key, css, body, script=""):
     open(os.path.join(T, f"reel-{key}.html"), "w").write(
