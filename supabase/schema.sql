@@ -89,6 +89,7 @@ create table if not exists public.records (
 -- 이미 records 테이블을 만든 뒤 컬럼 추가하는 경우(재실행 안전)
 alter table public.records add column if not exists region     text not null default '';
 alter table public.records add column if not exists photo_url  text not null default '';
+alter table public.records add column if not exists photo_urls text[] not null default '{}'; -- 여러 장(대표 = 첫 장 = photo_url, 최대 4)
 alter table public.records add column if not exists party_size int2 not null default 0;
 alter table public.records add column if not exists theme_type text not null default '';
 
@@ -188,7 +189,8 @@ create view public.public_reviews as
   select r.id, r.user_id, r.theme_name, r.cafe_name, r.played_at, r.genre,
          r.difficulty, r.fear_level, r.rating, r.success, r.remaining_time,
          r.hint_count, r.one_liner, r.region, r.photo_url, r.party_size, r.created_at,
-         coalesce(p.is_sample, false) as is_sample
+         coalesce(p.is_sample, false) as is_sample,
+         r.photo_urls
   from public.records r
   left join public.profiles p on p.id = r.user_id
   where r.is_public = true and r.hidden = false;
@@ -243,6 +245,8 @@ create policy "posters admin delete" on storage.objects
 insert into storage.buckets (id, name, public)
 values ('photos', 'photos', true)
 on conflict (id) do nothing;
+-- 한 장 최대 2MB · 사진 형식만(사이트가 올리기 전에 긴 변 1600px 로 줄인다)
+update storage.buckets set file_size_limit = 2097152, allowed_mime_types = array['image/webp', 'image/jpeg', 'image/png'] where id = 'photos';
 
 drop policy if exists "photos read" on storage.objects;
 create policy "photos read" on storage.objects

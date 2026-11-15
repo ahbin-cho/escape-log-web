@@ -21,6 +21,7 @@ export type ReviewCardData = {
   partySize: number;
   oneLiner: string;
   photoUrl: string;
+  photoUrls?: string[]; // 여러 장이면 옆으로 넘겨 본다(첫 장 = 대표)
   playedAt: string;
   difficulty?: number; // 난이도·공포도가 있으면(내 기록) 리뷰 시트로 그린다
   fearLevel?: number;
@@ -94,6 +95,8 @@ export default function ReviewCard({
   const chips = reviewChips(r);
   const [busy, setBusy] = useState(false);
   const [photoOk, setPhotoOk] = useState(true);
+  const photos = r.photoUrls?.length ? r.photoUrls : r.photoUrl ? [r.photoUrl] : [];
+  const [shown, setShown] = useState(0);
 
   async function share(e: React.MouseEvent) {
     e.preventDefault();
@@ -107,7 +110,23 @@ export default function ReviewCard({
   return (
     <article className="overflow-hidden rounded-2xl bg-panel ring-1 ring-edge/15">
       <div className="relative aspect-[4/5] text-white" style={{ backgroundColor: tone.bg }}>
-        {r.photoUrl && photoOk ? (
+        {photos.length > 1 ? (
+          <div
+            className="no-scrollbar absolute inset-0 flex snap-x snap-mandatory overflow-x-auto"
+            onScroll={(e) => setShown(Math.round(e.currentTarget.scrollLeft / Math.max(1, e.currentTarget.clientWidth)))}
+          >
+            {photos.map((u, i) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={u}
+                src={u}
+                alt={`${r.themeName} 인증샷 ${i + 1}`}
+                loading="lazy"
+                className="h-full w-full shrink-0 snap-center object-cover opacity-[0.65]"
+              />
+            ))}
+          </div>
+        ) : r.photoUrl && photoOk ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={r.photoUrl}
@@ -119,9 +138,16 @@ export default function ReviewCard({
         ) : (
           <span className="absolute inset-0" style={{ backgroundImage: `linear-gradient(150deg, ${tone.accent}55 0%, transparent 60%)` }} />
         )}
-        <span className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/10 to-black/80" />
+        <span className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/35 via-black/10 to-black/80" />
+        {photos.length > 1 && (
+          <span className="pointer-events-none absolute inset-x-0 top-12 flex justify-center gap-1" aria-label={`사진 ${photos.length}장 중 ${shown + 1}번째`}>
+            {photos.map((u, i) => (
+              <span key={u} className={`h-1.5 rounded-full transition-all ${i === shown ? "w-4 bg-white" : "w-1.5 bg-white/50"}`} />
+            ))}
+          </span>
+        )}
 
-        <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4 text-[11px] font-extrabold tracking-wide text-white/85">
+        <div className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-between p-4 text-[11px] font-extrabold tracking-wide text-white/85">
           <span>
             {r.genre}
             {r.playedAt ? ` · ${r.playedAt.replaceAll("-", ".")}` : ""}
@@ -129,13 +155,13 @@ export default function ReviewCard({
           <button
             onClick={share}
             aria-label="후기 카드 이미지로 공유"
-            className="rounded-full bg-white/15 px-3 py-1.5 text-[11px] font-extrabold backdrop-blur transition hover:bg-white/25 active:scale-95"
+            className="pointer-events-auto rounded-full bg-white/15 px-3 py-1.5 text-[11px] font-extrabold backdrop-blur transition hover:bg-white/25 active:scale-95"
           >
             {busy ? "만드는 중…" : "공유 ↗"}
           </button>
         </div>
 
-        <div className="absolute inset-x-0 bottom-0 space-y-2.5 p-4">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 space-y-2.5 p-4">
           {r.oneLiner && (
             <p className="line-clamp-4 text-lg font-extrabold leading-snug [word-break:keep-all]">“{r.oneLiner}”</p>
           )}

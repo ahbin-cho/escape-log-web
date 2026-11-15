@@ -162,12 +162,15 @@ export default function ThemeReviews({
                   {r.oneLiner && <p className="mt-1 text-sm text-cream/85">“{r.oneLiner}”</p>}
                 </div>
                 {r.photoUrl && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={r.photoUrl}
-                    alt=""
-                    className="h-16 w-16 shrink-0 rounded-lg object-cover"
-                  />
+                  <span className="relative shrink-0">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={r.photoUrl} alt="" className="h-16 w-16 rounded-lg object-cover" />
+                    {(r.photoUrls?.length ?? 0) > 1 && (
+                      <span className="absolute bottom-1 right-1 rounded bg-black/65 px-1 text-[10px] font-extrabold text-white">
+                        +{(r.photoUrls?.length ?? 1) - 1}
+                      </span>
+                    )}
+                  </span>
                 )}
               </li>
             ))}

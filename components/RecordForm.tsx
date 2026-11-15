@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   GENRES,
@@ -8,6 +8,8 @@ import {
   saveRecord,
   deleteRecord,
   uploadRecordPhoto,
+  deleteRecordPhotos,
+  photosOf,
   getCatalog,
   saveGuestRecord,
   type EscapeRecord,
@@ -15,6 +17,7 @@ import {
   type CandidateTheme,
 } from "@/lib/store";
 import { REGIONS, regionFromText } from "@/lib/region";
+import { MAX_PHOTOS } from "@/lib/photos";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { trackAttributionEvent } from "@/lib/track";
 import { fearLabel, RATING_LABELS, RATING_EMOJI } from "@/lib/terms";
@@ -185,9 +188,24 @@ export default function RecordForm({
   mode?: "new" | "edit";
 }) {
   const router = useRouter();
-  const [form, setForm] = useState<EscapeRecord>(
-    initial ?? { ...emptyRecord(), playedAt: todayKst() },
+  const [form, setForm] = useState<EscapeRecord>(() => {
+    const base = initial ?? { ...emptyRecord(), playedAt: todayKst() };
+    return { ...base, photoUrls: photosOf(base) };
+  });
+  const photos = form.photoUrls ?? [];
+  // 저장 공간 아끼기: 이번에 올렸는데 저장 안 하고 나간 사진, 뺀 사진은 파일까지 지운다
+  const initialPhotos = useRef(photosOf(initial ?? emptyRecord()));
+  const uploadedNow = useRef<string[]>([]);
+  const savedRef = useRef(false);
+  useEffect(
+    () => () => {
+      if (!savedRef.current) deleteRecordPhotos(uploadedNow.current);
+    },
+    [],
   );
+  function setPhotos(list: string[]) {
+    setForm((f) => ({ ...f, photoUrls: list, photoUrl: list[0] ?? "" }));
+  }
 
   function set<K extends keyof EscapeRecord>(name: K, value: EscapeRecord[K]) {
     setForm((f) => ({ ...f, [name]: value }));
@@ -280,12 +298,23 @@ export default function RecordForm({
     }));
   }
 
-  async function handlePhoto(file: File | undefined) {
-    if (!file) return;
+  async function handlePhotos(files: FileList | null) {
+    const room = MAX_PHOTOS - photos.length;
+    const picked = Array.from(files ?? []).slice(0, Math.max(0, room));
+    if (!picked.length) return;
+    if ((files?.length ?? 0) > room) alert(`사진은 ${MAX_PHOTOS}장까지 넣을 수 있어요. 앞의 ${room}장만 올릴게요.`);
     setUploading(true);
     try {
-      const url = await uploadRecordPhoto(file);
-      set("photoUrl", url);
+      const urls: string[] = [];
+      for (const f of picked) {
+        const url = await uploadRecordPhoto(f);
+        uploadedNow.current.push(url);
+        urls.push(url);
+      }
+      setForm((f) => {
+        const list = [...(f.photoUrls ?? []), ...urls].slice(0, MAX_PHOTOS);
+        return { ...f, photoUrls: list, photoUrl: list[0] ?? "" };
+      });
     } catch (err) {
       alert(
         err instanceof Error
@@ -295,6 +324,19 @@ export default function RecordForm({
     } finally {
       setUploading(false);
     }
+  }
+
+  function removePhoto(url: string) {
+    setPhotos(photos.filter((u) => u !== url));
+    // 이번에 올린 사진은 바로 지운다(저장된 사진은 저장 버튼을 눌렀을 때 지운다)
+    if (uploadedNow.current.includes(url)) {
+      uploadedNow.current = uploadedNow.current.filter((u) => u !== url);
+      deleteRecordPhotos([url]);
+    }
+  }
+
+  function makeCover(url: string) {
+    setPhotos([url, ...photos.filter((u) => u !== url)]);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -320,6 +362,9 @@ export default function RecordForm({
     }
     try {
       await saveRecord(record);
+      savedRef.current = true;
+      const kept = record.photoUrls ?? [];
+      deleteRecordPhotos(initialPhotos.current.filter((u) => !kept.includes(u)));
       if (mode === "new") trackAttributionEvent("record_saved");
       // 새 기록은 저장하자마자 '기록으로 본 내 유형·다음 방 추천'으로
       router.push(mode === "new" ? "/taste?saved=1" : "/");
@@ -339,6 +384,8 @@ export default function RecordForm({
     if (!confirm("이 기록을 삭제할까요?")) return;
     try {
       await deleteRecord(form.id);
+      savedRef.current = true;
+      deleteRecordPhotos([...initialPhotos.current, ...uploadedNow.current]);
       router.push("/");
       router.refresh();
     } catch (err) {
@@ -618,27 +665,60 @@ export default function RecordForm({
             {guest ? (
               <p className="rounded-xl border-2 border-dashed border-edge/20 px-3.5 py-3 text-[13px] text-cream/50">인증샷은 가입한 뒤에 올릴 수 있어요. 기록은 지금 저장돼요.</p>
             ) : (
-              <div className="flex items-center gap-3">
-                <label className="flex h-20 w-20 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-xl border border-dashed border-edge/20 bg-ink/60 text-2xl text-cream/30">
-                  {form.photoUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={form.photoUrl} alt="첨부 사진" className="h-full w-full object-cover" />
-                  ) : (
-                    "+"
-                  )}
-                  <input type="file" accept="image/*" className="hidden" onChange={(e) => handlePhoto(e.target.files?.[0])} />
-                </label>
-                <div className="text-xs text-cream/50">
-                  {uploading ? (
-                    <p className="font-bold text-candy">올리는 중…</p>
-                  ) : form.photoUrl ? (
-                    <button type="button" onClick={() => set("photoUrl", "")} className="font-bold text-red-500 underline">
-                      사진 빼기
-                    </button>
-                  ) : (
-                    <p>눌러서 사진 고르기</p>
+              <div>
+                <div className="flex flex-wrap gap-2">
+                  {photos.map((u, i) => (
+                    <div key={u} className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-edge/20 bg-ink/60">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={u} alt={`첨부 사진 ${i + 1}`} className="h-full w-full object-cover" />
+                      {i === 0 ? (
+                        <span className="absolute bottom-0 left-0 right-0 bg-black/60 py-0.5 text-center text-[10px] font-extrabold text-white">대표</span>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => makeCover(u)}
+                          className="absolute bottom-0 left-0 right-0 bg-black/45 py-0.5 text-center text-[10px] font-bold text-white"
+                        >
+                          대표로
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        aria-label={`사진 ${i + 1} 빼기`}
+                        onClick={() => removePhoto(u)}
+                        className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/65 text-xs font-extrabold text-white"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                  {photos.length < MAX_PHOTOS && (
+                    <label className="flex h-20 w-20 shrink-0 cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-edge/20 bg-ink/60 text-cream/40">
+                      {uploading ? (
+                        <span className="text-xs font-bold text-candy">올리는 중…</span>
+                      ) : (
+                        <>
+                          <span className="text-2xl leading-none">+</span>
+                          <span className="mt-1 text-[10px] font-bold">
+                            {photos.length}/{MAX_PHOTOS}
+                          </span>
+                        </>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        className="hidden"
+                        disabled={uploading}
+                        onChange={(e) => {
+                          handlePhotos(e.target.files);
+                          e.target.value = "";
+                        }}
+                      />
+                    </label>
                   )}
                 </div>
+                <p className="mt-1.5 text-xs text-cream/50">최대 {MAX_PHOTOS}장 · 첫 장이 대표 사진(피드·달력에 보여요)</p>
               </div>
             )}
           </div>

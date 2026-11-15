@@ -10,6 +10,7 @@ import { createClient, isSupabaseConfigured } from "./supabase/client";
 import { CATALOG as LOCAL_CATALOG } from "./catalog";
 import type { QuizValues } from "./quiz/slots";
 import { normalizeGenre } from "./genre";
+import { compressImage, normalizePhotos, storagePath } from "./photos";
 
 export type Genre =
   | "공포"
@@ -38,7 +39,8 @@ export interface EscapeRecord {
   oneLiner: string; // 공개 · 무스포
   memo: string; // 비공개 · 스포 OK
   region: string; // 시/도 (직접 선택, 빈 값이면 매장명으로 자동 추측)
-  photoUrl: string; // 인증샷 한 장 (Supabase Storage, 공개 시 함께 노출)
+  photoUrl: string; // 대표 인증샷(= photoUrls[0]). 피드·달력·서재·공유 카드는 이것만 쓴다
+  photoUrls?: string[]; // 인증샷 여러 장(대표 포함, 최대 4). 없으면 photoUrl 한 장
   partySize: number; // 함께한 인원 (명), 0=미입력
   themeType: string; // 테마 유형: 장치/자물쇠/문제/혼합 ("" = 미입력)
   isPublic: boolean; // 공개 후기로 올릴지
@@ -143,6 +145,7 @@ type RecordRow = {
   memo: string;
   region: string | null;
   photo_url: string | null;
+  photo_urls?: string[] | null; // docs/sql/records_multi_photos.sql 실행 전엔 없음
   party_size: number | null;
   theme_type: string | null;
   is_public: boolean;
@@ -167,6 +170,7 @@ function fromRow(r: RecordRow): EscapeRecord {
     memo: r.memo ?? "",
     region: r.region ?? "",
     photoUrl: r.photo_url ?? "",
+    photoUrls: normalizePhotos(r.photo_url, r.photo_urls),
     partySize: r.party_size ?? 0,
     themeType: r.theme_type ?? "",
     isPublic: !!r.is_public,
@@ -175,7 +179,13 @@ function fromRow(r: RecordRow): EscapeRecord {
   };
 }
 
+/** 기록의 사진 목록(대표가 맨 앞). photoUrls 가 있으면 그것, 없으면 photoUrl 한 장 */
+export function photosOf(r: Pick<EscapeRecord, "photoUrl" | "photoUrls">): string[] {
+  return r.photoUrls ? normalizePhotos(null, r.photoUrls) : normalizePhotos(r.photoUrl, []);
+}
+
 function toRow(r: EscapeRecord, userId: string) {
+  const photos = photosOf(r);
   return {
     user_id: userId,
     theme_name: r.themeName,
@@ -191,7 +201,8 @@ function toRow(r: EscapeRecord, userId: string) {
     one_liner: r.oneLiner,
     memo: r.memo,
     region: r.region || "", // NOT NULL 컬럼 → null 금지, 빈 문자열로
-    photo_url: r.photoUrl || "", // NOT NULL 컬럼 → null 금지, 빈 문자열로
+    photo_url: photos[0] ?? "", // NOT NULL 컬럼 → null 금지, 빈 문자열로
+    photo_urls: photos,
     party_size: Number(r.partySize) || 0,
     theme_type: r.themeType || "",
     is_public: r.isPublic,
@@ -235,22 +246,18 @@ export async function saveRecord(record: EscapeRecord): Promise<EscapeRecord | n
   } = await supabase.auth.getUser();
   if (!user) throw new Error("로그인이 필요합니다.");
 
-  const row = toRow(record, user.id);
-  if (record.id) {
-    const { data, error } = await supabase
-      .from("records")
-      .update(row)
-      .eq("id", record.id)
-      .select()
-      .single();
-    if (error) throw error;
-    return fromRow(data as RecordRow);
+  const full = toRow(record, user.id);
+  const write = (row: Partial<typeof full>) =>
+    record.id
+      ? supabase.from("records").update(row).eq("id", record.id).select().single()
+      : supabase.from("records").insert(row).select().single();
+  let { data, error } = await write(full);
+  // photo_urls 칸을 만드는 SQL 을 아직 안 돌린 DB → 대표 사진 한 장만 저장
+  if (error && /photo_urls/.test(error.message)) {
+    const { photo_urls: _drop, ...one } = full;
+    void _drop;
+    ({ data, error } = await write(one));
   }
-  const { data, error } = await supabase
-    .from("records")
-    .insert(row)
-    .select()
-    .single();
   if (error) throw error;
   return fromRow(data as RecordRow);
 }
@@ -268,15 +275,31 @@ export async function uploadRecordPhoto(file: File): Promise<string> {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) throw new Error("로그인이 필요합니다.");
-  const ext = file.name.split(".").pop() || "jpg";
+  const { blob, ext } = await compressImage(file); // 긴 변 1600px · WebP/JPEG 로 줄여서 올린다
   const rand = Math.random().toString(36).slice(2, 10);
   const path = `${user.id}/${rand}.${ext}`;
   const { error } = await supabase.storage
     .from("photos")
-    .upload(path, file, { cacheControl: "3600", upsert: false });
+    .upload(path, blob, { cacheControl: "31536000", upsert: false, contentType: blob.type || undefined });
   if (error) throw error;
   const { data } = supabase.storage.from("photos").getPublicUrl(path);
   return data.publicUrl;
+}
+
+// 더는 안 쓰는 인증샷 파일 지우기(뺀 사진·지운 기록). 내 폴더 것만, 실패해도 조용히 넘어간다
+export async function deleteRecordPhotos(urls: string[]): Promise<void> {
+  if (!urls.length) return;
+  try {
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return;
+    const paths = urls.map(storagePath).filter((p): p is string => !!p && p.startsWith(`${user.id}/`));
+    if (paths.length) await supabase.storage.from("photos").remove(paths);
+  } catch {
+    /* 파일이 남아도 화면에는 영향 없음 */
+  }
 }
 
 // user_id 목록 → 닉네임 맵. (records↔profiles 직접 FK가 없어 조인 대신 별도 조회)
