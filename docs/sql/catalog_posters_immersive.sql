@@ -13,6 +13,7 @@ where c.id in (
   'a8427c14-e634-4b4c-b7ae-93d94c8cb794', -- 리바이벌 REVIVER
   'ab5d5167-2b31-4a13-8132-bd973484b10c', -- 카지노: 게임의 법칙
   '4eba7208-dd09-4dd6-ba91-316972c36059', -- 비공식클래스: 기억표백의 진실편
-  '73830bc1-d8e1-4f22-ac70-fad65db9d5ee'  -- 인사이드 더 플레이: 카지노X
+  '73830bc1-d8e1-4f22-ac70-fad65db9d5ee', -- 인사이드 더 플레이: 카지노X
+  '1e7668f3-0c15-441b-bb8a-7ecd0e856182'  -- STAY ALIVE IN MUSEUM 앵콜
 );
 select name, cafe, poster_url from public.catalog where poster_url like '%/posters/immersive/%' order by name;
