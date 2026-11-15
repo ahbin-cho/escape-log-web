@@ -17,3 +17,9 @@ export function ageLimit(tags: string[] | null | undefined): AgeLimit | null {
 export function isAdultOnly(tags: string[] | null | undefined): boolean {
   return ageLimit(tags)?.adultOnly ?? false;
 }
+
+// 가오픈(시범 운영): 매장이 공식으로 가오픈이라고 밝힌 동안만 카탈로그 태그 "가오픈"을 붙인다.
+// 정식 오픈하면 태그를 뗀다(값이 바뀌는 경우가 많아, 가오픈 때 값은 정식 오픈 뒤 다시 확인).
+export function isSoftOpen(tags: string[] | null | undefined): boolean {
+  return (tags ?? []).some((t) => /가\s*오픈/.test(t));
+}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ageLimit, isAdultOnly } from "./age";
+import { ageLimit, isAdultOnly, isSoftOpen } from "./age";
 import { freshPicks, mysteryCandidates } from "./home-picks";
 import type { ThemeRow } from "./catalog-server";
 
@@ -12,6 +12,12 @@ describe("나이 제한", () => {
     expect(ageLimit(["스릴러", "고등학생 미만 불가"])).toEqual({ label: "고등학생 미만 이용 불가", adultOnly: false });
     expect(ageLimit(["공포", "홍대"])).toBeNull();
     expect(ageLimit(null)).toBeNull();
+  });
+
+  it("가오픈 태그를 읽는다", () => {
+    expect(isSoftOpen(["공포", "가오픈"])).toBe(true);
+    expect(isSoftOpen(["공포", "홍대"])).toBe(false);
+    expect(isSoftOpen(null)).toBe(false);
   });
 
   it("성인 전용 테마는 홈 새 테마·오늘의 미스터리(인스타 자동 게시)에 나오지 않는다", () => {

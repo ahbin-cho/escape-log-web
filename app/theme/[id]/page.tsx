@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cleanTeaser, teaserPreview } from "@/lib/home-picks";
-import { ageLimit } from "@/lib/age";
+import { ageLimit, isSoftOpen } from "@/lib/age";
 import { publicClient } from "@/lib/supabase/public";
 import { regionFromText } from "@/lib/region";
 import { brandOf } from "@/lib/cafe";
@@ -151,8 +151,9 @@ export default async function ThemePage({
 
   const region = regionFromText(t.cafe);
   const age = ageLimit(t.tags);
+  const softOpen = isSoftOpen(t.tags);
   // 나이 제한 태그는 아래에서 따로 눈에 띄게 보여 주므로 일반 태그에서는 뺀다
-  const tags = (t.tags ?? []).filter((x) => x !== t.genre && !/미만.*불가|19\s*금/.test(x));
+  const tags = (t.tags ?? []).filter((x) => x !== t.genre && !/미만.*불가|19\s*금|가\s*오픈/.test(x));
 
   // 목록 페이지(지역·브랜드)가 실제로 있을 때만 그쪽으로 링크
   const [regions, brands, all] = await Promise.all([
@@ -287,6 +288,11 @@ export default async function ThemePage({
             <li className="rounded-md bg-ink px-2 py-1 text-xs font-extrabold text-cream/75">
               {genre}
             </li>
+            {softOpen && (
+              <li className="rounded-md bg-[#FFE9A8] px-2 py-1 text-xs font-extrabold text-[#6B4A00]">
+                🚧 가오픈 중
+              </li>
+            )}
             {age && (
               <li className="rounded-md bg-[#FBE3DF] px-2 py-1 text-xs font-extrabold text-[#A32A1C]">
                 {age.adultOnly ? "🔞 " : "⚠️ "}
@@ -365,6 +371,12 @@ export default async function ThemePage({
         sub="질문 몇 개로 내 방탈출 유형과 맞는 방을 찾아 줘요"
       />
 
+      {softOpen && (
+        <p className="rounded-xl border-2 border-[#C99700]/40 bg-[#FFF4CC] px-4 py-3 text-sm font-bold text-[#5A3F00]">
+          🚧 <b className="font-extrabold">가오픈(시범 운영) 중</b>인 테마예요. 난이도·인원·가격·운영 시간이 정식 오픈 때
+          바뀔 수 있어요. 방문 전에 매장 공지를 꼭 확인하세요.
+        </p>
+      )}
       {age && (
         <p className="rounded-xl border-2 border-[#A32A1C]/40 bg-[#FBE3DF] px-4 py-3 text-sm font-bold text-[#7A1F14]">
           {age.adultOnly ? "🔞" : "⚠️"} 매장 안내: <b className="font-extrabold">{age.label}</b>. 예약 전에 매장
