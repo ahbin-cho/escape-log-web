@@ -1,7 +1,6 @@
 """비공식클래스(SPORTS CENTER) 2차 티켓 오픈 — 스토리 3장 + 피드 캐러셀 3장.
 
-공식 포스터 분위기(핏빛 폭풍 구름 · 붉은 달 · 붉은 번개 · 앙상한 나무 · 붉게 불 켜진 체육관 ·
-젖은 바닥 반사 · 안개 · K 가죽 가방)를 SVG 로 새로 그린다. 포스터를 베끼지 않는다.
+배경은 klass_bg.py 가 공식 포스터 분위기로 새로 그린 그림(먼저 실행). 여기선 글자와 K 가방만 얹는다.
 공식 포스터 원본은 피드 2장째에만 작게(출처 표기) 쓴다.
 
 정보 출처
@@ -12,9 +11,7 @@
 
 python3 tools/ig/drawings/klass_pages.py  → tools/ig/templates/tk-klass-{d7,d1,day}.html, klass-f{1,2,3}.html
 """
-import math
 import os
-import random
 
 T = os.path.join(os.path.dirname(__file__), "..", "templates")
 
@@ -45,86 +42,6 @@ html,body{width:%(w)dpx;height:%(h)dpx;overflow:hidden;font-family:P;color:#EFE7
 """
 
 
-def branches(rng, x, y, ang, ln, w, depth, out):
-    if depth == 0 or ln < 6:
-        return
-    x2 = x + math.cos(ang) * ln
-    y2 = y + math.sin(ang) * ln
-    cx = (x + x2) / 2 + rng.uniform(-ln, ln) * 0.15
-    cy = (y + y2) / 2 + rng.uniform(-ln, ln) * 0.15
-    out.append(f'<path d="M{x:.0f} {y:.0f} Q{cx:.0f} {cy:.0f} {x2:.0f} {y2:.0f}" stroke-width="{w:.1f}"/>')
-    n = 2 if depth > 2 else rng.choice([2, 3])
-    for _ in range(n):
-        branches(rng, x2, y2, ang + rng.uniform(-0.75, 0.75), ln * rng.uniform(0.62, 0.8), w * 0.66, depth - 1, out)
-
-
-def tree(seed, x, y, ang, ln, w):
-    rng = random.Random(seed)
-    out = []
-    branches(rng, x, y, ang, ln, w, 8, out)
-    return '<g stroke="#020205" fill="none" stroke-linecap="round">' + "".join(out) + "</g>"
-
-
-def lightning(seed, x, y, length, spread):
-    rng = random.Random(seed)
-    pts = [(x, y)]
-    cx, cy = x, y
-    while cy < y + length:
-        cx += rng.uniform(-spread, spread)
-        cy += rng.uniform(26, 60)
-        pts.append((cx, cy))
-    d = "M" + " L".join(f"{a:.0f} {b:.0f}" for a, b in pts)
-    forks = []
-    for i in range(2, len(pts) - 2, 3):
-        fx, fy = pts[i]
-        q = [(fx, fy)]
-        for _ in range(rng.randint(2, 4)):
-            fx += rng.uniform(10, 40) * rng.choice([-1, 1])
-            fy += rng.uniform(20, 45)
-            q.append((fx, fy))
-        forks.append("M" + " L".join(f"{a:.0f} {b:.0f}" for a, b in q))
-    return d, forks
-
-
-def building(gx, gy, s):
-    """gx: 왼쪽 끝, gy: 땅 높이, s: 배율. 왼쪽은 유리 정면 건물, 오른쪽은 둥근 체육관."""
-    p = []
-    W = lambda v: gx + v * s
-    H = lambda v: gy - v * s
-    # 왼쪽 별관(옥상 구조물)
-    p.append(f'<rect x="{W(0)}" y="{H(300)}" width="{70*s}" height="{300*s}" fill="url(#concrete)"/>')
-    p.append(f'<rect x="{W(60)}" y="{H(360)}" width="{300*s}" height="{360*s}" fill="url(#concrete)"/>')
-    p.append(f'<rect x="{W(90)}" y="{H(395)}" width="{60*s}" height="{36*s}" fill="#1A1C22"/>')
-    p.append(f'<rect x="{W(240)}" y="{H(380)}" width="{40*s}" height="{20*s}" fill="#1A1C22"/>')
-    # 유리 정면 — 붉은 불빛
-    gx0, gw, gh = W(85), 175 * s, 300 * s
-    p.append(f'<rect x="{gx0}" y="{H(300)}" width="{gw}" height="{gh}" fill="url(#redglass)"/>')
-    for i in range(1, 6):
-        p.append(f'<line x1="{gx0 + gw*i/6}" y1="{H(300)}" x2="{gx0 + gw*i/6}" y2="{gy}" stroke="#14080A" stroke-width="{3*s}"/>')
-    for j in range(1, 6):
-        p.append(f'<line x1="{gx0}" y1="{H(300) + gh*j/6}" x2="{gx0+gw}" y2="{H(300) + gh*j/6}" stroke="#14080A" stroke-width="{2.5*s}"/>')
-    # 유리창 안 사람 실루엣(한 명)
-    p.append(f'<g fill="#140405" opacity=".9"><circle cx="{W(175)}" cy="{H(216)}" r="{7*s}"/><path d="M{W(166)} {H(165)} Q{W(175)} {H(212)} {W(184)} {H(165)}Z"/></g>')
-    # 오른쪽 위층 작은 창
-    for r in range(3):
-        for c in range(3):
-            lit = (r + c) % 3 == 0
-            p.append(f'<rect x="{W(285 + c*22)}" y="{H(330 - r*70)}" width="{12*s}" height="{20*s}" fill="{"#B3121C" if lit else "#0C0D12"}" opacity="{.9 if lit else 1}"/>')
-    # 둥근 체육관
-    p.append(f'<path d="M{W(330)} {gy} V{H(250)} Q{W(330)} {H(270)} {W(360)} {H(272)} L{W(900)} {H(272)} Q{W(930)} {H(268)} {W(930)} {H(240)} V{gy}Z" fill="url(#concrete2)"/>')
-    p.append(f'<rect x="{W(330)}" y="{H(272)}" width="{600*s}" height="{6*s}" fill="#2A2D35"/>')
-    # 체육관 붉은 창(아래 띠)
-    for c in range(9):
-        p.append(f'<rect x="{W(380 + c*58)}" y="{H(95)}" width="{34*s}" height="{70*s}" fill="#9E0F18" opacity="{.55 + (c%3)*.15:.2f}"/>')
-    for c in range(6):
-        p.append(f'<rect x="{W(400 + c*85)}" y="{H(200)}" width="{24*s}" height="{18*s}" fill="#0A0B10"/>')
-    # 입구 캐노피
-    p.append(f'<path d="M{W(470)} {H(120)} Q{W(540)} {H(150)} {W(610)} {H(120)} V{H(110)} H{W(470)}Z" fill="#202229"/>')
-    p.append(f'<rect x="{W(490)}" y="{H(110)}" width="{100*s}" height="{110*s}" fill="url(#door)"/>')
-    p.append(f'<rect x="{W(470)}" y="{H(140)}" width="{140*s}" height="{140*s}" fill="#FF2630" opacity=".25" filter="url(#glow)"/>')
-    return "".join(p)
-
-
 def briefcase(x, y, s):
     return f"""<g transform="translate({x} {y}) scale({s})">
 <ellipse cx="110" cy="152" rx="130" ry="14" fill="#000" opacity=".7"/>
@@ -136,55 +53,14 @@ def briefcase(x, y, s):
 </g>"""
 
 
-def scene(w, h, ground, moon=(0.83, 0.1), bolt_x=0.8, bscale=1.0, seed=3, case_y=None):
-    """ground: 땅 높이(px). 위쪽은 하늘·구름, 아래는 젖은 바닥."""
-    d, forks = lightning(seed, w * bolt_x, h * 0.12, ground - h * 0.18, 34)
-    bx = (w - 930 * bscale) / 2 - 40 * bscale
-    bld = building(bx, ground, bscale)
-    mx, my = w * moon[0], h * moon[1]
-    return f"""<svg class="a" style="inset:0" width="{w}" height="{h}" viewBox="0 0 {w} {h}">
-<defs>
- <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#05060F"/><stop offset=".35" stop-color="#0B1129"/><stop offset=".62" stop-color="#170A14"/><stop offset="1" stop-color="#05050A"/></linearGradient>
- <radialGradient id="redmask" cx=".66" cy=".22" r=".62"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
- <radialGradient id="bluemask" cx=".1" cy=".3" r=".55"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
- <mask id="mr"><rect width="{w}" height="{ground}" fill="url(#redmask)"/></mask>
- <mask id="mb"><rect width="{w}" height="{ground}" fill="url(#bluemask)"/></mask>
- <filter id="cloudR" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".0045 .007" numOctaves="5" seed="{seed+4}"/><feColorMatrix values="0 0 0 0 .78  0 0 0 0 .05  0 0 0 0 .08  0 0 0 2.4 -1.05"/></filter>
- <filter id="cloudD" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".006 .01" numOctaves="5" seed="{seed+9}"/><feColorMatrix values="0 0 0 0 .01  0 0 0 0 .01  0 0 0 0 .02  0 0 0 2.2 -.95"/></filter>
- <filter id="cloudB" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".005 .009" numOctaves="4" seed="{seed+1}"/><feColorMatrix values="0 0 0 0 .14  0 0 0 0 .2  0 0 0 0 .45  0 0 0 2 -.9"/></filter>
- <filter id="fog" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".003 .02" numOctaves="4" seed="{seed+2}"/><feColorMatrix values="0 0 0 0 .6  0 0 0 0 .62  0 0 0 0 .72  0 0 0 1.6 -.75"/><feGaussianBlur stdDeviation="5"/></filter>
- <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="22"/></filter>
- <filter id="glow2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8"/></filter>
- <filter id="blur3"><feGaussianBlur stdDeviation="3"/></filter>
- <filter id="ripple" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".002 .09" numOctaves="2" seed="{seed}" result="t"/><feDisplacementMap in="SourceGraphic" in2="t" scale="26" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation="2.5"/></filter>
- <linearGradient id="concrete" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3A3D45"/><stop offset=".6" stop-color="#24262D"/><stop offset="1" stop-color="#121318"/></linearGradient>
- <linearGradient id="concrete2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2C2F37"/><stop offset=".5" stop-color="#3A3D46"/><stop offset="1" stop-color="#1B1D23"/></linearGradient>
- <linearGradient id="redglass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5A0A10"/><stop offset=".5" stop-color="#A3121C"/><stop offset="1" stop-color="#E0222C"/></linearGradient>
- <linearGradient id="door" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7A0C14"/><stop offset="1" stop-color="#FF3A40"/></linearGradient>
- <linearGradient id="leather" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3A2A22"/><stop offset="1" stop-color="#15100D"/></linearGradient>
- <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0D0E14"/><stop offset="1" stop-color="#030305"/></linearGradient>
- <radialGradient id="moonG" cx=".4" cy=".4" r=".7"><stop offset="0" stop-color="#FF5A5E"/><stop offset=".7" stop-color="#C1121C"/><stop offset="1" stop-color="#6E060C"/></radialGradient>
-</defs>
-<rect width="{w}" height="{h}" fill="url(#sky)"/>
-<rect width="{w}" height="{ground}" filter="url(#cloudB)" mask="url(#mb)" opacity=".9"/>
-<rect width="{w}" height="{ground}" filter="url(#cloudR)" mask="url(#mr)"/>
-<rect width="{w}" height="{ground}" filter="url(#cloudD)" opacity=".8"/>
-<circle cx="{mx}" cy="{my}" r="{w*0.11}" fill="#FF2A33" opacity=".45" filter="url(#glow)"/>
-<circle cx="{mx}" cy="{my}" r="{w*0.055}" fill="url(#moonG)"/>
-<g opacity=".95"><path d="{d}" stroke="#FF2530" stroke-width="14" fill="none" opacity=".5" filter="url(#glow2)"/>
-{''.join(f'<path d="{f}" stroke="#FF6B70" stroke-width="2" fill="none" opacity=".8"/>' for f in forks)}
-<path d="{d}" stroke="#FFE0E2" stroke-width="3" fill="none"/></g>
-<g>{bld}</g>
-<rect y="{ground}" width="{w}" height="{h-ground}" fill="url(#floor)"/>
-<g transform="translate(0 {2*ground}) scale(1 -1)" opacity=".38" filter="url(#ripple)">{bld}</g>
-<rect y="{ground}" width="{w}" height="{h-ground}" fill="#000" opacity=".25"/>
-<rect y="{ground-140}" width="{w}" height="300" filter="url(#fog)" opacity=".55"/>
-{tree(seed+20, -20, ground*0.62, -0.95, 210, 22)}
-{tree(seed+21, w+20, ground*0.55, -2.2, 230, 24)}
-{tree(seed+22, -40, h*0.05, 0.35, 160, 16)}
-{tree(seed+23, w+30, h*0.02, 2.75, 170, 16)}
-{briefcase(w*0.05, case_y if case_y is not None else ground + (h-ground)*0.18, w/1080*0.95)}
-</svg>"""
+def scene(w, h, ground, moon=None, bolt_x=None, bscale=None, seed=None, case_y=None):
+    """배경 그림(klass_bg.py 로 그린 것) + K 가방."""
+    bg = "klass-bg-story.jpg" if h > 1500 else "klass-bg-feed.jpg"
+    cy = case_y if case_y is not None else ground + 40
+    return (f'<img class="a" src="../assets/{bg}" style="inset:0;width:{w}px;height:{h}px">'
+            f'<svg class="a" style="inset:0" width="{w}" height="{h}"><defs>'
+            '<linearGradient id="leather" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3A2A22"/><stop offset="1" stop-color="#120D0B"/></linearGradient>'
+            f'</defs>{briefcase(w*0.05, cy, w/1080*0.95) if cy > 0 else ""}</svg>')
 
 
 FOOT = """<div class="a foot" style="left:72px;right:72px;bottom:%dpx"><span>BANGTALLOG · IMMERSIVE</span><span>@bangtal_log</span></div>
@@ -197,7 +73,7 @@ SRC = "2차 오픈 일시는 보도자료 기준이라 NOL 공지에서 한 번 
 def story(name, kick, title, when, sub):
     w, h = 1080, 1920
     s = HEAD % {"w": w, "h": h}
-    s += scene(w, h, ground=1180, moon=(0.82, 0.08), bolt_x=0.74, bscale=1.08, seed=3, case_y=1100)
+    s += scene(w, h, ground=1180, case_y=1150)
     s += f"""
 <div class="a kick" style="left:72px;right:72px;top:150px">{kick}</div>
 <div class="a ttl" style="left:60px;right:60px;top:220px;font-size:108px;text-align:center">{title}</div>
@@ -240,7 +116,7 @@ feed("klass-f1.html", f"""
   <div class="note" style="font-size:21px">NOL 티켓 단독 · 1차 3초 매진·2차 일시는 보도자료 기준</div>
 </div>
 <div class="a" style="right:72px;top:1212px;font-size:24px;font-weight:800;color:#D9C7A6;letter-spacing:.1em">넘겨서 정보·준비물 →</div>
-""", ground=880, seed=5, case_y=800)
+""", ground=900, case_y=850)
 
 # 피드 2: 공연 정보 + 공식 포스터(작게, 출처)
 rows = [
@@ -268,7 +144,7 @@ feed("klass-f2.html", f"""
 </div>
 <div class="a plate" style="left:72px;right:72px;top:420px;padding:14px 34px 18px">{tbl}</div>
 <div class="a note" style="left:72px;right:72px;top:1196px;font-size:20px">NOL 티켓 상품 상세 기준(11/15 확인) · 회차·가격은 바뀔 수 있어요</div>
-""", ground=1000, seed=7, bscale=0.9, moon=(0.62, 0.07))
+""", ground=900, case_y=-1)
 
 # 피드 3: 티켓팅 준비
 steps = [
@@ -288,5 +164,5 @@ feed("klass-f3.html", f"""
 <div class="a plate" style="left:72px;right:72px;top:440px;padding:6px 34px">{st}</div>
 <div class="a" style="left:72px;right:72px;top:1130px;font-size:27px;font-weight:800;text-align:center">다른 이머시브 공연도 → bangtallog.com/immersive</div>
 <div class="a note" style="left:72px;right:72px;top:1180px;font-size:19px;text-align:center">2차 오픈 일시는 보도자료 기준 · 배경 그림은 공식 포스터 분위기로 새로 그렸어요</div>
-""", ground=1000, seed=11, bscale=0.9, moon=(0.18, 0.08))
+""", ground=900, case_y=-1)
 print("ok")
