@@ -21,7 +21,7 @@ Next.js 14(App Router) · TypeScript · Tailwind · Supabase · Vercel(Hobby).
 ## 작업 방식
 - main 에 올리면 Vercel 이 자동 배포(2~3분). 작업 브랜치는 세션이 지정해 주는 것 사용.
 - **main 에는 운영자에게 먼저 물어보고, 모아서 한 번에 올린다(운영자 결정 2026-11-15).** 작은 수정마다 따로 올리지 않는다(배포가 밀려 취소·지연됐다). 작업 브랜치에는 그때그때 올려도 된다. SQL 도 가능하면 한 파일로 모아 한 번에 드린다.
-- 배포는 main 만(vercel.json: claude/** 브랜치 미리보기 꺼 둠). docs·tools·.claude·*.md 만 바뀐 커밋은 빌드를 건너뛴다(ignoreCommand).
+- 배포는 main 만(vercel.json: claude/** 브랜치 미리보기 꺼 둠). 직전 배포 이후 바뀐 게 docs·tools·.claude·*.md 뿐이면 빌드를 건너뛴다(ignoreCommand, VERCEL_GIT_PREVIOUS_SHA 기준 — 11/15 전엔 마지막 커밋만 봐서 묶어 올린 앱 변경이 배포에서 빠진 적 있음).
 - 올리기 전: `npx tsc --noEmit -p . && npx vitest run`
 - 비밀값(CRON_SECRET, IG 토큰)은 Vercel·GitHub Secrets 에만 있다. 읽거나 적지 않는다.
 - 인스타 관련 작업은 `.claude/skills/ig-*` 스킬과 `tools/ig/README.md` 참고.
