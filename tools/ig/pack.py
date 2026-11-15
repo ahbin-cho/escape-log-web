@@ -506,6 +506,29 @@ def main(reel_path=None):
     subprocess.run(["node", "tools/ig/render.cjs", jf], check=True)
     z = shutil.make_archive(os.path.join(OUT, "탈깍노트_직접올리기"), "zip", OUT, "탈깍노트_직접올리기")
     print(z)
+    print(ascii_pack(root))
+
+
+def ascii_pack(root):
+    """맥 '압축 해제'가 한글 폴더 이름에서 오류(94)를 내는 일이 있어(11/15), 영어 이름 묶음도 같이 만든다.
+    03b_1116_feed / 13_1117_reel / 14_anytime_feed … 폴더마다 README.txt 에 원래 한글 이름."""
+    dst = os.path.join(OUT, "talkkaknote_pack")
+    shutil.rmtree(dst, ignore_errors=True); os.makedirs(dst)
+    for d in sorted(os.listdir(root)):
+        p = os.path.join(root, d)
+        if not os.path.isdir(p):
+            shutil.copy(p, os.path.join(dst, "00_schedule.txt")); continue
+        kind = "reel" if "릴스" in d else "story" if "스토리" in d else "feed"
+        if "자동실패시만" in d: kind = "reel_backup"
+        m = re.match(r"(\d+[a-z]?)_(\d+)-(\d+)", d)
+        name = f"{m.group(1)}_{m.group(2)}{m.group(3)}_{kind}" if m else d.split("_")[0] + "_anytime_" + kind
+        q = os.path.join(dst, name); os.makedirs(q)
+        for f in sorted(os.listdir(p)):
+            g = {"캡션.txt": "caption.txt", "올리는법.txt": "how.txt"}.get(f, f)
+            if f.endswith(".mp4"): g = "video.mp4"
+            shutil.copy(os.path.join(p, f), os.path.join(q, g))
+        open(os.path.join(q, "README.txt"), "w").write(d + "\n")
+    return shutil.make_archive(dst, "zip", OUT, "talkkaknote_pack")
 
 if __name__ == "__main__":
     main(sys.argv[2] if len(sys.argv) > 2 else None)
