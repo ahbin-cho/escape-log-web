@@ -3,7 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { BANNERS, type Banner } from "@/lib/banners";
+import { BANNERS as DEFAULT_BANNERS, type Banner } from "@/lib/banners";
+import { kstDate } from "@/lib/home-picks";
+import { toBanners } from "@/lib/site-items";
+import { useSiteItems } from "@/lib/use-site-items";
 
 const TONE: Record<Banner["tone"], string> = {
   candy: "bg-candy/25",
@@ -36,7 +39,11 @@ function Icon({ d }: { d: string }) {
 // 홈 상단 배너. 가로 스크롤 스냅 기반이라 손가락으로 넘길 수 있고,
 // 다음 카드가 살짝 보여서 더 있다는 걸 알 수 있다. 건드리지 않으면 자동으로 넘어간다.
 // 카드가 한 화면에 다 들어오면(데스크톱 2장) 넘김 컨트롤은 숨긴다.
+// 배너 내용은 관리자 → 사이트 문구(/admin/site) 에서 고친다(site_items, kind=banner). 표를 못 읽으면 lib/banners.ts.
 export default function HomeBanner() {
+  const rows = useSiteItems();
+  const fromDb = rows ? toBanners(rows, kstDate(new Date())) : [];
+  const BANNERS = rows && rows.some((r) => r.kind === "banner") ? fromDb : DEFAULT_BANNERS;
   const track = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const [scrollable, setScrollable] = useState(false);
@@ -67,7 +74,7 @@ export default function HomeBanner() {
     const ro = new ResizeObserver(measure);
     ro.observe(el);
     return () => ro.disconnect();
-  }, []);
+  }, [BANNERS.length]);
 
   useEffect(() => {
     if (paused || stopped || !scrollable) return;

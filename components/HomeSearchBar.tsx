@@ -1,44 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { publicClient } from "@/lib/supabase/public";
 import { kstDate } from "@/lib/home-picks";
+import { toChips, type Chip } from "@/lib/site-items";
+import { useSiteItems } from "@/lib/use-site-items";
 
 // 홈 맨 위 큰 검색창. 누르면 헤더의 검색(바로 결과가 뜨는 창)을 연다.
 // 자바스크립트가 안 돌면 /search 로 그냥 넘어가도록 form 으로 감쌌다.
-// '많이 찾는' 칩: Supabase 표 home_chips 에서 읽는다(운영자가 SQL 로 바꿈, docs/sql/home_chips.sql).
+// '많이 찾는' 칩: 관리자 → 사이트 문구(/admin/site) 에서 고친다(Supabase 표 site_items, kind=chip).
 // 표가 없거나 비었거나 못 읽으면 아래 기본 칩. href 가 있으면 그 페이지로, 없으면 그 말로 검색창을 연다.
-type Chip = { label: string; href: string };
-const QUICK: Chip[] = ["강남", "홍대", "안 무서운", "공포", "감성", "키이스케이프"].map((label) => ({ label, href: "" }));
+const DEFAULT_CHIPS: Chip[] = ["강남", "홍대", "안 무서운", "공포", "감성", "키이스케이프"].map((label) => ({ label, href: "" }));
 
 function openSearch(preset?: string) {
   window.dispatchEvent(new CustomEvent("open-search", { detail: preset }));
 }
 
 export default function HomeSearchBar() {
-  const [chips, setChips] = useState<Chip[]>(QUICK);
-  useEffect(() => {
-    let alive = true;
-    const today = kstDate(new Date());
-    publicClient()
-      .from("home_chips")
-      .select("label,href,until")
-      .eq("active", true)
-      .order("sort")
-      .order("id")
-      .then(({ data, error }) => {
-        if (!alive || error || !data) return;
-        const list = (data as { label: string; href: string | null; until: string | null }[])
-          .filter((c) => c.label?.trim() && (!c.until || c.until >= today))
-          // 사이트 안 경로만(바깥 주소로 내보내지 않는다)
-          .map((c) => ({ label: c.label.trim(), href: (c.href ?? "").trim().startsWith("/") ? (c.href ?? "").trim() : "" }));
-        if (list.length) setChips(list);
-      });
-    return () => {
-      alive = false;
-    };
-  }, []);
+  const rows = useSiteItems();
+  const fromDb = rows ? toChips(rows, kstDate(new Date())) : [];
+  const chips = fromDb.length ? fromDb : DEFAULT_CHIPS;
   return (
     <div className="space-y-2.5">
       <form

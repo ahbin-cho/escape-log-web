@@ -90,7 +90,7 @@ export default async function ImmersivePage() {
   ];
 
   return (
-    <article className="mx-auto max-w-3xl space-y-10">
+    <article className="mx-auto max-w-3xl space-y-7">
       {jsonLd.map((j, i) => (
         <script key={i} hidden type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(j) }} />
       ))}
@@ -150,12 +150,12 @@ export default async function ImmersivePage() {
 
       <Tips />
 
-      <section className="space-y-2 border-t border-line pt-6 text-[13px] leading-relaxed text-cream/60 [word-break:keep-all]">
+      <section className="space-y-2 border-t border-line pt-5 text-[13px] leading-relaxed text-cream/60 [word-break:keep-all]">
         <p>각 곳의 공식 홈페이지·예약 페이지에 적힌 내용만 옮겼어요. 회차·가격은 자주 바뀌니 예약 전에 한 번 더 확인해 주세요.</p>
         <p>배우와 함께하는 이머시브인데 여기 없다면, 인스타 @bangtal_log 로 알려 주세요. 공식 안내를 확인하고 넣을게요.</p>
       </section>
 
-      <section className="border-t border-line pt-7">
+      <section className="border-t border-line pt-5">
         <h2 className="text-xl">다녀온 공연도 기록할 수 있어요</h2>
         <p className="mt-2 text-sm leading-relaxed text-cream/75 [word-break:keep-all]">
           어떤 역할을 맡았는지, 누구와 갔는지, 끝까지 진실을 알아냈는지. 잊기 전에 한 줄 남겨 두세요.
@@ -175,7 +175,7 @@ export default async function ImmersivePage() {
 
 function Group({ id, act, title, rows }: { id: string; act: string; title: string; rows: Row[] }) {
   return (
-    <section id={id} aria-labelledby={`${id}-h`} className="scroll-mt-20 space-y-3">
+    <section id={id} aria-labelledby={`${id}-h`} className="scroll-mt-20 space-y-2.5">
       <div>
         <p className="text-[11px] font-extrabold tracking-[0.25em] text-[#A85A14]">{act}</p>
         <h2 id={`${id}-h`} className="text-xl">
@@ -187,7 +187,7 @@ function Group({ id, act, title, rows }: { id: string; act: string; title: strin
           공식 안내를 확인하는 중이에요. 곧 막이 올라요.
         </p>
       ) : (
-        <ul className="space-y-4">
+        <ul className="space-y-3">
           {rows.map((t, i) => {
             const region = regionFromText(t.cafe);
             const price = priceLabel(t.price);
@@ -224,7 +224,7 @@ function Group({ id, act, title, rows }: { id: string; act: string; title: strin
                   </div>
                 </div>
                 {(t.booking_open?.trim() || t.reservation_url) && (
-                  <div className="space-y-2.5 border-t-2 border-dashed border-edge/30 p-3">
+                  <div className="space-y-2 border-t-2 border-dashed border-edge/30 p-3">
                     {t.booking_open?.trim() ? <BookingOpen rule={t.booking_open} /> : null}
                     {t.reservation_url && (
                       <a

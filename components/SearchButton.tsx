@@ -1,6 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { kstDate } from "@/lib/home-picks";
+import { toChips } from "@/lib/site-items";
+import { useSiteItems } from "@/lib/use-site-items";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -30,11 +33,15 @@ function SearchIcon() {
 
 const MIN_BRAND_THEMES = 3; // 브랜드 페이지가 만들어지는 기준(lib/catalog-server 의 MIN_THEMES 와 같게)
 
-const SUGGEST = ["안 무서운", "강남", "홍대", "공포", "감성", "키이스케이프"];
+// "이렇게 찾아보세요": 관리자에서 고친 칩 중 주소 없는(검색어) 칩. 없으면 기본값.
+const SUGGEST_DEFAULT = ["안 무서운", "강남", "홍대", "공포", "감성", "키이스케이프"];
 
 // 헤더의 테마 검색. 처음 열 때 테마 목록을 한 번 받아 와서, 치는 동안 바로 보여 준다.
 export default function SearchButton() {
   const router = useRouter();
+  const siteRows = useSiteItems();
+  const words = siteRows ? toChips(siteRows, kstDate(new Date())).filter((c) => !c.href).map((c) => c.label) : [];
+  const SUGGEST = words.length ? words : SUGGEST_DEFAULT;
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
   const [index, setIndex] = useState<ThemeRow[] | null>(null);
