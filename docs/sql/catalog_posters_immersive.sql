@@ -7,6 +7,10 @@ where c.id in (
   'b5e27ab4-507b-494d-b5bf-dea5cae2b699', -- 제일기숙학원
   '287a6a6a-472f-4930-8a42-3c99d044d882', -- BLACK MUSE
   '51f926fa-4853-4c98-89d5-2dd8b4041409', -- 위드아웃유
-  '9974ff3f-2cb6-4a7d-a068-9733bbd77b93'  -- 인세인 INSANE
+  '9974ff3f-2cb6-4a7d-a068-9733bbd77b93', -- 인세인 INSANE
+  '16d0f9bf-78d6-45ae-ac1b-97ca1e3b8f08', -- 슬립노모어 서울
+  'ee05926c-93d1-4dd6-8290-784e1bdc7c92', -- 아바타
+  'a8427c14-e634-4b4c-b7ae-93d94c8cb794', -- 리바이벌 REVIVER
+  'ab5d5167-2b31-4a13-8132-bd973484b10c'  -- 카지노: 게임의 법칙
 );
 select name, cafe, poster_url from public.catalog where poster_url like '%/posters/immersive/%' order by name;
