@@ -1,6 +1,6 @@
 """이머시브 '무대 영상' 스토리 소리를 직접 합성한다(녹음·남의 음원 없음). 시각은 imm-story-motion.html 과 같다.
 0초 객석 웅성임이 잦아들고 조명 '탁' → 0.6초 의자 삐걱(누군가 자리를 떴다) → 3.8~7초 나무 무대 위 발소리
-→ 8초 막이 젖혀지는 '촤악' → 내내 낮은 현악 같은 울림 → 10.6초 공연 시작 종 '딩-' 
+→ 8초 막이 젖혀지는 '촤악' → 내내 낮은 현악 같은 울림 → 10.6초 종 '딩-' → 10.8초부터 객석 박수(커졌다가 잦아듦)
 사용: python3 tools/ig/drawings/stage_sfx.py out.wav"""
 import sys, wave
 import numpy as np
@@ -40,6 +40,14 @@ while t < 7.2:
 add(7.9, .5 * noise(.8, 300, 5000) * np.sin(np.pi * tt(.8) / .8) ** 1.5)
 # 공연 시작 종
 add(10.6, sum(a * np.sin(2 * np.pi * f * tt(2.8)) for f, a in ((880, .5), (1760, .2), (2637, .08))) * np.exp(-tt(2.8) / .9) * np.minimum(1, tt(2.8) / .004), .35)
+# 박수: 수백 번의 짧은 손뼉(사람마다 손 크기가 달라 음색이 조금씩 다름), 빠르게 커졌다가 끝에서 잦아든다
+for _ in range(900):
+    t0 = 10.8 + rng.gamma(2.2, .55)
+    if t0 > DUR - .05: continue
+    lo = rng.uniform(600, 1400); hi = lo * rng.uniform(3, 5)
+    cl = noise(.03, lo, hi) * np.exp(-tt(.03) / rng.uniform(.004, .008))
+    g = rng.uniform(.25, .6) * min(1, (t0 - 10.8) / .5) * min(1, (DUR - t0) / 1.2)
+    add(t0, cl, g)
 out /= np.percentile(np.abs(out), 99.95); out = np.tanh(out * .95) * .89
 with wave.open(sys.argv[1], 'wb') as fo:
     fo.setnchannels(2); fo.setsampwidth(2); fo.setframerate(SR); fo.writeframes((np.stack([out, out], 1) * 32767).astype(np.int16).tobytes())
