@@ -67,6 +67,10 @@ else:
     tc = tt(1.1); f = 380 + 260 * np.sin(2 * np.pi * 2.3 * tc) + 120 * np.sin(2 * np.pi * 7 * tc)   # 문 끼익
     creak = np.sign(np.sin(2 * np.pi * np.cumsum(f) / SR)) * (.6 + .4 * rng.random(len(tc)))
     add(4.9, .12 * band(creak.astype(np.float32), 200, 4000) * np.sin(np.pi * tc / 1.1))
+    for t0 in (3.6,):                                                                           # 깜빡: 여인이 사라질 때 숨소리
+        add(t0, .45 * noise(.6, 500, 3500) * np.sin(np.pi * tt(.6) / .6) ** 2)
+    n2 = tt(1.2); sting = (np.sin(2 * np.pi * 1760 * n2) + np.sin(2 * np.pi * 1865 * n2) + .6 * np.sin(2 * np.pi * 932 * n2)) * np.exp(-n2 / .35)
+    add(5.4, .22 * sting); add(5.4, boom(1.6, 42, 1.3))                                         # 가까이 나타날 때 '쾅'
     add(6.3, tone(3.4, ((110, .6), (167, .4), (233, .3), (311, .2), (467, .1)), 1.3) * (1 + .3 * np.sin(2 * np.pi * 4 * tt(3.4))), .9)   # 징
     add(6.3, boom(1.4, 50, .8))
 

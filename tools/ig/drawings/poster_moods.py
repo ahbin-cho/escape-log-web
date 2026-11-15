@@ -117,6 +117,8 @@ def chunhwa():
             d.line([P(x0 + 18, y + 60), P(x1 - 18, y + 60)], fill=(60, 30, 70), width=3 * S)
     # 위쪽 벽(어둠)
     d.rectangle([P(0, 0), P(W, 300)], fill=(20, 8, 28))
+    room = im
+    WL = Image.new("RGBA", (W * S, H * S), (0, 0, 0, 0)); d = ImageDraw.Draw(WL, "RGBA")
     # 여인: 푸른 치마를 둥글게 펼치고 앉아 고개를 숙였다(얼굴은 머리카락 그늘)
     cx, cy = 560, 980
     d.ellipse([P(cx - 330, cy - 40), P(cx + 300, cy + 300)], fill=(26, 20, 100))
@@ -131,6 +133,7 @@ def chunhwa():
     d.ellipse([P(cx - 70, cy - 280), P(cx + 60, cy - 130)], fill=(20, 12, 22))                    # 숙인 머리
     d.polygon([P(cx - 72, cy - 210), P(cx - 95, cy - 60), P(cx - 40, cy - 120)], fill=(20, 12, 22))
     d.polygon([P(cx + 58, cy - 210), P(cx + 80, cy - 70), P(cx + 30, cy - 120)], fill=(20, 12, 22))
+    RL = Image.new("RGBA", (W * S, H * S), (0, 0, 0, 0)); d = ImageDraw.Draw(RL, "RGBA")
     # 금줄: 왼쪽 위에서 오른쪽으로 비스듬히 두 줄, 흰 종이 띠를 지그재그로 매단다
     def rope(p0, p1, sag, n_paper):
         pts = [(lerp(p0[0], p1[0], t), lerp(p0[1], p1[1], t) + sag * math.sin(math.pi * t)) for t in np.linspace(0, 1, 60)]
@@ -145,13 +148,18 @@ def chunhwa():
             d.polygon(poly, fill=(226, 206, 196), outline=(120, 90, 110))
     rope((-40, 560), (1120, 700), 120, 7)
     rope((-40, 840), (1120, 1040), 90, 6)
-    im = im.resize((W, H), Image.LANCZOS)
-    a = np.asarray(im).astype(np.float32)
-    a *= (0.6 + 0.6 * sm(90, 7))[..., None]                    # 얼룩진 어둠
     yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
     light = np.exp(-(((xx - 560) / 420) ** 2 + ((yy - 900) / 600) ** 2))
-    a *= (0.3 + 0.75 * light)[..., None]
+    shade = (0.3 + 0.75 * light)
+    for L, nm in ((WL, "reel-chunhwa-woman.png"), (RL, "reel-chunhwa-rope.png")):   # 레이어도 방과 같은 빛·색으로
+        L = L.resize((W, H), Image.LANCZOS).filter(ImageFilter.GaussianBlur(1.3)); la = np.asarray(L).astype(np.float32)
+        la[..., :3] *= shade[..., None] * np.array([1.0, 0.86, 1.08]) * 0.95
+        Image.fromarray(np.clip(la, 0, 255).astype(np.uint8), "RGBA").save(os.path.join(out, nm))
+    im = room.resize((W, H), Image.LANCZOS)
+    a = np.asarray(im).astype(np.float32)
+    a *= (0.6 + 0.6 * sm(90, 7))[..., None]                    # 얼룩진 어둠
+    a *= shade[..., None]
     a = np.asarray(Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(1.6))).astype(np.float32)
-    finish(Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)), "reel-chunhwa-room.jpg", (1.0, 0.86, 1.08), 9, (560, 900))
+    finish(Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)), "reel-chunhwa-empty.jpg", (1.0, 0.86, 1.08), 9, (560, 900))
 
 morgue(); chunhwa()

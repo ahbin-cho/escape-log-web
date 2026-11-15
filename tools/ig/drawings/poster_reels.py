@@ -58,16 +58,34 @@ WALK = """
   box-shadow:inset -6px 0 0 rgba(150,230,190,.18);transform-origin:0 50%;transform:perspective(1400px) rotateY(-14deg);animation:open 1.25s .1s cubic-bezier(.3,0,.2,1) forwards}
 @keyframes open{to{transform:perspective(1400px) rotateY(-86deg)}}
 """
+CURSE = """
+.scene{animation:in .6s forwards,dim .8s 1.55s forwards}
+@keyframes dim{to{filter:brightness(.6)}}
+.woman,.rope{position:absolute;inset:0;background-size:cover;background-position:center}
+.woman{background-image:url(../assets/reel-chunhwa-woman.png);transform-origin:52% 58%;animation:wdim .8s 1.55s forwards,gone 6s 3.6s steps(1) forwards}
+@keyframes wdim{to{filter:brightness(.62)}}
+@keyframes gone{0%{opacity:0}30%{opacity:0}30.5%{opacity:1;transform:scale(1.42) translateY(110px);filter:brightness(.75)}100%{opacity:1;transform:scale(1.48) translateY(118px);filter:brightness(.75)}}
+.rope{background-image:url(../assets/reel-chunhwa-rope.png);transform-origin:50% 0;animation:sway 2.6s ease-in-out infinite alternate,rdim .8s 1.55s forwards}
+@keyframes sway{0%{transform:rotate(-.7deg) skewX(-.6deg)}50%{transform:rotate(.35deg) skewX(.3deg) translateY(4px)}100%{transform:rotate(.8deg) skewX(.7deg)}}
+@keyframes rdim{to{filter:brightness(.7)}}
+.candle{position:absolute;inset:0;background:radial-gradient(ellipse at 52% 52%,rgba(255,150,70,.22),rgba(255,120,60,.06) 45%,transparent 70%);mix-blend-mode:screen;animation:cf 1.7s steps(9) infinite}
+@keyframes cf{0%{opacity:.9}12%{opacity:.55}25%{opacity:1}38%{opacity:.7}50%{opacity:.95}62%{opacity:.5}75%{opacity:.85}88%{opacity:.65}100%{opacity:.9}}
+.meta .t{clip-path:inset(-10% 100% -10% 0);animation:brush .9s 6.3s cubic-bezier(.3,0,.2,1) forwards}
+@keyframes brush{to{clip-path:inset(-10% -5% -10% 0)}}
+"""
 def line(top, size, t, text, acc=False, d=None):
     cls = "w pale acc" if acc else "w pale"
     dd = f";--d:{d}s" if d else ""
     return f'<div class="{cls}" style="top:{top}px;font-size:{size}px;--t:{t}s{dd}">{text}</div>'
-def make(name, walk=False, **k):
+def make(name, walk=False, curse=False, **k):
     s = BASE
     for key, v in k.items(): s = s.replace(f"__{key}__", str(v))
     if walk:   # 문이 열리고 복도 안으로 걸어 들어가는 듯한 화면 이동(영안실)
         s = s.replace('<div class="scene"></div>', '<div class="bob"><div class="cam"><div class="scene"></div><div class="door"></div></div></div>')
         s = s.replace("</style>", WALK + "</style>")
+    if curse:  # 춘화각: 카메라는 그대로, 촛불이 일렁이고 금줄이 바람에 흔들리고, 깜빡일 때 여인이 사라졌다가 더 가까이 나타난다
+        s = s.replace('<div class="scene"></div>', '<div class="scene"></div><div class="candle"></div><div class="woman"></div><div class="rope"></div>')
+        s = s.replace("</style>", CURSE + "</style>")
     open(os.path.join(T, f"reel-{name}.html"), "w", encoding="utf-8").write(s)
 
 make("morgue", walk=True, BG="reel-morgue-hall.jpg", ORIGIN="70% 40%", PALE="#E4EFE8", ACC="#D63A33", ACCGLOW="rgba(214,58,51,.35)",
@@ -75,7 +93,7 @@ make("morgue", walk=True, BG="reel-morgue-hall.jpg", ORIGIN="70% 40%", PALE="#E4
      LINES="\n".join([line(240, 92, 1.9, "안녕하십니까,"), line(380, 70, 2.8, "고객님의 마지막 여정을"), line(490, 70, 3.7, "함께하는"),
                       line(880, 74, 4.7, "인계병원 영안실입니다.", d=1.0), line(1010, 72, 5.5, "편안한 밤 되시길 바랍니다.", acc=True, d=.8)]),
      TITLE='<div class="t">영안실<i>.</i></div>', STORE="상상의문 수원점", SPEC="공포 · 난이도 4/5 · 공포도 4/5", NOTE="", POSTER="poster-morgue-official.jpg")
-make("chunhwa", BG="reel-chunhwa-room.jpg", ORIGIN="52% 48%", PALE="#EBDDF0", ACC="#E0333A", ACCGLOW="rgba(224,51,58,.4)",
+make("chunhwa", curse=True, BG="reel-chunhwa-empty.jpg", ORIGIN="52% 48%", PALE="#EBDDF0", ACC="#E0333A", ACCGLOW="rgba(224,51,58,.4)",
      HOOKTOP=1200, H1="그 소문 들었어?", H2="그 여인과 하룻밤을 지내면…", TSIZE=150, EXTRA=".hook .b{font-size:76px}.meta .t{font-family:B;color:#E0333A;line-height:.9}",
      LINES="\n".join([line(240, 86, 1.9, "자네도 장원 급제를"), line(370, 86, 2.8, "위해서 이 춘화각을"), line(500, 86, 3.7, "찾았는가?"),
                       line(1030, 70, 4.9, "이쪽 끝방으로 들어가시게.", acc=True, d=1.0)]),

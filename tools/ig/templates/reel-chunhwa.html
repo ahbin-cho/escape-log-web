@@ -6,7 +6,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:1080px;height:1920px;background:#000;overflow:hidden;font-family:P}
 .stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000}
-.scene{position:absolute;inset:0;background:url(../assets/reel-chunhwa-room.jpg) center/cover;opacity:.6;transform-origin:52% 48%;
+.scene{position:absolute;inset:0;background:url(../assets/reel-chunhwa-empty.jpg) center/cover;opacity:.6;transform-origin:52% 48%;
   animation:in .6s forwards,zoom 10.5s linear forwards,dim .8s 1.55s forwards}
 @keyframes in{to{opacity:1}} @keyframes zoom{from{transform:scale(1.03)}to{transform:scale(1.15)}}
 @keyframes dim{to{filter:brightness(.45)}} @keyframes out{to{opacity:0}}
@@ -34,8 +34,22 @@ html,body{width:1080px;height:1920px;background:#000;overflow:hidden;font-family
 .cta .x{color:#1D1D1D;font-weight:800;font-size:44px;letter-spacing:-.03em}.cta .x b{color:#E0782A}
 .cta .s{color:#6B665D;font-weight:500;font-size:28px;margin-top:6px}
 .hook .b{font-size:76px}.meta .t{font-family:B;color:#E0333A;line-height:.9}
+
+.scene{animation:in .6s forwards,dim .8s 1.55s forwards}
+@keyframes dim{to{filter:brightness(.6)}}
+.woman,.rope{position:absolute;inset:0;background-size:cover;background-position:center}
+.woman{background-image:url(../assets/reel-chunhwa-woman.png);transform-origin:52% 58%;animation:wdim .8s 1.55s forwards,gone 6s 3.6s steps(1) forwards}
+@keyframes wdim{to{filter:brightness(.62)}}
+@keyframes gone{0%{opacity:0}30%{opacity:0}30.5%{opacity:1;transform:scale(1.42) translateY(110px);filter:brightness(.75)}100%{opacity:1;transform:scale(1.48) translateY(118px);filter:brightness(.75)}}
+.rope{background-image:url(../assets/reel-chunhwa-rope.png);transform-origin:50% 0;animation:sway 2.6s ease-in-out infinite alternate,rdim .8s 1.55s forwards}
+@keyframes sway{0%{transform:rotate(-.7deg) skewX(-.6deg)}50%{transform:rotate(.35deg) skewX(.3deg) translateY(4px)}100%{transform:rotate(.8deg) skewX(.7deg)}}
+@keyframes rdim{to{filter:brightness(.7)}}
+.candle{position:absolute;inset:0;background:radial-gradient(ellipse at 52% 52%,rgba(255,150,70,.22),rgba(255,120,60,.06) 45%,transparent 70%);mix-blend-mode:screen;animation:cf 1.7s steps(9) infinite}
+@keyframes cf{0%{opacity:.9}12%{opacity:.55}25%{opacity:1}38%{opacity:.7}50%{opacity:.95}62%{opacity:.5}75%{opacity:.85}88%{opacity:.65}100%{opacity:.9}}
+.meta .t{clip-path:inset(-10% 100% -10% 0);animation:brush .9s 6.3s cubic-bezier(.3,0,.2,1) forwards}
+@keyframes brush{to{clip-path:inset(-10% -5% -10% 0)}}
 </style></head><body><div class="stage">
-<div class="scene"></div><div class="grain"></div><div class="flick"></div>
+<div class="scene"></div><div class="candle"></div><div class="woman"></div><div class="rope"></div><div class="grain"></div><div class="flick"></div>
 <div class="hook pale"><div class="a">그 소문 들었어?</div><div class="b acc">그 여인과 하룻밤을 지내면…</div></div>
 <div class="w pale" style="top:240px;font-size:86px;--t:1.9s">자네도 장원 급제를</div>
 <div class="w pale" style="top:370px;font-size:86px;--t:2.8s">위해서 이 춘화각을</div>
