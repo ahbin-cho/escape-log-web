@@ -30,9 +30,19 @@ h1{position:absolute;left:108px;right:108px;top:246px;font-family:H;font-weight:
 </style></head><body>'''
 def stars(n): return '<span class="st">' + '★' * n + '<i>' + '★' * (5 - n) + '</i></span>'
 def foot(src="정보: 쇼룸404 공식 홈페이지 (11.15 확인)"): return f'<div class="foot"><span>{src}</span><span class="b">방탈로그</span></div>'
-def page(n, kick, title, quote, rows, note, size=104, qtop=510):
+DARK = '''<style>body{color:#F3E6C8;background:#0b0a0c}.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,7,9,.42) 0%,rgba(8,7,9,.14) 28%,rgba(8,7,9,.4) 50%,rgba(8,7,9,.66) 100%)}
+.red{color:#FF6A55}.kick{color:#FF8A6E}.hd{position:absolute;left:110px;top:100px;font-family:A;font-size:28px;letter-spacing:.12em}
+.spec{border-color:#F3E6C8;background:rgba(8,7,9,.6)}.row{border-bottom-color:rgba(243,230,200,.4);padding-left:18px;padding-right:18px}.note{color:#E2D5B8}
+.tag{background:#E2412F;color:#fff}.st i{opacity:.3}.q:before{color:#FF6A55}.foot{color:#E2D5B8}
+h1,.q,.kick,.note,.hd,.pg{text-shadow:0 2px 10px rgba(0,0,0,.85)}</style>'''
+def page(n, kick, title, quote, rows, note, size=104, qtop=510, bg=None, accent=None):
     r = ''.join(f'<div class="row"><b>{k}</b><span>{v}</span></div>' for k, v in rows)
-    return (CSS + '<img class="bg" src="../assets/sr404-page.jpg">' + f'<div class="pg">{n} / 6</div><div class="kick">{kick}</div>'
+    if bg:
+        acc = f'<style>.red,.q:before{{color:{accent}}}.kick{{color:{accent}}}.tag{{background:{accent};color:#0b0a0c}}</style>' if accent else ''
+        head = CSS + DARK + acc + f'<img class="bg" src="../assets/{bg}"><div class="shade"></div><div class="hd">SHOWROOM 404</div>'
+    else:
+        head = CSS + '<img class="bg" src="../assets/sr404-page.jpg">'
+    return (head + f'<div class="pg">{n} / 6</div><div class="kick">{kick}</div>'
             f'<h1 style="font-size:{size}px">{title}</h1><div class="q" style="top:{qtop}px">{quote}</div>'
             f'<div class="spec" style="top:660px">{r}</div><div class="note" style="top:1122px">{note}</div>' + foot() + '</body></html>')
 P = {}
@@ -52,13 +62,13 @@ P['sr2'] = CSS + '''<img class="bg" src="../assets/sr404-page.jpg"><div class="p
 <div class="note" style="top:960px">전부 60분 · 홍대 (서울 마포구 잔다리로 5-1, 5층)<br>테마마다 인원·나이 제한이 달라요. 다음 장부터 하나씩 →<br><span style="opacity:.75">※ 이 밖에 성인 전용(19세 이상) 테마가 1편 더 있어요.</span></div>''' + foot() + '</body></html>'
 P['sr3'] = page(3, 'SHOW 01 · 공포', '한라아파트<br><span class="red">4동 404호</span>', '과연 귀신이 나온다는 소문이 진짜 일까?',
     [('난이도', stars(2)), ('공포', stars(2)), ('인원', '2~6명'), ('시간', '60분'), ('장치', '99.99%')],
-    '<span class="tag">공포 ★2</span>공식 표기 기준이에요. 체감은 사람마다 달라요.<br>가격은 공식 FAQ에 안 적혀 있어요 → 예약 페이지에서 확인.', 96)
+    '<span class="tag">공포 ★2</span>공식 표기 기준이에요. 체감은 사람마다 달라요.<br>가격은 공식 FAQ에 안 적혀 있어요 → 예약 페이지에서 확인.', 96, bg='sr404-halla.jpg')
 P['sr4'] = page(4, 'SHOW 02 · 스릴러 / 추격', '<span class="red">PIG</span>', '심야괴담 오늘의 이야기는 ‘비 내리는 밤, 미이산 연쇄실종사건’입니다.',
     [('난이도', stars(2)), ('공포', stars(4)), ('인원', '3~6명'), ('시간', '60분'), ('가격', '1인 29,000원')],
-    '<span class="tag">고등학생 미만 이용 불가</span><br>공식 안내: 일부 공포 연출·배우 연기 포함, 심장이 약하면 주의.', 150, 450)
-P['sr5'] = page(5, 'SHOW 03 · B급 코믹', '무서운 건 싫다면<br><span class="red">블랙홀</span>', '이수 : 피방 고? &nbsp;현석 : ㅇㅇ',
+    '<span class="tag">고등학생 미만 이용 불가</span><br>공식 안내: 일부 공포 연출·배우 연기 포함, 심장이 약하면 주의.', 150, 450, bg='sr404-pig.jpg', accent='#FF7A3D')
+P['sr5'] = page(5, 'SHOW 03 · B급 코믹 · 무서운 건 싫다면', '<span class="red">블랙홀</span>', '이수 : 피방 고? &nbsp;현석 : ㅇㅇ',
     [('난이도', stars(3)), ('공포', '공식 표기 없음'), ('인원', '2~6명'), ('시간', '60분'), ('가격', '1인 24,000원')],
-    '<span class="tag">B급 코믹</span>공식 장르 그대로예요. 장치 99.99%.<br>셋 중에 난이도 별이 가장 많아요(★3).', 92)
+    '<span class="tag">B급 코믹</span>공식 장르 그대로예요. 장치 99.99%.<br>셋 중에 난이도 별이 가장 많아요(★3).', 130, 520, bg='sr404-blackhole.jpg', accent='#5FE0FF')
 P['sr6'] = CSS + '''<img class="bg" src="../assets/sr404-page.jpg"><div class="pg">6 / 6</div>
 <div class="kick">BEFORE THE SHOW</div>
 <h1 style="font-size:92px">가기 전에 <span class="red">딱 5개</span></h1>
