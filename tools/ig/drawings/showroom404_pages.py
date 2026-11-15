@@ -42,30 +42,23 @@ P['sr1'] = CSS + '''<img class="bg" src="../assets/sr404-cover.jpg">
 </body></html>'''
 P['sr2'] = CSS + '''<img class="bg" src="../assets/sr404-page.jpg"><div class="pg">2 / 6</div>
 <div class="kick">SHOW LINEUP</div>
-<h1 style="font-size:92px">오늘의 <span class="red">쇼 4편</span></h1>
+<h1 style="font-size:92px">오늘의 <span class="red">쇼 라인업</span></h1>
 <div class="note" style="top:372px;font-size:30px;color:#1b1714">공식 소개는 “몰입형 연출 + 배우 체험”.<br>문제만 푸는 방이 아니라, 배우 연기가 들어가는 곳이에요.</div>
 <div class="spec" style="top:520px">
 <div class="row" style="padding:26px 6px"><span style="font-family:H;font-weight:400;font-size:52px">한라아파트 4동 404호</span><span class="red">공포</span></div>
 <div class="row" style="padding:26px 6px"><span style="font-family:H;font-weight:400;font-size:52px">PIG</span><span class="red">스릴러 · 추격</span></div>
 <div class="row" style="padding:26px 6px"><span style="font-family:H;font-weight:400;font-size:52px">블랙홀</span><span class="red">B급 코믹</span></div>
-<div class="row" style="padding:26px 6px"><span style="font-family:H;font-weight:400;font-size:52px">꼬치 진다</span><span class="red">19금 · 성인만</span></div>
 </div>
-<div class="note" style="top:1040px">전부 60분 · 홍대 (서울 마포구 잔다리로 5-1, 5층)<br>테마마다 인원·나이 제한이 달라요. 다음 장부터 하나씩 →</div>''' + foot() + '</body></html>'
+<div class="note" style="top:960px">전부 60분 · 홍대 (서울 마포구 잔다리로 5-1, 5층)<br>테마마다 인원·나이 제한이 달라요. 다음 장부터 하나씩 →<br><span style="opacity:.75">※ 이 밖에 성인 전용(19세 이상) 테마가 1편 더 있어요.</span></div>''' + foot() + '</body></html>'
 P['sr3'] = page(3, 'SHOW 01 · 공포', '한라아파트<br><span class="red">4동 404호</span>', '과연 귀신이 나온다는 소문이 진짜 일까?',
     [('난이도', stars(2)), ('공포', stars(2)), ('인원', '2~6명'), ('시간', '60분'), ('장치', '99.99%')],
     '<span class="tag">공포 ★2</span>공식 표기 기준이에요. 체감은 사람마다 달라요.<br>가격은 공식 FAQ에 안 적혀 있어요 → 예약 페이지에서 확인.', 96)
 P['sr4'] = page(4, 'SHOW 02 · 스릴러 / 추격', '<span class="red">PIG</span>', '심야괴담 오늘의 이야기는 ‘비 내리는 밤, 미이산 연쇄실종사건’입니다.',
     [('난이도', stars(2)), ('공포', stars(4)), ('인원', '3~6명'), ('시간', '60분'), ('가격', '1인 29,000원')],
     '<span class="tag">고등학생 미만 이용 불가</span><br>공식 안내: 일부 공포 연출·배우 연기 포함, 심장이 약하면 주의.', 150, 450)
-P['sr5'] = CSS + '''<img class="bg" src="../assets/sr404-page.jpg"><div class="pg">5 / 6</div>
-<div class="kick">SHOW 03 · 04</div>
-<h1 style="font-size:92px">무서운 건 싫다면</h1>
-<div class="a" style="left:110px;right:110px;top:400px"><div style="font-family:H;font-size:76px"><span class="red">블랙홀</span> <span style="font-family:P;font-weight:800;font-size:30px">B급 코믹</span></div>
-<div style="font-size:34px;font-weight:800;margin-top:10px">“이수 : 피방 고? &nbsp;현석 : ㅇㅇ”</div></div>
-<div class="spec" style="top:580px"><div class="row"><b>난이도</b>''' + stars(3) + '''</div><div class="row"><b>인원 · 시간</b><span>2~6명 · 60분</span></div><div class="row"><b>가격</b><span>1인 24,000원</span></div></div>
-<div class="a" style="left:110px;right:110px;top:850px"><div style="font-family:H;font-size:76px"><span class="red">꼬치 진다</span> <span style="font-family:P;font-weight:800;font-size:30px">19금</span></div></div>
-<div class="spec" style="top:960px"><div class="row"><b>난이도</b>''' + stars(4) + '''</div><div class="row"><b>인원 · 시간</b><span>2~6명 · 60분 · 24,000원</span></div></div>
-<div class="note" style="top:1150px;font-size:25px"><span class="tag" style="font-size:24px">19세 미만 이용 불가</span>공식 안내: 성인 관객용, 불편할 수 있으면 자제 권장.</div>''' + foot() + '</body></html>'
+P['sr5'] = page(5, 'SHOW 03 · B급 코믹', '무서운 건 싫다면<br><span class="red">블랙홀</span>', '이수 : 피방 고? &nbsp;현석 : ㅇㅇ',
+    [('난이도', stars(3)), ('공포', '공식 표기 없음'), ('인원', '2~6명'), ('시간', '60분'), ('가격', '1인 24,000원')],
+    '<span class="tag">B급 코믹</span>공식 장르 그대로예요. 장치 99.99%.<br>셋 중에 난이도 별이 가장 많아요(★3).', 92)
 P['sr6'] = CSS + '''<img class="bg" src="../assets/sr404-page.jpg"><div class="pg">6 / 6</div>
 <div class="kick">BEFORE THE SHOW</div>
 <h1 style="font-size:92px">가기 전에 <span class="red">딱 5개</span></h1>
@@ -74,7 +67,7 @@ P['sr6'] = CSS + '''<img class="bg" src="../assets/sr404-page.jpg"><div class="p
 <div class="row" style="display:block"><span>② 결제는 당일 현장에서</span><div class="note" style="position:static;font-size:26px">예약은 공식 홈페이지에서</div></div>
 <div class="row" style="display:block"><span>③ 2시간 전 이후 취소는 위약금 가능</span><div class="note" style="position:static;font-size:26px">정당한 사유 없이 취소하면 2인 요금 기준</div></div>
 <div class="row" style="display:block"><span>④ 혼자 플레이는 평일만</span><div class="note" style="position:static;font-size:26px">2인 요금 적용 (PIG는 3인 요금)</div></div>
-<div class="row" style="display:block"><span>⑤ 나이 제한 확인</span><div class="note" style="position:static;font-size:26px">PIG 고등학생 미만 ✕ · 꼬치 진다 19세 미만 ✕</div></div>
+<div class="row" style="display:block"><span>⑤ 나이 제한 확인</span><div class="note" style="position:static;font-size:26px">PIG는 고등학생 미만 ✕ · 성인 전용 테마는 19세 미만 ✕</div></div>
 </div>
 <div class="note" style="top:1090px;font-size:28px;font-weight:800;color:#1b1714">📌 저장해 두고 예약할 때 꺼내 보세요.<br><span style="font-weight:500;font-size:24px;color:#3d342c">방문 전에 꼭 매장 인스타·예약 페이지에서 다시 확인 · 다녀온 방은 방탈로그에 한 줄</span></div>''' + foot("먼저 써 보고 10초 가입 → 프로필 링크") + '</body></html>'
 for k, v in P.items(): open(os.path.join(T, k + '.html'), 'w', encoding='utf-8').write(v)
