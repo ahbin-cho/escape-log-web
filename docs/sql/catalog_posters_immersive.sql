@@ -11,6 +11,7 @@ where c.id in (
   '16d0f9bf-78d6-45ae-ac1b-97ca1e3b8f08', -- 슬립노모어 서울
   'ee05926c-93d1-4dd6-8290-784e1bdc7c92', -- 아바타
   'a8427c14-e634-4b4c-b7ae-93d94c8cb794', -- 리바이벌 REVIVER
-  'ab5d5167-2b31-4a13-8132-bd973484b10c'  -- 카지노: 게임의 법칙
+  'ab5d5167-2b31-4a13-8132-bd973484b10c', -- 카지노: 게임의 법칙
+  '4eba7208-dd09-4dd6-ba91-316972c36059'  -- 비공식클래스: 기억표백의 진실편
 );
 select name, cafe, poster_url from public.catalog where poster_url like '%/posters/immersive/%' order by name;
