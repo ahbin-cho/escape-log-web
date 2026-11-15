@@ -54,12 +54,13 @@ export const metadata: Metadata = {
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
     other: {
-      // 지금 도메인 소유 확인 값은 항상 넣고, 환경변수 값이 따로 있으면 함께 넣는다
+      // 예전 주소(bangtallog.com)·새 주소(talkkaknote.com) 소유 확인 값은 항상 넣고, 환경변수 값이 따로 있으면 함께 넣는다
       // (환경변수에 예전 값이 남아 있어도 새 주소 확인이 막히지 않게)
       "naver-site-verification": [
         ...new Set(
           [
             "4a2028464314f5e26f1daa34e45536bd33078b34",
+            "6b3a9b5582d582d46a7a30f9e9cf3e8192a7c0d0", // talkkaknote.com (2026-11 새 주소)
             process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION
           ].filter((v): v is string => !!v)
         )

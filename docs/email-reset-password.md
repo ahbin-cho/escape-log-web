@@ -1,7 +1,7 @@
 # 비밀번호 재설정 메일 (Supabase → Authentication → Emails → Templates → Reset Password)
 
 메일 발송: Resend 무료 요금제(SMTP). 비밀번호(API 키)는 Supabase SMTP 칸에만 넣고 여기에 적지 않는다.
-- Host `smtp.resend.com` · Port `465` · Username `resend` · Sender `no-reply@bangtallog.com` (talkkaknote.com 을 Resend 에서 인증하기 전까지는 예전 주소 그대로 — 인증 뒤 no-reply@talkkaknote.com) · Sender name `탈깍노트`
+- Host `smtp.resend.com` · Port `465` · Username `resend` · Sender `no-reply@talkkaknote.com` (2026-11-15 Resend 인증 완료. API 키의 Domain 은 All domains) · Sender name `탈깍노트`
 - 도메인 DNS 는 Vercel(ns1/ns2.vercel-dns.com) → Resend 가 알려 주는 레코드를 Vercel 도메인 DNS 에 추가.
 
 ## 제목
