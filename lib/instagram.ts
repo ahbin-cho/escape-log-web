@@ -2,6 +2,7 @@ import type { ThemeRow } from "./catalog-server";
 import { districtFromText, regionFromText } from "./region";
 import { areaThemes, pickCollection } from "./collection";
 import { pickYearEndCafes } from "./cafe-picks";
+import { brandOf } from "./cafe";
 
 // ─────────────────────────────────────────────────────────────
 // 인스타그램 자동 게시: "오늘의 미스터리 방" 글(캡션)과 게시 순서.
@@ -216,10 +217,12 @@ export function resolvePost(set: string, themes: ThemeRow[]): ResolvedPost | nul
     const file = REEL_FILES[id];
     const story = file ? resolvePost(`story:${id}`, themes) : null;
     if (!file || !story) return null;
-    // 릴스 그림은 줄거리에서 떠올린 장면이라 실제 방 모습이 아니다 → 캡션에 밝혀 둔다(운영자 결정 2026-11-14)
+    // 릴스 배경은 공식 포스터 분위기로 새로 그린 그림이고, 끝에 공식 포스터를 작게 넣는다 → 캡션에 밝히고 출처 표기(운영자 결정 2026-11-14·15)
+    const t = themes.find((x) => x.id === id);
+    const brand = t ? brandOf(t.cafe).trim() : "";
     const caption = story.caption.replace(
       "(줄거리는 매장 공식 소개 기준)",
-      "(줄거리는 매장 공식 소개 기준 · 그림은 줄거리에서 떠올린 분위기예요, 실제 방 모습과 달라요)"
+      `(줄거리는 매장 공식 소개 기준 · 배경 그림은 공식 포스터 분위기로 새로 그렸어요, 실제 방 모습과 달라요${brand ? ` · 포스터: ${brand} 공식` : ""})`
     );
     return { imagePaths: [], videoPath: `/reels/${file}.mp4`, caption };
   }
