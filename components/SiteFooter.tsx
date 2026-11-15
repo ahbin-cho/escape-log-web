@@ -11,7 +11,7 @@ export default function SiteFooter() {
             <p
               className="font-display text-lg tracking-tight"
             >
-              방탈로그
+              탈깍<span className="text-candy">.</span>로그
             </p>
             <p className="max-w-xs text-sm text-cream/60">
               방탈출 기록·취향 진단·추천, 그리고 친구 궁합까지. 방탈러를 위한
@@ -51,7 +51,7 @@ export default function SiteFooter() {
         </div>
 
         <div className="mt-6 space-y-1 border-t border-edge/15 pt-4 text-xs text-cream/45">
-          <p>© {year} 방탈로그. 개인 방탈출 아카이브 서비스.</p>
+          <p>© {year} 탈깍.로그. 개인 방탈출 아카이브 서비스.</p>
           <p>
             테마·매장 정보는 각 방탈출 브랜드의 공식 정보를 참고했으며, 실제와
             다를 수 있어요.

@@ -29,7 +29,7 @@ h1{position:absolute;left:108px;right:108px;top:246px;font-family:H;font-weight:
 .foot .b{font-family:A;font-size:26px}
 </style></head><body>'''
 def stars(n): return '<span class="st">' + '★' * n + '<i>' + '★' * (5 - n) + '</i></span>'
-def foot(src="정보: 쇼룸404 공식 홈페이지 (11.15 확인)"): return f'<div class="foot"><span>{src}</span><span class="b">방탈로그</span></div>'
+def foot(src="정보: 쇼룸404 공식 홈페이지 (11.15 확인)"): return f'<div class="foot"><span>{src}</span><span class="b">탈깍.로그</span></div>'
 DARK = '''<style>body{color:#F3E6C8;background:#0b0a0c}.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,7,9,.42) 0%,rgba(8,7,9,.14) 28%,rgba(8,7,9,.4) 50%,rgba(8,7,9,.66) 100%)}
 .red{color:#FF6A55}.kick{color:#FF8A6E}.hd{position:absolute;left:110px;top:100px;font-family:A;font-size:28px;letter-spacing:.12em}
 .spec{border-color:#F3E6C8;background:rgba(8,7,9,.6)}.row{border-bottom-color:rgba(243,230,200,.4);padding-left:18px;padding-right:18px}.note{color:#E2D5B8}
@@ -79,5 +79,5 @@ P['sr6'] = CSS + '''<img class="bg" src="../assets/sr404-page.jpg"><div class="p
 <div class="row" style="display:block"><span>④ 혼자 플레이는 평일만</span><div class="note" style="position:static;font-size:26px">2인 요금 적용 (PIG는 3인 요금)</div></div>
 <div class="row" style="display:block"><span>⑤ 나이 제한 확인</span><div class="note" style="position:static;font-size:26px">PIG는 고등학생 미만 ✕ · 성인 전용 테마는 19세 미만 ✕</div></div>
 </div>
-<div class="note" style="top:1090px;font-size:28px;font-weight:800;color:#1b1714">📌 저장해 두고 예약할 때 꺼내 보세요.<br><span style="font-weight:500;font-size:24px;color:#3d342c">방문 전에 꼭 매장 인스타·예약 페이지에서 다시 확인 · 다녀온 방은 방탈로그에 한 줄</span></div>''' + foot("먼저 써 보고 10초 가입 → 프로필 링크") + '</body></html>'
+<div class="note" style="top:1090px;font-size:28px;font-weight:800;color:#1b1714">📌 저장해 두고 예약할 때 꺼내 보세요.<br><span style="font-weight:500;font-size:24px;color:#3d342c">방문 전에 꼭 매장 인스타·예약 페이지에서 다시 확인 · 다녀온 방은 탈깍.로그에 한 줄</span></div>''' + foot("먼저 써 보고 10초 가입 → 프로필 링크") + '</body></html>'
 for k, v in P.items(): open(os.path.join(T, k + '.html'), 'w', encoding='utf-8').write(v)

@@ -1,3 +1,4 @@
+import { SITE_HOST } from "./site";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import type { CSSProperties, ReactElement, ReactNode } from "react";
@@ -113,13 +114,13 @@ export function Paper({
       <div style={{ position: "absolute", left: 0, top: 0, width: CARD_W, height: CARD_H, display: "flex", backgroundImage: "radial-gradient(circle at 30% 96%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 40%)" }} />
       <div style={{ position: "absolute", left: 0, top: 0, width: CARD_W, height: CARD_H, display: "flex", flexDirection: "column", padding: `64px ${PAD_X}px 56px` }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", height: 40 }}>
-          <div style={{ display: "flex", fontFamily: "Aggro", fontSize: 30, letterSpacing: "0" }}>방탈로그</div>
+          <div style={{ display: "flex", fontFamily: "Aggro", fontSize: 30, letterSpacing: "0" }}>탈깍.로그</div>
           <div style={{ display: "flex", fontSize: 26, fontWeight: 800, color: ED.mute }}>{label ?? ""}</div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", flex: 1, position: "relative" }}>{children}</div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", height: 66 }}>
           <div style={{ display: "flex" }}>{footLeft ?? null}</div>
-          <div style={{ display: "flex", fontSize: 28, fontWeight: 800 }}>bangtallog.com</div>
+          <div style={{ display: "flex", fontSize: 28, fontWeight: 800 }}>{SITE_HOST}</div>
         </div>
       </div>
     </div>

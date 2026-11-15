@@ -12,7 +12,7 @@ export default function StoryCardButton(props: StoryCardInput) {
     setBusy(true);
     try {
       const blob = await makeStoryCard(props);
-      const file = new File([blob], "bangtallog-type.png", { type: "image/png" });
+      const file = new File([blob], "talkkak-type.png", { type: "image/png" });
       if (navigator.canShare?.({ files: [file] })) {
         await navigator.share({ files: [file], title: "내 방탈 유형" });
       } else {

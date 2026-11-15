@@ -1,3 +1,4 @@
+import { SITE_HOST } from "./site";
 // 리뷰 시트(1080×1350): 방탈러들이 인스타에 올리는 '방탈출 리뷰' 양식 한 장을 브라우저에서 그린다.
 // 표지(내가 올린 사진 → 공식 포스터 → 장르 색 표지) · 테마/매장/날짜 · 탈출 결과 · 플레이 정보 · 체감 난이도 · 공포도 · 평점 · 한줄 후기.
 // 공식 포스터는 자르지 않고 그대로 넣고 아래에 출처를 적는다.
@@ -78,7 +79,7 @@ export async function makeReviewSheet(r: ReviewSheetInput): Promise<Blob> {
   for (let y = 14; y < H; y += 28) for (let x = 14; x < W; x += 28) { c.beginPath(); c.arc(x, y, 2, 0, 7); c.fill(); }
 
   // 머리: 로고 · N번째 방
-  c.fillStyle = INK; c.font = `36px ${TITLE}`; c.fillText("방탈로그", 56, 88);
+  c.fillStyle = INK; c.font = `36px ${TITLE}`; c.fillText("탈깍.로그", 56, 88);
   if (r.nth) {
     const t = `${r.nth}번째 방`;
     c.font = `800 28px ${BODY}`;
@@ -207,7 +208,7 @@ export async function makeReviewSheet(r: ReviewSheetInput): Promise<Blob> {
   lines.forEach((l, i) => c.fillText(l, OX + (OW - c.measureText(l).width) / 2, BY + BH / 2 + 26 + (i - (lines.length - 1) / 2) * (px + 14)));
 
   // 바닥
-  c.fillStyle = INK; c.font = `800 26px ${BODY}`; c.fillText("bangtallog.com", 56, H - 34);
+  c.fillStyle = INK; c.font = `800 26px ${BODY}`; c.fillText(SITE_HOST, 56, H - 34);
   if (poster && r.posterCredit) {
     const t = `포스터: ${r.posterCredit} 공식`;
     c.fillStyle = MUTE; c.font = `500 22px ${BODY}`; c.fillText(t, W - 56 - c.measureText(t).width, H - 34);

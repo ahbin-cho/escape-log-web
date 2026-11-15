@@ -26,7 +26,7 @@ const env = Object.fromEntries(
 const SITE =
   env.NEXT_PUBLIC_SITE_URL && !env.NEXT_PUBLIC_SITE_URL.includes("vercel.app")
     ? env.NEXT_PUBLIC_SITE_URL
-    : "https://bangtallog.com";
+    : "https://talkkak.com";
 
 async function sitemapUrls() {
   const xml = await (await fetch(`${SITE}/sitemap.xml`)).text();

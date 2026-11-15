@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/region" },
   openGraph: {
     images: [DEFAULT_OG_IMAGE],
-    title: "지역별 방탈출 지도 | 방탈로그",
+    title: "지역별 방탈출 지도 | 탈깍.로그",
     description: "우리 동네 방탈출부터 원정까지, 지역별로 모아보기.",
   },
 };

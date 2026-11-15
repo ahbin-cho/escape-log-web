@@ -1,3 +1,4 @@
+import { SITE_HOST } from "@/lib/site";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
@@ -364,7 +365,7 @@ function editorialCard(p: {
       <div style={{ marginTop: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ fontSize: 40, fontWeight: 800 }}>정답은 프로필 링크에서</div>
-          <div style={{ marginTop: 8, fontSize: 28, fontWeight: 500, color: ED.dim }}>방탈로그 · bangtallog.com</div>
+          <div style={{ marginTop: 8, fontSize: 28, fontWeight: 500, color: ED.dim }}>탈깍.로그 · {SITE_HOST}</div>
         </div>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={`${p.origin}/mascot.png`} alt="" width={130} height={130} />

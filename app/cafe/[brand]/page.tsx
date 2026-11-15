@@ -114,7 +114,7 @@ export default async function BrandPage({ params }: Props) {
 
       <nav aria-label="경로" className={CRUMB}>
         <Link href="/" className="hover:text-cream">
-          방탈로그
+          탈깍.로그
         </Link>
         <span aria-hidden>·</span>
         <Link href="/cafe" className="hover:text-cream">

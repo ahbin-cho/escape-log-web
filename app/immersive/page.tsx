@@ -152,7 +152,7 @@ export default async function ImmersivePage() {
 
       <section className="space-y-2 border-t border-line pt-5 text-[13px] leading-relaxed text-cream/60 [word-break:keep-all]">
         <p>각 곳의 공식 홈페이지·예약 페이지에 적힌 내용만 옮겼어요. 회차·가격은 자주 바뀌니 예약 전에 한 번 더 확인해 주세요.</p>
-        <p>배우와 함께하는 이머시브인데 여기 없다면, 인스타 @bangtal_log 로 알려 주세요. 공식 안내를 확인하고 넣을게요.</p>
+        <p>배우와 함께하는 이머시브인데 여기 없다면, 인스타 @talkkak.log 로 알려 주세요. 공식 안내를 확인하고 넣을게요.</p>
       </section>
 
       <section className="border-t border-line pt-5">

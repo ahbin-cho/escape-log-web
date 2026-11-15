@@ -14,7 +14,7 @@ export default function MonthCardButton({ month, records }: { month: string; rec
     setBusy(true);
     try {
       const blob = await makeMonthCard(month, records);
-      const file = new File([blob], `bangtallog-${month}.png`, { type: "image/png" });
+      const file = new File([blob], `talkkak-${month}.png`, { type: "image/png" });
       if (navigator.canShare?.({ files: [file] })) {
         await navigator.share({ files: [file], title: `${Number(month.slice(5))}월의 방탈출` });
       } else {

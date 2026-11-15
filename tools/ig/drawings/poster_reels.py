@@ -1,5 +1,5 @@
 """영안실·춘화각 릴스 템플릿(reel-morgue.html, reel-chunhwa.html)을 만든다. 성지기숙학원(reel-sungji.html)과 같은 짜임:
-0~1.45초 후킹 → 1.9초부터 줄거리 한 줄씩 → 6.3초 제목·매장·공식 포스터(작게, 출처) → 8.3초 방탈로그 카드.
+0~1.45초 후킹 → 1.9초부터 줄거리 한 줄씩 → 6.3초 제목·매장·공식 포스터(작게, 출처) → 8.3초 탈깍.로그 카드.
 배경은 poster_moods.py 로 새로 그린 그림. 사용: python3 tools/ig/drawings/poster_reels.py"""
 import os
 T = os.path.join(os.path.dirname(__file__), "..", "templates")
@@ -45,7 +45,7 @@ __EXTRA__
 __LINES__
 <div class="meta">__TITLE__<div class="k">__STORE__</div><div class="c">__SPEC__</div>__NOTE__</div>
 <div class="post"><img src="../assets/__POSTER__"><div>포스터: 상상의문 공식</div></div>
-<div class="cta"><img src="../../../public/mascot.png" width="110" height="110"><div><div class="x">다녀왔다면 <b>한 줄 기록</b></div><div class="s">줄거리·후기는 프로필 링크 · bangtallog.com</div></div></div>
+<div class="cta"><img src="../../../public/mascot.png" width="110" height="110"><div><div class="x">다녀왔다면 <b>한 줄 기록</b></div><div class="s">줄거리·후기는 프로필 링크 · talkkak.com</div></div></div>
 </div></body></html>'''
 WALK = """
 .bob{position:absolute;inset:0;animation:bob .62s 1.6s ease-in-out 12 alternate}

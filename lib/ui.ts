@@ -1,4 +1,4 @@
-// 공용 모양: 지금 사이트(bangtallog.com)와 같은 규칙.
+// 공용 모양: 지금 사이트와 같은 규칙.
 // 칩 = 연한 먹선 테두리 + 흰 종이 / 고른 칩 = 주황 + 먹선 / 버튼 = 굵은 먹선 + 그림자 + 손그림 선.
 export const CHIP =
   "inline-block whitespace-nowrap rounded-full border-2 border-edge/40 bg-ink px-3 py-1.5 text-[13px] font-bold transition hover:border-edge hover:bg-candy active:scale-[0.97]";

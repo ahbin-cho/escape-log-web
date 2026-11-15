@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = `${region} 지역 방탈출 테마 ${themes.length}개를 브랜드별로 정리했어요. ${brands} 등 매장별 장르·난이도·플레이 시간을 한눈에 비교해 보세요.`;
 
   return {
-    // region/layout 의 title 이 문자열이라 루트 템플릿("%s · 방탈로그")이 안 붙어 직접 붙인다
+    // region/layout 의 title 이 문자열이라 루트 템플릿("%s · 탈깍.로그")이 안 붙어 직접 붙인다
     title: { absolute: `${title} · ${SITE_NAME}` },
     description,
     alternates: { canonical: `/region/${region}` },
@@ -122,7 +122,7 @@ export default async function RegionThemesPage({ params }: Props) {
 
       <nav aria-label="경로" className={CRUMB}>
         <Link href="/" className="hover:text-cream">
-          방탈로그
+          탈깍.로그
         </Link>
         <span aria-hidden>·</span>
         <Link href="/region" className="hover:text-cream">

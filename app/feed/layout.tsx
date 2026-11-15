@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/feed" },
   openGraph: {
     images: [DEFAULT_OG_IMAGE],
-    title: "모두의 방탈출 후기 | 방탈로그",
+    title: "모두의 방탈출 후기 | 탈깍.로그",
     description: "방탈러들의 생생한 방탈출 후기 모음.",
   },
 };

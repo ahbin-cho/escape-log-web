@@ -1,3 +1,4 @@
+import { SITE_HOST } from "../site";
 import type { Draw, TypeId } from "./slots";
 import { MASCOT, PLAYERS_LABEL, QUIZ_TYPES, typeImage } from "./types";
 import { fearTrait } from "../terms";
@@ -242,7 +243,7 @@ export async function drawStoryCard(canvas: HTMLCanvasElement, input: StoryCardI
   c.fillText("나와 맞는 방 찾기", CX, y - 44);
   c.font = `800 34px ${SERIF}`;
   c.fillStyle = BROWN;
-  c.fillText("bangtallog.com", CX, y);
+  c.fillText(SITE_HOST, CX, y);
   c.textAlign = "left";
 }
 

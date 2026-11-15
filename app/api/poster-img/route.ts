@@ -19,7 +19,7 @@ export async function GET(request: Request) {
   const url = theme?.poster_url ?? "";
   if (!/^https:\/\//.test(url)) return new Response("no poster", { status: 404 });
   try {
-    const res = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0 (bangtallog poster)" }, signal: AbortSignal.timeout(8000) });
+    const res = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0 (talkkak poster)" }, signal: AbortSignal.timeout(8000) });
     if (!res.ok) return new Response("fetch failed", { status: 502 });
     const buf = await res.arrayBuffer();
     if (buf.byteLength > 6_000_000) return new Response("too large", { status: 502 });

@@ -101,12 +101,12 @@ def fan():
 
 def credit(ts):
     b = sorted({t["cafe"].split()[0] for t in ts if POSTERS.get(t["name"]) and not t["cafe"].startswith(NO_POSTER_BRANDS)})
-    return f'<p style="position:absolute;left:64px;right:64px;top:1250px;font-size:18px;font-weight:800;opacity:.7">포스터: {" · ".join(b)} 공식 홈페이지{" · 셜록홈즈는 방탈로그가 새로 그린 그림" if any(t["cafe"].startswith(NO_POSTER_BRANDS) for t in ts) else ""}</p>' if b else ""
+    return f'<p style="position:absolute;left:64px;right:64px;top:1250px;font-size:18px;font-weight:800;opacity:.7">포스터: {" · ".join(b)} 공식 홈페이지{" · 셜록홈즈는 탈깍.로그가 새로 그린 그림" if any(t["cafe"].startswith(NO_POSTER_BRANDS) for t in ts) else ""}</p>' if b else ""
 
 def main(p, posters=None):
     if posters: POSTERS.update(json.load(open(posters)))
     c = json.load(open(p)); S = c["sections"]; total = c["total"]; chk = c.get("checked_on", "")
-    foot_note = f"정보는 매장 공식 예약 페이지 기준{(' · ' + chk + ' 확인') if chk else ''}" + ("" if POSTERS else " · 그림은 방탈로그가 새로 그렸어요")
+    foot_note = f"정보는 매장 공식 예약 페이지 기준{(' · ' + chk + ' 확인') if chk else ''}" + ("" if POSTERS else " · 그림은 탈깍.로그가 새로 그렸어요")
     # 1 표지
     toc = "".join(f'<div style="background:#FFFBF2;border:4px solid #1D1D1D;border-radius:18px;padding:12px 18px;font-weight:800;font-size:26px;box-shadow:4px 5px 0 #1D1D1D">{x}</div>'
                   for x in ["2 😱 쫄깃한 거 좋아하나?", "3 🌿 무서븐 건 싫나?", "4 🐣 방탈출 처음이가?", "5 📖 이야기 좋아하제?"])
@@ -118,7 +118,7 @@ def main(p, posters=None):
 <p style="position:absolute;left:68px;top:405px;font-weight:800;font-size:31px;color:#FFF3DA;text-shadow:0 2px 8px rgba(0,0,0,.6)">대프리카 더위 피해서 들어갈 방, 골라 봤다 아이가 🥵</p>
 
 <div style="position:absolute;left:64px;right:64px;top:1100px;display:grid;grid-template-columns:1fr 1fr;gap:14px">{toc}</div>
-<div class="foot" style="color:#FFFBF2;bottom:44px"><span style="font-weight:800;text-shadow:0 2px 6px rgba(0,0,0,.6)">테마 {total}개 중에서 골랐어요 · 옆으로 넘겨 보세요 →</span><b>방탈로그</b></div></body></html>'''
+<div class="foot" style="color:#FFFBF2;bottom:44px"><span style="font-weight:800;text-shadow:0 2px 6px rgba(0,0,0,.6)">테마 {total}개 중에서 골랐어요 · 옆으로 넘겨 보세요 →</span><b>탈깍.로그</b></div></body></html>'''
     open(os.path.join(T, "dg1.html"), "w").write(s1)
     for i, (key, bg, fg, ac, chip, title, sub, fn) in enumerate(PAGES, 2):
         cards = "".join(card(t, *((t["tag"], t["line"]) if "tag" in t else fn(t))) for t in S[key])
@@ -130,7 +130,7 @@ def main(p, posters=None):
 <h1 style="position:absolute;left:64px;top:130px;font-size:92px">{title}</h1>
 <p style="position:absolute;right:64px;top:290px;font-weight:500;font-size:24px;opacity:.75;text-align:right">{sub}</p>
 <div class="grid">{cards}</div>{credit(S[key])}
-<div class="foot" style="color:{fg};opacity:.85"><span style="font-weight:800;font-size:19px">{foot_note}</span><b>방탈로그</b></div></body></html>'''
+<div class="foot" style="color:{fg};opacity:.85"><span style="font-weight:800;font-size:19px">{foot_note}</span><b>탈깍.로그</b></div></body></html>'''
         open(os.path.join(T, f"dg{i}.html"), "w").write(s)
     # 6 마무리
     s6 = HEAD + '<img src="../assets/dg-gem-end.jpg" style="position:absolute;inset:0;width:1080px;height:1350px;object-fit:cover">' + f'''
@@ -144,8 +144,8 @@ def main(p, posters=None):
 <span class="chip" style="background:#FFFBF2;border:4px solid #1D1D1D;padding:9px 18px;font-size:25px">🔍 검색창에 "대구"</span>
 <span class="chip" style="background:#FFFBF2;border:4px solid #1D1D1D;padding:9px 18px;font-size:25px">📖 줄거리·난이도·후기</span>
 <span class="chip" style="background:#FFFBF2;border:4px solid #1D1D1D;padding:9px 18px;font-size:25px">🎯 취향 추천</span></div>
-<div><span class="chip" style="background:#1D1D1D;color:#FFE27A;padding:14px 28px;font-size:32px;box-shadow:6px 6px 0 #FFFBF2">프로필 링크 → bangtallog.com</span></div></div>
-<div class="foot" style="color:#FFFBF2;bottom:30px"><span style="font-weight:800">먼저 써 보고 10초 가입</span><b>방탈로그</b></div></body></html>'''
+<div><span class="chip" style="background:#1D1D1D;color:#FFE27A;padding:14px 28px;font-size:32px;box-shadow:6px 6px 0 #FFFBF2">프로필 링크 → talkkak.com</span></div></div>
+<div class="foot" style="color:#FFFBF2;bottom:30px"><span style="font-weight:800">먼저 써 보고 10초 가입</span><b>탈깍.로그</b></div></body></html>'''
     open(os.path.join(T, "dg6.html"), "w").write(s6)
     print("dg1~6 written")
 

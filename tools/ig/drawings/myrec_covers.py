@@ -1,5 +1,5 @@
 """운영자 진짜 기록 캐러셀(myrec1~4)의 표지를 새로 그린 SVG 그림으로 바꾼다.
-공식 포스터는 쓰지 않고, 제목에서 떠오르는 소재로 가볍게 그린 방탈로그 그림.
+공식 포스터는 쓰지 않고, 제목에서 떠오르는 소재로 가볍게 그린 탈깍.로그 그림.
 사용: python3 tools/ig/drawings/myrec_covers.py tools/ig/templates/myrec*.html
 """
 import re, sys

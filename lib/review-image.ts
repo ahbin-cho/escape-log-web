@@ -1,3 +1,4 @@
+import { SITE_HOST } from "./site";
 // 후기 카드 이미지(1080×1350)를 브라우저에서 그린다: 사진을 살짝 어둡게 깔고 그 위에 한줄 후기와 기록을 얹는다.
 // 사진이 없거나 못 불러오면 장르 색 바탕으로 그린다. 인스타 피드·스토리에 올리기 좋은 4:5.
 
@@ -94,7 +95,7 @@ export async function makeReviewImage(r: ReviewImageInput): Promise<Blob> {
   // 위: 브랜드 · 날짜
   c.fillStyle = "#FFFFFF";
   c.font = `34px ${TITLE}`;
-  c.fillText("방탈로그", PAD, 118);
+  c.fillText("탈깍.로그", PAD, 118);
   c.font = `800 28px ${BODY}`;
   c.fillStyle = "rgba(255,255,255,0.8)";
   const top = [r.genre, r.playedAt?.replaceAll("-", ".")].filter(Boolean).join(" · ");
@@ -104,7 +105,7 @@ export async function makeReviewImage(r: ReviewImageInput): Promise<Blob> {
   let y = H - 92;
   c.font = `800 26px ${BODY}`;
   c.fillStyle = "rgba(255,255,255,0.6)";
-  c.fillText("bangtallog.com", PAD, y);
+  c.fillText(SITE_HOST, PAD, y);
   if (r.byline) c.fillText(r.byline, W - PAD - c.measureText(r.byline).width, y);
   y -= 64;
 

@@ -9,15 +9,15 @@ import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/site";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "방탈로그 — 방탈출 기록장·달력 다이어리, 취향 진단·추천",
-    template: "%s · 방탈로그"
+    default: "탈깍.로그 — 방탈출 기록장·달력 다이어리, 취향 진단·추천",
+    template: "%s · 탈깍.로그"
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
   alternates: {
     canonical: "/",
     // 새로 들어온 테마 RSS (브라우저·수집기가 찾을 수 있게 모든 페이지에 표시)
-    types: { "application/rss+xml": [{ url: "/rss.xml", title: "방탈로그 새로 들어온 테마" }] }
+    types: { "application/rss+xml": [{ url: "/rss.xml", title: "탈깍.로그 새로 들어온 테마" }] }
   },
   keywords: [
     "방탈출",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     "방탈출 취향 진단",
     "방탈출 후기",
     "이스케이프룸",
-    "방탈로그",
+    "탈깍.로그",
     "방탈출 궁합",
     "방탈출 지도"
   ],
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
     other: {
-      // bangtallog.com 소유 확인 값은 항상 넣고, 환경변수 값이 따로 있으면 함께 넣는다
+      // 지금 도메인 소유 확인 값은 항상 넣고, 환경변수 값이 따로 있으면 함께 넣는다
       // (환경변수에 예전 값이 남아 있어도 새 주소 확인이 막히지 않게)
       "naver-site-verification": [
         ...new Set(
@@ -71,13 +71,13 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     locale: "ko_KR",
     url: SITE_URL,
-    title: "방탈로그 — 나만의 방탈출 아카이브",
+    title: "탈깍.로그 — 나만의 방탈출 아카이브",
     description:
       "기록·취향 진단·추천·친구 궁합까지. 방탈러를 위한 올인원 서비스."
   },
   twitter: {
     card: "summary_large_image",
-    title: "방탈로그 — 나만의 방탈출 아카이브",
+    title: "탈깍.로그 — 나만의 방탈출 아카이브",
     description: "기록·취향 진단·추천·친구 궁합까지. 방탈러를 위한 올인원."
   }
 };

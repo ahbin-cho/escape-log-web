@@ -1,5 +1,6 @@
 "use client";
 
+import { SITE_HOST } from "@/lib/site";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import {
@@ -229,7 +230,7 @@ export default function AdminSpotlights() {
             <div>
               <label className={label}>주소 * (영어)</label>
               <input className={field} value={form.slug} disabled={!form.isNew} onChange={(e) => upd("slug", e.target.value.toLowerCase())} placeholder="maplestory-escape" />
-              <p className={hint}>bangtallog.com/spotlight/{form.slug || "…"}</p>
+              <p className={hint}>{SITE_HOST}/spotlight/{form.slug || "…"}</p>
             </div>
             <div>
               <label className={label}>묶을 매장 이름</label>

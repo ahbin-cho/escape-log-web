@@ -1,3 +1,4 @@
+import { SITE_HOST } from "./site";
 import type { EscapeRecord } from "./store";
 import { monthCells, recordsByDay } from "./calendar";
 import { wrapText } from "./review-image";
@@ -397,7 +398,7 @@ export async function drawMonthCard(canvas: HTMLCanvasElement, month: string, re
   c.textAlign = "center";
   c.fillStyle = INK;
   c.font = `700 36px ${TITLE}`;
-  c.fillText("bangtallog.com", CARD_W / 2, fy);
+  c.fillText(SITE_HOST, CARD_W / 2, fy);
   c.textAlign = "left";
 }
 

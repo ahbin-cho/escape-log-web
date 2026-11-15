@@ -64,8 +64,8 @@ export async function shareReviewImage(r: ReviewCardData, byline?: string): Prom
     } else {
       blob = await makeReviewImage({ ...r, chips: reviewChips(r), byline, tone });
     }
-    const file = new File([blob], "bangtallog-review.jpg", { type: "image/jpeg" });
-    const text = `${r.themeName}${r.oneLiner ? ` — “${r.oneLiner}”` : ""} · 방탈로그`;
+    const file = new File([blob], "talkkak-review.jpg", { type: "image/jpeg" });
+    const text = `${r.themeName}${r.oneLiner ? ` — “${r.oneLiner}”` : ""} · 탈깍.로그`;
     if (navigator.canShare?.({ files: [file] })) {
       await navigator.share({ files: [file], text });
     } else {
