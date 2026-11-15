@@ -27,7 +27,7 @@
 
 [글꼴]
 - Pretendard. 제목은 ExtraBold(매우 굵게, 자간 좁게), 본문은 Medium.
-- 맨 위 작은 라벨은 영문 대문자 + 넓은 자간 (예: BANGTALLOG, TODAY'S MYSTERY ROOM)
+- 맨 위 작은 라벨은 영문 대문자 + 넓은 자간 (예: TALKKAK NOTE, TODAY'S MYSTERY ROOM)
 
 [레이아웃]
 - 1080×1350(세로 4:5). 위·아래 여백 넉넉히(약 90px).
