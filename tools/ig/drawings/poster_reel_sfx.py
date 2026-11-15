@@ -35,6 +35,15 @@ if MODE == "morgue":
     for t0, d in ((.9, .12), (3.55, .22), (5.35, .3), (7.6, .1)):                               # 형광등 지직
         s = noise(d, 1500, 9000) * (np.sin(2 * np.pi * 60 * tt(d)) > 0); add(t0, .4 * s)
     add(.1, boom(1.8, 44, 1.2))
+    tc = tt(1.2); f = 300 + 180 * np.sin(2 * np.pi * 1.6 * tc) + 60 * np.sin(2 * np.pi * 9 * tc)   # 문 '끼이익'
+    creak = np.sign(np.sin(2 * np.pi * np.cumsum(f) / SR)) * (.6 + .4 * rng.random(len(tc)))
+    add(.1, .1 * band(creak.astype(np.float32), 200, 3500) * np.sin(np.pi * tc / 1.2))
+    t = 1.6; k = 0                                                                               # 발소리(복도 울림)
+    while t < 8.4:
+        step = (np.sin(2 * np.pi * 85 * tt(.12)) * np.exp(-tt(.12) / .02) + .6 * noise(.12, 800, 4000) * np.exp(-tt(.12) / .012))
+        echo = np.zeros(int(.6 * SR), np.float32); echo[:len(step)] += step
+        for dly, g in ((.11, .35), (.23, .18), (.37, .08)): i = int(dly * SR); echo[i:i + len(step)] += g * step
+        add(t, echo, .5 if k % 2 else .42); t += .62; k += 1
     add(1.6, tone(1.4, ((659, .5), (1318, .12)), .5), .45); add(1.95, tone(1.6, ((523, .5), (1046, .12)), .6), .45)   # 딩동
     for t0 in (2.4, 4.1, 6.9, 8.7):                                                              # 물방울
         add(t0, tone(.25, ((1400 + rng.uniform(-200, 200), .5),), .04) * np.exp(-tt(.25) / .05), .5)

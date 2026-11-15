@@ -34,8 +34,18 @@ html,body{width:1080px;height:1920px;background:#000;overflow:hidden;font-family
 .cta .x{color:#1D1D1D;font-weight:800;font-size:44px;letter-spacing:-.03em}.cta .x b{color:#E0782A}
 .cta .s{color:#6B665D;font-weight:500;font-size:28px;margin-top:6px}
 .meta .t{font-family:M;color:#E4EFE8;letter-spacing:.3em}.meta .t i{font-style:normal;color:#D63A33}
+
+.bob{position:absolute;inset:0;animation:bob .62s 1.6s ease-in-out 12 alternate}
+@keyframes bob{from{transform:translateY(0) rotate(0)}to{transform:translateY(9px) rotate(.25deg)}}
+.cam{position:absolute;inset:0;transform-origin:71.8% 42.4%;animation:walk 10s cubic-bezier(.45,0,.75,1) forwards}
+@keyframes walk{0%{transform:scale(1)}14%{transform:scale(1.04)}100%{transform:scale(1.95)}}
+.cam .scene{animation:in .6s forwards,dim .8s 1.55s forwards}
+@keyframes dim{to{filter:brightness(.58)}}
+.door{position:absolute;left:400px;top:170px;width:610px;height:1520px;background:linear-gradient(90deg,#030504,#0a120e 80%,#1c3328);
+  box-shadow:inset -6px 0 0 rgba(150,230,190,.18);transform-origin:0 50%;transform:perspective(1400px) rotateY(-14deg);animation:open 1.25s .1s cubic-bezier(.3,0,.2,1) forwards}
+@keyframes open{to{transform:perspective(1400px) rotateY(-86deg)}}
 </style></head><body><div class="stage">
-<div class="scene"></div><div class="grain"></div><div class="flick"></div>
+<div class="bob"><div class="cam"><div class="scene"></div><div class="door"></div></div></div><div class="grain"></div><div class="flick"></div>
 <div class="hook pale"><div class="a">안내 방송이 나오면,</div><div class="b acc">이미 늦은 거예요.</div></div>
 <div class="w pale" style="top:240px;font-size:92px;--t:1.9s">안녕하십니까,</div>
 <div class="w pale" style="top:380px;font-size:70px;--t:2.8s">고객님의 마지막 여정을</div>

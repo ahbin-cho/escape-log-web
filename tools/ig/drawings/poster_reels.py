@@ -47,16 +47,30 @@ __LINES__
 <div class="post"><img src="../assets/__POSTER__"><div>포스터: 상상의문 공식</div></div>
 <div class="cta"><img src="../../../public/mascot.png" width="110" height="110"><div><div class="x">다녀왔다면 <b>한 줄 기록</b></div><div class="s">줄거리·후기는 프로필 링크 · bangtallog.com</div></div></div>
 </div></body></html>'''
+WALK = """
+.bob{position:absolute;inset:0;animation:bob .62s 1.6s ease-in-out 12 alternate}
+@keyframes bob{from{transform:translateY(0) rotate(0)}to{transform:translateY(9px) rotate(.25deg)}}
+.cam{position:absolute;inset:0;transform-origin:71.8% 42.4%;animation:walk 10s cubic-bezier(.45,0,.75,1) forwards}
+@keyframes walk{0%{transform:scale(1)}14%{transform:scale(1.04)}100%{transform:scale(1.95)}}
+.cam .scene{animation:in .6s forwards,dim .8s 1.55s forwards}
+@keyframes dim{to{filter:brightness(.58)}}
+.door{position:absolute;left:400px;top:170px;width:610px;height:1520px;background:linear-gradient(90deg,#030504,#0a120e 80%,#1c3328);
+  box-shadow:inset -6px 0 0 rgba(150,230,190,.18);transform-origin:0 50%;transform:perspective(1400px) rotateY(-14deg);animation:open 1.25s .1s cubic-bezier(.3,0,.2,1) forwards}
+@keyframes open{to{transform:perspective(1400px) rotateY(-86deg)}}
+"""
 def line(top, size, t, text, acc=False, d=None):
     cls = "w pale acc" if acc else "w pale"
     dd = f";--d:{d}s" if d else ""
     return f'<div class="{cls}" style="top:{top}px;font-size:{size}px;--t:{t}s{dd}">{text}</div>'
-def make(name, **k):
+def make(name, walk=False, **k):
     s = BASE
     for key, v in k.items(): s = s.replace(f"__{key}__", str(v))
+    if walk:   # 문이 열리고 복도 안으로 걸어 들어가는 듯한 화면 이동(영안실)
+        s = s.replace('<div class="scene"></div>', '<div class="bob"><div class="cam"><div class="scene"></div><div class="door"></div></div></div>')
+        s = s.replace("</style>", WALK + "</style>")
     open(os.path.join(T, f"reel-{name}.html"), "w", encoding="utf-8").write(s)
 
-make("morgue", BG="reel-morgue-hall.jpg", ORIGIN="70% 40%", PALE="#E4EFE8", ACC="#D63A33", ACCGLOW="rgba(214,58,51,.35)",
+make("morgue", walk=True, BG="reel-morgue-hall.jpg", ORIGIN="70% 40%", PALE="#E4EFE8", ACC="#D63A33", ACCGLOW="rgba(214,58,51,.35)",
      HOOKTOP=1180, H1="안내 방송이 나오면,", H2="이미 늦은 거예요.", TSIZE=104, EXTRA=".meta .t{font-family:M;color:#E4EFE8;letter-spacing:.3em}.meta .t i{font-style:normal;color:#D63A33}",
      LINES="\n".join([line(240, 92, 1.9, "안녕하십니까,"), line(380, 70, 2.8, "고객님의 마지막 여정을"), line(490, 70, 3.7, "함께하는"),
                       line(880, 74, 4.7, "인계병원 영안실입니다.", d=1.0), line(1010, 72, 5.5, "편안한 밤 되시길 바랍니다.", acc=True, d=.8)]),
