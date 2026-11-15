@@ -32,7 +32,7 @@ jobs:
           q=""
           [ -n "$SET" ] && q="set=$(python3 -c 'import os,urllib.parse;print(urllib.parse.quote(os.environ["SET"]))')"
           [ "$DRY" = "true" ] && q="$q&dry=1"
-          call() { curl -sS -m 70 -w '\n%{http_code}' -H "Authorization: Bearer $CRON_SECRET" "https://bangtallog.com/api/ig/publish?$1"; }
+          call() { curl -sS -m 70 -w '\n%{http_code}' -H "Authorization: Bearer $CRON_SECRET" "https://talkkaknote.com/api/ig/publish?$1"; }
           if [ "$CHECK" = "true" ]; then out=$(call "check=1"); code=$(echo "$out" | tail -1); echo "$out" | sed '$d'; [ "$code" -lt 300 ]; exit $?; fi
           # 카드 이미지를 미리 한 번 불러 둬서 인스타가 가져갈 때 빨리 나오게
           if [ "$DRY" != "true" ]; then

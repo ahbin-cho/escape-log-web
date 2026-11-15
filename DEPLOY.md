@@ -1,4 +1,4 @@
-# 방탈로그 — Supabase 연결 & 배포 가이드
+# 탈깍노트(예전 이름 방탈로그) — Supabase 연결 & 배포 가이드
 
 이제 앱 데이터가 **Supabase(무료 DB)** 에 저장됩니다. 아래를 순서대로 하면
 로그인·공개 후기·어드민이 모두 켜집니다. **전부 무료 티어**입니다.
@@ -11,7 +11,7 @@
 |---|---|
 | Supabase 대시보드 (프로젝트 관리) | https://supabase.com/dashboard |
 | 새 프로젝트 만들기 | https://supabase.com/dashboard/new |
-| 내 서비스(배포됨) | https://bangtallog.com (예전 주소 escape-log-web-eight.vercel.app 은 자동으로 넘어옴) |
+| 내 서비스(배포됨) | https://talkkaknote.com (예전 주소 bangtallog.com · escape-log-web-eight.vercel.app 은 자동으로 넘어옴) |
 | Vercel 대시보드 (환경변수 설정) | https://vercel.com/dashboard |
 
 ---
