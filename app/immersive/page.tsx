@@ -201,12 +201,7 @@ function Group({ id, act, title, rows }: { id: string; act: string; title: strin
                       No.{String(i + 1).padStart(2, "0")}
                     </span>
                   </Link>
-                  {/* 절취선 */}
-                  <span aria-hidden className="relative w-0 border-l-2 border-dashed border-edge/40">
-                    <span className="absolute -left-[11px] -top-[11px] h-5 w-5 rounded-full border-2 border-edge bg-paper [clip-path:inset(50%_0_0_0)]" />
-                    <span className="absolute -bottom-[11px] -left-[11px] h-5 w-5 rounded-full border-2 border-edge bg-paper [clip-path:inset(0_0_50%_0)]" />
-                  </span>
-                  <div className="min-w-0 flex-1 p-3.5 pl-4">
+                  <div className="min-w-0 flex-1 p-3.5 pl-1.5">
                     <p className="text-xs font-extrabold text-cream/60">
                       {region ? `${region} · ` : ""}
                       {t.cafe}
