@@ -1,5 +1,6 @@
 import type { ThemeRow } from "./catalog-server";
 import { brandOf } from "./cafe";
+import { isAdultOnly } from "./age";
 
 // ─────────────────────────────────────────────────────────────
 // 홈의 "궁금증" 영역에서 쓰는 고르기 규칙. 순수 함수(테스트 대상).
@@ -23,6 +24,7 @@ export function mysteryCandidates(themes: ThemeRow[]): ThemeRow[] {
     // 줄거리에 브랜드 이름이 나오면(예: "셜록홈즈 탐정소") 정답이 반쯤 드러나므로 뺀다
     const brand = brandOf(t.cafe).trim();
     return (
+      !isAdultOnly(t.tags) && // 성인 전용 테마는 홈·인스타 자동 게시에 올리지 않는다
       teaser.length >= 40 &&
       !teaser.includes(t.name.trim()) &&
       !(brand.length >= 2 && teaser.includes(brand)) &&
@@ -56,6 +58,7 @@ const FRESH_POOL_DAYS = 3; // 가장 최근 등록일로부터 이 안에 들어
 export function freshPicks(themes: ThemeRow[], limit: number): ThemeRow[] {
   const seen = new Set<string>();
   const unique = newestThemes(themes, themes.length).filter((t) => {
+    if (isAdultOnly(t.tags)) return false; // 성인 전용 테마는 홈 맨 위에 띄우지 않는다(검색·테마 화면에서는 보인다)
     const key = t.name.replace(/\s+/g, "").toLowerCase();
     if (seen.has(key)) return false;
     seen.add(key);

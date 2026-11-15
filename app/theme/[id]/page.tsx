@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cleanTeaser, teaserPreview } from "@/lib/home-picks";
+import { ageLimit } from "@/lib/age";
 import { publicClient } from "@/lib/supabase/public";
 import { regionFromText } from "@/lib/region";
 import { brandOf } from "@/lib/cafe";
@@ -149,7 +150,9 @@ export default async function ThemePage({
   if (!t) notFound();
 
   const region = regionFromText(t.cafe);
-  const tags = (t.tags ?? []).filter((x) => x !== t.genre);
+  const age = ageLimit(t.tags);
+  // 나이 제한 태그는 아래에서 따로 눈에 띄게 보여 주므로 일반 태그에서는 뺀다
+  const tags = (t.tags ?? []).filter((x) => x !== t.genre && !/미만.*불가|19\s*금/.test(x));
 
   // 목록 페이지(지역·브랜드)가 실제로 있을 때만 그쪽으로 링크
   const [regions, brands, all] = await Promise.all([
@@ -284,6 +287,12 @@ export default async function ThemePage({
             <li className="rounded-md bg-ink px-2 py-1 text-xs font-extrabold text-cream/75">
               {genre}
             </li>
+            {age && (
+              <li className="rounded-md bg-[#FBE3DF] px-2 py-1 text-xs font-extrabold text-[#A32A1C]">
+                {age.adultOnly ? "🔞 " : "⚠️ "}
+                {age.label}
+              </li>
+            )}
             {tags.map((tag) => (
               <li
                 key={tag}
@@ -356,6 +365,12 @@ export default async function ThemePage({
         sub="질문 몇 개로 내 방탈출 유형과 맞는 방을 찾아 줘요"
       />
 
+      {age && (
+        <p className="rounded-xl border-2 border-[#A32A1C]/40 bg-[#FBE3DF] px-4 py-3 text-sm font-bold text-[#7A1F14]">
+          {age.adultOnly ? "🔞" : "⚠️"} 매장 안내: <b className="font-extrabold">{age.label}</b>. 예약 전에 매장
+          예약 페이지의 안내를 꼭 확인하세요.
+        </p>
+      )}
       {t.teaser && (
         <section className="mt-8">
           <h2 className={H2}>줄거리</h2>
