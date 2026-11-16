@@ -35,4 +35,5 @@
 - 안내 문구는 방린이 시점, 탈출귀가 말하듯.
 - 표는 값이 있는 칸만, 한 화면 60줄 이하.
 
-기준 구현: `tools/ig/templates/reel-lastlock-paper.html`
+기준 구현: `tools/ig/templates/reel-lastlock-cartoon.html` (운영자가 고른 것: 손그림 + 친구와 대화. 그림은 `tools/ig/reel_clay/scene_cartoon.py` 로 뽑는다)
+영상 파일(mp4)은 저장소에 올리지 않는다. 지난 시안(가격·예약 시간·점토·그림책·색종이)은 지웠다.
