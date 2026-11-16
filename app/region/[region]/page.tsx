@@ -148,8 +148,8 @@ export default async function RegionThemesPage({ params }: Props) {
 
       {hidden.length > 0 && (
         <nav aria-label="숨은 매장" className="space-y-2 rounded-xl border-2 border-dashed border-edge/30 p-3">
-          <h2 className="text-[15px] font-extrabold">🔎 숨은 매장 찾기</h2>
-          <p className="text-[13px] text-cream/60">큰 브랜드 말고, {region}에서 새로 가 볼 만한 작은 매장이에요.</p>
+          <h2 className="text-[15px] font-extrabold">🔎 유명한 곳 말고, 여기도 있어요</h2>
+          <p className="text-[13px] text-cream/60">방린이 땐 다들 아는 곳만 가게 되죠. 대신 찾아 둔 {region}의 작은 매장들이에요.</p>
           <ul className="flex flex-wrap gap-1.5">
             {hidden.map(([b, n]) => (
               <li key={b}>
