@@ -39,7 +39,7 @@ html,body{width:1080px;height:1920px;background:#000;overflow:hidden;font-family
 @keyframes zoom4{from{transform:scale(1.02)}to{transform:scale(1.5)}}
 .neon{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 46%,rgba(220,30,60,.32),transparent 40%);mix-blend-mode:screen;z-index:2;animation:nb 1.3s ease-in-out infinite alternate,nf 3.1s 2s steps(1) infinite}
 @keyframes nb{from{opacity:.5}to{opacity:1}}@keyframes nf{0%{filter:none}20%{filter:brightness(0)}23%{filter:none}55%{filter:brightness(0)}57%{filter:none}}
-</style></head><body><div class="stage">
+@keyframes fp{0%{opacity:0}15%{opacity:1}100%{opacity:0}}@keyframes fall{0%{opacity:0;transform:translate(0,0) rotate(0)}8%{opacity:1}100%{opacity:.9;transform:translate(120px,2000px) rotate(540deg)}}</style></head><body><div class="stage">
 <div class="scene"></div><div class="neon"></div><div class="grain"></div><div class="flick"></div>
 <div class="hook pale"><div class="a">매뉴얼만 따라서 하면</div><div class="b acc">쉬울 거라고 했는데…</div></div>
 <div class="w pale" style="top:200px;font-size:58px;--t:1.9s">고등학교 동창의 부탁으로</div>
