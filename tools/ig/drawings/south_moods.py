@@ -189,5 +189,64 @@ def kono():
     a *= (0.75 + 0.35 * sm(150, 13))[..., None]
     finish(a, "reel-kono.jpg", (0.98, 0.88, 1.12), 8, (540, 860))
 
+# ───────── 낙화: 밤 옥상 끝, 아래로 도시 불빛, 흩날리는 붉은 꽃잎 ─────────
+def nakhwa():
+    im = Image.new("RGB", (W * S, H * S)); d = ImageDraw.Draw(im, "RGBA")
+    for y in range(H):                                           # 하늘: 검남색 → 아래 도시 빛 번짐
+        t = y / H; d.line([P(0, y), P(W, y)], fill=(int(lerp(6, 40, t ** 3)), int(lerp(8, 22, t ** 3)), int(lerp(22, 46, t ** 3))), width=S)
+    for _ in range(900):                                         # 아래 도시 불빛(멀리)
+        x = rng.uniform(0, W); y = rng.uniform(1380, H); r = rng.uniform(.8, 2.6)
+        c = [(255, 214, 140), (255, 240, 220), (180, 200, 255), (255, 120, 120)][rng.integers(4)]
+        d.ellipse([P(x - r, y - r), P(x + r, y + r)], fill=c + (int(rng.uniform(120, 255)),))
+    for i in range(14):                                          # 건물 실루엣
+        x0 = i * 80 + rng.uniform(-20, 10); h = rng.uniform(80, 260)
+        d.rectangle([P(x0, 1400 - h), P(x0 + rng.uniform(50, 90), 1420)], fill=(8, 8, 16))
+        for k in range(int(h // 30)):
+            if rng.random() < .4: d.rectangle([P(x0 + 10, 1400 - h + 14 + k * 30), P(x0 + 22, 1400 - h + 24 + k * 30)], fill=(220, 180, 110, 160))
+    # 옥상 난간(가까이, 아래쪽)
+    d.polygon([P(0, 1560), P(W, 1500), P(W, H), P(0, H)], fill=(14, 12, 18))
+    d.line([P(0, 1530), P(W, 1470)], fill=(60, 56, 66), width=10 * S)
+    for x in range(0, W + 1, 120): d.line([P(x, 1530 - x * .0556), P(x, 1600 - x * .0556)], fill=(40, 38, 46), width=8 * S)
+    # 난간 위에 놓인 꽃 한 송이(붉은 장미)
+    fx, fy = 640, 1490
+    d.line([P(fx - 120, fy + 6), P(fx + 10, fy - 4)], fill=(40, 70, 40), width=5 * S)
+    d.polygon([P(fx - 60, fy - 2), P(fx - 30, fy - 22), P(fx - 20, fy - 4)], fill=(50, 90, 50))          # 잎
+    for k, (dx, dy, rx, ry, c) in enumerate([(0, 0, 34, 24, (120, 10, 26)), (-14, -6, 22, 18, (170, 22, 40)), (14, -8, 22, 18, (160, 20, 38)),
+                                             (0, -16, 20, 14, (196, 34, 52)), (-6, -4, 12, 10, (90, 6, 20)), (6, -10, 9, 8, (220, 60, 76))]):
+        d.ellipse([P(fx + 30 + dx - rx, fy - 18 + dy - ry), P(fx + 30 + dx + rx, fy - 18 + dy + ry)], fill=c)
+    d.arc([P(fx + 18, fy - 34), P(fx + 42, fy - 12)], 200, 520, fill=(80, 4, 16), width=2 * S)
+    a = arr(im)
+    a = glow(a, 30, .45)
+    a += np.array([90, 40, 60]) * (np.exp(-((YY - 1420) / 220) ** 2))[..., None] * .5
+    a *= .9
+    finish(a, "reel-nakhwa.jpg", (1.0, 0.94, 1.02), 7, (540, 1000))
+    # 꽃잎 한 장(겹쳐 띄우는 PNG)
+    pt = Image.new("RGBA", (120, 90), (0, 0, 0, 0)); pd = ImageDraw.Draw(pt)
+    pd.ellipse([8, 10, 112, 80], fill=(196, 26, 52, 255)); pd.ellipse([30, 20, 90, 60], fill=(226, 60, 80, 255))
+    pt.filter(ImageFilter.GaussianBlur(1)).save(os.path.join(out, "reel-nakhwa-petal.png"))
+
+# ───────── 몽염: 아무것도 없는 어둠, 멀리 서서 바라보는 그녀 ─────────
+def mongyeom():
+    a = np.zeros((H, W, 3), np.float32)
+    mist = sm(220, 21) * .6 + sm(70, 22) * .4
+    a += np.array([28, 30, 44]) * (mist * np.exp(-((YY - 1150) / 520) ** 2))[..., None]
+    a += np.array([36, 40, 56]) * np.exp(-((YY - 1240) / 40) ** 2)[..., None] * .6          # 바닥선(물 같은)
+    finish(a, "reel-mongyeom.jpg", (0.92, 0.96, 1.1), 7, (540, 1100))
+    # 그녀(따로 겹치는 PNG): 흰 원피스, 긴 머리, 얼굴은 그늘
+    g = Image.new("RGBA", (W * S, H * S), (0, 0, 0, 0)); d = ImageDraw.Draw(g)
+    cx, top = 540, 980
+    d.polygon([P(cx - 22, top + 70), P(cx + 22, top + 70), P(cx + 58, top + 250), P(cx - 58, top + 250)], fill=(205, 205, 214, 255))   # 원피스
+    d.rectangle([P(cx - 14, top + 250), P(cx - 6, top + 262)], fill=(150, 150, 160, 255)); d.rectangle([P(cx + 6, top + 250), P(cx + 14, top + 262)], fill=(150, 150, 160, 255))
+    d.line([P(cx - 24, top + 80), P(cx - 34, top + 170)], fill=(190, 190, 200, 255), width=9 * S); d.line([P(cx + 24, top + 80), P(cx + 34, top + 170)], fill=(190, 190, 200, 255), width=9 * S)
+    d.ellipse([P(cx - 22, top + 18), P(cx + 22, top + 68)], fill=(120, 120, 132, 255))                                               # 얼굴(그늘)
+    d.polygon([P(cx - 30, top + 30), P(cx, top + 6), P(cx + 30, top + 30), P(cx + 34, top + 150), P(cx + 18, top + 110), P(cx - 18, top + 110), P(cx - 34, top + 150)], fill=(8, 8, 12, 255))   # 긴 머리
+    d.ellipse([P(cx - 14, top + 34), P(cx + 14, top + 68)], fill=(100, 100, 112, 255))
+    g = g.resize((W, H), Image.LANCZOS)
+    rf = g.transpose(Image.FLIP_TOP_BOTTOM).filter(ImageFilter.GaussianBlur(5))                # 물 같은 바닥에 비친 모습
+    rf = Image.fromarray((np.asarray(rf).astype(np.float32) * np.array([1, 1, 1, .25])).astype(np.uint8))
+    canvas2 = Image.new("RGBA", (W, H), (0, 0, 0, 0)); canvas2.alpha_composite(g)
+    shift = 2 * (top + 262) - H; canvas2.alpha_composite(rf, (0, shift)) if shift >= 0 else None
+    canvas2.filter(ImageFilter.GaussianBlur(.8)).save(os.path.join(out, "reel-mongyeom-her.png"))
+
 for f in (sys.argv[2:] or ["bokdo", "sagwi", "scare", "kono"]): globals()[f]()
 print("ok")

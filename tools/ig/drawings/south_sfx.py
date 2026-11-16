@@ -3,11 +3,11 @@
  sagwi : 시계 초침, 숨소리(이불 속), 바닥 긁는 소리, 4.7초 심장, 5.4초 숨 멎는 '쿵'
  scare : 밤바람·풀벌레, 엔진 식는 '틱', 깜빡이 경고음, 4.7초 쾅(사고 기억), 까마귀 같은 거친 울음
  kono  : 옆 부스에서 새는 둔탁한 반주, 네온 지직, 마이크 '삐-' 하울링(5.3초), 6.3초 낮은 울림
-사용: python3 tools/ig/drawings/south_sfx.py bokdo|sagwi|scare|kono out.wav"""
+사용: python3 tools/ig/drawings/south_sfx.py bokdo|sagwi|scare|kono|nakhwa|mongyeom out.wav"""
 import sys, wave
 import numpy as np
 SR = 44100; DUR = 10.2; MODE = sys.argv[1]
-rng = np.random.default_rng({"bokdo": 3, "sagwi": 5, "scare": 7, "kono": 11}[MODE])
+rng = np.random.default_rng({"bokdo": 3, "sagwi": 5, "scare": 7, "kono": 11, "nakhwa": 13, "mongyeom": 17}[MODE])
 N = int(SR * DUR); T = np.arange(N) / SR; out = np.zeros(N, np.float32)
 def add(t0, s, g=1.0):
     i = int(t0 * SR); j = min(N, i + len(s))
@@ -67,6 +67,26 @@ elif MODE == "scare":
     add(.1, boom(1.8, 46, 1.1))
     add(4.7, boom(1.4, 52, 1.5)); add(4.72, .7 * noise(.6, 800, 7000) * np.exp(-tt(.6) / .12))   # 쾅·유리
     n = tt(.5); add(3.2, .35 * band((np.sign(np.sin(2 * np.pi * (520 - 260 * n) * n)) * (rng.random(len(n)) * .5 + .5)).astype(np.float32), 300, 3000) * np.sin(np.pi * n / .5))
+    title()
+elif MODE == "nakhwa":
+    out += amb(150, 1400, .7) * (.5 + .5 * np.sin(2 * np.pi * .11 * T) ** 2) * env                 # 옥상 바람
+    out += amb(200, 900, .25) * env                                                               # 멀리 웅성거림
+    for t0 in (.3, .9, 1.6, 2.4, 3.1, 3.9, 4.6, 5.2):                                              # 카메라 셔터(플래시와 같은 시각)
+        add(t0, .5 * noise(.04, 2000, 9000) * np.exp(-tt(.04) / .008)); add(t0 + .05, .35 * noise(.03, 1500, 7000) * np.exp(-tt(.03) / .006))
+    add(.1, boom(1.6, 50, 1.0))
+    mel = [(1318, 1.9), (1175, 2.7), (988, 3.5), (880, 4.4), (784, 5.1), (659, 5.6)]                # 내려가는 오르골
+    for f0, t0 in mel: add(t0, tone(1.6, ((f0, .5), (f0 * 2, .12), (f0 * 3, .05)), .6), .3)
+    n = tt(1.0); add(5.6, .4 * noise(1.0, 300, 3000) * np.sin(np.pi * n) * np.linspace(1, .2, len(n)))   # 떨어지는 바람 소리
+    title()
+elif MODE == "mongyeom":
+    out += (np.sin(2 * np.pi * 55 * T) * .12 + np.sin(2 * np.pi * 82.5 * T) * .08 + np.sin(2 * np.pi * 110.4 * T) * .05) * (1 + .3 * np.sin(2 * np.pi * .2 * T)) * env   # 꿈 같은 저음
+    out += amb(2000, 6000, .04) * env
+    for t0 in (1.2, 2.9, 4.4, 6.9, 8.5): add(t0, tone(.5, ((1180 + rng.uniform(-120, 120), .5),), .08), .35)   # 물방울(물 같은 바닥)
+    add(.2, boom(2.0, 40, .9))
+    for t0 in (3.38, 5.35):                                                                        # 그녀가 가까워질 때: 거꾸로 감기는 숨 + 쿵
+        n = tt(.6); add(t0 - .6, .5 * noise(.6, 400, 3000) * (n / .6) ** 2); add(t0, boom(1.4, 44, 1.3))
+    t = 5.6
+    while t < 8: add(t, beat(), .5); t += .9
     title()
 else:
     beatbed = np.zeros(N, np.float32)                                                            # 옆 부스에서 새는 반주(벽 너머라 낮은 소리만)

@@ -39,15 +39,35 @@ FX = {
 .neon{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 46%,rgba(220,30,60,.32),transparent 40%);mix-blend-mode:screen;z-index:2;animation:nb 1.3s ease-in-out infinite alternate,nf 3.1s 2s steps(1) infinite}
 @keyframes nb{from{opacity:.5}to{opacity:1}}@keyframes nf{0%{filter:none}20%{filter:brightness(0)}23%{filter:none}55%{filter:brightness(0)}57%{filter:none}}
 """,
+ # 아래에서 카메라 플래시가 터지고, 붉은 꽃잎이 천천히 떨어진다. 위(옥상 끝)에서 아래를 내려다보듯 살짝 기울어짐
+ "nakhwa": """
+.scene{transform-origin:55% 78%;animation:in .6s forwards,zoom5 10.5s linear forwards,dim .8s 1.55s forwards}
+@keyframes zoom5{from{transform:scale(1.02)}to{transform:scale(1.28) rotate(-1.5deg)}}
+.fl{position:absolute;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.95),rgba(255,255,255,0) 60%);opacity:0;z-index:3;mix-blend-mode:screen}
+.pt{position:absolute;width:44px;height:33px;background:url(../assets/reel-nakhwa-petal.png) center/contain no-repeat;z-index:4;opacity:0}
+""",
+ # 아무것도 없는 어둠. 깜빡일 때마다 그녀가 한 걸음씩 가까이(춘화각과 같은 방식)
+ "mongyeom": """
+.scene{animation:in .6s forwards,dim .8s 1.55s forwards}
+.her{position:absolute;inset:0;background:url(../assets/reel-mongyeom-her.png) center/cover;transform-origin:50% 66%;opacity:0;animation:in 1.2s .2s forwards,near 7s 3.4s steps(1) forwards;z-index:2}
+@keyframes near{0%{transform:scale(1)}1%{transform:scale(1.35) translateY(30px)}27%{transform:scale(1.35) translateY(30px)}28%{transform:scale(1.9) translateY(80px)}100%{transform:scale(1.95) translateY(84px)}}
+.flick{animation:fl .22s 3.38s,fl .3s 5.35s}
+""",
 }
 LAYER = {"bokdo": '<div class="cam"><div class="scene"></div><div class="el l"></div><div class="el r"></div></div><div class="lamp"></div>',
          "sagwi": '<div class="scene"></div><div class="moon"></div>', "scare": '<div class="scene"></div><div class="head"></div>',
-         "kono": '<div class="scene"></div><div class="neon"></div>'}
+         "kono": '<div class="scene"></div><div class="neon"></div>',
+         "nakhwa": '<div class="scene"></div>' + "".join(f'<div class="fl" style="left:{x}px;top:{y}px;animation:fp .5s {t}s"></div>' for x, y, t in
+                   ((80, 1380, .3), (700, 1420, .9), (380, 1500, 1.6), (860, 1360, 2.4), (200, 1460, 3.1), (560, 1390, 3.9), (40, 1520, 4.6), (760, 1480, 5.2)))
+                   + "".join(f'<div class="pt" style="left:{x}px;top:-60px;animation:fall {d}s {t}s linear forwards"></div>' for x, t, d in
+                   ((160, 1.0, 6.5), (520, 2.2, 7), (840, 3.0, 6), (330, 4.1, 6.5), (700, 5.0, 5.5), (60, 5.8, 5))),
+         "mongyeom": '<div class="scene"></div><div class="her"></div>'}
+EXTRA_KF = "@keyframes fp{0%{opacity:0}15%{opacity:1}100%{opacity:0}}@keyframes fall{0%{opacity:0;transform:translate(0,0) rotate(0)}8%{opacity:1}100%{opacity:.9;transform:translate(120px,2000px) rotate(540deg)}}"
 
 def make(name, poster=None, credit=None, **k):
     s = BASE
     for key, v in k.items(): s = s.replace(f"__{key}__", str(v))
-    s = s.replace("</style>", FX[name] + "</style>").replace('<div class="scene"></div>', LAYER[name], 1)
+    s = s.replace("</style>", FX[name] + EXTRA_KF + "</style>").replace('<div class="scene"></div>', LAYER[name], 1)
     post = re.search(r'<div class="post">.*?</div></div>', s).group(0)
     s = s.replace(post, f'<div class="post"><img src="../assets/{poster}"><div>포스터: {credit} 공식</div></div>' if poster else "")
     open(os.path.join(T, f"reel-{name}.html"), "w", encoding="utf-8").write(s)
@@ -72,4 +92,15 @@ make("kono", poster="poster-kono-official.jpg", credit="꿈소풍", BG="reel-kon
      LINES="\n".join([line(200, 58, 1.9, "고등학교 동창의 부탁으로"), line(300, 66, 2.7, "급하게 코인노래방 알바 대타로"), line(410, 66, 3.5, "근무하게 된 당신."),
                       line(960, 62, 4.5, "들어선 코인노래방은"), line(1060, 60, 5.3, "스산하고 이상한 분위기가 감돈다.", acc=True, d=.9)]),
      TITLE='<div class="t">안산 코노</div>', STORE="꿈소풍 안산1호점", SPEC="공포 · 난이도 3/5 · 공포도 3/5", NOTE="")
+make("nakhwa", BG="reel-nakhwa.jpg", ORIGIN="55% 78%", PALE="#F3E8EE", ACC="#E0334F", ACCGLOW="rgba(224,51,79,.45)",
+     HOOKTOP=1180, H1="가장 높은 곳에서,", H2="꽃이 졌다.", TSIZE=150, EXTRA=".hook .b{font-size:96px}.meta .t{font-family:B;color:#E0334F;line-height:.9}",
+     LINES="\n".join([line(220, 72, 1.9, "수천 개의 플래시가"), line(330, 72, 2.7, "날 향하던 그 밤,"), line(450, 80, 3.5, "나는 꼭대기에 있었다."),
+                      line(820, 58, 4.4, "누구보다 찬란했던 그 순간부터—"), line(930, 62, 5.1, "어쩌면 끝은 이미", acc=True, d=.8), line(1030, 62, 5.6, "정해져 있었는지도 모른다.", acc=True, d=.8)]),
+     TITLE='<div class="t">낙화</div><div class="s">떨어지는 꽃</div>', STORE="상상의문 수원 2호점", SPEC="추리 · 난이도 2/5 · 공포도 4/5",
+     NOTE='<div class="n">12세 미만은 이용할 수 없는 테마(매장 공식 안내)</div>')
+make("mongyeom", BG="reel-mongyeom.jpg", ORIGIN="50% 60%", PALE="#E2E8F4", ACC="#C9D6F0", ACCGLOW="rgba(201,214,240,.5)",
+     HOOKTOP=1420, H1="매일 밤 같은 꿈,", H2="같은 그녀.", TSIZE=150, EXTRA=".hook .b{font-size:96px}.meta{top:1300px}.meta .t{font-family:M;color:#E2E8F4;letter-spacing:.2em}",
+     LINES="\n".join([line(200, 76, 1.9, "나는 매일 꿈을 꾸었다."), line(320, 64, 2.7, "온통 어두운 곳에서"), line(420, 64, 3.4, "그녀가 날 바라보는 꿈."),
+                      line(560, 56, 4.2, "그녀와 나의 거리는 항상 멀었고,"), line(650, 56, 4.8, "우리 사이엔 아무런 행동조차"), line(740, 56, 5.2, "오가지 않았다."), line(870, 70, 5.8, "그저 바라만 보고 있었다.", acc=True, d=.9)]),
+     TITLE='<div class="t">몽염</div><div class="s">도망칠 수 없는 꿈</div>', STORE="상상의문 분당서현점", SPEC="공포 · 난이도 4/5 · 공포도 4/5", NOTE="")
 print("ok")
