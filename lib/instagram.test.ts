@@ -67,11 +67,9 @@ describe("게시 일정", () => {
     const { scheduledSet, setImagePaths, SET_CAPTIONS } = await import("./instagram");
         expect(setImagePaths("intro")).toHaveLength(6);
     expect(setImagePaths("ad-diary")).toEqual(["/api/ig/slides?ad=diary"]);
-    expect(scheduledSet("2026-11-14")).toBe("static:diary");
-    expect(scheduledSet("2026-11-13")).toBe("static:maple");
+    expect(scheduledSet("2026-11-14")).toBeNull(); // 지난 날짜는 일정에서 지웠다
     expect(scheduledSet("2026-11-20")).toBeNull();
     expect(scheduledSet("2026-11-18")).toBe("cafes:yearend");
-    expect(scheduledSet("2026-11-15")).toBe("reel:b60b538b-618e-4102-ab57-06f369f56a4b");
     expect(setImagePaths("record-story")).toHaveLength(4);
     // 첫 줄이 서로 달라야 중복 확인이 된다
     const firsts = Object.values(SET_CAPTIONS).map((c) => c.split("\n")[0]);

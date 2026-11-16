@@ -108,13 +108,6 @@ export type PostSet = "intro" | "record-story" | "ad-diary" | "ad-recap";
 // "reel:<테마 id>"(이 방의 이야기 릴스 — public/reels/ 의 영상), "skip"(그날은 자동 게시 쉼)
 // extra: true 면 그날 직접 올린 게시물이 있어도 이 묶음은 올린다(같은 묶음이 이미 있으면 건너뜀)
 export const POST_SCHEDULE: { date: string; set: string; extra?: boolean }[] = [
-  // 11/13: 수원 모음은 운영자가 직접 올리고, 자동 게시는 메이플스토리 이스케이프 7장
-  { date: "2026-11-13", set: "static:maple", extra: true },
-  // 11/14·15·18 은 운영자도 저녁에 직접 올린다(미명도감 / 이머시브 / 수능 이벤트) → 자동도 그대로(extra)
-  { date: "2026-11-14", set: "static:diary", extra: true }, // 다이어리 소개 4장(후기 카드·달력·기록으로 본 유형)
-
-  // 이 방의 이야기는 카드 대신 릴스로(처음 보는 사람에게 더 퍼진다)
-  { date: "2026-11-15", set: "reel:b60b538b-618e-4102-ab57-06f369f56a4b", extra: true }, // 성지기숙학원 : 특수교정반
   // 11/16 영안실 · 11/17 춘화각 릴스는 자동에서 뺐다(운영자 결정 11/16): 릴스 자동 게시가 인스타 "Fatal" 로 계속 실패.
   // 원인을 찾을 때까지 릴스는 운영자가 직접 올리고(직접 올리기 묶음 01d·01e), 그날 자동은 기본(오늘의 미스터리 방 이미지).
   { date: "2026-11-18", set: "cafes:yearend", extra: true },
