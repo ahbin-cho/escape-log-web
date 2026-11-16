@@ -58,22 +58,23 @@ elif MODE == "sagwi":
     add(5.4, .18 * (np.sin(2 * np.pi * 1661 * n2) + np.sin(2 * np.pi * 1760 * n2)) * np.exp(-n2 / .4))
     title()
 elif MODE == "scare":
-    # 논밭 바람: 낮게 깔리는 바람 + 세기가 오르내리는 돌풍 + 마른 옥수숫잎이 서로 스치는 사각거림
-    gust = np.clip(.35 + .4 * np.sin(2 * np.pi * .09 * T + .5) + .3 * np.sin(2 * np.pi * .23 * T + 2) + .2 * np.sin(2 * np.pi * .41 * T), .1, 1.2)
-    out += amb(60, 380, 1.1) * gust * env                                                         # 낮은 바람(웅-)
-    howl = band(rng.standard_normal(N).astype(np.float32), 300, 1100) * gust ** 2
-    out += howl * env * .8                                                                         # 바람이 귀를 스치는 소리(휘-)
-    rustle = band(rng.standard_normal(N).astype(np.float32), 2500, 9000)
-    flutter = (np.abs(band(rng.standard_normal(N).astype(np.float32), 4, 22)) * 6).clip(0, 1)      # 잎이 파르르 떨리는 잘게 끊긴 결
-    out += rustle * flutter * gust ** 1.5 * env * .55                                              # 옥수숫잎 사각사각
-    for k in range(14):                                                                            # 가끔 크게 쓸리는 잎 무더기
-        t0 = rng.uniform(.4, 9.2); d = rng.uniform(.4, .9); n = tt(d)
-        add(t0, .45 * noise(d, 1800, 8000) * np.sin(np.pi * n / d) ** 2 * (np.abs(np.sin(2 * np.pi * rng.uniform(9, 16) * n)) ** .5))
-    for k in range(10):                                                                            # 멀리 풀벌레(작게)
-        t0 = rng.uniform(.3, 9.5); add(t0, tone(.08, ((4600 + rng.uniform(-300, 300), .3),), .03) * (np.sin(2 * np.pi * 40 * tt(.08)) > 0), .1)
-    add(.1, boom(1.8, 46, 1.0))
-    n = tt(1.6); add(4.4, .6 * noise(1.6, 200, 2500) * np.sin(np.pi * n / 1.6) ** 2)               # 큰 돌풍이 지나가고
-    add(4.7, boom(1.4, 52, 1.3)); add(4.72, .5 * noise(.6, 800, 7000) * np.exp(-tt(.6) / .12))     # 쾅(사고)
+    # 스산한 바람: 낮게 우는 바람(공명하는 휘파람 음) + 웅- 하는 저음 + 세기가 천천히 오르내리는 돌풍. 높은 사각거림은 넣지 않는다(벌레 소리처럼 들림)
+    gust = np.clip(.3 + .45 * np.sin(2 * np.pi * .07 * T + .5) + .25 * np.sin(2 * np.pi * .17 * T + 2), .08, 1.1)
+    out += amb(40, 220, 1.3) * gust * env                                                          # 낮은 바람(웅-)
+    wn = rng.standard_normal(N).astype(np.float32)
+    for f0, q, g in ((310, 18, .9), (465, 26, .6), (620, 30, .35)):                                  # 우는 바람: 좁은 대역이 천천히 오르내림
+        f = f0 * (1 + .18 * np.sin(2 * np.pi * .11 * T + f0) + .08 * np.sin(2 * np.pi * .31 * T))
+        X = np.zeros(N, np.float32)
+        for seg in range(0, N, SR // 10):                                                            # 0.1초 조각마다 중심 주파수를 옮겨 가며 걸러 낸다
+            e = min(N, seg + SR // 10 + 2048); fc = float(f[seg])
+            X[seg:e] += band(wn[seg:e], fc - fc / q, fc + fc / q)[: e - seg] * np.hanning(e - seg)
+        out += X * gust ** 2 * env * g * 2.2
+    out += amb(400, 1400, .25) * gust ** 3 * env                                                    # 바람이 귀를 스치는 숨소리
+    add(.1, boom(2.2, 40, 1.0))
+    n = tt(2.2); add(3.6, .8 * band(rng.standard_normal(len(n)).astype(np.float32), 150, 900) * np.sin(np.pi * n / 2.2) ** 2)   # 큰 돌풍이 지나가고
+    add(4.7, boom(1.6, 48, 1.3))                                                                     # 쾅(사고)
+    t = 5.6
+    while t < 8: add(t, beat(44), .35); t += 1.1
     title()
 elif MODE == "nakhwa":
     out += amb(150, 1400, .7) * (.5 + .5 * np.sin(2 * np.pi * .11 * T) ** 2) * env                 # 옥상 바람
