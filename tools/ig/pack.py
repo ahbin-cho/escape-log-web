@@ -291,6 +291,39 @@ P.S. 이름이 살짝 바뀌었어요! 방탈로그 → 탈깍노트 🔑
 3. 다 올리면 하이라이트 📍광주 새로 만들어 5장 모두 넣기""",
   },
   {
+    "dir": "23_아무때나_피드_스얼뮤_신입캐스트공고",
+    "images": ["tools/ig/assets/stay/stay-casting-feed.jpg"],
+    "caption": """🚨 긴급 구인: 신입 캐스트 모집 (공연 소개 카드예요)
+
+롯데월드 민속박물관 이머시브 체이스 〈STAY ALIVE IN MUSEUM〉 앵콜이 11/29에 끝나요. 마지막 2주.
+
+가을 특별공연을 준비하던 밤, 진품 유물이 떨어지고 정전.
+관객은 공연팀 '신입 캐스트'가 되어 배우 10명과 함께 박물관 전체를 누비며 끝까지 살아남아야 해요.
+누군가를 살릴까, 내가 살아남을까?
+
+📍 롯데월드 민속박물관 (잠실)
+🕢 매일 19:30 (19:10 프리쇼) · 본공연 90분
+🎟 만 16세 이상 · 50,000원 · 롯데월드 홈페이지 예매
+
+(보도자료·공식 소개 기준이에요. 예매 전에 예매처에서 한 번 더 확인해 주세요. 이 카드는 탈깍노트가 만든 소개 카드예요)
+
+다녀오면 탈깍노트에 기록해 두세요 → 프로필 링크
+
+#이머시브연극 #이머시브씨어터 #스테이얼라이브인뮤지엄 #롯데월드 #롯데월드민속박물관 #잠실데이트 #잠실가볼만한곳 #공포체험 #이머시브 #방탈출 #방탈출추천 #방탈러 #실내데이트 #이색데이트 #주말에뭐하지 #탈깍노트""",
+    "how": """1. [+] → [게시물] → 1.jpg → 캡션.txt 붙여 넣기 → [공유]
+2. 사람 태그는 공식 계정을 인스타에서 확인한 것만(DM 은 보내지 않기)
+3. 공연 소식이라 주말도 OK. 11/29 에 끝나니 이번 주 안에. 이어서 24 스토리""",
+  },
+  {
+    "dir": "24_아무때나_스토리_스얼뮤_신입캐스트공고",
+    "images": ["tools/ig/assets/stay/stay-casting-story.jpg"],
+    "how": """23 피드를 올린 뒤 이어서
+1. [+] → [스토리] → 1.jpg
+2. 스티커 [링크] https://talkkaknote.com/immersive?utm_source=instagram&utm_medium=story&utm_campaign=stay-casting
+   (아래쪽 빈 곳, '롯데월드 홈페이지 예매' 줄 위에 두기)
+3. [공유]""",
+  },
+  {
     "dir": "16_11-23_19시_피드_리뷰시트_새기능",
     "pages": [f"{T}/sheet-intro1.html", f"{T}/mysheet-memorycarnival.html", f"{T}/myrec-sheet-jjan.html",
               f"{T}/mysheet-pointnine.html", f"{T}/mysheet-backtothescene.html", f"{T}/sheet-intro3.html"], "size": FEED,
@@ -517,7 +550,7 @@ SCHEDULE = """탈깍노트 직접 올리기 묶음
 원칙: 미리 한 번(1주 전쯤) → 임박해서 한 번 더. 스토리는 하루 여러 개 올려도 '피드 하루 1개' 규칙과 상관없어요.
 직접 올리는 날은 자동 + 직접 = 피드 2개(운영자 결정 11/14). 자동은 낮, 직접은 저녁으로 떨어뜨려 둔다.
 우리 사이트 추천·홍보 게시물(운영자 노트·영수증 릴스·리뷰시트·체크리스트)은 평일에만(운영자 결정 11/15). 주말엔 매장·지역·공연 소식.
-날짜 없는 폴더(14·15 부산, 21·22 광주, 17 수원 스토리, 19 쇼룸404)는 매장·지역 소식이라 주말 포함 아무 때나.
+날짜 없는 폴더(14·15 부산, 21·22 광주, 23·24 스얼뮤 신입캐스트(11/29 전에), 17 수원 스토리, 19 쇼룸404)는 매장·지역 소식이라 주말 포함 아무 때나.
 """
 
 WD = "월화수목금토일"
@@ -550,6 +583,8 @@ def main(reel_path=None):
         for i, html in enumerate(p.get("pages", []), 1):
             w, h = p["size"]
             jobs.append({"html": html, "out": os.path.join(d, f"{i}.jpg"), "w": w, "h": h})
+        for i, img in enumerate(p.get("images", []), 1):
+            shutil.copy(img, os.path.join(d, f"{i}.jpg"))
         if p.get("video") == "REEL" and reel_path:
             shutil.copy(reel_path, os.path.join(d, "무대_이머시브.mp4"))
         if p.get("video_file") and os.path.exists(p["video_file"]):
