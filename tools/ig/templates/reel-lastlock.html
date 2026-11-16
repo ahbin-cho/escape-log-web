@@ -1,0 +1,61 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:A;src:url(../../../assets/fonts/SBAggroB.woff)}
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#1A1714;font-family:P;color:#F5F0E6}
+#stage{position:absolute;inset:0;transition:background .2s}
+.cap{position:absolute;left:0;right:0;top:300px;text-align:center;font:400 84px/1.2 A;opacity:0;transition:opacity .15s}
+.cap.on{opacity:1}
+#timer{position:absolute;left:0;right:0;top:470px;text-align:center;font:400 230px/1 A;color:#E2554A;letter-spacing:6px;text-shadow:0 0 40px #E2554A66}
+#lock{position:absolute;left:290px;top:820px;width:500px;height:440px}
+.body{position:absolute;left:0;bottom:0;width:500px;height:300px;background:#E49A4A;border:10px solid #F5F0E6;border-radius:44px;box-sizing:border-box;box-shadow:16px 16px 0 #000}
+.shackle{position:absolute;left:105px;top:0;width:290px;height:300px;border:46px solid #CFC6B4;border-bottom:none;border-radius:150px 150px 0 0;box-sizing:border-box;transition:transform .12s}
+.open .shackle{transform:translateY(-90px) rotate(-14deg)}
+.wheels{position:absolute;left:52px;top:190px;display:flex;gap:16px}
+.w{width:82px;height:110px;background:#1A1714;border-radius:16px;overflow:hidden;position:relative;border:5px solid #F5F0E6}
+.w span{position:absolute;left:0;right:0;text-align:center;font:400 80px/110px A;color:#F5F0E6}
+#ghost{position:absolute;left:640px;top:1330px;width:330px;transform-origin:50% 90%}
+.shake{animation:sh .09s linear infinite}
+@keyframes sh{0%{transform:translate(0,0)}25%{transform:translate(-9px,5px)}50%{transform:translate(8px,-6px)}75%{transform:translate(-5px,-4px)}100%{transform:translate(0,0)}}
+.sweat{position:absolute;width:26px;height:38px;background:#9AD3F0;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;opacity:0}
+#flash{position:absolute;inset:0;background:#FFF6DA;opacity:0;pointer-events:none}
+#big{position:absolute;left:0;right:0;top:620px;text-align:center;font:400 260px/1 A;color:#1D1D1D;opacity:0;transform:scale(.6)}
+#end{position:absolute;left:0;right:0;bottom:200px;text-align:center;opacity:0}
+#end b{display:inline-block;font:400 52px A;background:#E49A4A;color:#1D1D1D;border:6px solid #1D1D1D;border-radius:24px;padding:10px 34px;box-shadow:9px 9px 0 #1D1D1D}
+.conf{position:absolute;width:22px;height:34px;opacity:0}
+</style></head><body><div id="stage">
+<div class="cap" id="c1">마지막 자물쇠</div>
+<div class="cap" id="c2">친구: “일단 0000 해 봐”</div>
+<div class="cap" id="c3">나: …</div>
+<div id="timer">00:30</div>
+<div id="lock"><div class="shackle"></div><div class="body"><div class="wheels"><div class="w"><span>0</span></div><div class="w"><span>0</span></div><div class="w"><span>0</span></div><div class="w"><span>0</span></div></div></div></div>
+<img id="ghost" src="../../../public/mascot.png">
+<div id="big">탈깍!</div>
+<div id="end"><b>남은 시간 00:01</b></div>
+</div><div id="flash"></div>
+<script>
+const $=s=>document.querySelector(s), T=(ms,f)=>setTimeout(f,ms);
+const timer=$('#timer'), wheels=[...document.querySelectorAll('.w span')], ghost=$('#ghost'), stage=$('#stage');
+let left=30; function tick(){timer.textContent='00:'+String(left).padStart(2,'0')}
+const cap=(id,on)=>$(id).classList.toggle('on',on);
+T(150,()=>cap('#c1',true));
+// countdown fast: 30 -> 1 over ~6.2s, speeding up
+const stamps=[]; let t=600; for(let s=29;s>=1;s--){t+= s>8?230:150; stamps.push([t,s]);}
+stamps.forEach(([ms,s])=>T(ms,()=>{left=s;tick(); if(s<=10){timer.style.transform=`scale(${1+ (10-s)*0.03})`;}}));
+T(1700,()=>{cap('#c1',false);cap('#c2',true)});
+T(3300,()=>{cap('#c2',false);cap('#c3',true);ghost.classList.add('shake')});
+// wheels spin like crazy from 3.6s
+let spin=null; T(3600,()=>{spin=setInterval(()=>wheels.forEach(w=>w.textContent=Math.floor(Math.random()*10)),45)});
+T(4900,()=>{cap('#c3',false);document.body.style.background='#3A1210';timer.classList.add('shake')});
+T(6750,()=>{clearInterval(spin);['1','1','2','9'].forEach((d,i)=>wheels[i].textContent=d);timer.classList.remove('shake');ghost.classList.remove('shake')});
+T(7050,()=>{ // click
+  $('#lock').classList.add('open'); const f=$('#flash'); f.style.transition='none'; f.style.opacity=1;
+  requestAnimationFrame(()=>{f.style.transition='opacity .5s';f.style.opacity=0});
+  document.body.style.background='#F5F0E6'; stage.style.background='#F5F0E6'; timer.style.color='#1D1D1D'; timer.style.textShadow='none';
+  const b=$('#big'); b.style.transition='transform .25s cubic-bezier(.2,1.6,.4,1),opacity .1s'; b.style.opacity=1; b.style.transform='scale(1)';
+  timer.style.opacity=0; ghost.style.transition='transform .3s'; ghost.style.transform='translateY(-60px) rotate(-10deg) scale(1.1)';
+  for(let i=0;i<46;i++){const c=document.createElement('div');c.className='conf';c.style.left=(540+(Math.random()-0.5)*200)+'px';c.style.top='900px';
+    c.style.background=['#E49A4A','#E2554A','#3E9A6A','#7A68C2','#F5C342'][i%5];document.body.appendChild(c);
+    const a=Math.random()*Math.PI*2,d=300+Math.random()*500;c.animate([{opacity:1,transform:'translate(0,0) rotate(0)'},{opacity:1,transform:`translate(${Math.cos(a)*d}px,${Math.sin(a)*d+400}px) rotate(${720*Math.random()}deg)`}],{duration:1600,easing:'cubic-bezier(.1,.7,.4,1)',fill:'forwards'});}
+});
+T(7900,()=>{$('#end').style.transition='opacity .3s';$('#end').style.opacity=1});
+</script></body></html>
