@@ -1,0 +1,75 @@
+"""경기남부 '이 방의 이야기' 릴스 템플릿 4편(성지기숙학원·영안실·춘화각과 같은 짜임).
+0~1.45초 후킹 → 1.9초부터 공식 줄거리 한 줄씩 → 6.3초 제목·매장(·공식 포스터 작게, 출처) → 8.3초 탈깍노트 카드.
+배경은 south_moods.py 로 새로 그린 그림. 줄거리 글은 매장 공식 소개(catalog.teaser) 그대로 끊어 쓴다.
+사용: python3 tools/ig/drawings/south_reels.py"""
+import os, re
+from poster_reels import BASE, line
+T = os.path.join(os.path.dirname(__file__), "..", "templates")
+
+FX = {
+ # 엘리베이터 문이 양쪽으로 열리고, 복도 끝 303호 쪽으로 천천히 걸어 들어간다
+ "bokdo": """
+.cam{position:absolute;inset:0;transform-origin:50.9% 47%;animation:walk 10s cubic-bezier(.45,0,.75,1) forwards}
+@keyframes walk{0%{transform:scale(1)}14%{transform:scale(1.02)}100%{transform:scale(1.6)}}
+.cam .scene{animation:in .6s forwards,dim .8s 1.55s forwards}
+.el{position:absolute;top:0;bottom:0;width:50%;background:linear-gradient(90deg,#2a2c2e,#55595c 40%,#3a3d40);box-shadow:inset 0 0 0 3px #1a1b1c;z-index:3}
+.el.l{left:0;animation:ol 1.4s .15s cubic-bezier(.5,0,.2,1) forwards}.el.r{right:0;animation:or 1.4s .15s cubic-bezier(.5,0,.2,1) forwards}
+@keyframes ol{to{transform:translateX(-82%)}}@keyframes or{to{transform:translateX(82%)}}
+.lamp{position:absolute;inset:0;background:#000;opacity:0;z-index:4;animation:lp 2.4s 2.2s steps(1) infinite}
+@keyframes lp{0%{opacity:0}8%{opacity:.55}10%{opacity:0}62%{opacity:.4}64%{opacity:0}}
+""",
+ # 달빛이 숨 쉬듯 밝아졌다 어두워지고, 침대 쪽으로 다가간다. 깜빡일 때 그림자 손이 조금씩 더 가까이
+ "sagwi": """
+.scene{transform-origin:50% 40%;animation:in .6s forwards,zoom2 10.5s linear forwards,dim .8s 1.55s forwards}
+@keyframes zoom2{from{transform:scale(1.02)}to{transform:scale(1.3) translateY(40px)}}
+.moon{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 18%,rgba(120,140,220,.28),transparent 60%);mix-blend-mode:screen;animation:br 3.2s ease-in-out infinite alternate;z-index:2}
+@keyframes br{from{opacity:.4}to{opacity:1}}
+""",
+ # 헤드라이트가 깜빡이고 바람에 화면이 흔들린다. 허수아비 쪽으로 다가감
+ "scare": """
+.scene{transform-origin:70% 40%;animation:in .6s forwards,zoom3 10.5s linear forwards,dim .8s 1.55s forwards}
+@keyframes zoom3{from{transform:scale(1.02)}to{transform:scale(1.35)}}
+.head{position:absolute;inset:0;background:radial-gradient(circle at 45% 76%,rgba(255,235,170,.35),transparent 30%);mix-blend-mode:screen;z-index:2;animation:hl 2.9s steps(1) infinite}
+@keyframes hl{0%{opacity:1}40%{opacity:.2}43%{opacity:1}71%{opacity:0}74%{opacity:1}}
+""",
+ # 네온이 지직거리고, 끝의 노래방 기계 화면이 붉게 숨 쉰다
+ "kono": """
+.scene{transform-origin:50% 44%;animation:in .6s forwards,zoom4 10.5s linear forwards,dim .8s 1.55s forwards}
+@keyframes zoom4{from{transform:scale(1.02)}to{transform:scale(1.5)}}
+.neon{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 46%,rgba(220,30,60,.32),transparent 40%);mix-blend-mode:screen;z-index:2;animation:nb 1.3s ease-in-out infinite alternate,nf 3.1s 2s steps(1) infinite}
+@keyframes nb{from{opacity:.5}to{opacity:1}}@keyframes nf{0%{filter:none}20%{filter:brightness(0)}23%{filter:none}55%{filter:brightness(0)}57%{filter:none}}
+""",
+}
+LAYER = {"bokdo": '<div class="cam"><div class="scene"></div><div class="el l"></div><div class="el r"></div></div><div class="lamp"></div>',
+         "sagwi": '<div class="scene"></div><div class="moon"></div>', "scare": '<div class="scene"></div><div class="head"></div>',
+         "kono": '<div class="scene"></div><div class="neon"></div>'}
+
+def make(name, poster=None, credit=None, **k):
+    s = BASE
+    for key, v in k.items(): s = s.replace(f"__{key}__", str(v))
+    s = s.replace("</style>", FX[name] + "</style>").replace('<div class="scene"></div>', LAYER[name], 1)
+    post = re.search(r'<div class="post">.*?</div></div>', s).group(0)
+    s = s.replace(post, f'<div class="post"><img src="../assets/{poster}"><div>포스터: {credit} 공식</div></div>' if poster else "")
+    open(os.path.join(T, f"reel-{name}.html"), "w", encoding="utf-8").write(s)
+
+make("bokdo", BG="reel-bokdo.jpg", ORIGIN="50% 47%", PALE="#EFE6D2", ACC="#D63A33", ACCGLOW="rgba(214,58,51,.4)",
+     HOOKTOP=1180, H1="평소처럼 탄 엘리베이터,", H2="그날은 달랐다.", TSIZE=130, EXTRA=".hook .b{font-size:90px}.meta .t{font-family:M;color:#EFE6D2;letter-spacing:.2em}.meta .t i{font-style:normal;color:#D63A33}",
+     LINES="\n".join([line(220, 60, 1.9, "상문빌라의 입주민 회장인 당신은"), line(330, 74, 2.8, "평소처럼 자신의 집"), line(440, 74, 3.6, "303호로 올라가는"),
+                      line(900, 66, 4.5, "엘리베이터를 탄다."), line(1010, 60, 5.3, "그런데 뒤에서 들려오는 비명소리..", acc=True, d=.8)]),
+     TITLE='<div class="t">복도끝<i>.</i></div>', STORE="상상의문 수원점", SPEC="공포 · 난이도 4/5 · 공포도 4/5", NOTE="")
+make("sagwi", poster="poster-sagwi-official.jpg", credit="마스터키", BG="reel-sagwi.jpg", ORIGIN="50% 40%", PALE="#E2E4F2", ACC="#D2283A", ACCGLOW="rgba(210,40,58,.45)",
+     HOOKTOP=1180, H1="분명 잠들었는데,", H2="왜 내 침대가 보이지?", TSIZE=150, EXTRA=".hook .b{font-size:86px}.meta .t{font-family:M;color:#D2283A;letter-spacing:.1em}",
+     LINES="\n".join([line(240, 80, 1.9, "분명 내 방에서"), line(360, 80, 2.8, "잠들었던 것 같은데.."), line(880, 88, 3.9, "잠깐,"),
+                      line(990, 72, 4.7, "그럼 내 침대 위에"), line(1090, 80, 5.4, "누워있는 건..", acc=True, d=.9)]),
+     TITLE='<div class="t">사귀</div><div class="s">邪鬼</div>', STORE="마스터키 평택점", SPEC="공포 · 난이도 4/5 · 공포도 4/5", NOTE="")
+make("scare", BG="reel-scare.jpg", ORIGIN="70% 40%", PALE="#EFE3CC", ACC="#E07A2A", ACCGLOW="rgba(224,122,42,.45)",
+     HOOKTOP=1180, H1="멈춰 버린 차,", H2="창밖엔 옥수수밭뿐", TSIZE=130, EXTRA=".hook .b{font-size:92px}.meta .t{font-family:M;color:#EFE3CC;letter-spacing:.14em}",
+     LINES="\n".join([line(560, 62, 1.9, "미국 서부 어느 지역"), line(660, 74, 2.8, "차를 타고 이동 중에.."), line(780, 74, 3.7, "옥수수밭 근처에서"),
+                      line(1040, 80, 4.7, "사고가 나고 마는데..", acc=True, d=1.0)]),
+     TITLE='<div class="t">허수아비</div>', STORE="둠이스케이프 FEAR점 (수원)", SPEC="공포 · 난이도 4/5 · 공포도 4/5", NOTE="")
+make("kono", poster="poster-kono-official.jpg", credit="꿈소풍", BG="reel-kono.jpg", ORIGIN="50% 44%", PALE="#ECE0FA", ACC="#E8344E", ACCGLOW="rgba(232,52,78,.45)",
+     HOOKTOP=1180, H1="매뉴얼만 따라서 하면", H2="쉬울 거라고 했는데…", TSIZE=130, EXTRA=".hook .b{font-size:84px}.meta .t{font-family:B;color:#E8344E;line-height:.95}",
+     LINES="\n".join([line(200, 58, 1.9, "고등학교 동창의 부탁으로"), line(300, 66, 2.7, "급하게 코인노래방 알바 대타로"), line(410, 66, 3.5, "근무하게 된 당신."),
+                      line(960, 62, 4.5, "들어선 코인노래방은"), line(1060, 60, 5.3, "스산하고 이상한 분위기가 감돈다.", acc=True, d=.9)]),
+     TITLE='<div class="t">안산 코노</div>', STORE="꿈소풍 안산1호점", SPEC="공포 · 난이도 3/5 · 공포도 3/5", NOTE="")
+print("ok")

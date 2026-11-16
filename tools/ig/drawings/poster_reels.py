@@ -88,15 +88,16 @@ def make(name, walk=False, curse=False, **k):
         s = s.replace("</style>", CURSE + "</style>")
     open(os.path.join(T, f"reel-{name}.html"), "w", encoding="utf-8").write(s)
 
-make("morgue", walk=True, BG="reel-morgue-hall.jpg", ORIGIN="70% 40%", PALE="#E4EFE8", ACC="#D63A33", ACCGLOW="rgba(214,58,51,.35)",
-     HOOKTOP=1180, H1="안내 방송이 나오면,", H2="이미 늦은 거예요.", TSIZE=104, EXTRA=".meta .t{font-family:M;color:#E4EFE8;letter-spacing:.3em}.meta .t i{font-style:normal;color:#D63A33}",
-     LINES="\n".join([line(240, 92, 1.9, "안녕하십니까,"), line(380, 70, 2.8, "고객님의 마지막 여정을"), line(490, 70, 3.7, "함께하는"),
-                      line(880, 74, 4.7, "인계병원 영안실입니다.", d=1.0), line(1010, 72, 5.5, "편안한 밤 되시길 바랍니다.", acc=True, d=.8)]),
-     TITLE='<div class="t">영안실<i>.</i></div>', STORE="상상의문 수원점", SPEC="공포 · 난이도 4/5 · 공포도 4/5", NOTE="", POSTER="poster-morgue-official.jpg")
-make("chunhwa", curse=True, BG="reel-chunhwa-empty.jpg", ORIGIN="52% 48%", PALE="#EBDDF0", ACC="#E0333A", ACCGLOW="rgba(224,51,58,.4)",
-     HOOKTOP=1200, H1="그 소문 들었어?", H2="그 여인과 하룻밤을 지내면…", TSIZE=150, EXTRA=".hook .b{font-size:76px}.meta .t{font-family:B;color:#E0333A;line-height:.9}",
-     LINES="\n".join([line(240, 86, 1.9, "자네도 장원 급제를"), line(370, 86, 2.8, "위해서 이 춘화각을"), line(500, 86, 3.7, "찾았는가?"),
-                      line(1030, 70, 4.9, "이쪽 끝방으로 들어가시게.", acc=True, d=1.0)]),
-     TITLE='<div class="t">춘화각</div><div class="s">피할 수 없는 저주</div>', STORE="상상의문 수원 2호점", SPEC="공포 · 난이도 3/5 · 공포도 4/5",
-     NOTE='<div class="n">직원 NPC와 함께하는 테마(매장 공식 안내)</div>', POSTER="poster-chunhwa-official.jpg")
-print("ok")
+if __name__ == "__main__":
+    make("morgue", walk=True, BG="reel-morgue-hall.jpg", ORIGIN="70% 40%", PALE="#E4EFE8", ACC="#D63A33", ACCGLOW="rgba(214,58,51,.35)",
+         HOOKTOP=1180, H1="안내 방송이 나오면,", H2="이미 늦은 거예요.", TSIZE=104, EXTRA=".meta .t{font-family:M;color:#E4EFE8;letter-spacing:.3em}.meta .t i{font-style:normal;color:#D63A33}",
+         LINES="\n".join([line(240, 92, 1.9, "안녕하십니까,"), line(380, 70, 2.8, "고객님의 마지막 여정을"), line(490, 70, 3.7, "함께하는"),
+                          line(880, 74, 4.7, "인계병원 영안실입니다.", d=1.0), line(1010, 72, 5.5, "편안한 밤 되시길 바랍니다.", acc=True, d=.8)]),
+         TITLE='<div class="t">영안실<i>.</i></div>', STORE="상상의문 수원점", SPEC="공포 · 난이도 4/5 · 공포도 4/5", NOTE="", POSTER="poster-morgue-official.jpg")
+    make("chunhwa", curse=True, BG="reel-chunhwa-empty.jpg", ORIGIN="52% 48%", PALE="#EBDDF0", ACC="#E0333A", ACCGLOW="rgba(224,51,58,.4)",
+         HOOKTOP=1200, H1="그 소문 들었어?", H2="그 여인과 하룻밤을 지내면…", TSIZE=150, EXTRA=".hook .b{font-size:76px}.meta .t{font-family:B;color:#E0333A;line-height:.9}",
+         LINES="\n".join([line(240, 86, 1.9, "자네도 장원 급제를"), line(370, 86, 2.8, "위해서 이 춘화각을"), line(500, 86, 3.7, "찾았는가?"),
+                          line(1030, 70, 4.9, "이쪽 끝방으로 들어가시게.", acc=True, d=1.0)]),
+         TITLE='<div class="t">춘화각</div><div class="s">피할 수 없는 저주</div>', STORE="상상의문 수원 2호점", SPEC="공포 · 난이도 3/5 · 공포도 4/5",
+         NOTE='<div class="n">직원 NPC와 함께하는 테마(매장 공식 안내)</div>', POSTER="poster-chunhwa-official.jpg")
+    print("ok")
