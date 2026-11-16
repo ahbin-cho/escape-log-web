@@ -32,5 +32,20 @@ export function hiddenBrands(all: Row[], here: Row[], big = BIG_BRANCHES, bigThe
   return [...local].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "ko"));
 }
 
+// 지역 표를 가볍게: 테마가 TABLE_ALL 개를 넘는 지역은 작은 매장 테마만 표에 싣고 큰 브랜드는 한 줄 요약으로 돌린다.
+export const TABLE_ALL = 60;
+export function splitForTable<T extends Row>(here: T[], hidden: [string, number][], max = TABLE_ALL): { rows: T[]; big: [string, T[]][] } {
+  const small = new Set(hidden.map(([b]) => b));
+  if (here.length <= max || small.size === 0) return { rows: here, big: [] };
+  const rows: T[] = [];
+  const big = new Map<string, T[]>();
+  for (const t of here) {
+    const b = brandOf(t.cafe);
+    if (small.has(b)) rows.push(t);
+    else big.set(b, [...(big.get(b) ?? []), t]);
+  }
+  return { rows, big: [...big].sort((a, b) => b[1].length - a[1].length) };
+}
+
 // 앵커 id 로 쓸 수 있게(공백·기호 → -)
 export const brandAnchor = (brand: string) => "b-" + brand.replace(/[^\p{L}\p{N}]+/gu, "-");

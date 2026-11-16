@@ -22,3 +22,17 @@ describe("숨은 매장", () => {
     expect(brandAnchor("룸 이스케이프!")).toBe("b-룸-이스케이프-");
   });
 });
+
+import { splitForTable } from "./discover";
+describe("splitForTable", () => {
+  const big = Array.from({ length: 5 }, (_, i) => ({ cafe: `큰집 ${i}호점` }));
+  const small = [{ cafe: "작은집" }, { cafe: "작은집" }];
+  it("테마가 적은 지역은 전부 표에 싣는다", () => {
+    expect(splitForTable([...big, ...small], [["작은집", 2]], 60)).toEqual({ rows: [...big, ...small], big: [] });
+  });
+  it("테마가 많은 지역은 작은 매장만 싣고 큰 브랜드는 묶는다", () => {
+    const r = splitForTable([...big, ...small], [["작은집", 2]], 3);
+    expect(r.rows).toEqual(small);
+    expect(r.big.map(([b, l]) => [b, l.length])).toEqual([["큰집", 5]]);
+  });
+});

@@ -3,8 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ThemeList from "@/components/ThemeList";
 import QuizRow from "@/components/QuizRow";
-import CompareTable from "@/components/CompareTable";
-import { brandAnchor, hiddenBrands } from "@/lib/discover";
+import CompareTable, { priceRange } from "@/components/CompareTable";
+import { brandAnchor, hiddenBrands, splitForTable } from "@/lib/discover";
 import { CHIP, CRUMB } from "@/lib/ui";
 import { brandOf } from "@/lib/cafe";
 import { listedConditions } from "@/lib/best";
@@ -86,6 +86,10 @@ export default async function RegionThemesPage({ params }: Props) {
   );
   const brandPages = new Set(brands.map((b) => b.key));
   const hidden = hiddenBrands(all, themes);
+  // 표는 가볍게: 테마가 많은 지역은 작은 매장만 싣고 큰 브랜드는 한 줄 요약
+  const table = splitForTable(themes, hidden);
+  const price = priceRange(themes);
+  const firstOf = (b: string) => themes.find((t) => brandOf(t.cafe) === b);
 
   const jsonLd = [
     {
@@ -143,21 +147,54 @@ export default async function RegionThemesPage({ params }: Props) {
           {region}에서 즐길 수 있는 방탈출 테마를 브랜드별로 모았어요. 테마를
           누르면 줄거리와 예약 정보를 볼 수 있어요.
         </p>
-        <CompareTable themes={themes} title={`${region} 방탈출 테마 비교표`} />
+        {price && (
+          <p className="text-sm font-bold">
+            {region} 방탈출 1인 가격 {price} · 매장 {sections.length}곳
+          </p>
+        )}
+        <CompareTable
+          themes={table.rows}
+          title={`${region} 방탈출 테마 비교표`}
+          label={table.big.length > 0 ? `작은 매장 테마 표로 비교하기 (${table.rows.length}개)` : undefined}
+          brands={table.big.map(([b, l]) => ({
+            brand: b,
+            count: l.length,
+            price: priceRange(l),
+            href: brandPages.has(b) ? `/cafe/${b}` : null,
+          }))}
+        />
       </header>
 
       {hidden.length > 0 && (
-        <nav aria-label="숨은 매장" className="space-y-2 rounded-xl border-2 border-dashed border-edge/30 p-3">
-          <h2 className="text-[15px] font-extrabold">🔎 유명한 곳 말고, 여기도 있어요</h2>
-          <p className="text-[13px] text-cream/60">방린이 땐 다들 아는 곳만 가게 되죠. 대신 찾아 둔 {region}의 작은 매장들이에요.</p>
-          <ul className="flex flex-wrap gap-1.5">
-            {hidden.map(([b, n]) => (
-              <li key={b}>
-                <a href={`#${brandAnchor(b)}`} className={CHIP}>
-                  {b} <span className="text-cream/60">{n}</span>
-                </a>
-              </li>
-            ))}
+        <nav aria-label="숨은 매장" className="space-y-2">
+          <div className="flex items-center gap-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/mascot.png" alt="" width={44} height={44} className="h-11 w-11 shrink-0 object-contain" />
+            <div>
+              <h2 className="font-display text-[17px] leading-tight">유명한 곳 말고, 여기도 있어요</h2>
+              <p className="text-[13px] text-cream/60">방린이 땐 다들 아는 곳만 가게 되죠. 탈출귀가 대신 찾아 둔 {region}의 작은 매장이에요.</p>
+            </div>
+          </div>
+          <ul className="-mx-4 flex snap-x gap-2.5 overflow-x-auto px-4 pb-2">
+            {hidden.map(([b, n]) => {
+              const t = firstOf(b);
+              return (
+                <li key={b} className="shrink-0 snap-start">
+                  <a
+                    href={`#${brandAnchor(b)}`}
+                    className="block w-[150px] rounded-xl border-2 border-edge bg-panel p-3 shadow-cute transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+                  >
+                    <b className="block truncate text-[15px] font-extrabold">{b}</b>
+                    <span className="mt-0.5 block text-[12px] font-bold text-candy">테마 {n}개</span>
+                    {t && (
+                      <span className="mt-1.5 block truncate text-[12px] text-cream/60">
+                        {t.name} · {t.genre}
+                      </span>
+                    )}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </nav>
       )}
