@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { shareOrDownload } from "@/lib/share-file";
 import { TONE } from "@/components/PosterTile";
 import { makeReviewImage } from "@/lib/review-image";
 import { ratingLabel, achievements } from "@/lib/terms";
@@ -66,16 +67,7 @@ export async function shareReviewImage(r: ReviewCardData, byline?: string): Prom
     }
     const file = new File([blob], "talkkak-review.jpg", { type: "image/jpeg" });
     const text = `${r.themeName}${r.oneLiner ? ` — “${r.oneLiner}”` : ""} · 탈깍노트`;
-    if (navigator.canShare?.({ files: [file] })) {
-      await navigator.share({ files: [file], text });
-    } else {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = file.name;
-      a.click();
-      setTimeout(() => URL.revokeObjectURL(url), 2000);
-    }
+    await shareOrDownload(file, { text });
   } catch (err) {
     // 공유 창을 닫은 경우는 조용히 넘어간다
     if (!(err instanceof Error && err.name === "AbortError")) alert("이미지를 만들지 못했어요. 잠시 뒤 다시 해 주세요.");
