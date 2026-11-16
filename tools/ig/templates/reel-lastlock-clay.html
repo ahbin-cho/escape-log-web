@@ -2,8 +2,8 @@
 @font-face{font-family:A;src:url(../../../assets/fonts/SBAggroB.woff)}
 html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000;color:#F5F0E6}
 #cam{position:absolute;inset:0;transform-origin:50% 68%;transition:transform 11s cubic-bezier(.3,0,.6,1)}
-#cam img{position:absolute;inset:0;width:1080px;height:1920px;visibility:hidden}
-#cam img.on{visibility:visible}
+#frames img{position:absolute;inset:0;width:1080px;height:1920px;visibility:hidden}
+#frames img.on{visibility:visible}
 #timer{position:absolute;left:268px;top:306px;width:544px;height:218px;text-align:center;font:400 150px/222px A;color:#ff4136;letter-spacing:8px;text-shadow:0 0 26px #ff4136cc,0 0 70px #ff413666}
 #dark{position:absolute;inset:0;background:radial-gradient(circle at var(--lx,540px) var(--ly,1380px),#0000 0,#0000 300px,#0a0606b0 640px,#050303e8 1100px);transition:opacity .5s}
 #red{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,#0000 35%,#a0101088);opacity:0;transition:opacity 1.5s}
@@ -15,10 +15,18 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000;co
 #big{position:absolute;left:0;right:0;top:640px;text-align:center;font:400 260px/1 A;color:#FFF6E0;opacity:0;transform:scale(.4) rotate(-8deg);text-shadow:10px 10px 0 #1D1D1D,-4px -4px 0 #1D1D1D,4px -4px 0 #1D1D1D,-4px 4px 0 #1D1D1D}
 #end{position:absolute;left:0;right:0;top:100px;text-align:center;opacity:0;transform:translateY(-30px);transition:all .5s cubic-bezier(.2,1.4,.4,1)}
 #end b{display:inline-block;font:400 50px A;background:#E49A4A;color:#1D1D1D;border:6px solid #1D1D1D;border-radius:24px;padding:12px 34px;box-shadow:9px 9px 0 #1D1D1D}
+#ghost{position:absolute;left:690px;top:1440px;width:400px;filter:brightness(.82) drop-shadow(0 14px 10px #0008);transform-origin:50% 90%;transition:transform .45s cubic-bezier(.2,1.7,.4,1),filter .4s}
+#ghost.bob{animation:bob 2.2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-16px)}}
+#ghost.worry{animation:worry .16s steps(2) infinite}
+@keyframes worry{50%{transform:translate(5px,-3px) rotate(1.5deg)}}
+#sweat{position:absolute;left:1000px;top:1530px;width:30px;height:44px;background:#9ad3f0;border:4px solid #1d1d1d;border-radius:50% 50% 50% 50%/65% 65% 35% 35%;opacity:0}
+#sweat.on{animation:drip 1s ease-in infinite}
+@keyframes drip{0%{opacity:0;transform:translateY(-10px)}20%{opacity:1}100%{opacity:0;transform:translateY(60px)}}
 #flash{position:absolute;inset:0;background:#fff8e6;opacity:0}
 .conf{position:absolute;width:24px;height:36px;opacity:0;border-radius:4px}
 </style></head><body>
-<div id="cam"><div id="frames"></div><div id="dark"></div><div id="timer">00:12</div><div id="glow"></div></div>
+<div id="cam"><div id="frames"></div><div id="dark"></div><div id="timer">00:12</div><img id="ghost" class="bob" src="../../../public/mascot.png"><div id="sweat"></div><div id="glow"></div></div>
 <div id="red"></div>
 <div class="cap" id="c1">마지막 자물쇠</div><div class="cap" id="c2">친구: “일단 0000 해 봐”</div><div class="cap" id="c3">나: 잠깐만…</div>
 <div id="big">탈깍!</div><div id="end"><b>남은 시간 00:01</b></div><div id="flash"></div>
@@ -42,12 +50,12 @@ T(2000,()=>{cap('#c1',false);T(250,()=>cap('#c2',true))});
 T(2900,()=>jig('a0'));
 T(3900,()=>{cap('#c2',false);T(250,()=>cap('#c3',true))});
 T(4500,()=>st('b1'));T(5200,()=>st('b2'));T(5900,()=>st('b3'));
-T(6700,()=>st('c4'));T(7100,()=>jig('c4'));
+T(6700,()=>{st('c4');const g=$('#ghost');g.classList.remove('bob');g.classList.add('worry');$('#sweat').classList.add('on')});T(7100,()=>jig('c4'));
 T(8000,()=>st('c7'));T(8400,()=>jig('c7'));
 T(8700,()=>{$('#c3').textContent='나: 제발…'});
 T(9500,()=>st('c8'));T(9900,()=>jig('c8'));
 T(10700,()=>st('d9'));
-T(11250,()=>{on=false;st('e9');cap('#c3',false);
+T(11250,()=>{on=false;st('e9');{const g=$('#ghost');g.classList.remove('worry');$('#sweat').classList.remove('on');g.style.filter='brightness(1) drop-shadow(0 14px 10px #0005)';g.style.transform='translateY(-150px) rotate(-10deg) scale(1.12)';T(480,()=>g.style.transform='translateY(-40px) rotate(6deg) scale(1.08)')}cap('#c3',false);
  const f=$('#flash');f.style.opacity=.9;requestAnimationFrame(()=>{f.style.transition='opacity .7s';f.style.opacity=0});
  D.style.opacity=0;$('#red').classList.remove('beat');$('#red').style.transition='opacity .3s';$('#red').style.opacity=0;$('#glow').style.opacity=1;
  timer.style.color='#7CFFB0';timer.style.textShadow='0 0 26px #7CFFB0cc';

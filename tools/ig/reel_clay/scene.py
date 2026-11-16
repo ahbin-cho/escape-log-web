@@ -58,7 +58,7 @@ def scene(digits='0000', dy=0, opened=False, ghost='idle', seed=1):
         c.pad(c.rrect(x0, 1384 + by, x0 + 82, 1540 + by, 14), DARK, height=4, round=6, texture=0.3)
         c.text(d, x0 + 41, 1464 + by, 118, '#f3ead8', height=12, round=5)
     # 탈출귀
-    g(c, 930 if ghost == 'joy' else 890, 1690, ghost)
+    if ghost != 'none': g(c, 930 if ghost == 'joy' else 890, 1690, ghost)   # 점토 탈출귀(지금은 안 씀: 원래 탈출귀 그림을 영상에서 얹는다)
     return c
 
 
@@ -99,12 +99,12 @@ if __name__ == '__main__':
     out = sys.argv[1]; os.makedirs(out, exist_ok=True)
     only = sys.argv[2] if len(sys.argv) > 2 else None
     # (이름, 숫자, 당김, 열림, 표정)
-    S = [('a0', '0000', 0, False, 'idle'), ('a0j', '0000', 24, False, 'idle'),
-         ('b1', '1000', 0, False, 'idle'), ('b2', '1100', 0, False, 'idle'), ('b3', '1120', 0, False, 'idle'),
-         ('c4', '1124', 0, False, 'worry'), ('c4j', '1124', 24, False, 'worry'),
-         ('c7', '1127', 0, False, 'worry'), ('c7j', '1127', 24, False, 'worry'),
-         ('c8', '1128', 0, False, 'worry'), ('c8j', '1128', 24, False, 'worry'),
-         ('d9', '1129', 0, False, 'worry'), ('e9', '1129', 0, True, 'joy')]
+    S = [('a0', '0000', 0, False, 'none'), ('a0j', '0000', 24, False, 'none'),
+         ('b1', '1000', 0, False, 'none'), ('b2', '1100', 0, False, 'none'), ('b3', '1120', 0, False, 'none'),
+         ('c4', '1124', 0, False, 'none'), ('c4j', '1124', 24, False, 'none'),
+         ('c7', '1127', 0, False, 'none'), ('c7j', '1127', 24, False, 'none'),
+         ('c8', '1128', 0, False, 'none'), ('c8j', '1128', 24, False, 'none'),
+         ('d9', '1129', 0, False, 'none'), ('e9', '1129', 0, True, 'none')]
     for name, d, dy, op, gh in S:
         if only and name != only: continue
         for v in (1, 2):
