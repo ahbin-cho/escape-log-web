@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ThemeList from "@/components/ThemeList";
 import QuizRow from "@/components/QuizRow";
+import CompareTable from "@/components/CompareTable";
+import { brandAnchor, hiddenBrands } from "@/lib/discover";
 import { CHIP, CRUMB } from "@/lib/ui";
 import { brandOf } from "@/lib/cafe";
 import { listedConditions } from "@/lib/best";
@@ -83,6 +85,7 @@ export default async function RegionThemesPage({ params }: Props) {
     themes.some(c.match)
   );
   const brandPages = new Set(brands.map((b) => b.key));
+  const hidden = hiddenBrands(all, themes);
 
   const jsonLd = [
     {
@@ -140,10 +143,27 @@ export default async function RegionThemesPage({ params }: Props) {
           {region}에서 즐길 수 있는 방탈출 테마를 브랜드별로 모았어요. 테마를
           누르면 줄거리와 예약 정보를 볼 수 있어요.
         </p>
+        <CompareTable themes={themes} title={`${region} 방탈출 테마 비교표`} />
       </header>
 
+      {hidden.length > 0 && (
+        <nav aria-label="숨은 매장" className="space-y-2 rounded-xl border-2 border-dashed border-edge/30 p-3">
+          <h2 className="text-[15px] font-extrabold">🔎 숨은 매장 찾기</h2>
+          <p className="text-[13px] text-cream/60">큰 브랜드 말고, {region}에서 새로 가 볼 만한 작은 매장이에요.</p>
+          <ul className="flex flex-wrap gap-1.5">
+            {hidden.map(([b, n]) => (
+              <li key={b}>
+                <a href={`#${brandAnchor(b)}`} className={CHIP}>
+                  {b} <span className="text-cream/60">{n}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+
       {sections.map(([brand, list]) => (
-        <section key={brand} className="space-y-3">
+        <section key={brand} id={brandAnchor(brand)} className="scroll-mt-20 space-y-3">
           <h2 className="text-lg font-extrabold">
             {brandPages.has(brand) ? (
               <Link href={`/cafe/${brand}`} className="hover:underline">
