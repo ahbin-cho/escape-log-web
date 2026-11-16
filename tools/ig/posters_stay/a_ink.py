@@ -41,12 +41,11 @@ p.over(p.D, 0.45 * np.exp(-((XX - 860) ** 2 / (2 * 110 ** 2) + (YY - 1508) ** 2 
 tal = [(CX - 70, 1110), (CX + 60, 1100), (CX + 72, 1330), (CX - 10, 1300), (CX - 58, 1340)]
 from core import polygon_mask
 m = polygon_mask(H, W, tal, 2)
-np.multiply(p.D, 1 - 0.85 * m, out=p.D)
-YEL = m * 0.22
-for y in range(1150, 1290, 30):
-    p.stroke([(CX - 32 + rng.normal(0, 4), y), (CX + 28 + rng.normal(0, 4), y + rng.normal(0, 6))], 6, 0.85, dry=0.3, red=True)
-p.stroke([(CX - 4, 1125), (CX + 2, 1295)], 7, 0.9, dry=0.3, red=True)
-p.stroke(spline([(CX - 70, 1110), (CX + 6, 1150), (CX + 60, 1100)], 10), 2.5, 0.7, dry=0.4)
+YEL = m * 0
+crack = [(CX + 40, 940), (CX + 10, 1010), (CX + 55, 1080), (CX - 5, 1170), (CX + 35, 1250), (CX - 20, 1340), (CX + 10, 1430)]
+p.stroke(crack, 9, 0.95, dry=0.15, taper=(0.05, 0.4), red=True)
+for a, b in [((CX + 10, 1010), (CX - 60, 1050)), ((CX - 5, 1170), (CX - 90, 1200)), ((CX + 35, 1250), (CX + 120, 1290))]:
+    p.stroke([a, b], 5, 0.85, dry=0.2, taper=(0.05, 0.8), red=True)
 # ink smoke: a wet billowing column from the mouth that widens into a face
 cl = p.noise2d(120, 5, 31); cl2 = p.noise2d(45, 4, 33)
 dens = np.zeros_like(p.D)
@@ -79,12 +78,12 @@ arr = np.asarray(img).astype(np.float32); yl = YEL[..., None] * np.array([0, 18,
 d = ImageDraw.Draw(img)
 INK, SOFT, RED = (28, 24, 22), (98, 88, 78), (166, 44, 36)
 spaced(d, (86, 140), 'ENCORE · 앵콜 마지막 2주', F(PB, 26), SOFT, 4)
-d.text((80, 270), '봉인이', font=F(MJ, 128), fill=INK, anchor='ls')
-d.text((80, 410), '풀렸다', font=F(MJ, 128), fill=INK, anchor='ls')
-d.text((86, 470), '공연을 준비하던 신입 단원,', font=F(PM, 30), fill=INK, anchor='ls', stroke_width=5, stroke_fill=(236, 230, 218))
-d.text((86, 512), '깨어난 저주. 박물관에 갇혔다.', font=F(PM, 30), fill=INK, anchor='ls', stroke_width=5, stroke_fill=(236, 230, 218))
+d.text((80, 270), '유물이', font=F(MJ, 128), fill=INK, anchor='ls')
+d.text((80, 410), '깨졌다', font=F(MJ, 128), fill=INK, anchor='ls')
+d.text((86, 470), '가을 특별공연을 준비하던 밤,', font=F(PM, 30), fill=INK, anchor='ls', stroke_width=5, stroke_fill=(236, 230, 218))
+d.text((86, 512), '진품 유물이 떨어지고, 정전.', font=F(PM, 30), fill=INK, anchor='ls', stroke_width=5, stroke_fill=(236, 230, 218))
 d.text((80, 1640), 'STAY ALIVE IN MUSEUM', font=F(MJ, 62), fill=INK, anchor='ls')
-spaced(d, (84, 1690), '롯데월드 민속박물관 · 이머시브 호러', F(PB, 26), SOFT, 3)
+spaced(d, (84, 1690), '롯데월드 민속박물관 · 이머시브 체이스', F(PB, 26), SOFT, 3)
 d.text((80, 1780), '~ 11.29', font=F(MJ, 78), fill=RED, anchor='ls')
 d.text((390, 1774), '살아남아야 끝나요', font=F(PB, 34), fill=INK, anchor='ls')
 for i, t in enumerate(INFO): d.text((84, 1828 + i * 34), t, font=F(PM, 22), fill=SOFT, anchor='ls')
