@@ -37,9 +37,3 @@ ffmpeg -y -i <webm> -f lavfi -i anullsrc=r=44100:cl=stereo -t 10 \
 ## 운영자 직접 올리기 묶음(zip)
 `python3 tools/ig/pack.py <출력 폴더> [릴스 mp4]` → 날짜순 폴더(1.jpg… + 캡션.txt + 올리는법.txt) + 00_일정표.txt 를 zip 으로.
 새 게시물은 pack.py 의 POSTS 에 한 줄 추가. 여러 장 렌더는 `node tools/ig/render.cjs jobs.json`.
-
-## 댓글 모아 보기 · 답글 (11/16~)
-- `app/api/ig/comments` (CRON_SECRET 필요) + GitHub Actions "인스타 댓글"(`ig-comments.yml`).
-- Claude 가 `mode=list` 로 실행 → 로그에서 최근 게시물 댓글과 미답변(answered=false)을 읽고 답글 초안을 만든다.
-- 답글은 운영자가 문구를 확인한 뒤에만 `mode=reply comment_id=… message=…` 로 단다. 매장 계정에 DM 하지 않는 원칙은 그대로.
-- 토큰에 댓글 권한(instagram_manage_comments / instagram_business_manage_comments)이 없으면 오류 메시지에 code 가 나온다.
