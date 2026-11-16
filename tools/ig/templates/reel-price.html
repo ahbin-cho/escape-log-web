@@ -1,0 +1,41 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:A;src:url(../../../assets/fonts/SBAggroB.woff)}
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-Medium.woff);font-weight:500}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;font-family:P;color:#1D1D1D;background:#F5F0E6}
+body:before{content:"";position:absolute;inset:0;background-image:radial-gradient(#1D1D1D12 1.6px,transparent 1.6px);background-size:28px 28px}
+.top{position:absolute;left:70px;right:70px;top:90px;display:flex;justify-content:space-between;font:30px A}
+.top span{font-family:P;font-weight:800;font-size:26px;color:#8A8478}
+#hook{position:absolute;left:70px;right:70px;top:330px;animation:hook 2.4s forwards}
+#hook h1{font:400 118px/1.12 A;margin:0}#hook h1 em{font-style:normal;color:#E07A2B}
+#hook p{font-size:40px;font-weight:800;margin-top:36px}
+@keyframes hook{0%{opacity:0;transform:translateY(40px)}10%{opacity:1;transform:none}86%{opacity:1}100%{opacity:0;transform:translateY(-40px)}}
+.card{position:absolute;left:70px;right:70px;top:430px;height:900px;background:#FFFCF6;border:6px solid #1D1D1D;border-radius:44px;box-shadow:14px 14px 0 #1D1D1D;opacity:0;animation:card 2s both}
+@keyframes card{0%{opacity:0;transform:translateX(120px) rotate(2deg)}12%{opacity:1;transform:none}88%{opacity:1;transform:none}100%{opacity:0;transform:translateX(-120px) rotate(-2deg)}}
+.no{position:absolute;left:56px;top:50px;width:84px;height:84px;border-radius:50%;background:#E49A4A;border:5px solid #1D1D1D;font:52px/80px A;text-align:center}
+.b{position:absolute;left:56px;right:56px;top:190px;font:96px/1.05 A}.b small{display:block;font-family:P;font-weight:800;font-size:38px;color:#8A8478;margin-top:18px}
+.t{position:absolute;left:56px;right:56px;top:460px;font:400 84px/1.1 A;color:#1D1D1D}.t em{display:inline-block;font-style:normal;background:#E49A4A;border:5px solid #1D1D1D;border-radius:24px;padding:4px 26px;margin-bottom:22px;font-size:72px}
+.t{display:flex;flex-direction:column;align-items:flex-start}
+.note{position:absolute;left:56px;right:56px;bottom:60px;font-size:36px;font-weight:500;color:#4A453E}
+#end{position:absolute;left:70px;right:70px;top:330px;opacity:0;animation:fin .5s 12.40s forwards}
+@keyframes fin{to{opacity:1}}
+#end h2{font:400 104px/1.15 A;margin:0}#end h2 em{font-style:normal;color:#E07A2B}
+#end p{font-size:38px;font-weight:800;line-height:1.5;margin-top:40px}
+#end .cta{display:inline-block;margin-top:50px;background:#E49A4A;border:5px solid #1D1D1D;border-radius:26px;box-shadow:9px 9px 0 #1D1D1D;padding:20px 36px;font:44px A}
+.dots{position:absolute;left:70px;top:1420px;display:flex;gap:18px;opacity:0;animation:fin .3s 2.4s forwards}
+.dots i{width:54px;height:16px;border-radius:8px;background:#1D1D1D22;animation:dot .2s both}
+@keyframes dot{to{background:#E49A4A}}
+.mascot{position:absolute;right:60px;top:1440px;width:330px;transform:rotate(-8deg);animation:bob 1.2s ease-in-out infinite alternate}
+@keyframes bob{to{transform:rotate(-2deg) translateY(-18px)}}
+.foot{position:absolute;left:70px;right:70px;bottom:90px;font-size:26px;color:#8A8478;font-weight:500;line-height:1.5}
+.k{position:absolute;left:56px;top:60px;font-size:44px;font-weight:800;color:#8A8478}
+.v{position:absolute;left:56px;right:40px;top:170px;font:400 112px/1.12 A}
+.n{position:absolute;left:56px;right:56px;bottom:60px;font-size:38px;font-weight:500;color:#4A453E;line-height:1.45}
+</style></head><body>
+<div class="top">탈깍노트<span>방탈출 가격 정리</span></div>
+<div id="hook"><h1>방탈출,<br><em>1인 얼마</em>야?</h1><p>공식 가격 149개로 정리했어요 💸</p></div>
+<div class="card" style="animation-delay:2.40s"><div class="k">가장 흔한 가격</div><div class="v">1인<br>2만 원대</div><div class="n">확인된 149개 중 84개(56%)</div></div><div class="card" style="animation-delay:4.40s"><div class="k">시간이 길수록</div><div class="v">60분 2.2만<br>75분 2.8만<br>80분+ 3.3만</div><div class="n">시간대별 중간값</div></div><div class="card" style="animation-delay:6.40s"><div class="k">장르로 보면</div><div class="v">공포·스릴러<br>3만 원대</div><div class="n">감성·코믹은 2.2~2.4만</div></div><div class="card" style="animation-delay:8.40s"><div class="k">배우가 나오면</div><div class="v">5만 원 이상</div><div class="n">이머시브·대형 테마</div></div><div class="card" style="animation-delay:10.40s"><div class="k">인원이 많으면</div><div class="v">1인당 ↓</div><div class="n">예) 2명 44,000 → 5명 95,000<br>(1인 22,000 → 19,000)</div></div>
+<div class="dots"><i style="animation-delay:2.40s"></i><i style="animation-delay:4.40s"></i><i style="animation-delay:6.40s"></i><i style="animation-delay:8.40s"></i><i style="animation-delay:10.40s"></i></div><img class="mascot" src="../../../public/mascot.png">
+<div id="end"><h2>📌 저장해 두고<br><em>예산 짜기</em></h2><p>테마마다 1인 가격·시간·인원은<br>탈깍노트 테마 페이지에 있어요.<br>다녀오면 한 줄 기록까지.</p><div class="cta">프로필 링크 → talkkaknote.com</div></div>
+<div class="foot">탈깍노트에 매장 공식 가격이 확인된 테마 149개 기준(11/16) · 할인·주말 요금은 매장마다 달라요</div>
+</body></html>
