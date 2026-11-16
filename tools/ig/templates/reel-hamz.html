@@ -1,0 +1,51 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* 햄즈 살찌우기(셜록홈즈 안양범계점, 2026 신작) — 손그림 + 친구와 대화 (docs/reels-standard.md) */
+@font-face{font-family:A;src:url(../../../assets/fonts/SBAggroB.woff)}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#fbe9c8}
+#cam{position:absolute;inset:0;transform-origin:50% 62%;transition:transform .35s cubic-bezier(.2,1.6,.4,1)}
+#frames img{position:absolute;inset:0;width:1080px;height:1920px;visibility:hidden}#frames img.on{visibility:visible}
+#watch{position:absolute;right:56px;top:560px;width:250px;padding:14px 0;text-align:center;background:#fffbf1;border:6px solid #1d1d1d;border-radius:30px;box-shadow:7px 8px 0 #1d1d1d;font:400 64px/1 A;color:#1d1d1d;transform:rotate(4deg)}
+#watch small{display:block;font:400 26px/1 A;color:#e04a3a;margin-bottom:6px}
+#ghost{position:absolute;left:40px;top:1060px;width:250px;transform-origin:50% 90%;animation:bob 2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-14px) rotate(-3deg)}}
+#chat{position:absolute;left:36px;right:36px;top:1400px;height:440px;display:flex;flex-direction:column;justify-content:flex-end;gap:16px;overflow:hidden;padding:0 16px 16px}
+.bub{max-width:88%;font:400 58px/1.2 A;padding:14px 30px;white-space:nowrap;flex:none;color:#1d1d1d;border:6px solid #1d1d1d;box-shadow:7px 8px 0 #1d1d1d}
+.bub.f{align-self:flex-start;background:#fffbf1;border-radius:10px 44px 40px 46px/10px 40px 46px 38px;transform-origin:0 100%}
+.bub.m{align-self:flex-end;background:#F2B23E;border-radius:44px 10px 46px 40px/40px 10px 38px 46px;transform-origin:100% 100%}
+.bub small{display:block;font:400 26px/1 A;opacity:.6;margin-bottom:4px}
+#end{position:absolute;left:0;right:0;top:560px;text-align:center;opacity:0;transform:translateY(-30px);transition:all .5s cubic-bezier(.2,1.4,.4,1)}
+#end b{display:inline-block;font:400 46px/1.35 A;background:#E49A4A;color:#1D1D1D;border:6px solid #1D1D1D;border-radius:24px;padding:12px 34px;box-shadow:9px 9px 0 #1D1D1D}
+#end i{display:block;font-style:normal;font-size:30px;opacity:.75}
+.conf{position:absolute;width:24px;height:36px;opacity:0;border-radius:4px}
+</style></head><body>
+<div id="cam"><div id="frames"></div></div>
+<div id="watch"><small>TIME ATTACK</small><span id="t">00:00</span></div>
+<img id="ghost" src="../../../public/mascot.png">
+<div id="chat"></div>
+<div id="end"><b>햄즈 살찌우기 · 2026 신작<i>셜록홈즈 안양범계점 · 공포도 0% · 팀 대결 타임어택</i></b></div>
+<script>
+const $=s=>document.querySelector(s),T=(ms,f)=>setTimeout(f,ms),FR=1000/12;
+const names=['h1','h2','h3','h4','h5'],F={};
+names.forEach(n=>[1,2].forEach(v=>{const i=new Image();i.src=`../assets/reels/hamz/${n}_${v}.jpg`;$('#frames').appendChild(i);F[n+v]=i}));
+let cur='h1',v=1,shown=null;
+const show=()=>{const k=cur+v;if(shown)shown.classList.remove('on');shown=F[k];shown.classList.add('on')};
+setInterval(()=>{v=3-v;show()},170);show();
+const grow=n=>{cur=n;show();const c=$('#cam');c.style.transform='scale(1.06)';T(180,()=>c.style.transform='scale(1)')};
+let sec=0;const tick=setInterval(()=>{sec++;$('#t').textContent='00:'+String(sec).padStart(2,'0')},1000);
+const chat=$('#chat');
+const say=(who,txt,ms)=>T(ms,()=>{const b=document.createElement('div');b.className='bub '+who;b.dataset.r=who==='f'?-1.2:1.2;b.dataset.s=.5;b.innerHTML=(who==='f'?'<small>친구</small>':'')+txt;chat.appendChild(b);
+ while(chat.children.length>3)chat.firstChild.remove();[.5,1.12,.96,1].forEach((sc,k)=>setTimeout(()=>{b.dataset.s=sc},k*FR))});
+setInterval(()=>[...chat.children].forEach(b=>b.style.transform=`scale(${b.dataset.s}) rotate(${+b.dataset.r+(Math.random()-.5)*1.2}deg) translate(${(Math.random()-.5)*3}px,${(Math.random()-.5)*3}px)`),170);
+say('f','햄즈 레스토랑 예약했어 🐹',400);say('m','햄스터 식당??',1300);
+say('f','팀 대결이래. 타임어택!',2200);say('m','그럼 우리 팀이 이김',3100);
+say('f','빨리빨리 먹여!!',3900);T(4300,()=>grow('h2'));
+say('m','볼 빵빵해진 거 봐 ㅋㅋ',5000);T(5400,()=>grow('h3'));
+say('f','하나만 더!!',6100);T(6500,()=>grow('h4'));
+say('m','됐다!!!',7200);T(7400,()=>{grow('h5');clearInterval(tick);$('#watch').style.background='#f8cd48';
+ for(let i=0;i<60;i++){const c=document.createElement('div');c.className='conf';c.style.left=(540+(Math.random()-.5)*160)+'px';c.style.top='900px';
+  c.style.background=['#E49A4A','#E2554A','#3E9A6A','#7A68C2','#F5C342','#fff'][i%6];document.body.appendChild(c);
+  const a=-Math.PI/2+(Math.random()-.5)*2.4,d=600+Math.random()*700;
+  c.animate([{opacity:1,transform:'translate(0,0)'},{opacity:1,transform:`translate(${Math.cos(a)*d*.6}px,${Math.sin(a)*d}px) rotate(${360*Math.random()}deg)`,offset:.35},{opacity:.9,transform:`translate(${Math.cos(a)*d*.8}px,${Math.sin(a)*d+1100}px) rotate(${900*Math.random()}deg)`}],{duration:2600,easing:'cubic-bezier(.2,.6,.5,1)',fill:'forwards'})}});
+say('f','이긴 팀은 할인이래',8200);say('m','다음 판 또 가자',9000);
+T(9700,()=>{$('#watch').style.opacity=0;$('#end').style.opacity=1;$('#end').style.transform='none'});
+</script></body></html>
