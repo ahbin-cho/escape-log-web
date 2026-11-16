@@ -75,7 +75,7 @@ def main(cfg, posters):
 <div><span class="chip" style="background:#E2603F;color:#fff;border:3px solid #3A2E28;padding:11px 24px;font-size:29px;box-shadow:5px 5px 0 #3A2E28">프로필 링크 → talkkaknote.com</span></div></div>
 <div class="ft" style="top:1300px;color:#FFF6EA;opacity:.9"><span>먼저 써 보고 10초 가입</span><b>탈깍노트</b></div>'''
     if os.path.exists(os.path.join(BB.A, "gj-end.jpg")):
-        open(os.path.join(T, "gj6.html"), "w").write(BB.page(1350, "gj-end.jpg", 135, inner))
+        open(os.path.join(T, "gj6.html"), "w").write(BB.page(1350, "gj-end.jpg", 290, inner))
     print("gj1~6, gjs1~5 written")
 
 
