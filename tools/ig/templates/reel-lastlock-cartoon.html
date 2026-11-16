@@ -10,8 +10,11 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000;co
 #red.beat{animation:beat .7s ease-in-out infinite}
 @keyframes beat{50%{opacity:.45}}
 #glow{position:absolute;inset:0;background:radial-gradient(circle at 540px 1300px,#fff3c855,#ffe9a022 50%,#0000 75%);opacity:0;transition:opacity .5s}
-.cap{position:absolute;left:0;right:0;top:640px;text-align:center;font:400 80px/1.2 A;opacity:0;transform:translateY(16px);transition:opacity .35s,transform .35s;text-shadow:0 5px 0 #000,0 0 30px #000}
-.cap.on{opacity:1;transform:none}
+#chat{position:absolute;left:36px;right:36px;top:580px;height:410px;display:flex;flex-direction:column;justify-content:flex-end;gap:16px;overflow:hidden;padding:0 16px 16px}
+.bub{max-width:88%;font:400 58px/1.2 A;padding:14px 30px;white-space:nowrap;flex:none;color:#1d1d1d;border:6px solid #1d1d1d;box-shadow:7px 8px 0 #1d1d1d}
+.bub.f{align-self:flex-start;background:#fff6e0;border-radius:10px 44px 40px 46px/10px 40px 46px 38px;transform-origin:0 100%}
+.bub.m{align-self:flex-end;background:#F2B23E;border-radius:44px 10px 46px 40px/40px 10px 38px 46px;transform-origin:100% 100%}
+.bub small{display:block;font:400 26px/1 A;opacity:.6;margin-bottom:4px}
 #big{position:absolute;left:0;right:0;top:640px;text-align:center;font:400 260px/1 A;color:#FFF6E0;opacity:0;transform:scale(.4) rotate(-8deg);text-shadow:10px 10px 0 #1D1D1D,-4px -4px 0 #1D1D1D,4px -4px 0 #1D1D1D,-4px 4px 0 #1D1D1D}
 #end{position:absolute;left:0;right:0;top:100px;text-align:center;opacity:0;transform:translateY(-30px);transition:all .5s cubic-bezier(.2,1.4,.4,1)}
 #end b{display:inline-block;font:400 50px A;background:#E49A4A;color:#1D1D1D;border:6px solid #1D1D1D;border-radius:24px;padding:12px 34px;box-shadow:9px 9px 0 #1D1D1D}
@@ -28,7 +31,7 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000;co
 </style></head><body>
 <div id="cam"><div id="frames"></div><div id="dark"></div><div id="timer">00:12</div><img id="ghost" class="bob" src="../../../public/mascot.png"><div id="sweat"></div><div id="glow"></div></div>
 <div id="red"></div>
-<div class="cap" id="c1">마지막 자물쇠</div><div class="cap" id="c2">친구: “일단 0000 해 봐”</div><div class="cap" id="c3">나: 잠깐만…</div>
+<div id="chat"></div>
 <div id="big">탈깍!</div><div id="end"><b>남은 시간 00:01</b></div><div id="flash"></div>
 <script>
 const $=s=>document.querySelector(s),T=(ms,f)=>setTimeout(f,ms);
@@ -44,18 +47,21 @@ const D=$('#dark');let on=true,t0=performance.now();
 (function loop(){if(!on)return;const t=(performance.now()-t0)/1000;D.style.setProperty('--lx',(540+Math.sin(t*.7)*110)+'px');D.style.setProperty('--ly',(1380+Math.cos(t*.9)*70)+'px');requestAnimationFrame(loop)})();
 requestAnimationFrame(()=>requestAnimationFrame(()=>$('#cam').style.transform='scale(1.16)'));
 const timer=$('#timer');for(let s=11;s>=1;s--)T((12-s)*1000,()=>{timer.textContent='00:'+String(s).padStart(2,'0');if(s===5){$('#red').style.opacity=.9;T(1500,()=>$('#red').classList.add('beat'))}});
-const cap=(id,o)=>$(id).classList.toggle('on',o);
-T(300,()=>cap('#c1',true));
-T(2000,()=>{cap('#c1',false);T(250,()=>cap('#c2',true))});
-T(2900,()=>jig('a0'));
-T(3900,()=>{cap('#c2',false);T(250,()=>cap('#c3',true))});
-T(4500,()=>st('b1'));T(5200,()=>st('b2'));T(5900,()=>st('b3'));
-T(6700,()=>{st('c4');const g=$('#ghost');g.classList.remove('bob');g.classList.add('worry');$('#sweat').classList.add('on')});T(7100,()=>jig('c4'));
-T(8000,()=>st('c7'));T(8400,()=>jig('c7'));
-T(8700,()=>{$('#c3').textContent='나: 제발…'});
-T(9500,()=>st('c8'));T(9900,()=>jig('c8'));
-T(10700,()=>st('d9'));
-T(11250,()=>{on=false;st('e9');{const g=$('#ghost');g.classList.remove('worry');$('#sweat').classList.remove('on');g.style.filter='brightness(1) drop-shadow(0 14px 10px #0005)';g.style.transform='translateY(-150px) rotate(-10deg) scale(1.12)';T(480,()=>g.style.transform='translateY(-40px) rotate(6deg) scale(1.08)')}cap('#c3',false);
+// 대화: 친구(왼쪽) · 나(오른쪽). 최근 3개만. 손그림처럼 말풍선이 계속 살짝 떨린다
+const chat=$('#chat'),FR=1000/12;
+const say=(who,txt,ms)=>T(ms,()=>{const b=document.createElement('div');b.className='bub '+who;b.dataset.r=who==='f'?-1.2:1.2;b.innerHTML=(who==='f'?'<small>친구</small>':'')+txt;chat.appendChild(b);
+ while(chat.children.length>3)chat.firstChild.remove();
+ [.5,1.12,.96,1].forEach((sc,k)=>setTimeout(()=>{b.dataset.s=sc},k*FR));b.dataset.s=.5});
+setInterval(()=>[...chat.children].forEach(b=>b.style.transform=`scale(${b.dataset.s}) rotate(${+b.dataset.r+(Math.random()-.5)*1.2}deg) translate(${(Math.random()-.5)*3}px,${(Math.random()-.5)*3}px)`),170);
+const worry=()=>{const g=$('#ghost');g.classList.remove('bob');g.classList.add('worry');$('#sweat').classList.add('on')};
+say('f','야 12초 남았어!!',500);say('m','알아;;',1500);
+say('f','일단 0000 해 봐',2300);T(2900,()=>jig('a0'));say('m','될 리가…',3500);
+say('f','내 생일인가? 1124',4300);T(4700,()=>st('b1'));T(4950,()=>st('b2'));T(5200,()=>st('b3'));T(5450,()=>{st('c4');worry()});T(5950,()=>jig('c4'));
+say('m','아니잖아 ㅡㅡ',6400);
+say('f','그럼 1127!',7100);T(7500,()=>st('c7'));T(7950,()=>jig('c7'));
+say('m','…우리 망했다',8500);
+say('f','아 달력 동그라미!! 1129',9300);say('m','제발…',10100);T(10600,()=>st('d9'));
+T(11250,()=>{on=false;st('e9');{const g=$('#ghost');g.classList.remove('worry');$('#sweat').classList.remove('on');g.style.filter='brightness(1) drop-shadow(0 14px 10px #0005)';g.style.transform='translateY(-150px) rotate(-10deg) scale(1.12)';T(480,()=>g.style.transform='translateY(-40px) rotate(6deg) scale(1.08)')}chat.innerHTML='';
  const f=$('#flash');f.style.opacity=.9;requestAnimationFrame(()=>{f.style.transition='opacity .7s';f.style.opacity=0});
  D.style.opacity=0;$('#red').classList.remove('beat');$('#red').style.transition='opacity .3s';$('#red').style.opacity=0;$('#glow').style.opacity=1;
  timer.style.color='#7CFFB0';timer.style.textShadow='0 0 26px #7CFFB0cc';
@@ -66,5 +72,6 @@ T(11250,()=>{on=false;st('e9');{const g=$('#ghost');g.classList.remove('worry');
   const a=-Math.PI/2+(Math.random()-.5)*2.4,d=600+Math.random()*700;
   c.animate([{opacity:1,transform:'translate(0,0) rotate(0)'},{opacity:1,transform:`translate(${Math.cos(a)*d*.6}px,${Math.sin(a)*d}px) rotate(${360*Math.random()}deg)`,offset:.35},{opacity:.9,transform:`translate(${Math.cos(a)*d*.8}px,${Math.sin(a)*d+1000}px) rotate(${900*Math.random()}deg)`}],{duration:2600,easing:'cubic-bezier(.2,.6,.5,1)',fill:'forwards'})}
 });
-T(12100,()=>{$('#end').style.opacity=1;$('#end').style.transform='none'});
+T(12350,()=>$('#big').style.opacity=0);say('f','거봐 ㅋㅋㅋ',12400);say('m','1초 남았거든…?',13100);
+T(13700,()=>{$('#end').style.opacity=1;$('#end').style.transform='none'});
 </script></body></html>
