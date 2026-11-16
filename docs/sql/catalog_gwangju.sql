@@ -41,7 +41,7 @@ update public.catalog set genre='감성', difficulty=4, tags=array['스토리','
 update public.catalog set genre='판타지', difficulty=4, tags=array['요정','판타지','광주']::text[], time_limit=60 where name='이 소리 저만 들리나요?' and cafe='룸즈에이 광주상무점';
 update public.catalog set genre='감성', difficulty=4, tags=array['스토리','로맨스','광주']::text[], time_limit=60 where name='전지적 작가 시점' and cafe='룸즈에이 광주상무점';
 update public.catalog set genre='코믹', difficulty=4, tags=array['코믹','판타지','광주']::text[], time_limit=60 where name='멍사탕' and cafe='룸즈에이 광주상무점';
-update public.catalog set genre='코믹', difficulty=3, tags=array['코믹','판타지','광주']::text[], time_limit=60 where name='요정들의 술집' and cafe='룸즈에이 광주수완점';
+update public.catalog set genre='코믹', difficulty=3, tags=array['코믹','판타지','광주']::text[], time_limit=60, players='2~5', price=22000 where name='요정들의 술집' and cafe='룸즈에이 광주수완점';
 update public.catalog set genre='감성', difficulty=4, tags=array['힐링','판타지','광주']::text[], time_limit=60 where name='낭랑카페' and cafe='룸즈에이 광주수완점';
 update public.catalog set genre='아케이드', difficulty=4, tags=array['히어로','아케이드','광주']::text[], time_limit=60 where name='히어로 아카데미' and cafe='룸즈에이 광주수완점';
 update public.catalog set genre='코믹', difficulty=5, tags=array['큐트','목욕','광주']::text[], time_limit=60 where name='뽀득뽀득' and cafe='룸즈에이 광주수완점';

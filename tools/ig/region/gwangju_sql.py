@@ -42,7 +42,7 @@ ROWS = [
     ("전지적 작가 시점", RS, "감성", 4, None, ["스토리", "로맨스", "광주"], None, 60, None, None, None, None),
     ("멍사탕", RS, "코믹", 4, None, ["코믹", "판타지", "광주"], None, 60, None, None, None, None),
     # 룸즈에이 광주수완점
-    ("요정들의 술집", RW, "코믹", 3, None, ["코믹", "판타지", "광주"], None, 60, None, None, None, None),
+    ("요정들의 술집", RW, "코믹", 3, None, ["코믹", "판타지", "광주"], None, 60, "2~5", 22000, None, None),  # 상세: 2명 44,000 · 3명 63,000 · 4명 80,000 · 5명 95,000 → 2인 기준 1인 22,000
     ("낭랑카페", RW, "감성", 4, None, ["힐링", "판타지", "광주"], None, 60, None, None, None, None),
     ("히어로 아카데미", RW, "아케이드", 4, None, ["히어로", "아케이드", "광주"], None, 60, None, None, None, None),
     ("뽀득뽀득", RW, "코믹", 5, None, ["큐트", "목욕", "광주"], None, 60, None, None, None, None),
