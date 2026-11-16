@@ -10,7 +10,7 @@ W, H = 1080, 1920
 R = Cartoon.rrect_pts
 E = Cartoon.ellipse_pts
 FUR, FUR_D, BELLY, EAR = '#f3b25e', '#d98d3a', '#fff1d8', '#f59a8a'
-STATES = [('h1', 1.0, 'smile', 9), ('h2', 1.22, 'happy', 6), ('h3', 1.48, 'wow', 3), ('h4', 1.8, 'happy', 0), ('h5', 1.8, 'happy', 0)]
+STATES = [('h1', 1.0, '', 9), ('h2', 1.2, '', 6), ('h3', 1.42, '', 3), ('h4', 1.7, '', 0), ('h5', 1.7, '', 0)]
 
 
 def scene(name, k, mood, seeds, seed):
@@ -32,27 +32,52 @@ def scene(name, k, mood, seeds, seed):
     for i in range(seeds):
         x = 820 + rng.uniform(-80, 80); y = 1290 + rng.uniform(-18, 10)
         c.shape(E(x, y, 16, 9, rot=rng.uniform(0, 180)), '#4a3a30', width=3)
-    # 햄스터(k 배로 통통해진다, 바닥에 붙어 있도록 아래 기준)
+    # 햄스터: 골든햄스터처럼 등은 주황, 얼굴 아래·배는 흰색. 구슬 같은 까만 눈, 분홍 코, 앞니, 수염,
+    # 양쪽으로 부푼 볼주머니(단계마다 더 빵빵), 씨앗을 쥔 분홍 앞발. k 배로 통통해진다(바닥 기준)
     cx, base = 520, 1300
-    bw, bh = 170 * k, 150 * (1 + (k - 1) * .75)
-    cy = base - bh * .85
-    for sx in (-1, 1):                                                                          # 귀
-        c.shape(E(cx + sx * bw * .55, cy - bh * .82, 46, 42), FUR, width=7)
-        c.fill(E(cx + sx * bw * .55, cy - bh * .8, 26, 22), EAR, slop=1)
-    c.shape(E(cx, cy, bw, bh), FUR, shade=(FUR_D, -18, -14), width=9)
-    c.fill(E(cx, cy + bh * .3, bw * .62, bh * .6), BELLY, slop=1.5)
-    for sx in (-1, 1):                                                                          # 볼주머니
-        c.fill(E(cx + sx * bw * .6, cy + bh * .05, 44 * k ** .7, 36 * k ** .7), '#ffd9a8', slop=1)
-    c.face(cx, cy - bh * .18, 120, mood)
-    for sx in (-1, 1):                                                                          # 앞발(씨앗을 쥔다)
-        c.shape(E(cx + sx * 46, cy + bh * .32, 22, 16), '#f59a8a', width=5)
-    c.shape(E(cx, cy + bh * .3, 18, 11), '#4a3a30', width=3)
+    bw, bh = 165 * k ** .9, 175 * (1 + (k - 1) * .55)
+    cy = base - bh * .82
+    pouch = 40 + 70 * (k - 1)                                                                   # 볼주머니 크기
+    for sx in (-1, 1):                                                                          # 귀: 작고 둥글게, 머리 양옆 위
+        c.shape(E(cx + sx * bw * .62, cy - bh * .78, 34, 32), FUR, width=6)
+        c.fill(E(cx + sx * bw * .62, cy - bh * .76, 19, 17), EAR, slop=.8)
+    body = E(cx, cy, bw, bh)
+    c.shape(body, FUR, shade=(FUR_D, -16, -12), width=9)
+    c.fill(c.mask(E(cx, cy + bh * .28, bw * .78, bh * .72)) * c.mask(body), BELLY, slop=1)        # 흰 배·턱
+    for sx in (-1, 1):                                                                          # 볼주머니: 몸 옆으로 불룩 튀어나온 흰 볼(바깥 테두리만 그린다)
+        px, pr = cx + sx * (bw * .78 + pouch * .15), pouch
+        c.fill(E(px, cy + bh * .05, pr, pr * .85), BELLY, slop=.6)
+        a0, a1 = (-80, 95) if sx > 0 else (85, 260)
+        c.line(E(px, cy + bh * .05, pr, pr * .85, a0=a0, a1=a1), 8)
+        c.blush(cx + sx * bw * .55, cy + bh * .02, 18, 10)
+    c.fill(c.mask(E(cx, cy - bh * .5, bw * .3, bh * .32)) * c.mask(body), BELLY, slop=.6)         # 이마의 흰 줄
+    ey = cy - bh * .2
+    for sx in (-1, 1):                                                                          # 구슬 눈
+        e = E(cx + sx * bw * .3, ey, 15, 17)
+        c.fill(e, '#1c1612', slop=.3)
+        c.fill(E(cx + sx * bw * .3 - 5, ey - 6, 5, 6), '#ffffff', slop=0, knock=False, kind='shade')
+    ny = ey + 34
+    c.shape([(cx - 11, ny - 6), (cx + 11, ny - 6), (cx, ny + 6)], '#f2869a', width=3)           # 분홍 코
+    c.line([(cx, ny + 6), (cx, ny + 16)], 3.5)
+    c.line([(cx - 20, ny + 16), (cx - 10, ny + 22), (cx, ny + 16), (cx + 10, ny + 22), (cx + 20, ny + 16)], 3.5)   # ω 입
+    c.shape(R(cx - 8, ny + 20, cx + 8, ny + 34, 3), '#fffbf1', width=3)                         # 앞니
+    c.line([(cx, ny + 21), (cx, ny + 33)], 2, rough=False)
+    for sx in (-1, 1):                                                                          # 수염
+        for dy in (-6, 6, 18):
+            c.line([(cx + sx * 34, ny + dy), (cx + sx * (bw * .5 + pouch * .5), ny + dy + dy * .6 - 4)], 2.4, rough=False)
+    py = ny + 62                                                                                # 앞발로 씨앗 쥐기
+    c.shape(E(cx, py, 13, 22, rot=20), '#4a3a30', width=3)
+    c.glint([(cx - 3, py - 12), (cx + 3, py + 10)], 3)
+    for sx in (-1, 1):
+        c.shape(E(cx + sx * 22, py + 4, 16, 13), '#f6a6b2', width=4)
+    for sx in (-1, 1):                                                                          # 뒷발
+        c.shape(E(cx + sx * bw * .45, base - 6, 30, 16), '#f6a6b2', width=5)
     if name == 'h5':                                                                            # 승리
         c.burst(540, 760, 250, 130, colour='#f8cd48', spikes=16, shade='#e0a52a')
         c.letter('WIN!', 540, 800, 120, fill='#fffbf1', depth=(5, 7), depth_colour='#e04a3a', anchor='m')
         for (x, y) in ((200, 600), (880, 640), (260, 980), (840, 1000)): c.sparkle(x, y, 34)
     if k > 1.4 and name != 'h5':
-        c.pop_lines(cx, cy, bw + 20, bw + 80, [200, 230, 310, 340], width=6)
+        c.pop_lines(cx, cy, bw + pouch, bw + pouch + 60, [200, 230, 310, 340], width=6)
     return c
 
 
