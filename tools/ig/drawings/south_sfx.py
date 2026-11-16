@@ -58,15 +58,22 @@ elif MODE == "sagwi":
     add(5.4, .18 * (np.sin(2 * np.pi * 1661 * n2) + np.sin(2 * np.pi * 1760 * n2)) * np.exp(-n2 / .4))
     title()
 elif MODE == "scare":
-    wind = amb(120, 900, .9) * (.5 + .5 * np.sin(2 * np.pi * .13 * T) ** 2)
-    out += wind * env
-    for k in range(40):                                                                          # 풀벌레
-        t0 = rng.uniform(.3, 9.5); add(t0, tone(.08, ((4600 + rng.uniform(-300, 300), .3),), .03) * (np.sin(2 * np.pi * 40 * tt(.08)) > 0), .25)
-    for t0 in np.arange(1.0, 9.6, 1.45): add(t0, tone(.03, ((2400, .5),), .006), .35)          # 엔진 식는 틱
-    for t0 in np.arange(.6, 9.5, .72): add(t0, tone(.12, ((880, .4), (1320, .15)), .05), .12)    # 비상등 깜빡
-    add(.1, boom(1.8, 46, 1.1))
-    add(4.7, boom(1.4, 52, 1.5)); add(4.72, .7 * noise(.6, 800, 7000) * np.exp(-tt(.6) / .12))   # 쾅·유리
-    n = tt(.5); add(3.2, .35 * band((np.sign(np.sin(2 * np.pi * (520 - 260 * n) * n)) * (rng.random(len(n)) * .5 + .5)).astype(np.float32), 300, 3000) * np.sin(np.pi * n / .5))
+    # 논밭 바람: 낮게 깔리는 바람 + 세기가 오르내리는 돌풍 + 마른 옥수숫잎이 서로 스치는 사각거림
+    gust = np.clip(.35 + .4 * np.sin(2 * np.pi * .09 * T + .5) + .3 * np.sin(2 * np.pi * .23 * T + 2) + .2 * np.sin(2 * np.pi * .41 * T), .1, 1.2)
+    out += amb(60, 380, 1.1) * gust * env                                                         # 낮은 바람(웅-)
+    howl = band(rng.standard_normal(N).astype(np.float32), 300, 1100) * gust ** 2
+    out += howl * env * .8                                                                         # 바람이 귀를 스치는 소리(휘-)
+    rustle = band(rng.standard_normal(N).astype(np.float32), 2500, 9000)
+    flutter = (np.abs(band(rng.standard_normal(N).astype(np.float32), 4, 22)) * 6).clip(0, 1)      # 잎이 파르르 떨리는 잘게 끊긴 결
+    out += rustle * flutter * gust ** 1.5 * env * .55                                              # 옥수숫잎 사각사각
+    for k in range(14):                                                                            # 가끔 크게 쓸리는 잎 무더기
+        t0 = rng.uniform(.4, 9.2); d = rng.uniform(.4, .9); n = tt(d)
+        add(t0, .45 * noise(d, 1800, 8000) * np.sin(np.pi * n / d) ** 2 * (np.abs(np.sin(2 * np.pi * rng.uniform(9, 16) * n)) ** .5))
+    for k in range(10):                                                                            # 멀리 풀벌레(작게)
+        t0 = rng.uniform(.3, 9.5); add(t0, tone(.08, ((4600 + rng.uniform(-300, 300), .3),), .03) * (np.sin(2 * np.pi * 40 * tt(.08)) > 0), .1)
+    add(.1, boom(1.8, 46, 1.0))
+    n = tt(1.6); add(4.4, .6 * noise(1.6, 200, 2500) * np.sin(np.pi * n / 1.6) ** 2)               # 큰 돌풍이 지나가고
+    add(4.7, boom(1.4, 52, 1.3)); add(4.72, .5 * noise(.6, 800, 7000) * np.exp(-tt(.6) / .12))     # 쾅(사고)
     title()
 elif MODE == "nakhwa":
     out += amb(150, 1400, .7) * (.5 + .5 * np.sin(2 * np.pi * .11 * T) ** 2) * env                 # 옥상 바람
