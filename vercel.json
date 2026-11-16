@@ -1,10 +1,9 @@
 {
   "git": {
-    "deploymentEnabled": { "main": true, "claude/**": false }
+    "deploymentEnabled": {
+      "main": true,
+      "claude/**": false
+    }
   },
-  "ignoreCommand": "git diff --quiet ${VERCEL_GIT_PREVIOUS_SHA:-HEAD^} HEAD -- . ':(exclude)docs' ':(exclude)tools' ':(exclude).claude' ':(exclude)*.md'",
-  "crons": [
-    { "path": "/api/ig/publish", "schedule": "0 3 * * *" },
-    { "path": "/api/ig/publish?retry=1", "schedule": "30 3 * * *" }
-  ]
+  "ignoreCommand": "git diff --quiet ${VERCEL_GIT_PREVIOUS_SHA:-HEAD^} HEAD -- . ':(exclude)docs' ':(exclude)tools' ':(exclude).claude' ':(exclude)*.md'"
 }
