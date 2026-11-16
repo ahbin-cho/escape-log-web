@@ -42,3 +42,4 @@ ruvector.db
 .claude/proven-config.json
 .claude/.proven-config-version
 .claude/worktrees/
+__pycache__/
