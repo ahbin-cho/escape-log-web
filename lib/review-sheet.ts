@@ -1,3 +1,4 @@
+import { shortDate } from "./ui";
 import { SITE_HOST } from "./site";
 // 리뷰 시트(1080×1350): 방탈러들이 인스타에 올리는 '방탈출 리뷰' 양식 한 장을 브라우저에서 그린다.
 // 표지(내가 올린 사진 → 공식 포스터 → 장르 색 표지) · 테마/매장/날짜 · 탈출 결과 · 플레이 정보 · 체감 난이도 · 공포도 · 평점 · 한줄 후기.
@@ -126,7 +127,7 @@ export async function makeReviewSheet(r: ReviewSheetInput): Promise<Blob> {
   const rows: [string, string][] = [
     ["테마", r.themeName || "(제목 없음)"],
     ["매장", r.cafeName || "-"],
-    ["날짜", r.playedAt ? r.playedAt.replaceAll("-", ".") : "-"],
+    ["날짜", r.playedAt ? shortDate(r.playedAt) : "-"],
     ["장르", r.genre],
   ];
   rows.forEach(([k, v], i) => {

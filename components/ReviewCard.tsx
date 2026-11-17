@@ -1,4 +1,5 @@
 "use client";
+import { shortDate } from "@/lib/ui";
 
 import { useState } from "react";
 import { shareOrDownload } from "@/lib/share-file";
@@ -158,7 +159,7 @@ export default function ReviewCard({
         <div className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-between p-4 text-[11px] font-extrabold tracking-wide text-white/85">
           <span>
             {r.genre}
-            {r.playedAt ? ` · ${r.playedAt.replaceAll("-", ".")}` : ""}
+            {r.playedAt ? ` · ${shortDate(r.playedAt)}` : ""}
           </span>
           <button
             onClick={share}

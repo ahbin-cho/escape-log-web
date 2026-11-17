@@ -19,3 +19,9 @@ export function posterSrc(url: string | null | undefined): string | null {
   const u = (url ?? "").trim();
   return /^https?:\/\//.test(u) ? u : null;
 }
+
+// 공개 화면 날짜: 연도 없이 "MM.DD" (운영자 결정 2026-11-17). "2024-10-13" → "10.13"
+export function shortDate(d: string | null | undefined): string {
+  const m = (d ?? "").match(/^\d{4}-(\d{2})-(\d{2})/);
+  return m ? `${m[1]}.${m[2]}` : (d ?? "");
+}
