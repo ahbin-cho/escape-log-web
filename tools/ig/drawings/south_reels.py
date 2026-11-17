@@ -33,8 +33,9 @@ FX = {
 .bgl{position:absolute;inset:0;background:url(../assets/reel-scare-road-bg.jpg) center/cover;transform-origin:83% 34%;animation:zoom3 10.5s linear forwards}
 @keyframes zoom3{from{transform:scale(1)}to{transform:scale(1.08)}}
 .fgl{position:absolute;inset:0;background:url(../assets/reel-scare-road-fg.png) center/cover;transform-origin:83% 34%;animation:zoom3 10.5s linear forwards;z-index:4}
-.car{position:absolute;left:0;top:0;width:500px;height:180px;transform-origin:50% 100%;z-index:3;filter:brightness(.62) saturate(.9)}
+.car{position:absolute;left:0;top:0;width:430px;height:180px;transform-origin:50% 100%;z-index:3;filter:brightness(.62) saturate(.9)}
 .bob{position:absolute;inset:0;background:url(../assets/reel-scare-yellowcar.png) center/contain no-repeat;animation:bump .26s ease-in-out infinite alternate}
+.beam{position:absolute;right:calc(100% - 22px);top:62px;width:560px;height:150px;background:radial-gradient(farthest-side at 100% 50%,rgba(255,236,180,.55),rgba(255,230,170,.18) 45%,transparent 100%);-webkit-mask:linear-gradient(90deg,transparent,#000 70%);mix-blend-mode:screen;filter:blur(4px)}
 @keyframes bump{from{transform:translateY(0)}to{transform:translateY(-3px) rotate(-.5deg)}}
 .dust{position:absolute;width:260px;height:180px;border-radius:50%;background:radial-gradient(closest-side,rgba(150,130,105,.35),transparent 100%);z-index:2;opacity:0;pointer-events:none}
 .flick{position:absolute;inset:0;background:radial-gradient(closest-side,rgba(255,232,170,.4),transparent 100%);width:420px;height:260px;mix-blend-mode:screen;z-index:3;opacity:0}
@@ -66,11 +67,11 @@ FX = {
 }
 LAYER = {"bokdo": '<div class="cam"><div class="scene"></div><div class="el l"></div><div class="el r"></div></div><div class="lamp"></div>',
          "sagwi": '<div class="scene"></div><div class="moon"></div>',
-         "scare": '<div class="world" id="world"><div class="bgl"></div><div class="car" id="car"><div class="bob" id="bob"></div></div><div class="flick" id="fl"></div><div class="fgl"></div></div><div class="crashfl" id="cf"></div>'
+         "scare": '<div class="world" id="world"><div class="bgl"></div><div class="car" id="car"><div class="beam" id="beam"></div><div class="bob" id="bob"></div></div><div class="fgl"></div></div><div class="crashfl" id="cf"></div>'
                   + """<script>
 const car=document.getElementById('car'),bob=document.getElementById('bob');
 const road=x=>1452-(x-120)*(140/880);                       // 흙길 가운데 선(왼쪽 아래 1452 → 오른쪽 위)
-const at=(x,s,r)=>`translate(${x-250}px,${road(x)-140+18*s}px) scale(${s}) rotate(${r||0}deg)`;
+const at=(x,s,r)=>`translate(${x-215}px,${road(x)-140+18*s}px) scale(${s}) rotate(${r||0}deg)`;
 car.animate([{transform:at(860,.42)},{transform:at(560,.62),offset:.55},{transform:at(330,.8)}],{duration:4350,easing:'linear',fill:'forwards'});
 let t0=performance.now();const W=document.getElementById('world');
 const dust=()=>{const r=car.getBoundingClientRect();const d=document.createElement('div');d.className='dust';d.style.left=(r.right-150)+'px';d.style.top=(r.bottom-150)+'px';W.appendChild(d);
@@ -80,8 +81,7 @@ setTimeout(()=>{car.getAnimations().forEach(a=>a.pause());car.animate([{transfor
 setTimeout(()=>{clearInterval(dt);bob.style.animation='none';car.getAnimations().forEach(a=>a.pause());car.style.transform=at(250,.84,11);
  document.querySelector('.stage').classList.add('shk');const f=document.getElementById('cf');f.style.opacity=.85;f.style.transition='opacity .5s';requestAnimationFrame(()=>requestAnimationFrame(()=>f.style.opacity=0));
  for(let k=0;k<6;k++)setTimeout(dust,k*120);setInterval(dust,700);
- const r=car.getBoundingClientRect(),fl=document.getElementById('fl');fl.style.left=(r.left-300)+'px';fl.style.top=(r.top)+'px';
- [[0,1],[300,.1],[360,1],[800,0],[860,.8],[1500,.1],[1560,.9]].forEach(([t,o])=>setInterval(()=>{},1e9)||setTimeout(()=>fl.style.opacity=o,t));
+ const bm=document.getElementById('beam');[[0,1],[300,.1],[360,1],[800,0],[860,.8],[1500,.1],[1560,.9],[2400,0],[2460,1]].forEach(([t,o])=>setTimeout(()=>bm.style.opacity=o,t));
 },4700);
 </script>""",
          "kono": '<div class="scene"></div><div class="neon"></div>',
