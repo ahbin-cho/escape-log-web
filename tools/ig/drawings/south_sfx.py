@@ -73,6 +73,10 @@ elif MODE == "scare":
     add(.1, boom(2.2, 40, 1.0))
     n = tt(2.2); add(3.6, .8 * band(rng.standard_normal(len(n)).astype(np.float32), 150, 900) * np.sin(np.pi * n / 2.2) ** 2)   # 큰 돌풍이 지나가고
     out *= 3.0                                                                                       # 쾅이 커진 만큼 바람도 키운다(전체를 맞추면 바람이 너무 작아짐)
+    eng = (np.sign(np.sin(2 * np.pi * 42 * T * (1 + .03 * np.sin(2 * np.pi * .7 * T)))) * .5 + np.sin(2 * np.pi * 84 * T) * .3).astype(np.float32)
+    out += band(eng, 30, 400) * (T < 4.6) * np.clip(T / .5, 0, 1) * .5                            # 달리는 엔진 소리(쾅에서 끊김)
+    out += amb(80, 600, .5) * (T < 4.6) * (.6 + .4 * np.abs(np.sin(2 * np.pi * 3.6 * T)))          # 흙길 덜컹
+    n = tt(.35); add(4.35, .9 * noise(.35, 900, 4000) * np.sin(np.pi * n / .35) * (1 + np.sin(2 * np.pi * 37 * n)))   # 끼이익(휘청)
     duck = 1 - .75 * np.exp(-((T - 5.0) / .5) ** 2) * (T > 4.6)                                    # 쾅 직후 바람을 잠깐 죽여 쾅이 묻히지 않게
     out *= duck.astype(np.float32)
     add(4.7, boom(1.8, 46, 3.2))                                                                     # 쾅(사고): 낮은 충격

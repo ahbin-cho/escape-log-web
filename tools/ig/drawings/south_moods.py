@@ -261,5 +261,70 @@ def mongyeom():
     shift = 2 * (top + 262) - H; canvas2.alpha_composite(rf, (0, shift)) if shift >= 0 else None
     canvas2.filter(ImageFilter.GaussianBlur(.8)).save(os.path.join(out, "reel-mongyeom-her.png"))
 
+# ───────── 허수아비(달리는 버전): 하늘·허수아비 / 먼 옥수수 / 길 / 가까운 옥수수 / 차를 따로 그려 겹치고 흘려 보낸다 ─────────
+def scare_drive():
+    W2 = 2160
+    # 1) 하늘 + 달 + 허수아비 + 지평선(아래는 어둡게)
+    im = Image.new("RGB", (W * S, H * S)); d = ImageDraw.Draw(im, "RGBA")
+    for y in range(0, 1100):
+        t = y / 1100; d.line([P(0, y), P(W, y)], fill=(int(lerp(8, 70, t ** 2)), int(lerp(12, 46, t ** 2)), int(lerp(26, 40, t ** 2))), width=S)
+    d.ellipse([P(700, 230), P(860, 390)], fill=(236, 228, 200))
+    d.rectangle([P(0, 1100), P(W, H)], fill=(10, 12, 8))
+    sx, sy = 760, 700; K = (6, 6, 8)
+    d.line([P(sx, sy - 40), P(sx, 1180)], fill=K, width=12 * S)
+    d.line([P(sx - 150, sy + 40), P(sx + 150, sy + 30)], fill=K, width=10 * S)
+    d.polygon([P(sx - 70, sy + 20), P(sx + 70, sy + 20), P(sx + 90, sy + 260), P(sx + 40, sy + 240), P(sx, sy + 270), P(sx - 50, sy + 245), P(sx - 92, sy + 262)], fill=K)
+    d.ellipse([P(sx - 52, sy - 70), P(sx + 52, sy + 30)], fill=K)
+    d.polygon([P(sx - 110, sy - 40), P(sx + 110, sy - 44), P(sx + 40, sy - 70), P(sx + 20, sy - 150), P(sx - 30, sy - 150), P(sx - 44, sy - 72)], fill=K)
+    a = arr(im)
+    a += np.array([60, 50, 46]) * (np.exp(-((YY - 1110) / 90) ** 2) * (0.6 + 0.4 * sm(120, 11)))[..., None] * .8
+    finish(a * .9, "reel-scare-sky.jpg", (1.02, 0.96, 0.9), 7, (620, 900))
+    # 2) 옥수수 띠(가로 2160, 좌우 이어지게): 먼 줄 / 가까운 줄
+    def corn(rows, name, y0, scale0, scale1, dark):
+        Hh = 1920 - y0
+        im = Image.new("RGBA", (W2 * S, Hh * S), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+        for row in rows:
+            t = (row - rows[0]) / max(1, rows[-1] - rows[0]); y = lerp(30, Hh - 40, t ** 1.4); sc = lerp(scale0, scale1, t)
+            col = (int((30 + 20 * sc) * dark), int((36 + 18 * sc) * dark), int((14 + 6 * sc) * dark), 255)
+            for x in np.arange(0, W2, 24 * sc):
+                h = (60 + rng.uniform(-14, 20)) * sc; xx = x + rng.uniform(-6, 6)
+                for off in (0, W2, -W2):                                  # 가장자리에서 반대편으로 이어 그려 이음매를 없앤다
+                    X = xx + off
+                    if -60 < X < W2 + 60:
+                        d.line([(X * S, y * S), ((X + rng.normal(0, 4) * sc) * S, (y - h) * S)], fill=col, width=max(1, int(3 * sc * S)))
+                        for k in range(2):
+                            ly = y - h * rng.uniform(.3, .85); s_ = rng.choice([-1, 1])
+                            d.line([(X * S, ly * S), ((X + s_ * 26 * sc) * S, (ly + 12 * sc) * S)], fill=col, width=max(1, int(2 * sc * S)))
+            if row == rows[0]: d.rectangle([0, int((y + 2) * S), W2 * S, Hh * S], fill=(10, 12, 8, 255))
+        im.resize((W2, Hh), Image.LANCZOS).save(os.path.join(out, name))
+    corn(list(range(0, 14)), "reel-scare-corn-far.png", 1080, .35, 1.1, 1.7)
+    corn(list(range(0, 6)), "reel-scare-corn-near.png", 1600, 1.6, 2.4, 1.3)
+    # 3) 흙길 띠(가로 2160): 바퀴 자국과 돌
+    road = Image.new("RGBA", (W2, 170), (52, 44, 34, 255)); rd = ImageDraw.Draw(road)
+    for k in range(260):
+        x = rng.uniform(0, W2); y = rng.uniform(10, 160); r = rng.uniform(1.5, 5)
+        rd.ellipse([x - r, y - r * .6, x + r, y + r * .6], fill=(int(rng.uniform(70, 110)), int(rng.uniform(60, 90)), int(rng.uniform(45, 70)), 255))
+    for y in (52, 118): rd.line([(0, y), (W2, y)], fill=(38, 32, 24, 255), width=10)
+    road.save(os.path.join(out, "reel-scare-road.png"))
+    # 4) 차(옆모습, 왼쪽을 본다)
+    cw, ch = 520, 230
+    car = Image.new("RGBA", (cw * S, ch * S), (0, 0, 0, 0)); d = ImageDraw.Draw(car)
+    Q = lambda x, y: ((x + 30) * S, (y + 30) * S)
+    d.polygon([Q(0, 90), Q(30, 60), Q(120, 50), Q(170, 0), Q(330, -4), Q(390, 50), Q(460, 58), Q(470, 130), Q(8, 138)], fill=(150, 52, 52, 255))
+    d.polygon([Q(180, 12), Q(252, 10), Q(252, 50), Q(136, 52)], fill=(96, 122, 156, 255))
+    d.polygon([Q(262, 10), Q(326, 8), Q(372, 52), Q(262, 50)], fill=(86, 112, 146, 255))
+    d.line([Q(190, 16), Q(160, 46)], fill=(200, 215, 235, 255), width=3 * S)
+    d.line([Q(30, 60), Q(120, 50), Q(170, 0), Q(330, -4), Q(390, 50), Q(460, 58)], fill=(230, 200, 180, 255), width=3 * S)
+    d.line([Q(256, 54), Q(256, 128)], fill=(70, 22, 24, 255), width=2 * S)
+    for cx in (95, 380):
+        d.ellipse([Q(cx - 46, 98), Q(cx + 46, 190)], fill=(12, 12, 14, 255)); d.ellipse([Q(cx - 20, 124), Q(cx + 20, 164)], fill=(120, 120, 128, 255))
+    d.rectangle([Q(452, 66), Q(468, 92)], fill=(255, 70, 60, 255))
+    d.ellipse([Q(-6, 84), Q(22, 108)], fill=(255, 248, 220, 255))
+    car = car.resize((cw, ch), Image.LANCZOS)
+    a = np.asarray(car).astype(np.float32); a[..., :3] *= .62                                    # 밤이라 어둡게(윤곽·불빛은 밝게 남김)
+    lit = (np.asarray(car)[..., :3].max(-1) > 200)
+    a[lit, :3] = np.asarray(car)[lit, :3]
+    Image.fromarray(a.astype(np.uint8)).save(os.path.join(out, "reel-scare-car.png"))
+
 for f in (sys.argv[2:] or ["bokdo", "sagwi", "scare", "kono"]): globals()[f]()
 print("ok")

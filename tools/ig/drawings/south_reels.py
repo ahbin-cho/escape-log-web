@@ -25,12 +25,30 @@ FX = {
 .moon{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 18%,rgba(120,140,220,.28),transparent 60%);mix-blend-mode:screen;animation:br 3.2s ease-in-out infinite alternate;z-index:2}
 @keyframes br{from{opacity:.4}to{opacity:1}}
 """,
- # 헤드라이트가 깜빡이고 바람에 화면이 흔들린다. 허수아비 쪽으로 다가감
+ # 옥수수밭 사이 흙길을 달린다(먼 밭·길·가까운 밭이 서로 다른 속도로 흘러감, 차는 덜컹). 4.55초 휘청 → 4.7초 쾅, 모든 게 멈추고 연기
  "scare": """
-.scene{transform-origin:70% 40%;animation:in .6s forwards,zoom3 10.5s linear forwards,dim .8s 1.55s forwards}
-@keyframes zoom3{from{transform:scale(1.02)}to{transform:scale(1.35)}}
-.head{position:absolute;inset:0;background:radial-gradient(circle at 46% 77%,rgba(255,235,170,.35),transparent 30%);mix-blend-mode:screen;z-index:2;animation:hl 2.9s steps(1) infinite}
-@keyframes hl{0%{opacity:1}40%{opacity:.2}43%{opacity:1}71%{opacity:0}74%{opacity:1}}
+.world{position:absolute;inset:0;animation:dimw .8s 1.55s forwards}
+@keyframes dimw{to{filter:brightness(.55)}}
+.sky{position:absolute;inset:0;background:url(../assets/reel-scare-sky.jpg) center/cover;transform-origin:70% 40%;animation:zoom3 10.5s linear forwards}
+@keyframes zoom3{from{transform:scale(1.02)}to{transform:scale(1.18)}}
+.strip{position:absolute;left:0;right:0;background-repeat:repeat-x;animation:run var(--sp) linear infinite}
+@keyframes run{from{background-position-x:0}to{background-position-x:2160px}}
+.far{top:1080px;height:840px;background-image:url(../assets/reel-scare-corn-far.png);--sp:9s}
+.road{top:1530px;height:170px;background-image:url(../assets/reel-scare-road.png);--sp:1.4s}
+.near{top:1700px;height:220px;background-image:url(../assets/reel-scare-corn-near.png);background-size:2160px 320px;background-position-y:-40px;--sp:.9s}
+.car{position:absolute;left:250px;top:1388px;width:520px;height:230px;background:url(../assets/reel-scare-car.png) center/contain no-repeat;transform-origin:20% 90%;animation:bump .28s ease-in-out infinite alternate}
+@keyframes bump{from{transform:translateY(0)}to{transform:translateY(-5px) rotate(-.4deg)}}
+.beam{position:absolute;left:-560px;top:1300px;width:860px;height:300px;background:radial-gradient(ellipse at 100% 62%,rgba(255,240,190,.55),rgba(255,230,170,.15) 45%,transparent 70%);mix-blend-mode:screen;transform-origin:100% 62%;clip-path:polygon(100% 55%,100% 70%,0 100%,0 0)}
+.smoke{position:absolute;left:230px;top:1360px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(170,170,180,.45),transparent 65%);opacity:0}
+.stopped .strip,.stopped .car{animation-play-state:paused}
+.crash .car{transform:rotate(7deg) translate(-26px,8px)!important;animation:none}
+.crash .beam{animation:hl 1.1s steps(1) infinite}
+@keyframes hl{0%{opacity:1}30%{opacity:.15}35%{opacity:1}70%{opacity:0}75%{opacity:.8}}
+.crash .smoke{animation:sm 2.6s ease-out infinite}
+@keyframes sm{0%{opacity:0;transform:translate(0,0) scale(.6)}20%{opacity:1}100%{opacity:0;transform:translate(-80px,-320px) scale(1.8)}}
+.shk{animation:shk .07s linear 6}
+@keyframes shk{0%{translate:0 0}25%{translate:-14px 8px}50%{translate:12px -10px}75%{translate:-8px -6px}}
+.crashfl{position:absolute;inset:0;background:#fff4dc;opacity:0;z-index:21}
 """,
  # 네온이 지직거리고, 끝의 노래방 기계 화면이 붉게 숨 쉰다
  "kono": """
@@ -55,7 +73,10 @@ FX = {
 """,
 }
 LAYER = {"bokdo": '<div class="cam"><div class="scene"></div><div class="el l"></div><div class="el r"></div></div><div class="lamp"></div>',
-         "sagwi": '<div class="scene"></div><div class="moon"></div>', "scare": '<div class="scene"></div><div class="head"></div>',
+         "sagwi": '<div class="scene"></div><div class="moon"></div>',
+         "scare": '<div class="world" id="world"><div class="sky"></div><div class="strip far"></div><div class="strip road"></div><div class="beam"></div><div class="car"></div><div class="smoke"></div><div class="smoke" style="left:300px;animation-delay:.9s"></div><div class="strip near"></div></div><div class="crashfl" id="cf"></div>'
+                  + '<script>setTimeout(()=>{document.querySelector(".car").style.transition="transform .15s";document.querySelector(".car").style.animation="none";document.querySelector(".car").style.transform="rotate(-6deg) translate(-20px,-6px)"},4550);'
+                  + 'setTimeout(()=>{const w=document.getElementById("world");w.classList.add("stopped","crash");document.querySelector(".stage").classList.add("shk");const f=document.getElementById("cf");f.style.opacity=.85;f.style.transition="opacity .5s";requestAnimationFrame(()=>requestAnimationFrame(()=>f.style.opacity=0))},4700);</script>',
          "kono": '<div class="scene"></div><div class="neon"></div>',
          "nakhwa": '<div class="scene"></div>' + "".join(f'<div class="fl" style="left:{x}px;top:{y}px;animation:fp .5s {t}s"></div>' for x, y, t in
                    ((80, 1380, .3), (700, 1420, .9), (380, 1500, 1.6), (860, 1360, 2.4), (200, 1460, 3.1), (560, 1390, 3.9), (40, 1520, 4.6), (760, 1480, 5.2)))
@@ -83,7 +104,7 @@ make("sagwi", poster="poster-sagwi-official.jpg", credit="마스터키", BG="ree
                       line(990, 72, 4.7, "그럼 내 침대 위에"), line(1090, 80, 5.4, "누워있는 건..", acc=True, d=.9)]),
      TITLE='<div class="t">사귀</div><div class="s">邪鬼</div>', STORE="마스터키 평택점", SPEC="공포 · 난이도 4/5 · 공포도 4/5", NOTE="")
 make("scare", BG="reel-scare.jpg", ORIGIN="70% 40%", PALE="#EFE3CC", ACC="#E07A2A", ACCGLOW="rgba(224,122,42,.45)",
-     HOOKTOP=1180, H1="멈춰 버린 차,", H2="창밖엔 옥수수밭뿐", TSIZE=130, EXTRA=".hook .b{font-size:92px}.meta .t{font-family:M;color:#EFE3CC;letter-spacing:.14em}",
+     HOOKTOP=1180, H1="한밤의 시골길,", H2="옥수수밭만 끝없이", TSIZE=130, EXTRA=".hook .b{font-size:92px}.meta .t{font-family:M;color:#EFE3CC;letter-spacing:.14em}",
      LINES="\n".join([line(560, 62, 1.9, "미국 서부 어느 지역"), line(660, 74, 2.8, "차를 타고 이동 중에.."), line(780, 74, 3.7, "옥수수밭 근처에서"),
                       line(1040, 80, 4.7, "사고가 나고 마는데..", acc=True, d=1.0)]),
      TITLE='<div class="t">허수아비</div>', STORE="둠이스케이프 FEAR점 (수원)", SPEC="공포 · 난이도 4/5 · 공포도 4/5", NOTE="")
