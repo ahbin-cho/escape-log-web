@@ -35,9 +35,9 @@ FX = {
 .fgl{position:absolute;inset:0;background:url(../assets/reel-scare-road-fg.png) center/cover;transform-origin:83% 34%;animation:zoom3 10.5s linear forwards;z-index:4}
 .car{position:absolute;left:0;top:0;width:430px;height:180px;transform-origin:50% 100%;z-index:3;filter:brightness(.62) saturate(.9)}
 .bob{position:absolute;inset:0;background:url(../assets/reel-scare-yellowcar.png) center/contain no-repeat;animation:bump .26s ease-in-out infinite alternate}
-.beam{position:absolute;right:calc(100% - 22px);top:62px;width:560px;height:150px;background:radial-gradient(farthest-side at 100% 50%,rgba(255,236,180,.55),rgba(255,230,170,.18) 45%,transparent 100%);-webkit-mask:linear-gradient(90deg,transparent,#000 70%);mix-blend-mode:screen;filter:blur(4px)}
+.beam{position:absolute;right:calc(100% - 14px);top:70px;width:620px;height:120px;background:radial-gradient(farthest-side at 100% 50%,rgba(255,240,190,.85),rgba(255,232,170,.3) 40%,transparent 100%);clip-path:polygon(100% 38%,100% 62%,0 100%,0 0);mix-blend-mode:screen;filter:blur(9px)}
 @keyframes bump{from{transform:translateY(0)}to{transform:translateY(-3px) rotate(-.5deg)}}
-.dust{position:absolute;width:260px;height:180px;border-radius:50%;background:radial-gradient(closest-side,rgba(150,130,105,.35),transparent 100%);z-index:2;opacity:0;pointer-events:none}
+.dust{position:absolute;width:260px;height:180px;border-radius:50%;background:radial-gradient(closest-side,rgba(58,52,44,.5),transparent 100%);z-index:2;opacity:0;pointer-events:none}
 .flick{position:absolute;inset:0;background:radial-gradient(closest-side,rgba(255,232,170,.4),transparent 100%);width:420px;height:260px;mix-blend-mode:screen;z-index:3;opacity:0}
 .shk{animation:shk .07s linear 6}
 @keyframes shk{0%{translate:0 0}25%{translate:-14px 8px}50%{translate:12px -10px}75%{translate:-8px -6px}}
