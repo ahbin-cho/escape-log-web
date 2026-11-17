@@ -10,12 +10,17 @@ def tt(d): return np.arange(int(d * SR)) / SR
 def tone(d, f, dec, f1=None):
     t = tt(d); fr = f if f1 is None else np.linspace(f, f1, len(t))
     return np.sin(2 * np.pi * np.cumsum(np.broadcast_to(fr, t.shape)) / SR) * np.exp(-t / dec) * np.minimum(1, t / .004)
-for k in range(1, 8): add(k, tone(.05, 3000, .01), .35)                                   # 초시계
-for t0, w in [(.4, 'f'), (1.3, 'm'), (2.2, 'f'), (3.1, 'm'), (3.9, 'f'), (5.0, 'm'), (6.1, 'f'), (7.0, 'm'), (8.2, 'f'), (9.0, 'm')]:
+add(.2, tone(.4, 300, .2, 700), .5)                                                        # 후킹 글자 '뽀잉'
+for k in range(1, 4): add(k, tone(.05, 3000, .01), .3)                                     # 초시계(처음엔 느긋)
+for t0 in np.arange(3.4, 7.4, .5): add(t0, tone(.05, 3400, .01), .4)                       # 대결 시작: 째깍 빨라짐
+for t0 in np.arange(3.5, 7.3, .42):                                                         # 헥헥 숨소리
+    n = int(.22 * SR); add(t0, rng.standard_normal(n) * np.sin(np.pi * np.arange(n) / n) ** 2 * .5 * np.convolve(np.ones(30) / 30, rng.standard_normal(n), 'same') ** 0, .25)
+for t0, w in [(1.6, 'f'), (2.3, 'm'), (3.0, 'f'), (3.7, 'm'), (4.4, 'f'), (5.3, 'm'), (6.3, 'f'), (7.3, 'm'), (8.2, 'f'), (9.0, 'm')]:
     add(t0, tone(.09, 420 if w == 'f' else 640, .04, 640 if w == 'f' else 900), .5)        # 말풍선 뽁
-for t0 in np.arange(3.95, 7.3, .19):                                                       # 냠냠(짧고 둥근 소리 두 겹)
+for t0 in np.arange(4.45, 7.0, .19):                                                       # 냠냠
     add(t0 + rng.uniform(0, .04), tone(.06, rng.uniform(220, 320), .02) + .4 * rng.standard_normal(int(.06 * SR)) * np.exp(-tt(.06) / .01), .45)
-for t0 in (4.3, 5.4, 6.5): add(t0, tone(.35, 180, .18, 520), .6)                            # 뽀잉
+for t0 in (4.9, 5.4, 5.9): add(t0, tone(.18, 900, .08, 1500), .5)                          # 햄찌 얼굴 '뿅' 등장
+for t0 in (4.6, 5.7, 6.7): add(t0, tone(.35, 180, .18, 520), .6)                            # 뽀잉
 for i, f in enumerate([523, 659, 784, 1047, 1319]): add(7.4 + i * .08, tone(1.2, f, .5) + .3 * tone(1.2, f * 2, .3), .3)   # 팡파르
 add(7.4, rng.standard_normal(int(.3 * SR)) * np.exp(-tt(.3) / .05), .4)                   # 팡(폭죽)
 for i, f in enumerate([784, 988, 1175]): add(9.7 + i * .1, tone(.6, f, .25), .25)          # 끝 칩
