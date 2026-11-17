@@ -14,6 +14,7 @@ IMM_LINK = "https://talkkaknote.com/immersive"
 POSTS = [
   {
     "dir": "07b_11-17_19시_피드_우야_예약오픈",
+    "tags_max": 15,  # 운영자 요청 11/17: 이 피드는 해시태그를 넉넉히(앱이 5개 넘게 막으면 앞 5개만)
     "pages": [f"{T}/uya1.html"], "size": FEED,
     "caption": """비가 내리는 그날, 쫓기기 시작했다. 🌧️
 수원 행궁동에 새 방탈출 MHZ ESCAPE, 11/20(금)부터 첫 게임! 예약은 이미 열려 있어요.
@@ -24,7 +25,7 @@ POSTS = [
 
 다녀왔다면 탈깍노트에 한 줄 남겨 두세요. 먼저 써 보고 10초 가입 → 프로필 링크
 
-#수원방탈출 #행궁동방탈출 #공포방탈출 #신규방탈출 #행궁동 #행궁동데이트 #수원데이트 #수원놀거리 #수원가볼만한곳 #공포방탈출 #공포테마 #신규방탈출 #신상방탈출 #우야 #MHZESCAPE #방탈출 #방탈출카페 #방탈출추천 #방탈출후기 #방탈출스타그램 #방탈러 #방린이 #방탈출테마 #방탈출데이트 #실내데이트 #이색데이트 #데이트코스 #주말에뭐하지 #탈깍노트""",
+#수원방탈출 #행궁동방탈출 #공포방탈출 #신규방탈출 #신상방탈출 #수원데이트 #행궁동데이트 #수원놀거리 #행궁동놀거리 #수원가볼만한곳 #경기방탈출 #방탈출추천 #방탈출 #우야 #MHZESCAPE""",
     "how": """1. [+] → [게시물] → 1.jpg → 캡션.txt
 2. 매장 인스타 계정을 알면 [사람 태그](모르면 생략, DM 은 보내지 않기)
 3. 다음 날(11/20 오픈일)에 이 게시물을 [스토리에 추가] 해서 '오늘 오픈!' 한 줄""",
@@ -531,7 +532,7 @@ def main():
         if p.get("video_file") and os.path.exists(p["video_file"]):
             shutil.copy(p["video_file"], os.path.join(d, os.path.basename(p["video_file"])))
         if p.get("caption"):
-            open(os.path.join(d, "캡션.txt"), "w").write(cap_hashtags(p["caption"]) + "\n")
+            open(os.path.join(d, "캡션.txt"), "w").write(cap_hashtags(p["caption"], p.get("tags_max", HASHTAG_MAX)) + "\n")
         open(os.path.join(d, "올리는법.txt"), "w").write(p["how"] + "\n")
     open(os.path.join(root, "00_일정표.txt"), "w").write(SCHEDULE)
     jf = os.path.join(OUT, "jobs.json"); json.dump(jobs, open(jf, "w"), ensure_ascii=False)
