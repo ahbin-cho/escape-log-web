@@ -1,15 +1,15 @@
 import Link from "next/link";
 import { listedConditions } from "@/lib/best";
-import { getAllThemes, listedBrands } from "@/lib/catalog-server";
-import { immersiveKind } from "@/lib/immersive";
+import { getAllThemes, listedBrands, listedRegions } from "@/lib/catalog-server";
 
-// 홈 상단 "어떤 방 찾아?": 조건별 추천 진입 + 우리 팀 궁합 진입.
+// 홈 상단 "어떤 방 찾아?": 조건별 추천 · 지역 · 브랜드로 찾기.
+// (이머시브·팀 궁합 배너는 운영자 결정 2026-11-17로 홈에서 뺐다. 페이지는 그대로 있다)
 // 서버 컴포넌트라 링크가 HTML 에 그대로 실려 검색엔진이 /best 페이지들을 따라간다.
 export default async function HomeDiscover() {
-  const [all, brands] = await Promise.all([getAllThemes(), listedBrands()]);
+  const [all, brands, regionsRaw] = await Promise.all([getAllThemes(), listedBrands(), listedRegions()]);
   const conditions = listedConditions(all);
   const topBrands = brands.slice(0, 12);
-  const immersiveCount = all.filter((t) => immersiveKind(t.tags)).length;
+  const regions = [...regionsRaw].sort((a, b) => b.count - a.count).slice(0, 8); // 많은 순 8곳(나머지는 전체 지역에서)
 
   return (
     <section className="space-y-3" aria-labelledby="home-discover">
@@ -50,6 +50,30 @@ export default async function HomeDiscover() {
         </ul>
       )}
 
+      {regions.length > 0 && (
+        <div className="space-y-2 pt-1">
+          <div className="flex items-baseline justify-between">
+            <h3 className="text-base font-extrabold">📍 지역으로 찾기</h3>
+            <Link href="/region" className="text-xs font-bold text-candy">
+              전체 지역 {regionsRaw.length}곳 →
+            </Link>
+          </div>
+          <ul className="grid grid-cols-4 gap-2 sm:grid-cols-8">
+            {regions.map((r) => (
+              <li key={r.key}>
+                <Link
+                  href={`/region/${r.key}`}
+                  className="rough flex h-full flex-col items-center justify-center rounded-2xl border-2 border-edge bg-panel px-1 py-2.5 text-center transition hover:border-candy active:scale-[0.97]"
+                >
+                  <span className="text-[15px] font-extrabold">{r.key}</span>
+                  <span className="mt-0.5 text-[11px] font-bold text-cream/50">{r.count}개</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {topBrands.length > 0 && (
         <div className="space-y-2 pt-1">
           <div className="flex items-baseline justify-between">
@@ -73,42 +97,6 @@ export default async function HomeDiscover() {
         </div>
       )}
 
-      {immersiveCount > 0 && (
-        <Link
-          href="/immersive"
-          className="rough flex items-center gap-4 rounded-2xl border-2 border-edge bg-candy/15 p-4 transition hover:border-candy active:scale-[0.99]"
-        >
-          <span className="text-3xl leading-none" aria-hidden>
-            🎭
-          </span>
-          <span className="min-w-0 flex-1">
-            <span className="block font-extrabold">자물쇠 대신 배우가 있는 방</span>
-            <span className="mt-0.5 block text-sm text-cream/70 [word-break:keep-all]">
-              배우와 함께 이야기 안으로 들어가는 이머시브 연극·방탈출 {immersiveCount}곳
-            </span>
-          </span>
-          <span className="shrink-0 text-sm font-extrabold text-candy">보기 →</span>
-        </Link>
-      )}
-
-      <Link
-        href="/match"
-        className="rough flex items-center gap-4 rounded-2xl border-2 border-edge bg-grape/10 p-4 transition hover:border-grape active:scale-[0.99]"
-      >
-        <span className="text-3xl leading-none" aria-hidden>
-          👥
-        </span>
-        <span className="min-w-0 flex-1">
-          <span className="block font-extrabold">
-            여럿이 가? 우리 팀 궁합부터
-          </span>
-          <span className="mt-0.5 block text-sm text-cream/70 [word-break:keep-all]">
-            팀 궁합 점수에, 제일 겁 많은 친구도 들어갈 수 있는 방까지 골라 줄게.
-            링크 하나로 단톡방에 공유.
-          </span>
-        </span>
-        <span className="shrink-0 text-sm font-extrabold text-grape">시작 →</span>
-      </Link>
     </section>
   );
 }
