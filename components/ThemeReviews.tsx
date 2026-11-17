@@ -1,4 +1,5 @@
 "use client";
+import { shortDate } from "@/lib/ui";
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -157,7 +158,7 @@ export default function ThemeReviews({
                         {ratingLabel(r.rating)}
                       </span>
                     )}
-                    {r.playedAt && <span className="font-normal text-cream/60">{r.playedAt}</span>}
+                    {r.playedAt && <span className="font-normal text-cream/60">{shortDate(r.playedAt)}</span>}
                   </p>
                   {r.oneLiner && <p className="mt-1 text-sm text-cream/85">“{r.oneLiner}”</p>}
                 </div>
