@@ -19,6 +19,7 @@ import CalendarView from "@/components/CalendarView";
 import BookshelfView from "@/components/BookshelfView";
 import InstallHint from "@/components/InstallHint";
 import YearRecapCard from "@/components/YearRecapCard";
+import PublishPrompt from "@/components/PublishPrompt";
 import { nextMilestone, playNumbers } from "@/lib/diary";
 import { shelfStats } from "@/lib/bookshelf";
 
@@ -181,6 +182,8 @@ export default function RecordsPage() {
           </div>
         ))}
       </dl>
+
+      {!guest && <PublishPrompt records={records} onDone={() => getRecords().then(setRecords)} />}
 
       <YearRecapCard
         records={records}

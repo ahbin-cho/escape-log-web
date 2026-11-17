@@ -23,7 +23,12 @@ describe("summarizeReviews", () => {
     expect(summarizeReviews([])).toBeNull();
     expect(
       summarizeReviews([r({ rating: 5, hintCount: 0 }), r({ rating: 4 }), r({ success: false, rating: 2 })])
-    ).toEqual({ count: 3, successRate: 67, avgRating: 3.7, noHint: 1 });
+    ).toMatchObject({ count: 3, successRate: 67, avgRating: 3.7, noHint: 1, ratingDist: [0, 1, 0, 1, 1] });
+    // 힌트 무제한(-1)은 평균에서 빼고, 체감 난이도·공포 평균을 낸다
+    const s = summarizeReviews([r({ hintCount: 2, difficulty: 4, fearLevel: 2 }), r({ hintCount: -1, difficulty: 2, fearLevel: 4 })])!;
+    expect(s.avgHint).toBe(2);
+    expect(s.avgDifficulty).toBe(3);
+    expect(s.avgFear).toBe(3);
   });
 });
 

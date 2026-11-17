@@ -23,16 +23,35 @@ export type ReviewSummary = {
   successRate: number; // %
   avgRating: number; // 소수 첫째 자리
   noHint: number;
+  avgHint: number | null; // 힌트 개수를 적은 기록만(무제한 -1 제외). 없으면 null
+  avgDifficulty: number; // 체감 난이도 1~5
+  avgFear: number; // 체감 공포 1~5
+  ratingDist: number[]; // [흙길, 풀길, 꽃길, 꽃밭길, 인생테마] 개수
+};
+
+const avg1 = (all: number[]) => {
+  const xs = all.filter((x) => Number.isFinite(x));
+  return xs.length ? Math.round((xs.reduce((s, x) => s + x, 0) / xs.length) * 10) / 10 : 0;
 };
 
 export function summarizeReviews(list: EscapeRecord[]): ReviewSummary | null {
   if (!list.length) return null;
   const success = list.filter((r) => r.success).length;
+  const hints = list.map((r) => r.hintCount).filter((n) => n >= 0);
+  const ratingDist = [0, 0, 0, 0, 0];
+  for (const r of list) {
+    const k = Math.round(r.rating);
+    if (k >= 1 && k <= 5) ratingDist[k - 1] += 1;
+  }
   return {
     count: list.length,
     successRate: Math.round((success / list.length) * 100),
-    avgRating: Math.round((list.reduce((s, r) => s + r.rating, 0) / list.length) * 10) / 10,
+    avgRating: avg1(list.map((r) => r.rating)),
     noHint: list.filter((r) => r.success && r.hintCount === 0).length,
+    avgHint: hints.length ? avg1(hints) : null,
+    avgDifficulty: avg1(list.map((r) => r.difficulty)),
+    avgFear: avg1(list.map((r) => r.fearLevel)),
+    ratingDist,
   };
 }
 

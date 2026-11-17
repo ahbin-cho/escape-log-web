@@ -189,7 +189,7 @@ export default function RecordForm({
 }) {
   const router = useRouter();
   const [form, setForm] = useState<EscapeRecord>(() => {
-    const base = initial ?? { ...emptyRecord(), playedAt: todayKst() };
+    const base = initial ?? { ...emptyRecord(), playedAt: todayKst(), isPublic: true, photoPublic: false };
     return { ...base, photoUrls: photosOf(base) };
   });
   const photos = form.photoUrls ?? [];
@@ -722,14 +722,35 @@ export default function RecordForm({
               </div>
             )}
           </div>
-          <div className="flex items-start justify-between gap-4 rounded-xl border-2 border-edge/15 px-4 py-3.5">
-            <div>
-              <p className="text-sm font-extrabold">공개 후기로 올리기</p>
-              <p className="mt-0.5 text-xs leading-relaxed text-cream/50">
-                한줄 후기·사진이 닉네임과 함께 피드에 보여요. 메모는 절대 공개되지 않아요. 첫 후기면 🥇 배지가 붙어요.
-              </p>
+          {/* 공개 범위: 글과 사진을 따로 고른다(사진은 기본 비공개). 메모는 어떤 경우에도 공개되지 않는다 */}
+          <div className="divide-y divide-line rounded-xl border-2 border-edge/15 px-4">
+            <div className="flex items-start justify-between gap-4 py-3.5">
+              <div>
+                <p className="text-sm font-extrabold">한 줄 후기 공개</p>
+                <p className="mt-0.5 text-xs leading-relaxed text-cream/50">
+                  한 줄·평점·성공 여부가 닉네임과 함께 테마 페이지에 보여요. 메모는 절대 공개되지 않아요. 첫 후기면 🥇 배지가 붙어요.
+                </p>
+              </div>
+              <Toggle checked={form.isPublic} onChange={(v) => set("isPublic", v)} label="한 줄 후기 공개" />
             </div>
-            <Toggle checked={form.isPublic} onChange={(v) => set("isPublic", v)} label="공개 후기로 올리기" />
+            {form.isPublic && (
+              <>
+                <div className="flex items-start justify-between gap-4 py-3.5">
+                  <div>
+                    <p className="text-sm font-extrabold">사진도 공개</p>
+                    <p className="mt-0.5 text-xs leading-relaxed text-cream/50">꺼 두면 사진은 나만 봐요. 켜면 모두의 후기에 사진까지 보여요.</p>
+                  </div>
+                  <Toggle checked={!!form.photoPublic} onChange={(v) => set("photoPublic", v)} label="사진도 공개" />
+                </div>
+                <div className="flex items-start justify-between gap-4 py-3.5">
+                  <div>
+                    <p className="text-sm font-extrabold">스포일러가 있어요</p>
+                    <p className="mt-0.5 text-xs leading-relaxed text-cream/50">켜면 한 줄이 흐리게 가려지고, 눌러야 보여요.</p>
+                  </div>
+                  <Toggle checked={!!form.spoiler} onChange={(v) => set("spoiler", v)} label="스포일러가 있어요" />
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>
