@@ -1,0 +1,55 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-Medium.woff);font-weight:500}
+@font-face{font-family:M;src:url(../assets/fonts/nanum-myeongjo-korean-800-normal.woff2)}
+@font-face{font-family:B;src:url(../assets/fonts/nanum-brush-script-korean-400-normal.woff2)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;background:#000;overflow:hidden;font-family:P}
+.stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000}
+.scene{position:absolute;inset:0;background:url(../assets/reel-mongyeom.jpg) center/cover;opacity:.6;transform-origin:50% 60%;
+  animation:in .6s forwards,zoom 10.5s linear forwards,dim .8s 1.55s forwards}
+@keyframes in{to{opacity:1}} @keyframes zoom{from{transform:scale(1.03)}to{transform:scale(1.15)}}
+@keyframes dim{to{filter:brightness(.45)}} @keyframes out{to{opacity:0}}
+.grain{position:absolute;inset:-50%;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1.4px);background-size:7px 9px;animation:gr .18s steps(3) infinite;mix-blend-mode:screen;z-index:5}
+@keyframes gr{0%{transform:translate(0,0)}33%{transform:translate(-11px,7px)}66%{transform:translate(9px,-5px)}}
+.flick{position:absolute;inset:0;background:#000;opacity:0;z-index:20;animation:fl .22s 3.55s,fl .3s 5.35s}
+@keyframes fl{0%,100%{opacity:0}30%{opacity:.85}60%{opacity:.2}}
+.pale{font-family:M;color:#E2E8F4;letter-spacing:.12em;text-shadow:0 2px 14px rgba(0,0,0,.9)}
+.acc{color:#C9D6F0;text-shadow:0 0 18px rgba(201,214,240,.5)}
+.hook{position:absolute;left:0;right:0;top:1420px;text-align:center;animation:out .25s 1.45s forwards;z-index:30}
+.hook .a{font-size:74px} .hook .b{font-size:104px;margin-top:20px}
+.w{position:absolute;left:0;right:0;text-align:center;white-space:nowrap;opacity:0;filter:blur(10px);letter-spacing:.28em;animation:wr var(--d,.9s) var(--t) cubic-bezier(.2,.7,.3,1) forwards;z-index:25}
+@keyframes wr{to{opacity:1;filter:blur(0);letter-spacing:.1em}}
+.meta{position:absolute;left:84px;top:1225px;opacity:0;animation:in .7s 6.3s forwards;z-index:25}
+.meta .t{font-size:150px;line-height:1.05}
+.meta .s{font-family:M;font-size:40px;margin-top:10px;letter-spacing:.3em;color:#E2E8F4}
+.meta .k{font-weight:800;font-size:34px;color:#EDE6DA;margin-top:24px}
+.meta .c{font-weight:800;font-size:31px;color:#A9A39A;margin-top:8px}
+.meta .n{font-weight:500;font-size:24px;color:#8F897F;margin-top:8px}
+.post{position:absolute;right:84px;top:1232px;width:218px;opacity:0;animation:in .7s 6.6s forwards;z-index:25}
+.post img{display:block;width:218px;border:2px solid rgba(237,230,218,.3)}
+.post div{font-weight:500;font-size:20px;color:#8F897F;margin-top:8px;text-align:right}
+.cta{position:absolute;left:72px;right:72px;top:1600px;display:flex;align-items:center;gap:24px;background:#F5F0E6;border:5px solid #1D1D1D;border-radius:30px;padding:22px 30px;box-shadow:8px 9px 0 #1D1D1D;opacity:0;transform:translateY(50px);animation:card .6s 8.3s cubic-bezier(.22,1,.36,1) forwards;z-index:40}
+@keyframes card{to{opacity:1;transform:none}}
+.cta .x{color:#1D1D1D;font-weight:800;font-size:44px;letter-spacing:-.03em}.cta .x b{color:#E0782A}
+.cta .s{color:#6B665D;font-weight:500;font-size:28px;margin-top:6px}
+.hook .b{font-size:96px}.meta{top:1300px}.meta .t{font-family:M;color:#E2E8F4;letter-spacing:.2em}
+
+.scene{animation:in .6s forwards,dim .8s 1.55s forwards}
+.her{position:absolute;inset:0;background:url(../assets/reel-mongyeom-her.png) center/cover;transform-origin:50% 66%;opacity:0;animation:in 1.2s .2s forwards,near 7s 3.4s steps(1) forwards;z-index:2}
+@keyframes near{0%{transform:scale(1)}1%{transform:scale(1.35) translateY(30px)}27%{transform:scale(1.35) translateY(30px)}28%{transform:scale(1.9) translateY(80px)}100%{transform:scale(1.95) translateY(84px)}}
+.flick{animation:fl .22s 3.38s,fl .3s 5.35s}
+@keyframes fp{0%{opacity:0}15%{opacity:1}100%{opacity:0}}@keyframes fall{0%{opacity:0;transform:translate(0,0) rotate(0)}8%{opacity:1}100%{opacity:.9;transform:translate(120px,2000px) rotate(540deg)}}</style></head><body><div class="stage">
+<div class="scene"></div><div class="her"></div><div class="grain"></div><div class="flick"></div>
+<div class="hook pale"><div class="a">매일 밤 같은 꿈,</div><div class="b acc">같은 그녀.</div></div>
+<div class="w pale" style="top:200px;font-size:76px;--t:1.9s">나는 매일 꿈을 꾸었다.</div>
+<div class="w pale" style="top:320px;font-size:64px;--t:2.7s">온통 어두운 곳에서</div>
+<div class="w pale" style="top:420px;font-size:64px;--t:3.4s">그녀가 날 바라보는 꿈.</div>
+<div class="w pale" style="top:560px;font-size:56px;--t:4.2s">그녀와 나의 거리는 항상 멀었고,</div>
+<div class="w pale" style="top:650px;font-size:56px;--t:4.8s">우리 사이엔 아무런 행동조차</div>
+<div class="w pale" style="top:740px;font-size:56px;--t:5.2s">오가지 않았다.</div>
+<div class="w pale acc" style="top:870px;font-size:70px;--t:5.8s;--d:0.9s">그저 바라만 보고 있었다.</div>
+<div class="meta"><div class="t">몽염</div><div class="s">도망칠 수 없는 꿈</div><div class="k">상상의문 분당서현점</div><div class="c">공포 · 난이도 4/5 · 공포도 4/5</div></div>
+
+<div class="cta"><img src="../../../public/mascot.png" width="110" height="110"><div><div class="x">다녀왔다면 <b>한 줄 기록</b></div><div class="s">줄거리·후기는 프로필 링크 · talkkaknote.com</div></div></div>
+</div></body></html>

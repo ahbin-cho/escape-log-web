@@ -43,3 +43,6 @@ ruvector.db
 .claude/.proven-config-version
 .claude/worktrees/
 __pycache__/
+
+# 릴스 시안 영상은 저장소에 올리지 않는다(템플릿·그림만 올림, 영상은 다시 뽑으면 됨)
+tools/ig/assets/reels/*.mp4

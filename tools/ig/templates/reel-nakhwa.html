@@ -1,0 +1,54 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-Medium.woff);font-weight:500}
+@font-face{font-family:M;src:url(../assets/fonts/nanum-myeongjo-korean-800-normal.woff2)}
+@font-face{font-family:B;src:url(../assets/fonts/nanum-brush-script-korean-400-normal.woff2)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;background:#000;overflow:hidden;font-family:P}
+.stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000}
+.scene{position:absolute;inset:0;background:url(../assets/reel-nakhwa.jpg) center/cover;opacity:.6;transform-origin:55% 78%;
+  animation:in .6s forwards,zoom 10.5s linear forwards,dim .8s 1.55s forwards}
+@keyframes in{to{opacity:1}} @keyframes zoom{from{transform:scale(1.03)}to{transform:scale(1.15)}}
+@keyframes dim{to{filter:brightness(.45)}} @keyframes out{to{opacity:0}}
+.grain{position:absolute;inset:-50%;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1.4px);background-size:7px 9px;animation:gr .18s steps(3) infinite;mix-blend-mode:screen;z-index:5}
+@keyframes gr{0%{transform:translate(0,0)}33%{transform:translate(-11px,7px)}66%{transform:translate(9px,-5px)}}
+.flick{position:absolute;inset:0;background:#000;opacity:0;z-index:20;animation:fl .22s 3.55s,fl .3s 5.35s}
+@keyframes fl{0%,100%{opacity:0}30%{opacity:.85}60%{opacity:.2}}
+.pale{font-family:M;color:#F3E8EE;letter-spacing:.12em;text-shadow:0 2px 14px rgba(0,0,0,.9)}
+.acc{color:#E0334F;text-shadow:0 0 18px rgba(224,51,79,.45)}
+.hook{position:absolute;left:0;right:0;top:1180px;text-align:center;animation:out .25s 1.45s forwards;z-index:30}
+.hook .a{font-size:74px} .hook .b{font-size:104px;margin-top:20px}
+.w{position:absolute;left:0;right:0;text-align:center;white-space:nowrap;opacity:0;filter:blur(10px);letter-spacing:.28em;animation:wr var(--d,.9s) var(--t) cubic-bezier(.2,.7,.3,1) forwards;z-index:25}
+@keyframes wr{to{opacity:1;filter:blur(0);letter-spacing:.1em}}
+.meta{position:absolute;left:84px;top:1225px;opacity:0;animation:in .7s 6.3s forwards;z-index:25}
+.meta .t{font-size:150px;line-height:1.05}
+.meta .s{font-family:M;font-size:40px;margin-top:10px;letter-spacing:.3em;color:#F3E8EE}
+.meta .k{font-weight:800;font-size:34px;color:#EDE6DA;margin-top:24px}
+.meta .c{font-weight:800;font-size:31px;color:#A9A39A;margin-top:8px}
+.meta .n{font-weight:500;font-size:24px;color:#8F897F;margin-top:8px}
+.post{position:absolute;right:84px;top:1232px;width:218px;opacity:0;animation:in .7s 6.6s forwards;z-index:25}
+.post img{display:block;width:218px;border:2px solid rgba(237,230,218,.3)}
+.post div{font-weight:500;font-size:20px;color:#8F897F;margin-top:8px;text-align:right}
+.cta{position:absolute;left:72px;right:72px;top:1600px;display:flex;align-items:center;gap:24px;background:#F5F0E6;border:5px solid #1D1D1D;border-radius:30px;padding:22px 30px;box-shadow:8px 9px 0 #1D1D1D;opacity:0;transform:translateY(50px);animation:card .6s 8.3s cubic-bezier(.22,1,.36,1) forwards;z-index:40}
+@keyframes card{to{opacity:1;transform:none}}
+.cta .x{color:#1D1D1D;font-weight:800;font-size:44px;letter-spacing:-.03em}.cta .x b{color:#E0782A}
+.cta .s{color:#6B665D;font-weight:500;font-size:28px;margin-top:6px}
+.hook .b{font-size:96px}.meta .t{font-family:B;color:#E0334F;line-height:.9}
+
+.scene{transform-origin:55% 78%;animation:in .6s forwards,zoom5 10.5s linear forwards,dim .8s 1.55s forwards}
+@keyframes zoom5{from{transform:scale(1.02)}to{transform:scale(1.28) rotate(-1.5deg)}}
+.fl{position:absolute;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.95),rgba(255,255,255,0) 60%);opacity:0;z-index:3;mix-blend-mode:screen}
+.pt{position:absolute;width:44px;height:33px;background:url(../assets/reel-nakhwa-petal.png) center/contain no-repeat;z-index:4;opacity:0}
+@keyframes fp{0%{opacity:0}15%{opacity:1}100%{opacity:0}}@keyframes fall{0%{opacity:0;transform:translate(0,0) rotate(0)}8%{opacity:1}100%{opacity:.9;transform:translate(120px,2000px) rotate(540deg)}}</style></head><body><div class="stage">
+<div class="scene"></div><div class="fl" style="left:80px;top:1380px;animation:fp .5s 0.3s"></div><div class="fl" style="left:700px;top:1420px;animation:fp .5s 0.9s"></div><div class="fl" style="left:380px;top:1500px;animation:fp .5s 1.6s"></div><div class="fl" style="left:860px;top:1360px;animation:fp .5s 2.4s"></div><div class="fl" style="left:200px;top:1460px;animation:fp .5s 3.1s"></div><div class="fl" style="left:560px;top:1390px;animation:fp .5s 3.9s"></div><div class="fl" style="left:40px;top:1520px;animation:fp .5s 4.6s"></div><div class="fl" style="left:760px;top:1480px;animation:fp .5s 5.2s"></div><div class="pt" style="left:160px;top:-60px;animation:fall 6.5s 1.0s linear forwards"></div><div class="pt" style="left:520px;top:-60px;animation:fall 7s 2.2s linear forwards"></div><div class="pt" style="left:840px;top:-60px;animation:fall 6s 3.0s linear forwards"></div><div class="pt" style="left:330px;top:-60px;animation:fall 6.5s 4.1s linear forwards"></div><div class="pt" style="left:700px;top:-60px;animation:fall 5.5s 5.0s linear forwards"></div><div class="pt" style="left:60px;top:-60px;animation:fall 5s 5.8s linear forwards"></div><div class="grain"></div><div class="flick"></div>
+<div class="hook pale"><div class="a">가장 높은 곳에서,</div><div class="b acc">꽃이 졌다.</div></div>
+<div class="w pale" style="top:220px;font-size:72px;--t:1.9s">수천 개의 플래시가</div>
+<div class="w pale" style="top:330px;font-size:72px;--t:2.7s">날 향하던 그 밤,</div>
+<div class="w pale" style="top:450px;font-size:80px;--t:3.5s">나는 꼭대기에 있었다.</div>
+<div class="w pale" style="top:820px;font-size:58px;--t:4.4s">누구보다 찬란했던 그 순간부터—</div>
+<div class="w pale acc" style="top:930px;font-size:62px;--t:5.1s;--d:0.8s">어쩌면 끝은 이미</div>
+<div class="w pale acc" style="top:1030px;font-size:62px;--t:5.6s;--d:0.8s">정해져 있었는지도 모른다.</div>
+<div class="meta"><div class="t">낙화</div><div class="s">떨어지는 꽃</div><div class="k">상상의문 수원 2호점</div><div class="c">추리 · 난이도 2/5 · 공포도 4/5</div><div class="n">12세 미만은 이용할 수 없는 테마(매장 공식 안내)</div></div>
+
+<div class="cta"><img src="../../../public/mascot.png" width="110" height="110"><div><div class="x">다녀왔다면 <b>한 줄 기록</b></div><div class="s">줄거리·후기는 프로필 링크 · talkkaknote.com</div></div></div>
+</div></body></html>

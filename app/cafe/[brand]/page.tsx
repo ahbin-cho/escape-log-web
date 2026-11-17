@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ThemeList from "@/components/ThemeList";
+import CompareTable from "@/components/CompareTable";
 import OwnerCTA from "@/components/OwnerCTA";
 import QuizRow from "@/components/QuizRow";
 import { CHIP, CRUMB } from "@/lib/ui";
@@ -132,6 +133,7 @@ export default async function BrandPage({ params }: Props) {
           {brand}의 테마를 지점별로 모았어요. 테마를 누르면 줄거리와 예약
           정보를 볼 수 있어요.
         </p>
+        <CompareTable themes={themes} title={`${brand} 방탈출 테마 비교표`} />
       </header>
 
       {sections.map(([branch, list]) => {

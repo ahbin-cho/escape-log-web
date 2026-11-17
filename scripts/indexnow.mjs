@@ -10,7 +10,7 @@
 
 import { readFileSync } from "node:fs";
 import {
-  INDEXNOW_ENDPOINT,
+  INDEXNOW_ENDPOINTS,
   indexNowPayload,
   recentThemeUrls,
 } from "../lib/indexnow.ts";
@@ -52,11 +52,6 @@ if (!payload.urlList.length) {
   process.exit(0);
 }
 
-const res = await fetch(INDEXNOW_ENDPOINT, {
-  method: "POST",
-  headers: { "Content-Type": "application/json; charset=utf-8" },
-  body: JSON.stringify(payload),
-});
 const hint = {
   200: "접수됨",
   202: "접수됨 (키 확인 대기 중)",
@@ -64,6 +59,20 @@ const hint = {
   403: "키 파일을 못 읽음 — 배포됐는지, 사이트가 막혀 있지 않은지 확인",
   422: "주소와 사이트 호스트가 안 맞음",
   429: "너무 자주 보냄 — 나중에 다시",
-}[res.status] ?? "";
-console.log(`${payload.urlList.length}개 전송 → ${res.status} ${hint}`);
-process.exit(res.ok ? 0 : 1);
+};
+// Bing(+공유) 과 네이버에 각각 보낸다. 하나가 실패해도 나머지는 보낸다.
+let ok = false;
+for (const endpoint of INDEXNOW_ENDPOINTS) {
+  try {
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: JSON.stringify(payload),
+    });
+    console.log(`${new URL(endpoint).host}: ${payload.urlList.length}개 전송 → ${res.status} ${hint[res.status] ?? ""}`);
+    ok ||= res.ok;
+  } catch (e) {
+    console.log(`${new URL(endpoint).host}: 전송 실패 (${e.message})`);
+  }
+}
+process.exit(ok ? 0 : 1);

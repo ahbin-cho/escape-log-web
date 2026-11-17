@@ -8,6 +8,8 @@
 export const INDEXNOW_KEY = "44e90a7aaf8414fc17c616c79e44887d";
 // Bing 에 바로 보낸다(Bing 웹마스터 IndexNow 화면에 기록이 남고, 다른 검색엔진에도 공유됨)
 export const INDEXNOW_ENDPOINT = "https://www.bing.com/indexnow";
+// 네이버에도 따로 보낸다(서치어드바이저 IndexNow. Bing 이 공유해 주기를 기다리지 않고 바로 알림)
+export const INDEXNOW_ENDPOINTS = [INDEXNOW_ENDPOINT, "https://searchadvisor.naver.com/indexnow"];
 const MAX_URLS = 10000; // IndexNow 한 번에 보낼 수 있는 최대 개수
 
 export type IndexNowPayload = {

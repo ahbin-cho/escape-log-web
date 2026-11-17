@@ -1,0 +1,77 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-Medium.woff);font-weight:500}
+@font-face{font-family:M;src:url(../assets/fonts/nanum-myeongjo-korean-800-normal.woff2)}
+@font-face{font-family:B;src:url(../assets/fonts/nanum-brush-script-korean-400-normal.woff2)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;background:#000;overflow:hidden;font-family:P}
+.stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000}
+.scene{position:absolute;inset:0;background:url(../assets/reel-scare.jpg) center/cover;opacity:.6;transform-origin:70% 40%;
+  animation:in .6s forwards,zoom 10.5s linear forwards,dim .8s 1.55s forwards}
+@keyframes in{to{opacity:1}} @keyframes zoom{from{transform:scale(1.03)}to{transform:scale(1.15)}}
+@keyframes dim{to{filter:brightness(.45)}} @keyframes out{to{opacity:0}}
+.grain{position:absolute;inset:-50%;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1.4px);background-size:7px 9px;animation:gr .18s steps(3) infinite;mix-blend-mode:screen;z-index:5}
+@keyframes gr{0%{transform:translate(0,0)}33%{transform:translate(-11px,7px)}66%{transform:translate(9px,-5px)}}
+.flick{position:absolute;inset:0;background:#000;opacity:0;z-index:20;animation:fl .22s 3.55s,fl .3s 5.35s}
+@keyframes fl{0%,100%{opacity:0}30%{opacity:.85}60%{opacity:.2}}
+.pale{font-family:M;color:#EFE3CC;letter-spacing:.12em;text-shadow:0 2px 14px rgba(0,0,0,.9)}
+.acc{color:#E07A2A;text-shadow:0 0 18px rgba(224,122,42,.45)}
+.hook{position:absolute;left:0;right:0;top:1180px;text-align:center;animation:out .25s 1.45s forwards;z-index:30}
+.hook .a{font-size:74px} .hook .b{font-size:104px;margin-top:20px}
+.w{position:absolute;left:0;right:0;text-align:center;white-space:nowrap;opacity:0;filter:blur(10px);letter-spacing:.28em;animation:wr var(--d,.9s) var(--t) cubic-bezier(.2,.7,.3,1) forwards;z-index:25}
+@keyframes wr{to{opacity:1;filter:blur(0);letter-spacing:.1em}}
+.meta{position:absolute;left:84px;top:1225px;opacity:0;animation:in .7s 6.3s forwards;z-index:25}
+.meta .t{font-size:130px;line-height:1.05}
+.meta .s{font-family:M;font-size:40px;margin-top:10px;letter-spacing:.3em;color:#EFE3CC}
+.meta .k{font-weight:800;font-size:34px;color:#EDE6DA;margin-top:24px}
+.meta .c{font-weight:800;font-size:31px;color:#A9A39A;margin-top:8px}
+.meta .n{font-weight:500;font-size:24px;color:#8F897F;margin-top:8px}
+.post{position:absolute;right:84px;top:1232px;width:218px;opacity:0;animation:in .7s 6.6s forwards;z-index:25}
+.post img{display:block;width:218px;border:2px solid rgba(237,230,218,.3)}
+.post div{font-weight:500;font-size:20px;color:#8F897F;margin-top:8px;text-align:right}
+.cta{position:absolute;left:72px;right:72px;top:1600px;display:flex;align-items:center;gap:24px;background:#F5F0E6;border:5px solid #1D1D1D;border-radius:30px;padding:22px 30px;box-shadow:8px 9px 0 #1D1D1D;opacity:0;transform:translateY(50px);animation:card .6s 8.3s cubic-bezier(.22,1,.36,1) forwards;z-index:40}
+@keyframes card{to{opacity:1;transform:none}}
+.cta .x{color:#1D1D1D;font-weight:800;font-size:44px;letter-spacing:-.03em}.cta .x b{color:#E0782A}
+.cta .s{color:#6B665D;font-weight:500;font-size:28px;margin-top:6px}
+.hook .b{font-size:92px}.meta .t{font-family:M;color:#EFE3CC;letter-spacing:.14em}
+
+.world{position:absolute;inset:0;animation:dimw .8s 1.55s forwards}
+@keyframes dimw{to{filter:brightness(.78)}}
+.bgl{position:absolute;inset:0;background:url(../assets/reel-scare-road-bg.jpg) center/cover;transform-origin:83% 34%;animation:zoom3 10.5s linear forwards}
+@keyframes zoom3{from{transform:scale(1)}to{transform:scale(1.08)}}
+.fgl{position:absolute;inset:0;background:url(../assets/reel-scare-road-fg.png) center/cover;transform-origin:83% 34%;animation:zoom3 10.5s linear forwards;z-index:4}
+.car{position:absolute;left:0;top:0;width:430px;height:180px;transform-origin:50% 100%;z-index:3;filter:brightness(.62) saturate(.9)}
+.bob{position:absolute;inset:0;background:url(../assets/reel-scare-yellowcar.png) center/contain no-repeat;animation:bump .26s ease-in-out infinite alternate}
+.beam{position:absolute;right:calc(100% - 14px);top:70px;width:620px;height:120px;background:radial-gradient(farthest-side at 100% 50%,rgba(255,240,190,.85),rgba(255,232,170,.3) 40%,transparent 100%);clip-path:polygon(100% 38%,100% 62%,0 100%,0 0);mix-blend-mode:screen;filter:blur(9px)}
+@keyframes bump{from{transform:translateY(0)}to{transform:translateY(-3px) rotate(-.5deg)}}
+.dust{position:absolute;width:260px;height:180px;border-radius:50%;background:radial-gradient(closest-side,rgba(58,52,44,.5),transparent 100%);z-index:2;opacity:0;pointer-events:none}
+.flick{position:absolute;inset:0;background:radial-gradient(closest-side,rgba(255,232,170,.4),transparent 100%);width:420px;height:260px;mix-blend-mode:screen;z-index:3;opacity:0}
+.shk{animation:shk .07s linear 6}
+@keyframes shk{0%{translate:0 0}25%{translate:-14px 8px}50%{translate:12px -10px}75%{translate:-8px -6px}}
+.crashfl{position:absolute;inset:0;background:#fff4dc;opacity:0;z-index:21}
+@keyframes fp{0%{opacity:0}15%{opacity:1}100%{opacity:0}}@keyframes fall{0%{opacity:0;transform:translate(0,0) rotate(0)}8%{opacity:1}100%{opacity:.9;transform:translate(120px,2000px) rotate(540deg)}}</style></head><body><div class="stage">
+<div class="world" id="world"><div class="bgl"></div><div class="car" id="car"><div class="beam" id="beam"></div><div class="bob" id="bob"></div></div><div class="fgl"></div></div><div class="crashfl" id="cf"></div><script>
+const car=document.getElementById('car'),bob=document.getElementById('bob');
+const road=x=>1452-(x-120)*(140/880);                       // 흙길 가운데 선(왼쪽 아래 1452 → 오른쪽 위)
+const at=(x,s,r)=>`translate(${x-215}px,${road(x)-140+18*s}px) scale(${s}) rotate(${r||0}deg)`;
+car.animate([{transform:at(860,.42)},{transform:at(560,.62),offset:.55},{transform:at(330,.8)}],{duration:4350,easing:'linear',fill:'forwards'});
+let t0=performance.now();const W=document.getElementById('world');
+const dust=()=>{const r=car.getBoundingClientRect();const d=document.createElement('div');d.className='dust';d.style.left=(r.right-150)+'px';d.style.top=(r.bottom-150)+'px';W.appendChild(d);
+ d.animate([{opacity:.9,transform:'scale(.5)'},{opacity:0,transform:'translate(60px,-60px) scale(1.5)'}],{duration:1400,fill:'forwards'})};
+const dt=setInterval(dust,160);
+setTimeout(()=>{car.getAnimations().forEach(a=>a.pause());car.animate([{transform:at(330,.8)},{transform:at(290,.82,-9)},{transform:at(270,.83,6)}],{duration:350,fill:'forwards'})},4350);
+setTimeout(()=>{clearInterval(dt);bob.style.animation='none';car.getAnimations().forEach(a=>a.pause());car.style.transform=at(250,.84,11);
+ document.querySelector('.stage').classList.add('shk');const f=document.getElementById('cf');f.style.opacity=.85;f.style.transition='opacity .5s';requestAnimationFrame(()=>requestAnimationFrame(()=>f.style.opacity=0));
+ for(let k=0;k<6;k++)setTimeout(dust,k*120);setInterval(dust,700);
+ const bm=document.getElementById('beam');[[0,1],[300,.1],[360,1],[800,0],[860,.8],[1500,.1],[1560,.9],[2400,0],[2460,1]].forEach(([t,o])=>setTimeout(()=>bm.style.opacity=o,t));
+},4700);
+</script><div class="grain"></div><div class="flick"></div>
+<div class="hook pale"><div class="a">한밤의 시골길,</div><div class="b acc">옥수수밭만 끝없이</div></div>
+<div class="w pale" style="top:560px;font-size:62px;--t:1.9s">미국 서부 어느 지역</div>
+<div class="w pale" style="top:660px;font-size:74px;--t:2.8s">차를 타고 이동 중에..</div>
+<div class="w pale" style="top:780px;font-size:74px;--t:3.7s">옥수수밭 근처에서</div>
+<div class="w pale acc" style="top:1040px;font-size:80px;--t:4.7s;--d:1.0s">사고가 나고 마는데..</div>
+<div class="meta"><div class="t">허수아비</div><div class="k">둠이스케이프 FEAR점 (수원)</div><div class="c">공포 · 난이도 4/5 · 공포도 4/5</div></div>
+
+<div class="cta"><img src="../../../public/mascot.png" width="110" height="110"><div><div class="x">다녀왔다면 <b>한 줄 기록</b></div><div class="s">줄거리·후기는 프로필 링크 · talkkaknote.com</div></div></div>
+</div></body></html>
