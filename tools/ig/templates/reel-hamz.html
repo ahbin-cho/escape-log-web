@@ -29,7 +29,7 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#fbe9c8
 <div id="watch"><small>TIME ATTACK</small><span id="t">00:00</span></div>
 <img id="ghost" src="../../../public/mascot.png">
 <div id="chat"></div>
-<div id="hook">귀여워서<br>골랐는데…</div>
+<div id="hook">친구랑<br>1대1 붙으면…</div>
 <div class="pk" id="p1" style="left:-40px;top:900px;transform:translateX(-360px) rotate(-14deg)"></div><div class="pk" id="p2" style="right:-40px;top:760px;transform:translateX(360px) rotate(12deg)"></div><div class="pk" id="p3" style="left:560px;top:420px;transform:translateY(-760px) rotate(170deg)"></div>
 <div id="end"><b>햄즈 살찌우기 · 2026 신작<i>셜록홈즈 안양범계점 · 공포도 0% · 팀 대결 타임어택</i></b></div>
 <script>
@@ -43,18 +43,18 @@ const chat=$('#chat');
 const say=(who,txt,ms)=>T(ms,()=>{const b=document.createElement('div');b.className='bub '+who;b.dataset.r=who==='f'?-1.2:1.2;b.dataset.s=.5;b.innerHTML=(who==='f'?'<small>친구</small>':'')+txt;chat.appendChild(b);
  while(chat.children.length>3)chat.firstChild.remove();[.5,1.12,.96,1].forEach((sc,k)=>setTimeout(()=>{b.dataset.s=sc},k*FR))});
 setInterval(()=>[...chat.children].forEach(b=>b.style.transform=`scale(${b.dataset.s}) rotate(${+b.dataset.r+(Math.random()-.5)*1.2}deg) translate(${(Math.random()-.5)*3}px,${(Math.random()-.5)*3}px)`),170);
-// 실제 후기 분위기를 참고: 귀여운 줄 알고 갔다가 땀범벅 팀 대결(공식 안내: 활동성 60%·팀 대결 타임어택). 후기 문장·사진은 쓰지 않는다
+// 실제 후기 두 편 분위기를 참고: 귀여운데 친구끼리 붙으면 땀범벅 대결(공식 안내: 활동성 60%·팀 대결 타임어택). 후기 문장·사진은 쓰지 않는다
 T(1500,()=>$('#hook').style.opacity=0);
-say('f','햄스터 식당이래 🐹 귀엽겠다',1600);say('m','힐링하러 가자~',2300);
-say('f','근데 팀 대결이래. 타임어택!',3000);
+say('f','햄스터 식당 귀엽다 🐹',1600);say('m','우리 1대1 할래?',2300);
+say('f','콜. 진 사람이 밥 사기 ㅋ',3000);
 T(3400,()=>{cam.classList.add('shake');$('#watch').style.background='#ff8a7a';sweat()});
-say('m','잠깐… 왜 이렇게 숨차??',3700);
-say('f','빨리빨리 먹여!!',4400);T(4600,()=>grow(0,1.05));
+say('m','내 햄찌가 더 빵빵해!!',3700);
+say('f','아니거든 내 거 봐!!',4400);T(4600,()=>grow(0,1.05));
 const peek=(id,ms,back)=>{T(ms,()=>$(id).style.transform='none');T(ms+back,()=>$(id).style.transform=$(id).dataset.h)};
 ['#p1','#p2','#p3'].forEach(id=>$(id).dataset.h=$(id).style.transform);
 peek('#p1',4900,700);peek('#p2',5400,700);peek('#p3',5900,800);
 say('m','햄찌야 그만 좀 나와 ㅠㅠ',5300);T(5700,()=>grow(0,1.1));
-say('f','하나만 더!!',6300);T(6700,()=>grow(1,1.0));
+say('f','하나만 더!!!',6300);T(6700,()=>grow(1,1.0));
 T(7400,()=>{cam.classList.remove('shake');$('#win').style.transform='scale(1) rotate(-8deg)';clearInterval(tick);$('#watch').style.background='#f8cd48';
  for(let i=0;i<60;i++){const c=document.createElement('div');c.className='conf';c.style.left=(540+(Math.random()-.5)*160)+'px';c.style.top='800px';
   c.style.background=['#E49A4A','#E2554A','#3E9A6A','#7A68C2','#F5C342','#fff'][i%6];document.body.appendChild(c);
@@ -62,7 +62,7 @@ T(7400,()=>{cam.classList.remove('shake');$('#win').style.transform='scale(1) ro
   c.animate([{opacity:1,transform:'translate(0,0)'},{opacity:1,transform:`translate(${Math.cos(a)*d*.6}px,${Math.sin(a)*d}px) rotate(${360*Math.random()}deg)`,offset:.35},{opacity:.9,transform:`translate(${Math.cos(a)*d*.8}px,${Math.sin(a)*d+1100}px) rotate(${900*Math.random()}deg)`}],{duration:2600,easing:'cubic-bezier(.2,.6,.5,1)',fill:'forwards'})}});
 function sweat(){for(let i=0;i<14;i++){const d=document.createElement('div');d.className='sw';const left=Math.random()<.5;d.style.left=(left?40+Math.random()*180:860+Math.random()*180)+'px';d.style.top=(300+Math.random()*500)+'px';document.body.appendChild(d);
  d.animate([{opacity:0,transform:'translateY(0)'},{opacity:1,offset:.15},{opacity:0,transform:'translateY(260px)'}],{duration:900,delay:Math.random()*3600,fill:'forwards'})}}
-say('m','볼 빵빵해진 거 봐 ㅋㅋ',7300);
-say('f','귀여운 줄만 알았지? ㅋㅋ',8200);say('m','(헥헥) 다음 판 또 가자…',9000);
+say('f','이겼다 ㅋㅋㅋ 밥 사',7300);
+say('m','(헥헥) 한 판만 더…',8200);say('f','다음엔 2대2로 오자 ㅋㅋ',9000);
 T(9700,()=>{$('#watch').style.opacity=0;$('#end').style.opacity=1;$('#end').style.transform='none'});
 </script></body></html>

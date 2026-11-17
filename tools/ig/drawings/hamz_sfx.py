@@ -15,7 +15,7 @@ for k in range(1, 4): add(k, tone(.05, 3000, .01), .3)                          
 for t0 in np.arange(3.4, 7.4, .5): add(t0, tone(.05, 3400, .01), .4)                       # 대결 시작: 째깍 빨라짐
 for t0 in np.arange(3.5, 7.3, .42):                                                         # 헥헥 숨소리
     n = int(.22 * SR); add(t0, rng.standard_normal(n) * np.sin(np.pi * np.arange(n) / n) ** 2 * .5 * np.convolve(np.ones(30) / 30, rng.standard_normal(n), 'same') ** 0, .25)
-for t0, w in [(1.6, 'f'), (2.3, 'm'), (3.0, 'f'), (3.7, 'm'), (4.4, 'f'), (5.3, 'm'), (6.3, 'f'), (7.3, 'm'), (8.2, 'f'), (9.0, 'm')]:
+for t0, w in [(1.6, 'f'), (2.3, 'm'), (3.0, 'f'), (3.7, 'm'), (4.4, 'f'), (5.3, 'm'), (6.3, 'f'), (7.3, 'f'), (8.2, 'm'), (9.0, 'f')]:
     add(t0, tone(.09, 420 if w == 'f' else 640, .04, 640 if w == 'f' else 900), .5)        # 말풍선 뽁
 for t0 in np.arange(4.45, 7.0, .19):                                                       # 냠냠
     add(t0 + rng.uniform(0, .04), tone(.06, rng.uniform(220, 320), .02) + .4 * rng.standard_normal(int(.06 * SR)) * np.exp(-tt(.06) / .01), .45)
