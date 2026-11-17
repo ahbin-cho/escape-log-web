@@ -72,6 +72,7 @@ elif MODE == "scare":
     out += amb(400, 1400, .25) * gust ** 3 * env                                                    # 바람이 귀를 스치는 숨소리
     add(.1, boom(2.2, 40, 1.0))
     n = tt(2.2); add(3.6, .8 * band(rng.standard_normal(len(n)).astype(np.float32), 150, 900) * np.sin(np.pi * n / 2.2) ** 2)   # 큰 돌풍이 지나가고
+    out *= 3.0                                                                                       # 쾅이 커진 만큼 바람도 키운다(전체를 맞추면 바람이 너무 작아짐)
     duck = 1 - .75 * np.exp(-((T - 5.0) / .5) ** 2) * (T > 4.6)                                    # 쾅 직후 바람을 잠깐 죽여 쾅이 묻히지 않게
     out *= duck.astype(np.float32)
     add(4.7, boom(1.8, 46, 3.2))                                                                     # 쾅(사고): 낮은 충격
