@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TONE } from "@/components/PosterTile";
 
 // 포스터 한 장(2:3). 공식 포스터가 있으면 그 그림, 없거나 불러오지 못하면 '직접 만든 표지'.
@@ -40,26 +40,52 @@ export default function Poster({
   compact?: boolean;
 }) {
   const [broken, setBroken] = useState(false);
+  // 화면에 가까워졌을 때만 그림을 불러오고(스크롤 따라 하나씩), 다 받으면 살짝 나타나게 한다.
+  // 브라우저 기본 loading="lazy" 는 화면 아래 수천 px 까지 미리 받아 버려 한꺼번에 뜨는 것처럼 보였다.
+  const box = useRef<HTMLSpanElement>(null);
+  const [near, setNear] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    const el = box.current;
+    if (!el || near) return;
+    if (typeof IntersectionObserver === "undefined") return setNear(true);
+    const io = new IntersectionObserver(
+      (es) => {
+        if (es.some((e) => e.isIntersecting)) {
+          setNear(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "200px 0px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [near]);
   const url = (src ?? "").trim(); // 빈칸·줄바꿈만 든 주소는 없는 것으로 본다
   const g = genre ?? "기타";
   const t = TONE[g] ?? TONE["기타"];
   const motif = MOTIF[g] ?? KEYHOLE;
   return (
     <span
+      ref={box}
       className={`relative block aspect-[2/3] w-full overflow-hidden border-[2px] border-[#1D1D1D] ${rounded} ${className}`}
       style={{ backgroundColor: t.bg }}
     >
       {url && !broken ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={url}
-          alt={`${name} 포스터`}
-          loading="lazy"
-          decoding="async"
-          referrerPolicy="no-referrer"
-          onError={() => setBroken(true)}
-          className="absolute inset-0 h-full w-full object-cover"
-        />
+        near ? (
+          <img
+            src={url}
+            alt={`${name} 포스터`}
+            loading="lazy"
+            decoding="async"
+            referrerPolicy="no-referrer"
+            onLoad={() => setLoaded(true)}
+            onError={() => setBroken(true)}
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${loaded ? "opacity-100" : "opacity-0"}`}
+          />
+        ) : null
+
       ) : compact ? (
         <span className="absolute inset-0" aria-label={`${name} (포스터 준비 중)`}>
           <span
