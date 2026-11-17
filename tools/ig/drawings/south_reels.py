@@ -29,7 +29,7 @@ FX = {
  "scare": """
 .scene{transform-origin:70% 40%;animation:in .6s forwards,zoom3 10.5s linear forwards,dim .8s 1.55s forwards}
 @keyframes zoom3{from{transform:scale(1.02)}to{transform:scale(1.35)}}
-.head{position:absolute;inset:0;background:radial-gradient(circle at 45% 76%,rgba(255,235,170,.35),transparent 30%);mix-blend-mode:screen;z-index:2;animation:hl 2.9s steps(1) infinite}
+.head{position:absolute;inset:0;background:radial-gradient(circle at 46% 77%,rgba(255,235,170,.35),transparent 30%);mix-blend-mode:screen;z-index:2;animation:hl 2.9s steps(1) infinite}
 @keyframes hl{0%{opacity:1}40%{opacity:.2}43%{opacity:1}71%{opacity:0}74%{opacity:1}}
 """,
  # 네온이 지직거리고, 끝의 노래방 기계 화면이 붉게 숨 쉰다
