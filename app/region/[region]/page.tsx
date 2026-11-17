@@ -175,7 +175,7 @@ export default async function RegionThemesPage({ params }: Props) {
               <p className="text-[13px] text-cream/60">방린이 땐 다들 아는 곳만 가게 되죠. 탈출귀가 대신 찾아 둔 {region}의 작은 매장이에요.</p>
             </div>
           </div>
-          <ul className="-mx-4 flex snap-x gap-2.5 overflow-x-auto px-4 pb-2">
+          <ul className="flex snap-x scroll-px-1 gap-3 overflow-x-auto px-1 pb-3 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {hidden.map(([b, n]) => {
               const t = firstOf(b);
               return (
