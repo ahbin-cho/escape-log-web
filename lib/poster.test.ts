@@ -23,4 +23,15 @@ describe("poster index", () => {
   it("없는 테마는 null", () => {
     expect(findPoster(idx, "없는 방", "어디")).toBeNull();
   });
+
+  it("한글로 적은 영어 제목·EP 머리말·띄어쓰기 차이도 찾는다", () => {
+    const idx = buildPosterIndex([
+      { id: "n", name: "NOX", cafe: "제로월드 홍대점", poster_url: "https://x/n.jpg" },
+      { id: "e", name: "EP3 : 눈 먼 귀금속상인의 후회", cafe: "포인트나인 강남점", poster_url: "https://x/e.jpg" },
+      { id: "b", name: "FILM BY BOB", cafe: "키이스케이프 메모리컴퍼니", poster_url: "https://x/b.jpg" },
+    ]);
+    expect(findPoster(idx, "녹스", "제로월드 홍대점")?.id).toBe("n");
+    expect(findPoster(idx, "눈먼 귀금속 상인의 후회", "포인트나인 강남점")?.id).toBe("e");
+    expect(findPoster(idx, "필름 바이 밥", "키이스케이프 메모리컴퍼니")?.id).toBe("b");
+  });
 });
