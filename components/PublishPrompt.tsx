@@ -42,7 +42,7 @@ export default function PublishPrompt({ records, onDone }: { records: EscapeReco
       <img src="/mascot.png" alt="" width={52} height={52} className="mx-auto h-[52px] w-[52px] object-contain" />
       <p className="mt-1 text-[15px] font-extrabold">지난 후기 {privates.length}개, 글만 공개할까요?</p>
       <p className="mt-1 text-xs leading-relaxed text-cream/60">
-        한 줄·평점·성공 여부만 테마 페이지에 보여요. 사진과 메모는 계속 나만 봐요. 기록마다 언제든 끌 수 있어요.
+        후기·평점·성공 여부만 테마 페이지에 보여요. 사진과 메모는 계속 나만 봐요. 기록마다 언제든 끌 수 있어요.
       </p>
       <div className="mt-3 grid grid-cols-2 gap-2">
         <button

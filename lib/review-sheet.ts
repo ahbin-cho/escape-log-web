@@ -197,7 +197,7 @@ export async function makeReviewSheet(r: ReviewSheetInput): Promise<Blob> {
     c.fillText(RATING_LABELS[v - 1], 56 + 116, y + 28);
   });
   const OX = 56 + LW + 20, OW = W - 56 - OX;
-  box(OX, BY, OW, BH); label("한줄 후기", OX + OW / 2, BY);
+  box(OX, BY, OW, BH); label("후기", OX + OW / 2, BY);
   const text = r.oneLiner?.trim() || "기억에 남는 방!";
   let px = 54, lines: string[] = [];
   for (; px >= 30; px -= 4) {

@@ -101,7 +101,7 @@ export default function ThemeReviews({
       <div className="space-y-3">
         <div className="flex items-baseline justify-between">
           <h2 id="theme-reviews" className="text-lg font-extrabold">
-            다녀온 사람들의 한 줄 {summary ? <span className="text-cream/60">{summary.count}</span> : null}
+            다녀온 사람들의 후기 {summary ? <span className="text-cream/60">{summary.count}</span> : null}
           </h2>
           <Link href="/feed" className="text-[13px] text-cream/60 hover:text-cream">
             전체 후기
@@ -178,7 +178,7 @@ export default function ThemeReviews({
             <p className="text-sm font-extrabold">아직 아무도 후기를 안 남긴 방이에요</p>
             <p className="mt-1 text-sm text-cream/60">
               지금 기록을 남기면 <b className="text-cream">첫 후기 배지</b>가 붙어요.
-              스포 없이 한 줄이면 충분해요.
+              짧아도 길어도 좋아요. 스포가 있으면 가려서 보여 줘요.
             </p>
           </div>
         ) : shown.length === 0 ? (
@@ -198,13 +198,13 @@ export default function ThemeReviews({
                           className="block w-full text-left"
                           aria-label="스포일러가 있는 후기 보기"
                         >
-                          <span className="block select-none text-[15px] font-extrabold blur-[5px]" aria-hidden>
+                          <span className="block select-none line-clamp-3 text-[15px] font-extrabold blur-[5px]" aria-hidden>
                             “{r.oneLiner}”
                           </span>
                           <span className="mt-0.5 block text-xs font-bold text-[#A85A14]">스포일러가 있어요 · 눌러서 보기</span>
                         </button>
                       ) : (
-                        <p className="text-[15px] font-extrabold leading-snug">“{r.oneLiner}”</p>
+                        <ReviewText id={r.id} text={r.oneLiner} />
                       ))}
                     <p className="mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-xs text-cream/60">
                       {ratingLabel(r.rating) && <span className="font-bold text-[#A85A14]">{ratingLabel(r.rating)}</span>}
@@ -250,5 +250,31 @@ export default function ThemeReviews({
         </Link>
       </div>
     </section>
+  );
+}
+
+// 후기 본문: 짧으면 굵게 한 줄 느낌 그대로, 길면 본문 글씨로 4줄까지 보이고 "더 보기"로 펼친다.
+function ReviewText({ id, text }: { id: string; text: string }) {
+  const [open, setOpen] = useState(false);
+  const t = text.trim();
+  if (t.length <= 60 && !t.includes("\n")) return <p className="text-[15px] font-extrabold leading-snug [word-break:keep-all]">“{t}”</p>;
+  return (
+    <div>
+      <p
+        id={`rv-${id}`}
+        className={`whitespace-pre-line text-[15px] leading-relaxed text-cream/90 [word-break:keep-all] ${open ? "" : "line-clamp-4"}`}
+      >
+        {t}
+      </p>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-controls={`rv-${id}`}
+        className="mt-0.5 text-xs font-bold text-[#A85A14]"
+      >
+        {open ? "접기" : "더 보기"}
+      </button>
+    </div>
   );
 }
