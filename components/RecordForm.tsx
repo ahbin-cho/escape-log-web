@@ -648,13 +648,20 @@ export default function RecordForm({
         <div className="space-y-4">
           <div>
             <label className={labelCls}>
-              한줄 후기 <span className="font-normal text-cream/40">스포 없이</span>
+              후기 <span className="font-normal text-cream/40">다른 사람에게 보여요 · 짧아도 길어도 OK</span>
             </label>
-            <input className={field} value={form.oneLiner} onChange={(e) => set("oneLiner", e.target.value)} placeholder="분위기, 난이도 위주로" />
+            <textarea
+              rows={4}
+              maxLength={1000}
+              className={`${field} resize-y`}
+              value={form.oneLiner}
+              onChange={(e) => set("oneLiner", e.target.value)}
+              placeholder="분위기, 난이도, 좋았던 점·아쉬웠던 점. 스포가 있으면 아래 '스포일러가 있어요'를 켜 주세요."
+            />
           </div>
           <div>
             <label className={labelCls}>
-              메모 <span className="font-normal text-cream/40">나만 보기 · 스포 OK</span>
+              메모 <span className="font-normal text-cream/40">나만 보기 · 절대 공개 안 됨</span>
             </label>
             <textarea rows={3} className={`${field} resize-none`} value={form.memo} onChange={(e) => set("memo", e.target.value)} placeholder="기억하고 싶은 장면, 같이 간 사람 이야기" />
           </div>
@@ -726,12 +733,12 @@ export default function RecordForm({
           <div className="divide-y divide-line rounded-xl border-2 border-edge/15 px-4">
             <div className="flex items-start justify-between gap-4 py-3.5">
               <div>
-                <p className="text-sm font-extrabold">한 줄 후기 공개</p>
+                <p className="text-sm font-extrabold">후기 공개</p>
                 <p className="mt-0.5 text-xs leading-relaxed text-cream/50">
-                  한 줄·평점·성공 여부가 닉네임과 함께 테마 페이지에 보여요. 메모는 절대 공개되지 않아요. 첫 후기면 🥇 배지가 붙어요.
+                  후기·평점·성공 여부가 닉네임과 함께 테마 페이지에 보여요. 메모는 절대 공개되지 않아요. 첫 후기면 🥇 배지가 붙어요.
                 </p>
               </div>
-              <Toggle checked={form.isPublic} onChange={(v) => set("isPublic", v)} label="한 줄 후기 공개" />
+              <Toggle checked={form.isPublic} onChange={(v) => set("isPublic", v)} label="후기 공개" />
             </div>
             {form.isPublic && (
               <>
@@ -745,7 +752,7 @@ export default function RecordForm({
                 <div className="flex items-start justify-between gap-4 py-3.5">
                   <div>
                     <p className="text-sm font-extrabold">스포일러가 있어요</p>
-                    <p className="mt-0.5 text-xs leading-relaxed text-cream/50">켜면 한 줄이 흐리게 가려지고, 눌러야 보여요.</p>
+                    <p className="mt-0.5 text-xs leading-relaxed text-cream/50">켜면 후기가 흐리게 가려지고, 눌러야 보여요.</p>
                   </div>
                   <Toggle checked={!!form.spoiler} onChange={(v) => set("spoiler", v)} label="스포일러가 있어요" />
                 </div>

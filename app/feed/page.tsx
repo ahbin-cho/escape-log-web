@@ -37,7 +37,7 @@ export default async function FeedPage() {
       <header className="space-y-1">
         <h1 className="text-xl font-extrabold sm:text-2xl">모두의 후기</h1>
         <p className="text-sm text-cream/70">
-          다른 사람들이 남긴 방탈출 한 줄이에요. 기록할 때 “한 줄 후기 공개”가 켜져 있으면 여기에 보여요(사진은 따로 켠 것만).
+          다른 사람들이 남긴 방탈출 후기예요. 기록할 때 “후기 공개”가 켜져 있으면 여기에 보여요(사진은 따로 켠 것만).
           카드 오른쪽 위 “공유”를 누르면 이미지로 저장하거나 보낼 수 있어요.
         </p>
       </header>
