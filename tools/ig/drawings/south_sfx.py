@@ -72,7 +72,13 @@ elif MODE == "scare":
     out += amb(400, 1400, .25) * gust ** 3 * env                                                    # 바람이 귀를 스치는 숨소리
     add(.1, boom(2.2, 40, 1.0))
     n = tt(2.2); add(3.6, .8 * band(rng.standard_normal(len(n)).astype(np.float32), 150, 900) * np.sin(np.pi * n / 2.2) ** 2)   # 큰 돌풍이 지나가고
-    add(4.7, boom(1.6, 48, 1.3))                                                                     # 쾅(사고)
+    duck = 1 - .75 * np.exp(-((T - 5.0) / .5) ** 2) * (T > 4.6)                                    # 쾅 직후 바람을 잠깐 죽여 쾅이 묻히지 않게
+    out *= duck.astype(np.float32)
+    add(4.7, boom(1.8, 46, 3.2))                                                                     # 쾅(사고): 낮은 충격
+    n = tt(.9); crash = noise(.9, 300, 9000) * np.exp(-n / .12) * 2.2                                # 차체가 찌그러지는 넓은 소리
+    crash += tone(.9, ((210, .8), (533, .6), (1270, .4), (2890, .25)), .18) * 1.3                     # 금속 울림
+    add(4.7, crash)
+    for k in range(12): add(4.78 + rng.uniform(0, .5), tone(.12, ((rng.uniform(3000, 6500), .5),), .03), .35)   # 유리 조각
     t = 5.6
     while t < 8: add(t, beat(44), .35); t += 1.1
     title()
