@@ -1,31 +1,41 @@
 <!doctype html><html><head><meta charset="utf-8"><style>
-/* 셜록홈즈 모란점 12월 오픈 기대(성남 주민 시점) — 임팩트 버전. 정보는 매장 공식 인스타(@sherlock_moran) 소개글 기준:
-   성남 최대규모 · 모란역 · 100평 · 8개 테마 · 12월 그랜드오픈. 매장 사진은 쓰지 않는다(전부 새로 그림). */
+/* 셜록홈즈 모란점 12월 오픈 기대(성남 주민 시점) — 탐정 사건 파일 느낌. 정보는 매장 공식 인스타(@sherlock_moran) 소개글 기준.
+   매장 사진·로고는 쓰지 않는다. 탈출귀는 원래 그림 + 소품(사냥 모자·돋보기)만 얹었다. */
 @font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
 @font-face{font-family:A;src:url(../../../assets/fonts/SBAggroB.woff)}
+@font-face{font-family:M;src:url(../assets/fonts/nanum-myeongjo-korean-800-normal.woff2)}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{width:1080px;height:1350px;overflow:hidden;font-family:P;color:#1D1D1D;background:#3d2756}
-.rays{position:absolute;left:50%;top:420px;width:2600px;height:2600px;margin:-1300px 0 0 -1300px;background:repeating-conic-gradient(#4a3166 0 10deg,#5b3d7c 10deg 20deg)}
-.low{position:absolute;left:0;right:0;bottom:0;height:270px;background:#e58f7e;border-top:12px solid #1D1D1D}
-.tag{position:absolute;left:60px;top:90px;background:#ff5b4c;color:#fff;border:6px solid #1D1D1D;border-radius:18px;padding:12px 28px;font:400 44px A;box-shadow:8px 8px 0 #1D1D1D;transform:rotate(-5deg)}
-.h{position:absolute;left:0;right:0;top:210px;text-align:center;font:400 150px/1.02 A;color:#fff;-webkit-text-stroke:16px #1D1D1D;paint-order:stroke fill;text-shadow:12px 12px 0 #1D1D1D}
-.h em{font-style:normal;color:#ffd23f;font-size:176px;display:block}
-.dec{position:absolute;right:50px;top:80px;width:250px;height:250px;border-radius:50%;background:#ffd23f;border:8px solid #1D1D1D;box-shadow:10px 10px 0 #1D1D1D;display:flex;flex-direction:column;align-items:center;justify-content:center;transform:rotate(10deg);font:400 84px/1 A}
-.dec small{font:800 30px P;margin-top:6px}
-.row{position:absolute;left:60px;right:60px;top:730px;display:flex;gap:18px}
-.f{flex:1;background:#F5F0E6;border:6px solid #1D1D1D;border-radius:24px;box-shadow:8px 8px 0 #1D1D1D;padding:18px 8px;text-align:center}
-.f b{display:block;font:400 62px A;color:#E0531F}.f span{font:800 26px P}
-.say{position:absolute;left:60px;right:300px;top:940px;background:#F5F0E6;border:6px solid #1D1D1D;border-radius:30px 30px 30px 6px;box-shadow:10px 10px 0 #1D1D1D;padding:24px 30px;font:400 50px/1.25 A;transform:rotate(-2deg)}
-.say small{display:block;font:800 26px/1.4 P;color:#6B6258;margin-top:8px}
-.ghost{position:absolute;right:40px;top:910px;width:270px;transform:rotate(10deg);filter:drop-shadow(10px 12px 0 #1D1D1D)}
-.ft{position:absolute;left:60px;right:60px;bottom:34px;display:flex;justify-content:space-between;font:800 23px P;color:#3b2a1f}
+html,body{width:1080px;height:1350px;overflow:hidden;font-family:P;color:#1D1D1D;background:#14110f}
+.rays{position:absolute;left:50%;top:410px;width:2600px;height:2600px;margin:-1300px 0 0 -1300px;background:repeating-conic-gradient(#1b1714 0 10deg,#262019 10deg 20deg)}
+.vig{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,#e8c15a22,transparent 55%)}
+.tag{position:absolute;left:60px;top:80px;background:#F5F0E6;border:5px solid #1D1D1D;padding:10px 24px;font:800 34px M;letter-spacing:.12em;transform:rotate(-4deg);box-shadow:7px 7px 0 #000}
+.tag:before{content:"";position:absolute;left:-26px;top:-16px;width:90px;height:34px;background:#c8433a;opacity:.9;transform:rotate(-18deg)}
+.h{position:absolute;left:0;right:0;top:190px;text-align:center;font:400 140px/1.04 A;color:#F5F0E6;text-shadow:10px 10px 0 #000}
+.h em{font-style:normal;color:#e8c15a;font-size:172px;display:block;-webkit-text-stroke:3px #7a5a1c}
+.stamp{position:absolute;right:54px;top:74px;font:400 58px/1.05 A;color:#e0453a;border:9px solid #e0453a;border-radius:16px;padding:10px 20px;transform:rotate(11deg);text-align:center;background:#14110fcc}
+.stamp small{display:block;font:800 26px P;letter-spacing:.1em}
+.file{position:absolute;left:60px;right:60px;top:680px;background:#efe2c4;border:6px solid #1D1D1D;border-radius:8px 30px 8px 8px;box-shadow:12px 12px 0 #000;padding:26px 30px 28px;transform:rotate(-1.2deg);background-image:repeating-linear-gradient(#0000 0 46px,#c9b68f55 46px 48px)}
+.file:before{content:"CASE FILE · 모란";position:absolute;left:-6px;top:-46px;background:#d8c59a;border:6px solid #1D1D1D;border-bottom:0;border-radius:14px 14px 0 0;padding:6px 22px;font:800 24px M;letter-spacing:.1em}
+.row{display:flex;gap:16px}
+.f{flex:1;background:#fffaf0;border:4px solid #1D1D1D;border-radius:14px;padding:14px 6px;text-align:center}
+.f b{display:block;font:400 58px A;color:#b8421f}.f span{font:800 24px P}
+.say{font:400 46px/1.3 A;margin-top:22px;padding-right:260px}
+.say small{display:block;font:800 25px/1.45 P;color:#6B6258;margin-top:8px}
+.ghost{position:absolute;left:730px;top:920px;width:300px;transform:rotate(8deg);filter:drop-shadow(8px 10px 0 #000)}
+.fp{position:absolute;width:150px;height:190px;border-radius:50%;opacity:.16;background:repeating-radial-gradient(ellipse at 50% 60%,#e8c15a 0 3px,transparent 3px 11px)}
+.ft{position:absolute;left:60px;right:60px;bottom:30px;display:flex;justify-content:space-between;font:800 22px P;color:#a89c86}
 </style></head><body>
-<div class="rays"></div><div class="low"></div>
-<div class="tag">📍 성남 주민 속보</div>
-<div class="dec">12월<small>그랜드 오픈</small></div>
+<div class="rays"></div><div class="vig"></div>
+<div class="fp" style="left:40px;bottom:81px;transform:rotate(-20deg)"></div><div class="fp" style="right:60px;top:500px;transform:rotate(24deg)"></div>
+<div class="tag">성남 주민 제보</div>
+<div class="stamp">12월<small>GRAND OPEN</small></div>
 <div class="h">모란에<em>셜록홈즈</em>상륙!</div>
-<div class="row"><div class="f"><b>8개</b><span>테마</span></div><div class="f"><b>100평</b><span>성남 최대 규모</span></div><div class="f"><b>모란역</b><span>바로 거기</span></div></div>
-<div class="say">성남 사람으로서<br>넘모 기대 중 🥹💜<small>이제 방탈출 하러 서울·수원 안 가도 된다…!</small></div>
+<div class="file">
+<div class="row"><div class="f"><b>8건</b><span>의 사건(테마)</span></div><div class="f"><b>100평</b><span>성남 최대 규모</span></div><div class="f"><b>모란역</b><span>사건 현장</span></div></div>
+<div class="say">성남 사람으로서<br>넘모 기대 중 🥹🔍<small>이제 사건 풀러 서울·수원 안 가도 된다…!</small></div>
+</div>
 <img class="ghost" src="../../../public/mascot.png">
+<svg viewBox="0 0 200 120" style="position:absolute;left:798px;top:908px;width:170px;transform:rotate(9deg)"><path d="M30 86 Q100 -10 170 86 Z" fill="#8a6a3c" stroke="#1D1D1D" stroke-width="7"/><path d="M30 86 Q100 60 170 86 Q190 96 196 110 Q150 96 100 96 Q50 96 4 110 Q10 96 30 86Z" fill="#6f5430" stroke="#1D1D1D" stroke-width="7" stroke-linejoin="round"/><path d="M60 52 L140 52 M50 70 L150 70 M100 20 L100 86" stroke="#5a4326" stroke-width="5"/><circle cx="100" cy="18" r="9" fill="#5a4326" stroke="#1D1D1D" stroke-width="5"/></svg>
+<svg viewBox="0 0 200 200" style="position:absolute;left:640px;top:1060px;width:150px;transform:rotate(-10deg)"><line x1="118" y1="118" x2="184" y2="184" stroke="#1D1D1D" stroke-width="30" stroke-linecap="round"/><line x1="122" y1="122" x2="180" y2="180" stroke="#8a6a3c" stroke-width="16" stroke-linecap="round"/><circle cx="80" cy="80" r="62" fill="#bfe3ff55" stroke="#1D1D1D" stroke-width="22"/><circle cx="80" cy="80" r="62" fill="none" stroke="#e8c15a" stroke-width="10"/><path d="M48 62 Q60 40 84 38" stroke="#fff" stroke-width="8" fill="none" stroke-linecap="round"/></svg>
 <div class="ft"><span>정보: 셜록홈즈 모란점 공식 인스타 소개 기준 · 그림은 탈깍노트</span><span>탈깍노트</span></div>
 </body></html>
