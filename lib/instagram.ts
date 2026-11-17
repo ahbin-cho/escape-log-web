@@ -11,44 +11,47 @@ import { brandOf } from "./cafe";
 // ─────────────────────────────────────────────────────────────
 
 export const IG_CAPTION_MAX = 2200; // 인스타 캡션 최대 글자 수
-const IG_HASHTAG_MAX = 30; // 인스타 해시태그 최대 개수
+export const IG_HASHTAG_MAX = 5; // 인스타 해시태그 최대 개수(2025-12부터 게시물당 5개)
 
 function tag(s: string): string {
   return `#${s.replace(/[^0-9A-Za-z가-힣_]/g, "")}`;
 }
 
-// 해시태그: 큰 태그(묻히기 쉬움) + 중간 태그 + 좁은 태그(동네·조건, 여기서 눈에 띈다)를 섞는다.
+// 해시태그는 5개까지만(인스타 제한). 고르는 순서: 좁은 태그(동네·지역) → 조건(공포/안무서운 등) → #방탈출추천 → #방탈출.
+// 묻히기 쉬운 큰 태그·우리 이름 태그(#방탈러 #방탈출스타그램 #탈깍노트 등)는 자리가 없어 뺀다.
 // 브랜드 태그(#키이스케이프 등)는 정답이 드러나므로 넣지 않는다.
+const LOW_TAGS = new Set(["#방탈러", "#방탈출스타그램", "#탈깍노트", "#이방의이야기", "#오늘의미스터리방", "#기록스타그램", "#방탈출카페", "#방탈출후기", "#방린이", "#이색데이트"]);
+const BIG_TAGS = ["#방탈출추천", "#방탈출"];
+
+// 아무 캡션이나 해시태그를 max 개로 줄인다(좁은 태그 먼저, 큰 태그 두 개는 끝에). 본문 글은 건드리지 않는다.
+export function capHashtags(caption: string, max = IG_HASHTAG_MAX): string {
+  const all = [...new Set(caption.match(/#[0-9A-Za-z가-힣_]+/g) ?? [])];
+  if (all.length <= max) return caption;
+  const narrow = all.filter((t) => !LOW_TAGS.has(t) && !BIG_TAGS.includes(t));
+  const big = BIG_TAGS.filter((t) => all.includes(t));
+  const keep = [...narrow.slice(0, Math.max(max - big.length, 0)), ...big].slice(0, max);
+  for (const t of [...narrow, ...all]) if (keep.length < max && !keep.includes(t)) keep.push(t);
+  const lines = caption.split("\n");
+  const tagLine = (l: string) => /^\s*#/.test(l);
+  const out = lines.filter((l) => !tagLine(l));
+  while (out.length && out[out.length - 1].trim() === "") out.pop();
+  return [...out, "", keep.join(" ")].join("\n");
+}
+
 export function mysteryHashtags(t: ThemeRow): string[] {
   const region = regionFromText(t.cafe);
   const district = districtFromText(t.cafe);
   const playersMin = Number(((t.players ?? "").match(/\d+/) || [])[0]) || 0;
-  const tags = [
-    // 좁은 태그: 지역·동네
+  const narrow = [
     district ? `${district}방탈출` : "",
     region ? `${region}방탈출` : "",
+    t.fear_level >= 4 ? "공포방탈출" : t.fear_level <= 2 ? "안무서운방탈출" : `${t.genre}방탈출`,
     district ? `${district}데이트` : "",
-    // 조건
-    `${t.genre}방탈출`,
-    t.fear_level <= 2 ? "안무서운방탈출" : "",
-    t.fear_level >= 4 ? "공포방탈출" : "",
-    t.difficulty <= 2 ? "방탈출입문" : "",
-    t.difficulty >= 4 ? "고난도방탈출" : "",
+    t.difficulty <= 2 ? "방탈출입문" : t.difficulty >= 4 ? "고난도방탈출" : "",
     playersMin && playersMin <= 2 && t.fear_level <= 3 ? "데이트코스" : "",
-    // 중간 태그: 방탈출 커뮤니티
-    "방탈출추천",
-    "방탈출후기",
-    "방탈출카페",
-    "방탈러",
-    "방린이",
-    "방탈출스타그램",
-    // 큰 태그 + 우리 태그
-    "방탈출",
-    "이색데이트",
-    "오늘의미스터리방",
-    "탈깍노트",
-  ].filter(Boolean);
-  return [...new Set(tags.map(tag))].slice(0, IG_HASHTAG_MAX);
+  ].filter(Boolean).map(tag);
+  const uniq = [...new Set(narrow)];
+  return [...uniq.slice(0, IG_HASHTAG_MAX - 2), "#방탈출추천", "#방탈출"];
 }
 
 // 정답(테마 이름·매장)은 캡션에 넣지 않는다. 궁금하면 사이트로 오게.
@@ -196,6 +199,11 @@ export type ResolvedPost = { imagePaths: string[]; caption: string; videoPath?: 
 
 // 게시할 이미지(또는 릴스 영상) 경로와 캡션. 알 수 없는 묶음·없는 테마면 null
 export function resolvePost(set: string, themes: ThemeRow[]): ResolvedPost | null {
+  const r = resolvePostRaw(set, themes);
+  return r ? { ...r, caption: capHashtags(r.caption) } : null;
+}
+
+function resolvePostRaw(set: string, themes: ThemeRow[]): ResolvedPost | null {
   if (set.startsWith("static:")) {
     const name = set.slice("static:".length);
     const p = STATIC_POSTS[name];
@@ -208,7 +216,7 @@ export function resolvePost(set: string, themes: ThemeRow[]): ResolvedPost | nul
   if (set.startsWith("reel:")) {
     const id = set.slice("reel:".length);
     const file = REEL_FILES[id];
-    const story = file ? resolvePost(`story:${id}`, themes) : null;
+    const story = file ? resolvePostRaw(`story:${id}`, themes) : null;
     if (!file || !story) return null;
     // 릴스 배경은 공식 포스터 분위기로 새로 그린 그림이고, 끝에 공식 포스터를 작게 넣는다 → 캡션에 밝히고 출처 표기(운영자 결정 2026-11-14·15)
     const t = themes.find((x) => x.id === id);

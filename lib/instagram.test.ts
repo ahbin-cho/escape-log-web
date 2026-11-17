@@ -21,12 +21,18 @@ describe("mysteryCaption", () => {
     expect(tags).toContain("#공포방탈출");
     expect(tags).toContain("#서울방탈출");
     expect(tags[0]).toBe("#강남방탈출"); // 동네 태그가 맨 앞
-    expect(tags).toContain("#강남데이트");
     expect(tags.some((x) => x.includes("키이스케이프"))).toBe(false); // 브랜드(정답) 태그 없음
-    expect(tags.length).toBeLessThanOrEqual(30);
-    expect(tags).toContain("#방탈출입문");
+    expect(tags.length).toBe(5); // 인스타 제한
+    expect(tags.slice(-2)).toEqual(["#방탈출추천", "#방탈출"]);
     expect(new Set(tags).size).toBe(tags.length);
     expect(tags.every((x) => /^#[0-9A-Za-z가-힣_]+$/.test(x))).toBe(true);
+  });
+
+  it("capHashtags: 어떤 캡션이든 5개로, 좁은 태그 먼저", async () => {
+    const { capHashtags } = await import("./instagram");
+    const c = capHashtags("본문\n\n#수원방탈출 #경기방탈출 #공포방탈출 #방탈출 #방탈출추천 #방탈출후기 #방탈러 #방탈출스타그램 #이방의이야기 #탈깍노트");
+    expect(c.startsWith("본문\n\n")).toBe(true);
+    expect(c.split("\n").pop()).toBe("#수원방탈출 #경기방탈출 #공포방탈출 #방탈출추천 #방탈출");
   });
 
   it("너무 긴 줄거리는 잘라서 2200자 안으로", () => {
