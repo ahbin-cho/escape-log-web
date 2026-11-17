@@ -270,14 +270,25 @@ def scare_drive():
         t = y / 1100; d.line([P(0, y), P(W, y)], fill=(int(lerp(8, 70, t ** 2)), int(lerp(12, 46, t ** 2)), int(lerp(26, 40, t ** 2))), width=S)
     d.ellipse([P(700, 230), P(860, 390)], fill=(236, 228, 200))
     d.rectangle([P(0, 1100), P(W, H)], fill=(10, 12, 8))
-    sx, sy = 760, 700; K = (6, 6, 8)
+    sx, sy = 760, 700; K = (58, 48, 38)                                         # 달빛 받은 허수아비(검은 실루엣보다 밝게)
     d.line([P(sx, sy - 40), P(sx, 1180)], fill=K, width=12 * S)
     d.line([P(sx - 150, sy + 40), P(sx + 150, sy + 30)], fill=K, width=10 * S)
     d.polygon([P(sx - 70, sy + 20), P(sx + 70, sy + 20), P(sx + 90, sy + 260), P(sx + 40, sy + 240), P(sx, sy + 270), P(sx - 50, sy + 245), P(sx - 92, sy + 262)], fill=K)
     d.ellipse([P(sx - 52, sy - 70), P(sx + 52, sy + 30)], fill=K)
     d.polygon([P(sx - 110, sy - 40), P(sx + 110, sy - 44), P(sx + 40, sy - 70), P(sx + 20, sy - 150), P(sx - 30, sy - 150), P(sx - 44, sy - 72)], fill=K)
+    L = (190, 170, 130)                                                            # 달빛 테두리(위·오른쪽)
+    d.arc([P(sx - 52, sy - 70), P(sx + 52, sy + 30)], 250, 60, fill=L, width=4 * S)
+    d.line([P(sx + 20, sy - 150), P(sx + 40, sy - 70), P(sx + 110, sy - 44)], fill=L, width=4 * S)
+    d.line([P(sx + 70, sy + 20), P(sx + 90, sy + 260)], fill=L, width=4 * S)
+    d.line([P(sx, sy + 34), P(sx + 150, sy + 28)], fill=L, width=3 * S)
+    for k in range(18):                                                            # 지푸라기 결
+        x = sx + rng.uniform(-80, 80); y = sy + rng.uniform(40, 250)
+        d.line([P(x, y), P(x + rng.uniform(-6, 6), y + rng.uniform(14, 30))], fill=(120, 100, 70), width=2 * S)
+    for k in range(3): d.line([P(sx - 26 + k * 4, sy - 34), P(sx - 14 + k * 4, sy - 22)], fill=(20, 16, 14), width=4 * S)   # 꿰맨 눈
+    for k in range(3): d.line([P(sx + 12 + k * 4, sy - 34), P(sx + 24 + k * 4, sy - 22)], fill=(20, 16, 14), width=4 * S)
     a = arr(im)
     a += np.array([60, 50, 46]) * (np.exp(-((YY - 1110) / 90) ** 2) * (0.6 + 0.4 * sm(120, 11)))[..., None] * .8
+    a += np.array([120, 110, 90]) * np.exp(-(((XX - 770) / 240) ** 2 + ((YY - 760) / 330) ** 2))[..., None] * .45   # 허수아비 뒤 달빛 번짐
     finish(a * .9, "reel-scare-sky.jpg", (1.02, 0.96, 0.9), 7, (620, 900))
     # 2) 옥수수 띠(가로 2160, 좌우 이어지게): 먼 줄 / 가까운 줄
     def corn(rows, name, y0, scale0, scale1, dark):

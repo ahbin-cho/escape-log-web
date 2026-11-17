@@ -28,7 +28,8 @@ FX = {
  # 옥수수밭 사이 흙길을 달린다(먼 밭·길·가까운 밭이 서로 다른 속도로 흘러감, 차는 덜컹). 4.55초 휘청 → 4.7초 쾅, 모든 게 멈추고 연기
  "scare": """
 .world{position:absolute;inset:0;animation:dimw .8s 1.55s forwards}
-@keyframes dimw{to{filter:brightness(.55)}}
+@keyframes dimw{to{filter:brightness(.62)}}
+.sclight{position:absolute;inset:0;background:radial-gradient(ellipse 300px 420px at 70.5% 41%,rgba(255,236,190,.22),transparent 70%);mix-blend-mode:screen;z-index:2;pointer-events:none}
 .sky{position:absolute;inset:0;background:url(../assets/reel-scare-sky.jpg) center/cover;transform-origin:70% 40%;animation:zoom3 10.5s linear forwards}
 @keyframes zoom3{from{transform:scale(1.02)}to{transform:scale(1.18)}}
 .strip{position:absolute;left:0;right:0;background-repeat:repeat-x;animation:run var(--sp) linear infinite}
@@ -74,7 +75,7 @@ FX = {
 }
 LAYER = {"bokdo": '<div class="cam"><div class="scene"></div><div class="el l"></div><div class="el r"></div></div><div class="lamp"></div>',
          "sagwi": '<div class="scene"></div><div class="moon"></div>',
-         "scare": '<div class="world" id="world"><div class="sky"></div><div class="strip far"></div><div class="strip road"></div><div class="beam"></div><div class="car"></div><div class="smoke"></div><div class="smoke" style="left:300px;animation-delay:.9s"></div><div class="strip near"></div></div><div class="crashfl" id="cf"></div>'
+         "scare": '<div class="world" id="world"><div class="sky"></div><div class="strip far"></div><div class="strip road"></div><div class="beam"></div><div class="car"></div><div class="smoke"></div><div class="smoke" style="left:300px;animation-delay:.9s"></div><div class="strip near"></div></div><div class="sclight"></div><div class="crashfl" id="cf"></div>'
                   + '<script>setTimeout(()=>{document.querySelector(".car").style.transition="transform .15s";document.querySelector(".car").style.animation="none";document.querySelector(".car").style.transform="rotate(-6deg) translate(-20px,-6px)"},4550);'
                   + 'setTimeout(()=>{const w=document.getElementById("world");w.classList.add("stopped","crash");document.querySelector(".stage").classList.add("shk");const f=document.getElementById("cf");f.style.opacity=.85;f.style.transition="opacity .5s";requestAnimationFrame(()=>requestAnimationFrame(()=>f.style.opacity=0))},4700);</script>',
          "kono": '<div class="scene"></div><div class="neon"></div>',

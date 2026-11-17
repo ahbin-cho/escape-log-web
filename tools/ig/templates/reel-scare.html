@@ -36,7 +36,8 @@ html,body{width:1080px;height:1920px;background:#000;overflow:hidden;font-family
 .hook .b{font-size:92px}.meta .t{font-family:M;color:#EFE3CC;letter-spacing:.14em}
 
 .world{position:absolute;inset:0;animation:dimw .8s 1.55s forwards}
-@keyframes dimw{to{filter:brightness(.55)}}
+@keyframes dimw{to{filter:brightness(.62)}}
+.sclight{position:absolute;inset:0;background:radial-gradient(ellipse 300px 420px at 70.5% 41%,rgba(255,236,190,.22),transparent 70%);mix-blend-mode:screen;z-index:2;pointer-events:none}
 .sky{position:absolute;inset:0;background:url(../assets/reel-scare-sky.jpg) center/cover;transform-origin:70% 40%;animation:zoom3 10.5s linear forwards}
 @keyframes zoom3{from{transform:scale(1.02)}to{transform:scale(1.18)}}
 .strip{position:absolute;left:0;right:0;background-repeat:repeat-x;animation:run var(--sp) linear infinite}
@@ -58,7 +59,7 @@ html,body{width:1080px;height:1920px;background:#000;overflow:hidden;font-family
 @keyframes shk{0%{translate:0 0}25%{translate:-14px 8px}50%{translate:12px -10px}75%{translate:-8px -6px}}
 .crashfl{position:absolute;inset:0;background:#fff4dc;opacity:0;z-index:21}
 @keyframes fp{0%{opacity:0}15%{opacity:1}100%{opacity:0}}@keyframes fall{0%{opacity:0;transform:translate(0,0) rotate(0)}8%{opacity:1}100%{opacity:.9;transform:translate(120px,2000px) rotate(540deg)}}</style></head><body><div class="stage">
-<div class="world" id="world"><div class="sky"></div><div class="strip far"></div><div class="strip road"></div><div class="beam"></div><div class="car"></div><div class="smoke"></div><div class="smoke" style="left:300px;animation-delay:.9s"></div><div class="strip near"></div></div><div class="crashfl" id="cf"></div><script>setTimeout(()=>{document.querySelector(".car").style.transition="transform .15s";document.querySelector(".car").style.animation="none";document.querySelector(".car").style.transform="rotate(-6deg) translate(-20px,-6px)"},4550);setTimeout(()=>{const w=document.getElementById("world");w.classList.add("stopped","crash");document.querySelector(".stage").classList.add("shk");const f=document.getElementById("cf");f.style.opacity=.85;f.style.transition="opacity .5s";requestAnimationFrame(()=>requestAnimationFrame(()=>f.style.opacity=0))},4700);</script><div class="grain"></div><div class="flick"></div>
+<div class="world" id="world"><div class="sky"></div><div class="strip far"></div><div class="strip road"></div><div class="beam"></div><div class="car"></div><div class="smoke"></div><div class="smoke" style="left:300px;animation-delay:.9s"></div><div class="strip near"></div></div><div class="sclight"></div><div class="crashfl" id="cf"></div><script>setTimeout(()=>{document.querySelector(".car").style.transition="transform .15s";document.querySelector(".car").style.animation="none";document.querySelector(".car").style.transform="rotate(-6deg) translate(-20px,-6px)"},4550);setTimeout(()=>{const w=document.getElementById("world");w.classList.add("stopped","crash");document.querySelector(".stage").classList.add("shk");const f=document.getElementById("cf");f.style.opacity=.85;f.style.transition="opacity .5s";requestAnimationFrame(()=>requestAnimationFrame(()=>f.style.opacity=0))},4700);</script><div class="grain"></div><div class="flick"></div>
 <div class="hook pale"><div class="a">한밤의 시골길,</div><div class="b acc">옥수수밭만 끝없이</div></div>
 <div class="w pale" style="top:560px;font-size:62px;--t:1.9s">미국 서부 어느 지역</div>
 <div class="w pale" style="top:660px;font-size:74px;--t:2.8s">차를 타고 이동 중에..</div>
