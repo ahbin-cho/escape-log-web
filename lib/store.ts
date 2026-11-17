@@ -43,7 +43,9 @@ export interface EscapeRecord {
   photoUrls?: string[]; // 인증샷 여러 장(대표 포함, 최대 4). 없으면 photoUrl 한 장
   partySize: number; // 함께한 인원 (명), 0=미입력
   themeType: string; // 테마 유형: 장치/자물쇠/문제/혼합 ("" = 미입력)
-  isPublic: boolean; // 공개 후기로 올릴지
+  isPublic: boolean; // 한 줄 후기(글)를 다른 사람에게 보일지
+  photoPublic?: boolean; // 사진도 보일지(기본 꺼짐). isPublic 이 켜져 있을 때만 의미가 있다
+  spoiler?: boolean; // 한 줄에 스포일러가 있음 → 가려서 보여 준다
   hidden: boolean; // 관리자 숨김
   createdAt: string; // ISO
 }
@@ -149,6 +151,8 @@ type RecordRow = {
   party_size: number | null;
   theme_type: string | null;
   is_public: boolean;
+  photo_public?: boolean | null; // docs/sql/2026-11-17_review_visibility.sql 실행 전엔 없음
+  spoiler?: boolean | null;
   hidden: boolean;
   created_at: string;
 };
@@ -174,6 +178,8 @@ function fromRow(r: RecordRow): EscapeRecord {
     partySize: r.party_size ?? 0,
     themeType: r.theme_type ?? "",
     isPublic: !!r.is_public,
+    photoPublic: !!r.photo_public,
+    spoiler: !!r.spoiler,
     hidden: !!r.hidden,
     createdAt: r.created_at ?? "",
   };
@@ -206,6 +212,8 @@ function toRow(r: EscapeRecord, userId: string) {
     party_size: Number(r.partySize) || 0,
     theme_type: r.themeType || "",
     is_public: r.isPublic,
+    photo_public: !!r.isPublic && !!r.photoPublic,
+    spoiler: !!r.spoiler,
     hidden: r.hidden,
   };
 }
@@ -258,8 +266,34 @@ export async function saveRecord(record: EscapeRecord): Promise<EscapeRecord | n
     void _drop;
     ({ data, error } = await write(one));
   }
+  // photo_public·spoiler 칸을 만드는 SQL 을 아직 안 돌린 DB → 그 칸 없이 저장.
+  // 그 상태의 공개 뷰는 사진을 그대로 내보내므로, 사진을 공개하지 않기로 한 기록은 통째로 비공개로 둔다.
+  if (error && /photo_public|spoiler/.test(error.message)) {
+    const { photo_public: _p, spoiler: _s, ...old } = full;
+    void _p;
+    void _s;
+    const safe = old.photo_url && !full.photo_public ? { ...old, is_public: false } : old;
+    ({ data, error } = await write(safe));
+  }
   if (error) throw error;
   return fromRow(data as RecordRow);
+}
+
+// 예전 비공개 기록을 '글만' 한꺼번에 공개(사진은 그대로 비공개). 바뀐 개수를 돌려준다.
+export async function publishMyPrivateRecords(): Promise<number> {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return 0;
+  const { data, error } = await supabase
+    .from("records")
+    .update({ is_public: true })
+    .eq("user_id", user.id)
+    .eq("is_public", false)
+    .select("id");
+  if (error) throw error;
+  return data?.length ?? 0;
 }
 
 export async function deleteRecord(id: string): Promise<void> {

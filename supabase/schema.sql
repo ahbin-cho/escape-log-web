@@ -92,6 +92,8 @@ alter table public.records add column if not exists photo_url  text not null def
 alter table public.records add column if not exists photo_urls text[] not null default '{}'; -- 여러 장(대표 = 첫 장 = photo_url, 최대 4)
 alter table public.records add column if not exists party_size int2 not null default 0;
 alter table public.records add column if not exists theme_type text not null default '';
+alter table public.records add column if not exists photo_public bool not null default false; -- 사진도 공개(글 공개와 따로)
+alter table public.records add column if not exists spoiler      bool not null default false; -- 한 줄에 스포일러가 있음(가려서 보여 준다)
 
 create index if not exists records_user_idx   on public.records (user_id);
 create index if not exists records_public_idx on public.records (is_public, hidden);
@@ -185,12 +187,16 @@ create policy admins_select on public.admins
 -- ─────────────────────────────────────────────────────────────
 -- 컬럼 구성이 바뀔 수 있어 create or replace 대신 drop 후 재생성.
 drop view if exists public.public_reviews;
+-- 사진은 photo_public 인 기록만 내보낸다(글과 사진의 공개를 따로 고른다, 2026-11-17)
 create view public.public_reviews as
   select r.id, r.user_id, r.theme_name, r.cafe_name, r.played_at, r.genre,
          r.difficulty, r.fear_level, r.rating, r.success, r.remaining_time,
-         r.hint_count, r.one_liner, r.region, r.photo_url, r.party_size, r.created_at,
+         r.hint_count, r.one_liner, r.region,
+         case when r.photo_public then r.photo_url else '' end as photo_url,
+         r.party_size, r.created_at,
          coalesce(p.is_sample, false) as is_sample,
-         r.photo_urls
+         case when r.photo_public then r.photo_urls else '{}'::text[] end as photo_urls,
+         r.spoiler
   from public.records r
   left join public.profiles p on p.id = r.user_id
   where r.is_public = true and r.hidden = false;
