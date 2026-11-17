@@ -28,19 +28,21 @@ FX = {
  # 옥수수밭 사이 흙길을 달린다(먼 밭·길·가까운 밭이 서로 다른 속도로 흘러감, 차는 덜컹). 4.55초 휘청 → 4.7초 쾅, 모든 게 멈추고 연기
  "scare": """
 .world{position:absolute;inset:0;animation:dimw .8s 1.55s forwards}
-@keyframes dimw{to{filter:brightness(.62)}}
-.sclight{position:absolute;inset:0;background:radial-gradient(ellipse 300px 420px at 70.5% 41%,rgba(255,236,190,.22),transparent 70%);mix-blend-mode:screen;z-index:2;pointer-events:none}
-.sky{position:absolute;inset:0;background:url(../assets/reel-scare-sky.jpg) center/cover;transform-origin:70% 40%;animation:zoom3 10.5s linear forwards}
-@keyframes zoom3{from{transform:scale(1.02)}to{transform:scale(1.18)}}
+@keyframes dimw{to{filter:brightness(.7)}}
+.sclight{position:absolute;inset:0;background:radial-gradient(ellipse 260px 380px at 75% 26%,rgba(220,230,255,.12),transparent 70%);mix-blend-mode:screen;z-index:2;pointer-events:none}
+.skyw{position:absolute;inset:0;animation:drift 4.7s linear forwards}
+@keyframes drift{from{transform:translateX(0)}to{transform:translateX(-36px)}}
+.sky{position:absolute;inset:0 -40px 0 0;background:url(../assets/reel-scare-gem.jpg) left top/1080px 1920px;transform-origin:72% 35%;animation:zoom3 10.5s linear forwards}
+@keyframes zoom3{from{transform:scale(1)}to{transform:scale(1.1)}}
 .strip{position:absolute;left:0;right:0;background-repeat:repeat-x;animation:run var(--sp) linear infinite}
 @keyframes run{from{background-position-x:0}to{background-position-x:2160px}}
 .far{top:1080px;height:840px;background-image:url(../assets/reel-scare-corn-far.png);--sp:9s}
-.road{top:1530px;height:170px;background-image:url(../assets/reel-scare-road.png);--sp:1.4s}
-.near{top:1700px;height:220px;background-image:url(../assets/reel-scare-corn-near.png);background-size:2160px 320px;background-position-y:-40px;--sp:.9s}
-.car{position:absolute;left:250px;top:1388px;width:520px;height:230px;background:url(../assets/reel-scare-car.png) center/contain no-repeat;transform-origin:20% 90%;animation:bump .28s ease-in-out infinite alternate}
+.road{top:1560px;filter:brightness(.7);height:170px;background-image:url(../assets/reel-scare-road.png);--sp:1.4s}
+.near{top:1720px;filter:brightness(.45);height:220px;background-image:url(../assets/reel-scare-corn-near.png);background-size:2160px 320px;background-position-y:-40px;--sp:.9s}
+.car{position:absolute;left:250px;top:1418px;filter:brightness(.72) saturate(.8);width:520px;height:230px;background:url(../assets/reel-scare-car.png) center/contain no-repeat;transform-origin:20% 90%;animation:bump .28s ease-in-out infinite alternate}
 @keyframes bump{from{transform:translateY(0)}to{transform:translateY(-5px) rotate(-.4deg)}}
-.beam{position:absolute;left:-560px;top:1300px;width:860px;height:300px;background:radial-gradient(ellipse at 100% 62%,rgba(255,240,190,.55),rgba(255,230,170,.15) 45%,transparent 70%);mix-blend-mode:screen;transform-origin:100% 62%;clip-path:polygon(100% 55%,100% 70%,0 100%,0 0)}
-.smoke{position:absolute;left:230px;top:1360px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(170,170,180,.45),transparent 65%);opacity:0}
+.beam{position:absolute;left:-560px;top:1330px;width:860px;height:300px;background:radial-gradient(ellipse at 100% 62%,rgba(255,240,190,.55),rgba(255,230,170,.15) 45%,transparent 70%);mix-blend-mode:screen;transform-origin:100% 62%;clip-path:polygon(100% 55%,100% 70%,0 100%,0 0)}
+.smoke{position:absolute;left:230px;top:1390px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(170,170,180,.45),transparent 65%);opacity:0}
 .stopped .strip,.stopped .car{animation-play-state:paused}
 .crash .car{transform:rotate(7deg) translate(-26px,8px)!important;animation:none}
 .crash .beam{animation:hl 1.1s steps(1) infinite}
@@ -75,7 +77,7 @@ FX = {
 }
 LAYER = {"bokdo": '<div class="cam"><div class="scene"></div><div class="el l"></div><div class="el r"></div></div><div class="lamp"></div>',
          "sagwi": '<div class="scene"></div><div class="moon"></div>',
-         "scare": '<div class="world" id="world"><div class="sky"></div><div class="strip far"></div><div class="strip road"></div><div class="beam"></div><div class="car"></div><div class="smoke"></div><div class="smoke" style="left:300px;animation-delay:.9s"></div><div class="strip near"></div></div><div class="sclight"></div><div class="crashfl" id="cf"></div>'
+         "scare": '<div class="world" id="world"><div class="skyw"><div class="sky"></div></div><div class="strip road"></div><div class="beam"></div><div class="car"></div><div class="smoke"></div><div class="smoke" style="left:300px;animation-delay:.9s"></div><div class="strip near"></div></div><div class="sclight"></div><div class="crashfl" id="cf"></div>'
                   + '<script>setTimeout(()=>{document.querySelector(".car").style.transition="transform .15s";document.querySelector(".car").style.animation="none";document.querySelector(".car").style.transform="rotate(-6deg) translate(-20px,-6px)"},4550);'
                   + 'setTimeout(()=>{const w=document.getElementById("world");w.classList.add("stopped","crash");document.querySelector(".stage").classList.add("shk");const f=document.getElementById("cf");f.style.opacity=.85;f.style.transition="opacity .5s";requestAnimationFrame(()=>requestAnimationFrame(()=>f.style.opacity=0))},4700);</script>',
          "kono": '<div class="scene"></div><div class="neon"></div>',
