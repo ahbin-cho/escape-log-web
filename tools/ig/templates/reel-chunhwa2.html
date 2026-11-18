@@ -1,6 +1,6 @@
 <!doctype html><html><head><meta charset="utf-8"><style>
-/* 춘화각 릴스 v2(12초): 닫힌 끝방 문 → 끼익 열림 → 여인 → 촛불 꺼짐(암전) → 빈 방 → 코앞에 나타남 → 제목. 대사는 매장 공식 줄거리 그대로.
-   소리: drawings/chunhwa2_sfx.py. 그림 레이어는 poster_moods.py 가 그린 것(제미나이 그림이 오면 바꿔 끼운다). */
+/* 춘화각 릴스 v2(12초): 복도 → 문틈 엿보기 → 방 안 여인 → 촛불 꺼짐(암전) → 빈 방 → 코앞에 나타남 → 제목. 대사는 매장 공식 줄거리 그대로.
+   소리: drawings/chunhwa2_sfx.py. 그림은 운영자가 제미나이로 뽑은 5장(assets/chunhwa2-*.jpg, 공식 포스터 분위기 참고·새 장면). */
 @font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
 @font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-Medium.woff);font-weight:500}
 @font-face{font-family:M;src:url(../assets/fonts/nanum-myeongjo-korean-800-normal.woff2)}
@@ -9,46 +9,40 @@
 html,body{width:1080px;height:1920px;background:#000;overflow:hidden;font-family:P}
 .stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000}
 @keyframes in{to{opacity:1}} @keyframes out{to{opacity:0}}
-/* 방(카메라): 문이 열릴 때 살짝 다가가고, 코앞 등장 때 흔들린다 */
-.cam{position:absolute;inset:0;transform-origin:50% 46%;transform:scale(1.25);animation:push 3.6s 2s cubic-bezier(.2,.6,.2,1) forwards,shake .5s 7.2s steps(8)}
-@keyframes push{from{transform:scale(1.25)}to{transform:scale(1.42)}}
+/* 장면 그림(제미나이, 공식 포스터 분위기 참고): 복도 → 문틈 엿보기 → 방 안 여인 → 빈 방 → 코앞. 1460px 높이로 가운데에 놓고 위아래는 어둠으로 잇는다 */
+.stage{background:#120a1c}
+.cam{position:absolute;inset:0;animation:shake .5s 7.2s steps(8)}
 @keyframes shake{0%{translate:0 0}15%{translate:-22px 14px}30%{translate:18px -16px}45%{translate:-14px -10px}60%{translate:12px 12px}80%{translate:-6px 4px}100%{translate:0 0}}
-.room,.woman,.rope{position:absolute;inset:0;background-size:cover;background-position:center}
-.room{background-image:url(../assets/reel-chunhwa-empty.jpg);filter:brightness(1.5) saturate(1.2)}
-.woman{background-image:url(../assets/reel-chunhwa-woman.png);filter:brightness(1.25);animation:out .01s 5.6s forwards}
-.rope{background-image:url(../assets/reel-chunhwa-rope.png);transform-origin:50% 0;animation:sway 2.6s ease-in-out infinite alternate,wild .22s 6.1s 12 alternate}
-@keyframes sway{0%{transform:rotate(-.7deg) skewX(-.6deg)}100%{transform:rotate(.8deg) skewX(.7deg)}}
-@keyframes wild{0%{transform:rotate(-1.6deg) skewX(-1.6deg)}100%{transform:rotate(1.7deg) skewX(1.8deg)}}
-.candle{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 46%,rgba(255,150,70,.34),rgba(255,120,60,.08) 40%,transparent 65%);mix-blend-mode:screen;animation:cf 1.7s steps(9) infinite,out .15s 5.6s forwards}
-@keyframes cf{0%{opacity:.9}12%{opacity:.55}25%{opacity:1}38%{opacity:.7}50%{opacity:.95}62%{opacity:.5}75%{opacity:.85}88%{opacity:.65}100%{opacity:.9}}
-.cold{position:absolute;inset:0;background:rgba(20,30,80,.35);mix-blend-mode:multiply;opacity:0;animation:in .01s 6.1s forwards}
-/* 코앞의 여인 */
-.close{position:absolute;inset:0;background:url(../assets/reel-chunhwa-woman.png) center/cover;transform-origin:50% 44%;transform:scale(3.1) translateY(150px);filter:brightness(.8) contrast(1.2);opacity:0;animation:in .01s 7.2s forwards,creep 2s 7.2s linear forwards,out .5s 8.7s forwards}
-@keyframes creep{to{transform:scale(3.5) translateY(165px)}}
-.red{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,transparent 30%,rgba(190,10,20,.75));opacity:0;animation:rf 1.5s 7.2s}
+.sc{position:absolute;top:230px;left:-194px;width:1468px;height:1460px;background-size:cover;opacity:0}
+.hall{background-image:url(../assets/chunhwa2-hall.jpg);opacity:1;transform-origin:50% 55%;animation:z1 1.8s linear forwards,out .01s 1.7s forwards}
+@keyframes z1{from{transform:scale(1)}to{transform:scale(1.5)}}
+.peek{background-image:url(../assets/chunhwa2-peek.jpg);left:-470px;width:1965px;transform-origin:45% 55%;animation:in .01s 1.7s forwards,z2 1.5s 1.7s linear forwards,out .01s 3.1s forwards}
+@keyframes z2{from{transform:scale(1.02) translateX(40px)}to{transform:scale(1.1) translateX(-10px)}}
+.room{background-image:url(../assets/chunhwa2-room.jpg);transform-origin:52% 62%;animation:in .01s 3.1s forwards,z3 2.6s 3.1s linear forwards,out .01s 5.6s forwards}
+@keyframes z3{from{transform:scale(1.02)}to{transform:scale(1.14)}}
+.empty{background-image:url(../assets/chunhwa2-empty.jpg);transform-origin:52% 62%;transform:scale(1.14);animation:in .01s 5.6s forwards,out .01s 7.1s forwards}
+.close{background-image:url(../assets/chunhwa2-close.jpg);transform-origin:50% 35%;animation:in .01s 7.2s forwards,z5 4.8s 7.2s cubic-bezier(.1,.6,.3,1) forwards}
+@keyframes z5{from{transform:scale(1.5)}to{transform:scale(1.22)}}
+.candle{position:absolute;left:480px;top:1180px;width:640px;height:640px;border-radius:50%;background:radial-gradient(circle,rgba(255,90,60,.4),rgba(255,70,50,.1) 45%,transparent 70%);mix-blend-mode:screen;opacity:0;animation:in .01s 3.1s forwards,cf 1.7s 3.1s steps(9) infinite,out2 .12s 5.5s forwards}
+@keyframes out2{to{opacity:0;visibility:hidden}}
+@keyframes cf{0%{opacity:.9}12%{opacity:.45}25%{opacity:1}38%{opacity:.6}50%{opacity:.95}62%{opacity:.4}75%{opacity:.85}88%{opacity:.6}100%{opacity:.9}}
+.fade{position:absolute;inset:0;background:linear-gradient(#120a1c 0,#120a1c 225px,transparent 420px,transparent 1500px,#120a1c 1695px);z-index:3}
+.red{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,transparent 25%,rgba(190,10,20,.8));opacity:0;animation:rf 1.6s 7.2s;z-index:4}
 @keyframes rf{0%{opacity:1}100%{opacity:0}}
-/* 암전: 촛불 꺼짐(5.6~6.1), 코앞 직전 깜빡(7.05), 끝 화면 어둡게(8.7~) */
-.black{position:absolute;inset:0;background:#000;opacity:0;z-index:20;animation:bo .5s 5.6s,bo2 .15s 7.05s,endd .5s 8.7s forwards}
-@keyframes bo{0%{opacity:0}12%,88%{opacity:1}100%{opacity:0}} @keyframes bo2{0%,100%{opacity:1}} @keyframes endd{to{opacity:.72}}
-/* 문 두 짝(창호) */
-.door{position:absolute;top:0;bottom:0;width:545px;z-index:10;background-color:#150c1c;
-  background-image:linear-gradient(#2a1a33 0 0),repeating-linear-gradient(90deg,#3a2742 0 8px,transparent 8px 128px),repeating-linear-gradient(0deg,#3a2742 0 8px,transparent 8px 150px);
-  background-size:100% 100%,100% 62%,100% 62%;background-position:0 0,0 14%,0 14%;background-repeat:no-repeat;background-blend-mode:normal;box-shadow:inset 0 0 0 16px #0d0712,inset 0 0 120px #000}
-.door.l{left:0;animation:dl 1.3s 2s cubic-bezier(.5,0,.2,1) forwards}.door.r{right:0;animation:dr 1.3s 2s cubic-bezier(.5,0,.2,1) forwards}
-@keyframes dl{to{transform:translateX(-560px)}} @keyframes dr{to{transform:translateX(560px)}}
-.door:after{content:"";position:absolute;inset:14% 40px 24% 40px;background:rgba(235,221,240,.07)}
-.slit{position:absolute;left:50%;top:0;bottom:0;width:10px;margin-left:-5px;z-index:11;background:#ffb070;box-shadow:0 0 60px 18px rgba(255,140,60,.55);animation:cf 1.3s steps(7) infinite,out .3s 2s forwards}
+/* 깜빡: 복도→문틈(1.62), 문틈→방(3.0), 촛불 꺼짐(5.5~6.05), 코앞 직전(7.05), 끝 화면 어둡게(8.8~) */
+.black{position:absolute;inset:0;background:#000;opacity:0;z-index:20;animation:bo2 .12s 1.62s,bo2 .14s 3s,bo .55s 5.5s,bo2 .15s 7.05s,endd .6s 8.8s forwards}
+@keyframes bo{0%{opacity:0}12%,88%{opacity:1}100%{opacity:0}} @keyframes bo2{0%,100%{opacity:1}} @keyframes endd{to{opacity:.74}}
+.vig{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,transparent 45%,rgba(0,0,0,.65));z-index:5}
 .grain{position:absolute;inset:-50%;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1.4px);background-size:7px 9px;animation:gr .18s steps(3) infinite;mix-blend-mode:screen;z-index:15}
 @keyframes gr{0%{transform:translate(0,0)}33%{transform:translate(-11px,7px)}66%{transform:translate(9px,-5px)}}
-.vig{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 46%,transparent 42%,rgba(0,0,0,.8));z-index:14}
 /* 글자 */
 .pale{font-family:M;color:#F3E8F6;text-shadow:0 3px 18px #000,0 0 6px #000}
 .acc{color:#FF4048;text-shadow:0 0 22px rgba(224,51,58,.55),0 3px 14px #000}
-.hook{position:absolute;left:0;right:0;top:640px;text-align:center;z-index:30;animation:out .3s 1.9s forwards}
-.hook .a{font-size:70px;opacity:0;animation:in .5s .2s forwards}.hook .b{font-size:84px;margin-top:26px;opacity:0;animation:in .6s .9s forwards}
-.w{position:absolute;left:0;right:0;text-align:center;white-space:nowrap;opacity:0;filter:blur(10px);letter-spacing:.28em;z-index:25;animation:wr .8s var(--t) cubic-bezier(.2,.7,.3,1) forwards,out .1s 5.6s forwards}
+.hook{position:absolute;left:0;right:0;top:270px;text-align:center;z-index:30;animation:out .2s 2.95s forwards}
+.hook .a{font-size:76px;opacity:0;animation:in .5s .2s forwards}.hook .b{font-size:80px;margin-top:26px;opacity:0;animation:in .4s 1.8s forwards}
+.w{position:absolute;left:0;right:0;text-align:center;white-space:nowrap;opacity:0;filter:blur(10px);letter-spacing:.28em;z-index:25;animation:wr .8s var(--t) cubic-bezier(.2,.7,.3,1) forwards,out .1s 5.5s forwards}
 @keyframes wr{to{opacity:1;filter:blur(0);letter-spacing:.08em}}
-.say{position:absolute;left:0;right:0;top:1290px;text-align:center;font-size:88px;z-index:25;opacity:0;animation:pop .25s 7.35s forwards,out .4s 8.7s forwards}
+.say{position:absolute;left:0;right:0;top:1290px;padding:50px 0 60px;background:radial-gradient(ellipse at 50% 50%,rgba(0,0,0,.82),rgba(0,0,0,.55) 45%,transparent 72%);text-align:center;font-size:92px;line-height:1.25;z-index:25;opacity:0;animation:pop .25s 7.5s forwards,out .4s 8.7s forwards}
 @keyframes pop{from{opacity:0;transform:scale(1.5)}to{opacity:1;transform:none}}
 .meta{position:absolute;left:84px;top:1010px;z-index:25}
 .meta>div{opacity:0;animation:in .6s 9.5s forwards}
@@ -66,13 +60,12 @@ html,body{width:1080px;height:1920px;background:#000;overflow:hidden;font-family
 .cta .x{color:#1D1D1D;font-weight:800;font-size:44px;letter-spacing:-.03em}.cta .x b{color:#E0782A}
 .cta .s{color:#6B665D;font-weight:500;font-size:28px;margin-top:6px}
 </style></head><body><div class="stage">
-<div class="cam"><div class="room"></div><div class="candle"></div><div class="woman"></div><div class="rope"></div><div class="cold"></div></div>
-<div class="close"></div><div class="red"></div><div class="vig"></div>
-<div class="door l"></div><div class="door r"></div><div class="slit"></div>
+<div class="cam"><div class="sc hall"></div><div class="sc peek"></div><div class="sc room"></div><div class="sc empty"></div><div class="sc close"></div><div class="candle"></div></div>
+<div class="fade"></div><div class="red"></div><div class="vig"></div>
 <div class="grain"></div><div class="black"></div>
 <div class="hook pale"><div class="a">그 소문 들었어?</div><div class="b acc">그 여인과 하룻밤을 지내면…</div></div>
-<div class="w pale" style="top:250px;font-size:80px;--t:3.2s">자네도 장원 급제를 위해서</div>
-<div class="w pale" style="top:380px;font-size:80px;--t:4.1s">이 춘화각을 찾았는가?</div>
+<div class="w pale" style="top:270px;font-size:78px;--t:3.3s">자네도 장원 급제를 위해서</div>
+<div class="w pale" style="top:390px;font-size:78px;--t:4.2s">이 춘화각을 찾았는가?</div>
 <div class="say pale acc">이쪽 끝방으로<br>들어가시게.</div>
 <div class="meta"><div class="t">춘화각</div><div class="s">피할 수 없는 저주</div><div class="k">상상의문 수원 2호점</div><div class="c">공포 · 난이도 3/5 · 공포도 4/5</div><div class="n">직원 NPC와 함께하는 테마(매장 공식 안내)</div></div>
 <div class="post"><img src="../assets/poster-chunhwa-official.jpg"><div>포스터: 상상의문 공식</div></div>
