@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset="utf-8"><style>
-/* 춘화각 릴스 v2(12초): 복도 → 문틈 엿보기 → 방 안 여인 → 촛불 꺼짐(암전) → 빈 방 → 코앞에 나타남 → 제목. 대사는 매장 공식 줄거리 그대로.
+/* 춘화각 릴스 v2(13.5초): 복도 → 문틈 엿보기 → 방 안 여인 → 촛불 꺼짐(암전) → 빈 방 → 코앞에 나타남 → 제목. 대사는 매장 공식 줄거리 그대로.
    소리: drawings/chunhwa2_sfx.py. 그림은 운영자가 제미나이로 뽑은 5장(assets/chunhwa2-*.jpg, 공식 포스터 분위기 참고·새 장면). */
 @font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
 @font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-Medium.woff);font-weight:500}
@@ -55,7 +55,12 @@ html,body{width:1080px;height:1920px;background:#000;overflow:hidden;font-family
 .post{position:absolute;right:84px;top:1080px;width:230px;opacity:0;animation:in .7s 9.7s forwards;z-index:25}
 .post img{display:block;width:230px;border:2px solid rgba(237,230,218,.3)}
 .post div{font-weight:500;font-size:20px;color:#9F998F;margin-top:8px;text-align:right}
-.cta{position:absolute;left:72px;right:72px;top:1560px;display:flex;align-items:center;gap:24px;background:#F5F0E6;border:5px solid #1D1D1D;border-radius:30px;padding:22px 30px;box-shadow:8px 9px 0 #1D1D1D;opacity:0;transform:translateY(50px);animation:card .6s 10.5s cubic-bezier(.22,1,.36,1) forwards;z-index:40}
+.rv{position:absolute;left:84px;right:84px;top:330px;z-index:25}
+.rv .h{font:800 30px P;color:#B9B3AA;letter-spacing:.08em;opacity:0;animation:in .4s 9.9s forwards}
+.rv .q{font-family:M;font-size:58px;line-height:1.3;color:#F3E8F6;text-shadow:0 3px 14px #000;margin-top:26px;opacity:0;transform:translateY(16px);animation:card .5s var(--t) forwards}
+.rv .q b{color:#FF4048;font-weight:800}
+.rv .src{font:500 22px P;color:#8F897F;margin-top:26px;opacity:0;animation:in .4s 11.6s forwards}
+.cta{position:absolute;left:72px;right:72px;top:1560px;display:flex;align-items:center;gap:24px;background:#F5F0E6;border:5px solid #1D1D1D;border-radius:30px;padding:22px 30px;box-shadow:8px 9px 0 #1D1D1D;opacity:0;transform:translateY(50px);animation:card .6s 11.9s cubic-bezier(.22,1,.36,1) forwards;z-index:40}
 @keyframes card{to{opacity:1;transform:none}}
 .cta .x{color:#1D1D1D;font-weight:800;font-size:44px;letter-spacing:-.03em}.cta .x b{color:#E0782A}
 .cta .s{color:#6B665D;font-weight:500;font-size:28px;margin-top:6px}
@@ -67,6 +72,11 @@ html,body{width:1080px;height:1920px;background:#000;overflow:hidden;font-family
 <div class="w pale" style="top:270px;font-size:78px;--t:3.3s">자네도 장원 급제를 위해서</div>
 <div class="w pale" style="top:390px;font-size:78px;--t:4.2s">이 춘화각을 찾았는가?</div>
 <div class="say pale acc">이쪽 끝방으로<br>들어가시게.</div>
+<div class="rv"><div class="h">다녀온 사람 후기</div>
+<div class="q" style="--t:10.1s">“<b>쫄탱 한 명</b>은 꼭 끼고 가세요”</div>
+<div class="q" style="--t:10.6s">“둘이선 너무 무서워요. <b>3~4명</b>”</div>
+<div class="q" style="--t:11.1s">“문제는 쉬운 편, <b>장치</b>가 많아요”</div>
+<div class="src">네이버 블로그 방탈출 후기(759방째 기록)에서 간추림</div></div>
 <div class="meta"><div class="t">춘화각</div><div class="s">피할 수 없는 저주</div><div class="k">상상의문 수원 2호점</div><div class="c">공포 · 난이도 3/5 · 공포도 4/5</div><div class="n">직원 NPC와 함께하는 테마(매장 공식 안내)</div></div>
 <div class="post"><img src="../assets/poster-chunhwa-official.jpg"><div>포스터: 상상의문 공식</div></div>
 <div class="cta"><img src="../../../public/mascot.png" width="110" height="110"><div><div class="x">다녀왔다면 <b>후기 남기기</b></div><div class="s">줄거리·후기는 프로필 링크 · talkkaknote.com</div></div></div>
