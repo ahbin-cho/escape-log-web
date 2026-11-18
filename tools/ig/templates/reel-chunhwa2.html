@@ -21,8 +21,7 @@ html,body{width:1080px;height:1920px;background:#000;overflow:hidden;font-family
 .room{background-image:url(../assets/chunhwa2-room.jpg);transform-origin:52% 62%;animation:in .01s 3.1s forwards,z3 2.6s 3.1s linear forwards,out .01s 5.6s forwards}
 @keyframes z3{from{transform:scale(1.02)}to{transform:scale(1.14)}}
 .empty{background-image:url(../assets/chunhwa2-empty.jpg);transform-origin:52% 62%;transform:scale(1.14);animation:in .01s 5.6s forwards,out .01s 7.1s forwards}
-.close{background-image:url(../assets/chunhwa2-close.jpg);transform-origin:50% 35%;animation:in .01s 7.2s forwards,z5 4.8s 7.2s cubic-bezier(.1,.6,.3,1) forwards,soft .6s 8.8s forwards}
-@keyframes soft{to{filter:blur(10px) brightness(.8)}}
+.close{background-image:url(../assets/chunhwa2-close.jpg);transform-origin:50% 35%;animation:in .01s 7.2s forwards,z5 4.8s 7.2s cubic-bezier(.1,.6,.3,1) forwards}
 @keyframes z5{from{transform:scale(1.5)}to{transform:scale(1.22)}}
 .candle{position:absolute;left:480px;top:1180px;width:640px;height:640px;border-radius:50%;background:radial-gradient(circle,rgba(255,90,60,.4),rgba(255,70,50,.1) 45%,transparent 70%);mix-blend-mode:screen;opacity:0;animation:in .01s 3.1s forwards,cf 1.7s 3.1s steps(9) infinite,out2 .12s 5.5s forwards}
 @keyframes out2{to{opacity:0;visibility:hidden}}
