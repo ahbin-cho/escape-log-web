@@ -1,5 +1,6 @@
-"""춘화각 릴스 v2 소리(직접 합성). 시각은 templates/reel-chunhwa2.html 과 같다.
-바람 깔림, 0.2초 낮은 쿵, 2.0초 문 끼익, 3~5.5초 느린 북, 5.6초 촛불 훅(뒤로 정적), 6.1초 금줄 바스락, 7.2초 큰 쿵+긁는 소리, 9.0초 징, 11.3초 탈깍.
+"""춘화각 릴스 v2 소리(직접 합성, 오래된 한옥 느낌). 시각은 templates/reel-chunhwa2.html 과 같다.
+틈새 바람·문풍지 떨림이 깔리고, 마루 밟는 소리(0.3·0.9·1.4초), 처마 풍경, 2.0초 나무 문 끼이익, 방 안에서 나무 '딱'·금줄 당겨지는 소리,
+5.5초 촛불 훅(뒤로 거의 정적, 마루만 삐걱 6.3·6.75초), 7.2초 나무 문 쾅 + 창호 덜컹, 9.0초 징, 11.3초 탈깍.
 사용: python3 chunhwa2_sfx.py out.wav"""
 import sys, wave
 import numpy as np
@@ -11,21 +12,42 @@ def band(x, lo, hi):
     X = np.fft.rfft(x); f = np.fft.rfftfreq(len(x), 1 / SR); X[(f < lo) | (f > hi)] = 0; return np.fft.irfft(X, len(x)).astype(np.float32)
 def noise(d, lo, hi): return band(rng.standard_normal(int(d * SR)).astype(np.float32), lo, hi)
 def tt(d): return np.arange(int(d * SR)) / SR
-def boom(d, f0, g=1.0):
-    t = tt(d); f = f0 * (1 + .6 * np.exp(-t / .08))
-    return g * (np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t / (d * .35)) + .5 * noise(d, 30, 400) * np.exp(-t / .12))
-wind = band(rng.standard_normal(N).astype(np.float32), 120, 700) * (.5 + .5 * np.sin(2 * np.pi * .23 * T + 1)) ** 2
-mute = np.where((T > 5.65) & (T < 7.15), .12, 1.0)                         # 촛불 꺼진 뒤엔 거의 정적
-out += .22 * wind * mute * np.clip(T / .6, 0, 1)
-add(.2, boom(1.4, 46), .7)
-t = tt(1.3); f = 310 + 90 * np.sin(2 * np.pi * 1.1 * t) + 40 * t                # 문 끼익
-add(2.0, (np.sign(np.sin(2 * np.pi * np.cumsum(f) / SR)) * .5 + noise(1.3, 800, 3000) * .6) * np.sin(np.pi * t / 1.3) ** 1.5 * (.6 + .4 * np.sin(2 * np.pi * 17 * t)), .28)
-for t0 in (3.3, 4.2, 5.0): add(t0, boom(.7, 62), .55)                           # 느린 북
-add(5.58, noise(.35, 300, 2500) * np.exp(-tt(.35) / .07), .7)                   # 훅
-for t0 in np.arange(6.15, 7.0, .11): add(t0, noise(.07, 2500, 9000) * np.exp(-tt(.07) / .02), .22)   # 종이 바스락
-add(7.2, boom(2.2, 38), 1.3)
-t = tt(1.2); add(7.2, band(np.sign(np.sin(2 * np.pi * np.cumsum(900 + 1400 * t) / SR)).astype(np.float32), 700, 6000) * np.exp(-t / .35) * (.5 + .5 * rng.random(len(t))), .3)   # 긁는 소리
-t = tt(2.8); add(9.0, sum(a * np.sin(2 * np.pi * f * t * (1 + .004 * np.sin(2 * np.pi * 3 * t))) for f, a in ((98, 1), (147, .6), (233, .4), (311, .25), (467, .15))) * np.exp(-t / .9) * np.minimum(1, t / .01), .4)  # 징
+def creak(d, f0, f1, res=(430, 980, 1650), rough=.35):
+    """나무 삐걱: 걸렸다 미끄러지는(stick-slip) 불규칙한 톡톡이 나무 울림통을 친다."""
+    n = int(d * SR); s = np.zeros(n + SR, np.float32); t = 0.0
+    while t < d:
+        f = f0 + (f1 - f0) * (t / d); k = tt(.03)
+        hit = sum(a * np.sin(2 * np.pi * r * (1 + .03 * rng.standard_normal()) * k) for r, a in zip(res, (1, .6, .35))) * np.exp(-k / .006)
+        i = int(t * SR); s[i:i + len(hit)] += hit * (.6 + .4 * rng.random())
+        t += (1 / f) * (1 + rough * rng.standard_normal() * .5)
+    s = s[:n]; return s * np.sin(np.pi * np.arange(n) / n) ** .7
+def thud(f=85, d=.35, wood=True):
+    t = tt(d); s = np.sin(2 * np.pi * f * (1 + .5 * np.exp(-t / .03)) * t) * np.exp(-t / .07) + .5 * noise(d, 150, 900) * np.exp(-t / .025)
+    if wood: s += .35 * sum(np.sin(2 * np.pi * r * t) for r in (310, 520)) * np.exp(-t / .04)
+    return s
+def chime(g=1.0):
+    t = tt(1.6); return g * sum(a * np.sin(2 * np.pi * f * t) * np.exp(-t / dc) for f, a, dc in ((1318, 1, .7), (2105, .5, .45), (3170, .3, .3), (4410, .12, .2))) * np.minimum(1, t / .003)
+# 깔리는 소리: 낮은 바람 + 틈새로 새는 가는 바람 + 문풍지 떨림(바람이 셀 때만)
+gust = (.5 + .5 * np.sin(2 * np.pi * .19 * T + .8)) ** 2 * (.7 + .3 * np.sin(2 * np.pi * .53 * T))
+quiet = np.where((T > 5.6) & (T < 7.15), .15, 1.0) * np.clip(T / .5, 0, 1)
+out += .20 * band(rng.standard_normal(N).astype(np.float32), 70, 380) * gust * quiet
+out += .05 * band(rng.standard_normal(N).astype(np.float32), 650, 1100) * gust ** 2 * quiet
+out += .05 * band(rng.standard_normal(N).astype(np.float32), 1800, 5200) * np.clip(gust - .55, 0, 1) * 2 * (.5 + .5 * np.sign(np.sin(2 * np.pi * 31 * T + 3 * np.sin(2 * np.pi * 2.3 * T)))) * quiet
+# 복도: 마루 밟는 소리 + 밟을 때마다 삐걱, 멀리 처마 풍경
+for t0, g in ((.3, .5), (.9, .6), (1.4, .7)):
+    add(t0, thud(80 + 10 * rng.random()), g); add(t0 + .06, creak(.28, 70, 120), .12 * g / .5)
+add(.6, chime(), .06); add(4.5, chime(), .035)
+# 문: 길게 끼이익(높아졌다 낮아짐), 끝에 문짝이 벽에 닿는 '툭'
+add(2.0, creak(.55, 55, 150, res=(520, 1180, 2100)), .22); add(2.5, creak(.6, 150, 60, res=(480, 1100, 1900)), .2); add(3.08, thud(110, .2), .3)
+# 방 안: 오래된 나무가 '딱', 금줄이 당겨지는 소리
+add(3.7, thud(240, .12), .22); add(4.3, creak(.5, 28, 40, res=(260, 610, 900), rough=.6), .1); add(5.1, thud(200, .1), .15)
+add(5.5, noise(.35, 300, 2500) * np.exp(-tt(.35) / .07), .6)                       # 촛불 훅
+add(6.3, creak(.4, 60, 95), .1); add(6.75, creak(.5, 75, 130), .16)                 # 정적 속에서 마루만 삐걱(가까워짐)
+# 코앞: 나무 문 쾅 + 창호 덜컹덜컹
+add(7.2, thud(52, 1.4), 1.3); add(7.2, noise(.25, 200, 3000) * np.exp(-tt(.25) / .03), .7)
+for k in range(7): add(7.32 + k * .075, thud(170 + 30 * rng.random(), .09) + .4 * noise(.09, 1500, 5000) * np.exp(-tt(.09) / .012), .35 * .8 ** k)
+t = tt(2.8); add(9.0, sum(a * np.sin(2 * np.pi * f * t * (1 + .004 * np.sin(2 * np.pi * 3 * t))) for f, a in ((98, 1), (147, .6), (233, .4), (311, .25), (467, .15))) * np.exp(-t / .9) * np.minimum(1, t / .01), .32)  # 징
+add(10.3, chime(), .04)
 for k, f in enumerate([2600, 1800]): add(11.3 + k * .07, np.sin(2 * np.pi * f * tt(.04)) * np.exp(-tt(.04) / .008), .5)   # 탈깍
 out *= np.clip((DUR - T) / .4, 0, 1); out /= np.abs(out).max() * 1.1
 with wave.open(sys.argv[1], 'wb') as w:
