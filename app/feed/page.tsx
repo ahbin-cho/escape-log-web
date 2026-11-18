@@ -9,7 +9,7 @@ import { brandOf } from "@/lib/cafe";
 
 // 공개 후기는 서버에서 그려 검색엔진이 받는 HTML 에도 실리게 한다.
 // 새 후기가 배포 없이도 보이도록 10분마다 다시 만든다.
-export const revalidate = 600;
+export const revalidate = 3600;
 
 export default async function FeedPage() {
   let reviews: Awaited<ReturnType<typeof getPublicFeed>> = [];

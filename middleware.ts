@@ -18,6 +18,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(target, 301);
   }
 
+  // 로그인 쿠키(sb-…-auth-token)가 없으면 갱신할 세션도 없다 → Supabase 를 부르지 않고 통과.
+  // 검색엔진·봇 요청과 가입 전 방문자가 대부분이라 서버 CPU 를 크게 아낀다(2026-11-18 Vercel 무료 한도 경고).
+  if (!request.cookies.getAll().some((c) => c.name.startsWith("sb-") && c.name.includes("-auth-token"))) {
+    return NextResponse.next({ request });
+  }
+
   let response = NextResponse.next({ request });
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;

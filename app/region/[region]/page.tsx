@@ -21,7 +21,7 @@ import { REGIONS, type Region } from "@/lib/region";
 import { SITE_NAME, SITE_URL, DEFAULT_OG_IMAGE } from "@/lib/site";
 
 // DB(catalog)를 고치면 10분 안에 화면에 반영된다(재배포 불필요). 새 브랜드·지역도 첫 방문 때 페이지가 생긴다.
-export const revalidate = 600;
+export const revalidate = 86400;
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
