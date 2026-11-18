@@ -20,7 +20,7 @@ import { regionFromText, REGIONS } from "@/lib/region";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 // 조건 목록은 코드에 있고, 걸리는 테마는 DB 에서 10분마다 다시 읽는다(재배포 불필요).
-export const revalidate = 600;
+export const revalidate = 86400;
 export const dynamicParams = false;
 
 export async function generateStaticParams() {

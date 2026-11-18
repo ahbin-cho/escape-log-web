@@ -13,6 +13,8 @@ export default function robots(): MetadataRoute.Robots {
         //  확실히 색인에서 빼기 때문에 여기서는 Disallow 하지 않음)
         disallow: ["/admin", "/api/", "/auth/"],
       },
+      // 학습용 대량 수집 봇: 검색 유입은 없고 서버 CPU 만 쓴다(Vercel 무료 한도). 검색·AI 검색 봇은 그대로 허용.
+      { userAgent: ["Bytespider", "CCBot", "meta-externalagent", "Amazonbot", "PetalBot", "SemrushBot", "AhrefsBot", "MJ12bot", "DotBot"], disallow: "/" },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
     host: SITE_URL,
