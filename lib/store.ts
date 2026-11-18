@@ -267,12 +267,13 @@ export async function saveRecord(record: EscapeRecord): Promise<EscapeRecord | n
     ({ data, error } = await write(one));
   }
   // photo_public·spoiler 칸을 만드는 SQL 을 아직 안 돌린 DB → 그 칸 없이 저장.
-  // 그 상태의 공개 뷰는 사진을 그대로 내보내므로, 사진을 공개하지 않기로 한 기록은 통째로 비공개로 둔다.
+  // 그 상태의 공개 뷰는 사진을 그대로 내보내고 스포 가림도 못 하므로,
+  // 사진을 공개하지 않기로 했거나 스포일러가 있는 기록은 통째로 비공개로 둔다.
   if (error && /photo_public|spoiler/.test(error.message)) {
     const { photo_public: _p, spoiler: _s, ...old } = full;
     void _p;
     void _s;
-    const safe = old.photo_url && !full.photo_public ? { ...old, is_public: false } : old;
+    const safe = (old.photo_url && !full.photo_public) || full.spoiler ? { ...old, is_public: false } : old;
     ({ data, error } = await write(safe));
   }
   if (error) throw error;
