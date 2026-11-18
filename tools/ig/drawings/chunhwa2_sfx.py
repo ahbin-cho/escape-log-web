@@ -28,7 +28,7 @@ def thud(f=85, d=.35, wood=True):
 def chime(g=1.0):
     t = tt(1.6); return g * sum(a * np.sin(2 * np.pi * f * t) * np.exp(-t / dc) for f, a, dc in ((1318, 1, .7), (2105, .5, .45), (3170, .3, .3), (4410, .12, .2))) * np.minimum(1, t / .003)
 # 깔리는 소리: 낮은 바람 + 틈새로 새는 가는 바람 + 문풍지 떨림(바람이 셀 때만)
-gust = (.5 + .5 * np.sin(2 * np.pi * .19 * T + .8)) ** 2 * (.7 + .3 * np.sin(2 * np.pi * .53 * T))
+gust = .35 + .65 * (.5 + .5 * np.sin(2 * np.pi * .19 * T + .8)) ** 2 * (.7 + .3 * np.sin(2 * np.pi * .53 * T))   # 바람이 완전히 끊기지는 않게
 quiet = np.where((T > 5.6) & (T < 7.15), .15, 1.0) * np.clip(T / .5, 0, 1)
 out += .20 * band(rng.standard_normal(N).astype(np.float32), 70, 380) * gust * quiet
 out += .05 * band(rng.standard_normal(N).astype(np.float32), 650, 1100) * gust ** 2 * quiet
@@ -49,6 +49,7 @@ for k in range(7): add(7.32 + k * .075, thud(170 + 30 * rng.random(), .09) + .4 
 t = tt(2.8); add(9.0, sum(a * np.sin(2 * np.pi * f * t * (1 + .004 * np.sin(2 * np.pi * 3 * t))) for f, a in ((98, 1), (147, .6), (233, .4), (311, .25), (467, .15))) * np.exp(-t / .9) * np.minimum(1, t / .01), .32)  # 징
 add(10.3, chime(), .04)
 for k, f in enumerate([2600, 1800]): add(11.3 + k * .07, np.sin(2 * np.pi * f * tt(.04)) * np.exp(-tt(.04) / .008), .5)   # 탈깍
-out *= np.clip((DUR - T) / .4, 0, 1); out /= np.abs(out).max() * 1.1
+out *= np.clip((DUR - T) / .4, 0, 1); out /= np.abs(out).max()
+out = np.tanh(out * 2.6) / np.tanh(2.6) / 1.1   # 작은 소리(바람·삐걱)를 끌어올린다: 폰 스피커에서도 들리게
 with wave.open(sys.argv[1], 'wb') as w:
     w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR); w.writeframes((out * 32767).astype(np.int16).tobytes())
