@@ -50,21 +50,22 @@ export async function shareReviewImage(r: ReviewCardData, byline?: string): Prom
   try {
     const tone = TONE[r.genre] ?? TONE["기타"];
     let blob: Blob;
+    // 공식 포스터가 있으면 출처와 함께 넣는다(내 기록 시트·모두의 후기 카드 둘 다)
+    const found = findPoster(await loadPosterIndex(), r.themeName, r.cafeName);
+    const posterUrl = found?.poster ? `/api/poster-img?id=${found.id}` : undefined;
     if (typeof r.difficulty === "number") {
-      // 내 기록: 방탈출 리뷰 시트(공식 포스터가 있으면 출처와 함께 넣는다)
-      const found = findPoster(await loadPosterIndex(), r.themeName, r.cafeName);
       const nth = Number((byline?.match(/(\d+)번째/) || [])[1]) || undefined;
       blob = await makeReviewSheet({
         ...r,
         difficulty: r.difficulty,
         fearLevel: r.fearLevel ?? 0,
         nth,
-        posterUrl: found?.poster ? `/api/poster-img?id=${found.id}` : undefined,
+        posterUrl,
         posterCredit: brandOf(r.cafeName),
         tone,
       });
     } else {
-      blob = await makeReviewImage({ ...r, chips: reviewChips(r), byline, tone });
+      blob = await makeReviewImage({ ...r, chips: reviewChips(r), byline, tone, posterUrl, posterCredit: brandOf(r.cafeName) });
     }
     const file = new File([blob], "talkkak-review.jpg", { type: "image/jpeg" });
     const text = `${r.themeName}${r.oneLiner ? ` — “${r.oneLiner}”` : ""} · 방탈깍노트`;

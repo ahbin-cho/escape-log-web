@@ -158,7 +158,27 @@ function card(
 }
 
 // 나뉜 칸용 작은 표지: 장르 색 바탕에 테마 이름만(자리가 좁다)
+// 달력 화면처럼 공식 포스터가 있으면 그 그림으로 칸을 채운다(없으면 아래의 직접 만든 표지). 기록 id → 포스터 그림.
+export type PosterImages = Map<string, CanvasImageSource & { width: number; height: number }>;
+let posterImages: PosterImages = new Map();
+
+function drawCover(c: CanvasRenderingContext2D, img: CanvasImageSource & { width: number; height: number }, x: number, y: number, w: number, h: number) {
+  const s = Math.max(w / img.width, h / img.height);
+  const dw = img.width * s, dh = img.height * s;
+  c.drawImage(img, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
+}
+
 function miniTile(c: CanvasRenderingContext2D, r: EscapeRecord, x: number, y: number, w: number, h: number) {
+  const pic = posterImages.get(r.id);
+  if (pic) {
+    c.save();
+    c.beginPath();
+    c.rect(x, y, w, h);
+    c.clip();
+    drawCover(c, pic, x, y, w, h);
+    c.restore();
+    return;
+  }
   const t = TONE[r.genre] ?? TONE["기타"];
   c.save();
   c.beginPath();
@@ -189,6 +209,21 @@ function miniTile(c: CanvasRenderingContext2D, r: EscapeRecord, x: number, y: nu
 function posterTile(c: CanvasRenderingContext2D, r: EscapeRecord, x: number, y: number, w: number, h: number) {
   const t = TONE[r.genre] ?? TONE["기타"];
   const rad = Math.round(w * 0.1);
+  const pic = posterImages.get(r.id);
+  if (pic) {
+    c.save();
+    c.beginPath();
+    c.roundRect(x, y, w, h, rad);
+    c.clip();
+    drawCover(c, pic, x, y, w, h);
+    c.restore();
+    c.lineWidth = 3;
+    c.strokeStyle = INK;
+    c.beginPath();
+    c.roundRect(x, y, w, h, rad);
+    c.stroke();
+    return;
+  }
   c.save();
   c.beginPath();
   c.roundRect(x, y, w, h, rad);
@@ -257,7 +292,8 @@ function fitFont(c: CanvasRenderingContext2D, text: string, family: string, weig
   return size;
 }
 
-export async function drawMonthCard(canvas: HTMLCanvasElement, month: string, records: EscapeRecord[]): Promise<void> {
+export async function drawMonthCard(canvas: HTMLCanvasElement, month: string, records: EscapeRecord[], posters: PosterImages = new Map()): Promise<void> {
+  posterImages = posters;
   const L = monthCardLayout(month, records);
   canvas.width = CARD_W;
   canvas.height = CARD_H;
@@ -399,12 +435,33 @@ export async function drawMonthCard(canvas: HTMLCanvasElement, month: string, re
   c.fillStyle = INK;
   c.font = `700 36px ${TITLE}`;
   c.fillText(SITE_HOST, CARD_W / 2, fy);
+  if (posters.size > 0) {
+    // 매장 포스터를 썼으면 출처를 적는다
+    c.font = `500 22px ${BODY}`;
+    c.fillStyle = "rgba(29,29,29,0.55)";
+    c.fillText("포스터: 각 매장 공식", CARD_W / 2, fy + 36);
+  }
   c.textAlign = "left";
+  posterImages = new Map();
 }
 
-export async function makeMonthCard(month: string, records: EscapeRecord[]): Promise<Blob> {
+/** 이 달 기록의 공식 포스터를 같은 주소(/api/poster-img)로 받아 온다. 못 받은 건 빼고 돌려준다(그 칸은 직접 만든 표지로). */
+export async function loadMonthPosters(month: string, records: EscapeRecord[], posterUrlOf: (r: EscapeRecord) => string | null): Promise<PosterImages> {
+  const out: PosterImages = new Map();
+  const mine = records.filter((r) => (r.playedAt || r.createdAt || "").startsWith(month));
+  await Promise.all(
+    mine.map(async (r) => {
+      const url = posterUrlOf(r);
+      const img = url ? await loadImage(url) : null;
+      if (img) out.set(r.id, img);
+    })
+  );
+  return out;
+}
+
+export async function makeMonthCard(month: string, records: EscapeRecord[], posters: PosterImages = new Map()): Promise<Blob> {
   const canvas = document.createElement("canvas");
-  await drawMonthCard(canvas, month, records);
+  await drawMonthCard(canvas, month, records, posters);
   return new Promise((resolve, reject) =>
     canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("이미지를 만들지 못했어요"))), "image/png")
   );
