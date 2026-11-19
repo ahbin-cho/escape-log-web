@@ -345,7 +345,8 @@ export default async function ThemePage({
 
       {/* 행동 유도 */}
       <div className="mt-4 flex gap-2">
-        <Link href={`/new?theme=${t.id}`} className={`flex-1 ${BTN_PRIMARY}`}>
+        {/* 검색 봇이 테마마다 이 주소를 따라가지 않게 nofollow + 미리 불러오기 끔(robots 에서도 /new 차단) */}
+        <Link rel="nofollow" prefetch={false} href={`/new?theme=${t.id}`} className={`flex-1 ${BTN_PRIMARY}`}>
           다녀왔어요
         </Link>
         {t.reservation_url && (
