@@ -1,4 +1,7 @@
-# 탈깍노트 (talkkaknote.com)
+# 방탈깍노트 (talkkaknote.com)
+
+> 2026-11-19 이름 한 번 더: 탈깍노트 → **방탈깍노트**(운영자 결정. 검색에 "방탈"이 걸리게). 주소(talkkaknote.com)·인스타 아이디(@talkkak.note)는 그대로.
+> 예전 이름 "탈깍노트"·"방탈로그"는 사이트 구조화 데이터 alternateName·키워드에 남겨 둔다.
 
 > 2026-11-15 이름 변경: 방탈로그(bangtallog.com · @bangtal_log) → **탈깍노트**(talkkaknote.com · @talkkak.note).
 > 같은 이름 "방탈로그"(bangtalog.com · @bangtalog · 앱)가 먼저 있어서 바꿨다. 예전 주소는 2027-11-11 만료까지 새 주소로 301 이동.

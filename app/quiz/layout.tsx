@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/quiz" },
   openGraph: {
     images: [DEFAULT_OG_IMAGE],
-    title: "내 방탈출 취향은? | 탈깍노트",
+    title: "내 방탈출 취향은? | 방탈깍노트",
     description: "질문 몇 개로 방탈 유형 진단 + 맞춤 테마 추천.",
   },
 };

@@ -38,7 +38,7 @@ def ct(t, y, f, c, sp=0):
     w = sum(d.textlength(ch, font=f) for ch in t) + sp * (len(t) - 1); x = 540 - w / 2
     for ch in t:
         d.text((x, y), ch, font=f, fill=c, anchor='ls'); x += d.textlength(ch, font=f) + sp
-ct('탈깍노트', 1150, ImageFont.truetype('/home/user/escape-log-web/assets/fonts/SBAggroB.woff', 108), INKC, 6)
+ct('방탈깍노트', 1150, ImageFont.truetype('/home/user/escape-log-web/assets/fonts/SBAggroB.woff', 108), INKC, 6)
 ct('TALKKAK NOTE', 1206, ImageFont.truetype(PR, 24), SUBC, 10)
 ct('방탈출 다녀온 날, 탈깍 한 줄', 1262, ImageFont.truetype(PR, 30), SUBC, 2)
 im.save(sys.argv[1], quality=92)

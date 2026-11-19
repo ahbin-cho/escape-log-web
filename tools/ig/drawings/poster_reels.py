@@ -1,5 +1,5 @@
 """영안실·춘화각 릴스 템플릿(reel-morgue.html, reel-chunhwa.html)을 만든다. 성지기숙학원(reel-sungji.html)과 같은 짜임:
-0~1.45초 후킹 → 1.9초부터 줄거리 한 줄씩 → 6.3초 제목·매장·공식 포스터(작게, 출처) → 8.3초 탈깍노트 카드.
+0~1.45초 후킹 → 1.9초부터 줄거리 한 줄씩 → 6.3초 제목·매장·공식 포스터(작게, 출처) → 8.3초 방탈깍노트 카드.
 배경은 poster_moods.py 로 새로 그린 그림. 사용: python3 tools/ig/drawings/poster_reels.py"""
 import os
 T = os.path.join(os.path.dirname(__file__), "..", "templates")

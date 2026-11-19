@@ -61,7 +61,7 @@ describe("buildBrandReport", () => {
 describe("reportMessage", () => {
   it("숫자를 넣은 메일 초안을 만든다", () => {
     const r = buildBrandReport([row({ source: "recommend" }), row({})]);
-    const msg = reportMessage("브랜드", r, "탈깍노트");
+    const msg = reportMessage("브랜드", r, "방탈깍노트");
     expect(msg).toContain("예약 페이지로 이동한 횟수는 2회");
     expect(msg).toContain("테마A(2회)");
     expect(msg).toContain("1회는 취향 맞춤 추천");

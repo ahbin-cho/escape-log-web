@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/match" },
   openGraph: {
     images: [DEFAULT_OG_IMAGE],
-    title: "방탈출 취향 궁합 | 탈깍노트",
+    title: "방탈출 취향 궁합 | 방탈깍노트",
     description: "우리 팀 방탈출 궁합은 몇 점? 같이 갈 방까지 골라 줄게.",
   },
 };

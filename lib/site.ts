@@ -4,7 +4,7 @@
 export const CANONICAL_URL = "https://talkkaknote.com";
 
 // 예전 주소. next.config 의 redirects 가 이 주소로 온 요청을 CANONICAL_URL 로 301 이동시킨다(목록을 고치면 next.config 도 같이).
-// bangtallog.com 은 2026-11 이름 변경(방탈로그 → 탈깍노트) 전 주소. 만료(2027-11-11)까지 새 주소로 넘긴다
+// bangtallog.com 은 2026-11 이름 변경(방탈로그 → 탈깍노트 → 2026-11-19 방탈깍노트) 전 주소. 만료(2027-11-11)까지 새 주소로 넘긴다
 export const LEGACY_HOSTS = ["escape-log-web-eight.vercel.app", "www.bangtallog.com", "bangtallog.com", "www.talkkaknote.com"];
 
 // 환경변수가 예전 주소로 남아 있어도 대표 주소가 갈라지지 않게 무시한다.
@@ -12,7 +12,7 @@ const envUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "";
 export const SITE_URL =
   envUrl && !LEGACY_HOSTS.some((h) => envUrl.includes(h)) ? envUrl : CANONICAL_URL;
 
-export const SITE_NAME = "탈깍노트";
+export const SITE_NAME = "방탈깍노트";
 
 // 카드·이미지에 찍는 주소(https:// 없이). 도메인을 바꾸면 CANONICAL_URL 만 고치면 따라 바뀐다
 export const SITE_HOST = new URL(SITE_URL).host;

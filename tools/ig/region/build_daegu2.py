@@ -1,5 +1,5 @@
 """대구편 v3 — 수원편과 같은 수채 그림체(운영자가 제미나이로 만든 그림)를 꽉 채우고, 아래 띠에 작은 카드 2×2.
-카드: 공식 포스터 썸네일(원본 그대로) + 이름 + 꼬리표 + 매장. 셜록홈즈는 탈깍노트 새 그림.
+카드: 공식 포스터 썸네일(원본 그대로) + 이름 + 꼬리표 + 매장. 셜록홈즈는 방탈깍노트 새 그림.
 사용: python3 tools/ig/region/build_daegu2.py tools/ig/region/daegu.json <posters map.json> [stories]"""
 import json, sys, os, html
 sys.path.insert(0, os.path.dirname(__file__))
@@ -44,7 +44,7 @@ def card(t):
 def credit(ts):
     b = sorted({SHORT.get(t["cafe"], t["cafe"]).split()[0] for t in ts if not t["cafe"].startswith("셜록홈즈")})
     sh = any(t["cafe"].startswith("셜록홈즈") for t in ts)
-    return "포스터: " + " · ".join(b) + " 공식" + (" · 셜록홈즈 칸은 탈깍노트 그림" if sh else "")
+    return "포스터: " + " · ".join(b) + " 공식" + (" · 셜록홈즈 칸은 방탈깍노트 그림" if sh else "")
 
 # key, 그림, 위 띠 글자색, 강조색, 칩, 제목
 PAGES = [
@@ -63,7 +63,7 @@ def cover(c):
 <span class="chip" style="background:#3A2E28;color:#F7EEDD;padding:6px 16px;font-size:22px">1 / 6</span></div>
 <h1 style="position:absolute;left:64px;top:118px;font-size:80px;color:#3A2E28">대구 방탈출,<br><span style="color:#E2603F">어데 갈래?</span></h1>
 <div style="position:absolute;left:64px;right:64px;top:1105px;display:grid;grid-template-columns:1fr 1fr;gap:10px">{toc}</div>
-<div class="ft" style="top:1300px;color:#3A2E28;opacity:.8"><span>대프리카 더위 피해서 들어갈 방, 테마 {c["total"]}개 중에 골라 봤다 아이가 🥵 →</span><b>탈깍노트</b></div></body></html>'''
+<div class="ft" style="top:1300px;color:#3A2E28;opacity:.8"><span>대프리카 더위 피해서 들어갈 방, 테마 {c["total"]}개 중에 골라 봤다 아이가 🥵 →</span><b>방탈깍노트</b></div></body></html>'''
     open(os.path.join(T, "dg1.html"), "w").write(s1)
     s = (HEAD % 1920) + f'''<div style="position:absolute;inset:0;background:#F7EEDD"></div>
 <img src="../assets/dg-cover.jpg" style="position:absolute;left:0;top:250px;width:1080px;height:1340px">
@@ -83,7 +83,7 @@ def feed(c):
 <h1 style="position:absolute;left:64px;top:128px;font-size:88px;color:{fg}">{title}</h1>
 <p style="position:absolute;left:68px;top:238px;font-weight:800;font-size:24px;color:{fg};opacity:.8">📍 대구 동성로 일대 · 매장 공식 예약 페이지 기준({chk} 확인)</p>
 <div class="grid" style="top:1008px;--ac:{ac}">{"".join(card(t) for t in S[key])}</div>
-<div class="ft" style="top:1300px;color:{bfg};opacity:.8"><span>{credit(S[key])}</span><b>탈깍노트</b></div></body></html>'''
+<div class="ft" style="top:1300px;color:{bfg};opacity:.8"><span>{credit(S[key])}</span><b>방탈깍노트</b></div></body></html>'''
         open(os.path.join(T, f"dg{i}.html"), "w").write(s)
     # 6 마무리
     s6 = (HEAD % 1350) + f'''<div style="position:absolute;inset:0;background:#A7AEC5"></div>
@@ -98,7 +98,7 @@ def feed(c):
 <span class="chip" style="background:#FFFBF2;border:3px solid #3A2E28;padding:7px 16px;font-size:23px">📖 줄거리·난이도·후기</span>
 <span class="chip" style="background:#FFFBF2;border:3px solid #3A2E28;padding:7px 16px;font-size:23px">🎯 취향 추천</span></div>
 <div><span class="chip" style="background:#E2603F;color:#fff;border:3px solid #3A2E28;padding:11px 24px;font-size:29px;box-shadow:5px 5px 0 #3A2E28">프로필 링크 → talkkaknote.com</span></div></div>
-<div class="ft" style="top:1300px;color:#2E2650;opacity:.8"><span>먼저 써 보고 10초 가입</span><b>탈깍노트</b></div></body></html>'''
+<div class="ft" style="top:1300px;color:#2E2650;opacity:.8"><span>먼저 써 보고 10초 가입</span><b>방탈깍노트</b></div></body></html>'''
     open(os.path.join(T, "dg6.html"), "w").write(s6)
     print("dg2~6 written (v3)")
 

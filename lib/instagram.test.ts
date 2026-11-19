@@ -30,7 +30,7 @@ describe("mysteryCaption", () => {
 
   it("capHashtags: 어떤 캡션이든 5개로, 좁은 태그 먼저", async () => {
     const { capHashtags } = await import("./instagram");
-    const c = capHashtags("본문\n\n#수원방탈출 #경기방탈출 #공포방탈출 #방탈출 #방탈출추천 #방탈출후기 #방탈러 #방탈출스타그램 #이방의이야기 #탈깍노트");
+    const c = capHashtags("본문\n\n#수원방탈출 #경기방탈출 #공포방탈출 #방탈출 #방탈출추천 #방탈출후기 #방탈러 #방탈출스타그램 #이방의이야기 #방탈깍노트");
     expect(c.startsWith("본문\n\n")).toBe(true);
     expect(c.split("\n").pop()).toBe("#수원방탈출 #경기방탈출 #공포방탈출 #방탈출추천 #방탈출");
   });

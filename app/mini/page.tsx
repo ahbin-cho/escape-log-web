@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     "질문 몇 개로 끝나는 방탈출 미니 테스트. 방탈 밸런스 게임, 공포방에서 나는 몇 분 버틸까 등 결과는 링크로 친구와 나눠 보세요.",
   alternates: { canonical: "/mini" },
   openGraph: {
-    title: "방탈출 1분 테스트 | 탈깍노트",
+    title: "방탈출 1분 테스트 | 방탈깍노트",
     description: "질문 몇 개로 끝나는 방탈출 미니 테스트. 너는 어떤 결과야?",
     url: "/mini",
     images: [DEFAULT_OG_IMAGE],
