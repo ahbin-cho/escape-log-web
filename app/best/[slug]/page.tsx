@@ -111,7 +111,7 @@ export default async function BestConditionPage({ params }: Props) {
       "@type": "ItemList",
       name: condition.title,
       numberOfItems: themes.length,
-      itemListElement: themes.map((t, i) => ({
+      itemListElement: themes.slice(0, 100).map((t, i) => ({ // 앞의 100개만 싣는다(전체 개수는 numberOfItems)
         "@type": "ListItem",
         position: i + 1,
         name: t.name,
@@ -187,7 +187,7 @@ export default async function BestConditionPage({ params }: Props) {
             )}{" "}
             <span className="text-sm font-normal text-cream/60">{list.length}개</span>
           </h2>
-          <ThemeList themes={list} />
+          <ThemeList themes={list} limit={8} />
         </section>
       ))}
 
