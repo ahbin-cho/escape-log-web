@@ -104,7 +104,8 @@ const jsonLd = {
   publisher: {
     "@type": "Organization",
     name: SITE_NAME,
-    url: SITE_URL
+    url: SITE_URL,
+    sameAs: ["https://www.instagram.com/bangtalkkak.note/"] // 공식 인스타(검색엔진이 같은 곳으로 묶게)
   }
 };
 

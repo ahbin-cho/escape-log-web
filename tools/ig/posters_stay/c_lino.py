@@ -89,5 +89,5 @@ d.text((520, 1590), '앵콜 마지막 2주', font=F(PB, 40), fill=INK, anchor='l
 d.text((520, 1640), '살아남아야 끝나요', font=F(PB, 34), fill=(90, 82, 72), anchor='ls')
 for i, t in enumerate(INFO): d.text((84, 1720 + i * 36), t, font=F(PM, 24), fill=(90, 82, 72), anchor='ls')
 spaced(d, (84, 1860), 'TALKKAK NOTE', F(PB, 22), (120, 110, 98), 4)
-d.text((996, 1860), '@talkkak.note', font=F(PB, 22), fill=(120, 110, 98), anchor='rs')
+d.text((996, 1860), '@bangtalkkak.note', font=F(PB, 22), fill=(120, 110, 98), anchor='rs')
 img.save(out, quality=92)

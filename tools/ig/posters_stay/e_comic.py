@@ -65,5 +65,5 @@ d.text((470, 1572), '앵콜 마지막 2주', font=F(AG, 48), fill=INK, anchor='l
 d.text((470, 1622), '롯데월드 민속박물관 · 이머시브 체이스', font=F(PB, 28), fill=INK, anchor='ls')
 for i, s in enumerate(INFO): d.text((70, 1700 + i * 36), s, font=F(PM, 24), fill=(70, 60, 50), anchor='ls')
 spaced(d, (70, 1850), 'TALKKAK NOTE', F(PB, 22), (110, 96, 80), 4)
-d.text((1010, 1850), '@talkkak.note', font=F(PB, 22), fill=(110, 96, 80), anchor='rs')
+d.text((1010, 1850), '@bangtalkkak.note', font=F(PB, 22), fill=(110, 96, 80), anchor='rs')
 im.save(out, quality=92)

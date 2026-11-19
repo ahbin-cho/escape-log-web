@@ -6,7 +6,7 @@
 | 무엇 | 값 |
 |---|---|
 | 사이트 | https://talkkaknote.com (2026-11 이름 변경. 예전 주소 bangtallog.com · escape-log-web-eight.vercel.app 은 301 로 넘김) |
-| 인스타 | @talkkak.note (예전 @bangtal_log, 프로페셔널 계정, Graph API 로 자동 게시. 아이디를 바꿔도 토큰은 그대로) |
+| 인스타 | @bangtalkkak.note (예전 @bangtal_log, 프로페셔널 계정, Graph API 로 자동 게시. 아이디를 바꿔도 토큰은 그대로) |
 | 배포 | Vercel. 환경변수: CRON_SECRET, IG_USER_ID, IG_ACCESS_TOKEN, Supabase 값 |
 | GitHub Secrets | CRON_SECRET (Vercel 과 같은 값) — "인스타 지금 올리기" 워크플로용 |
 | 검색 등록 | Google Search Console(주소 변경 신청함, 수주~수개월 걸림), 네이버 서치어드바이저, Bing 웹마스터 + IndexNow |

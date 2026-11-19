@@ -63,7 +63,7 @@ def scene(w, h, ground, moon=None, bolt_x=None, bscale=None, seed=None, case_y=N
             f'</defs>{briefcase(w*0.05, cy, w/1080*0.95) if cy > 0 else ""}</svg>')
 
 
-FOOT = """<div class="a foot" style="left:72px;right:72px;bottom:%dpx"><span>TALKKAK NOTE · IMMERSIVE</span><span>@talkkak.note</span></div>
+FOOT = """<div class="a foot" style="left:72px;right:72px;bottom:%dpx"><span>TALKKAK NOTE · IMMERSIVE</span><span>@bangtalkkak.note</span></div>
 <div class="a vig"></div><div class="a grain"></div></body></html>"""
 
 INFO = "11.26–12.27 · KBS스포츠월드 생활체육관 · 85분 · 만 16세 이상 · 55,000원"

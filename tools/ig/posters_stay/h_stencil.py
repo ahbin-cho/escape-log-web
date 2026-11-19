@@ -51,5 +51,5 @@ fl = fl.rotate(-3, expand=True, fillcolor=(0, 0, 0)); m = fl.convert('L').point(
 sh = Image.new('L', fl.size, 0); sh.paste(m, (0, 0)); sh = sh.filter(ImageFilter.GaussianBlur(6))
 im.paste((40, 38, 36), (502, 1672), sh.point(lambda v: v * 0.4)); im.paste(fl, (490, 1660), m)
 d = ImageDraw.Draw(im)
-d.text((70, 1880), '@talkkak.note', font=F(PB, 26), fill=(30, 28, 26), anchor='ls')
+d.text((70, 1880), '@bangtalkkak.note', font=F(PB, 26), fill=(30, 28, 26), anchor='ls')
 im.save(out, quality=92)

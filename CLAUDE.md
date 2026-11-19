@@ -1,6 +1,6 @@
 # 방탈깍노트 (talkkaknote.com)
 
-> 2026-11-19 이름 한 번 더: 탈깍노트 → **방탈깍노트**(운영자 결정. 검색에 "방탈"이 걸리게). 주소(talkkaknote.com)·인스타 아이디(@talkkak.note)는 그대로.
+> 2026-11-19 이름 한 번 더: 탈깍노트 → **방탈깍노트**(운영자 결정. 검색에 "방탈"이 걸리게). 주소(talkkaknote.com)는 그대로. 인스타 아이디는 같은 날 @talkkak.note → **@bangtalkkak.note** 로 바뀜(운영자가 앱에서 변경).
 > 예전 이름 "탈깍노트"·"방탈로그"는 사이트 구조화 데이터 alternateName·키워드에 남겨 둔다.
 
 > 2026-11-15 이름 변경: 방탈로그(bangtallog.com · @bangtal_log) → **탈깍노트**(talkkaknote.com · @talkkak.note).

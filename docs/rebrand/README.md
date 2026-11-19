@@ -8,7 +8,7 @@
 | 어디 | 새 표기 |
 |---|---|
 | 브랜드 | 탈깍노트 |
-| 인스타 아이디 / 이름 칸 | @talkkak.note / 탈깍노트 \| 방탈출 기록·추천 (이름 칸은 14일 제한 때문에 11월 말에) |
+| 인스타 아이디 / 이름 칸 | @bangtalkkak.note / 탈깍노트 \| 방탈출 기록·추천 (이름 칸은 14일 제한 때문에 11월 말에) |
 | 해시태그 | #탈깍노트 |
 | 도메인 | talkkaknote.com (Vercel 에서 구입) |
 | 예전 주소 | bangtallog.com · www.bangtallog.com → 301 로 새 주소(만료 2027-11-11까지) |
@@ -30,5 +30,5 @@
 6. 네이버 서치어드바이저: 사이트 추가 talkkaknote.com → HTML 태그 인증값을 Vercel 환경변수 NEXT_PUBLIC_NAVER_SITE_VERIFICATION 에 넣고 다시 배포(또는 값을 알려 주면 코드 기본값으로) → 사이트맵·RSS 제출 → 예전 사이트는 '사이트 이전' 메뉴가 있으면 신청
 7. Vercel 환경변수 NEXT_PUBLIC_SITE_URL 이 있으면 https://talkkaknote.com 으로(없으면 그냥 둬도 됨)
 8. 메일(Resend): 새 도메인 인증은 나중에 해도 된다. 그 전까지 보내는 주소는 no-reply@bangtallog.com 그대로. 인증하면 Supabase SMTP Sender 를 no-reply@talkkaknote.com 으로, 템플릿 `docs/email-reset-password.md` 붙여 넣기
-9. 인스타: 아이디 talkkak.note(지금), 이름 칸·소개·프로필 링크 https://talkkaknote.com (이름 칸은 14일 뒤)
+9. 인스타: 아이디 bangtalkkak.note(지금), 이름 칸·소개·프로필 링크 https://talkkaknote.com (이름 칸은 14일 뒤)
 10. 인스타 공지 게시물 "방탈로그가 탈깍노트로 이름을 바꿨어요" (평일)
