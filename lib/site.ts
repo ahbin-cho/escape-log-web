@@ -3,7 +3,7 @@
 //    고정 프로덕션 주소를 기본값으로 둔다.
 export const CANONICAL_URL = "https://talkkaknote.com";
 
-// 예전 주소. middleware 가 이 주소로 온 요청을 CANONICAL_URL 로 영구 이동시킨다.
+// 예전 주소. next.config 의 redirects 가 이 주소로 온 요청을 CANONICAL_URL 로 301 이동시킨다(목록을 고치면 next.config 도 같이).
 // bangtallog.com 은 2026-11 이름 변경(방탈로그 → 탈깍노트) 전 주소. 만료(2027-11-11)까지 새 주소로 넘긴다
 export const LEGACY_HOSTS = ["escape-log-web-eight.vercel.app", "www.bangtallog.com", "bangtallog.com", "www.talkkaknote.com"];
 
