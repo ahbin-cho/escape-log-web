@@ -48,13 +48,8 @@ def hall(s, n=7, delay=.085, decay=.62):
 quiet = np.where((T > 6.0) & (T < 7.5), .25, 1.0) * np.clip(T / .8, 0, 1)
 out += .22 * band(rng.standard_normal(N).astype(np.float32), 35, 140) * (.75 + .25 * np.sin(2 * np.pi * .11 * T)) * quiet   # 낮은 웅웅
 out += .05 * band(rng.standard_normal(N).astype(np.float32), 150, 420) * (.5 + .5 * np.sin(2 * np.pi * .23 * T + 1)) ** 2 * quiet   # 먼 바람
-# 심장 박동: 쿵-쿵, 간격이 1.0초에서 0.55초로 좁아지며 긴장을 올린다
-t0 = .4; gap = 1.0
-while t0 < 5.2:
-    add(t0, thump(52, .35, .08), .5); add(t0 + .17, thump(46, .3, .07), .32)
-    t0 += gap; gap = max(.55, gap * .9)
-for t1, g in ((.5, .55), (1.3, .6)): add(t1, hall(step()), g)
-add(1.75, hall(bars()), .32)                                                # 곤봉이 철창을 긁고 지나간다
+# 심장 박동·발소리·철창 긁는 소리는 뺐다(운영자 피드백 11/19: '틱·똑' 하는 짧은 소리가 거슬린다). 길게 끄는 소리만 남긴다.
+out += .07 * band(rng.standard_normal(N).astype(np.float32), 180, 700) * (.5 + .5 * np.sin(2 * np.pi * .31 * T + 2)) ** 3 * quiet   # 먼 웅성거림
 add(2.5, hall(slam(1.2)), .55)
 add(4.75, buzzer(.5), .3)                                                   # 문 잠금 버저
 add(5.3, hall(slam()), 1.3)
@@ -62,7 +57,7 @@ d = 1.6; t = tt(d); add(7.5, noise(d, 80, 600) * np.sin(np.pi * t / d) ** 2 * (t
 add(7.25, buzzer(.45), .3)
 add(7.75, hall(slam(2.0)), .9)
 t = tt(3.4); add(9.8, (np.sin(2 * np.pi * 41 * t) + .6 * np.sin(2 * np.pi * 61.5 * t) + .3 * np.sin(2 * np.pi * 82 * t)) * np.exp(-t / 1.4) * np.minimum(1, t / .05), .5)   # 긴 낮은 울림
-t = tt(.06); add(12.75, np.sin(2 * np.pi * 900 * t) * np.exp(-t / .012), .35); add(12.83, thump(120, .15, .03), .4)   # 탈깍(낮게)
+add(12.7, hall(slam(.9)), .35)                                              # 끝: 멀리서 문 닫히는 소리(짧은 '탈깍' 대신)
 out = band(out, 25, 3200)                                                    # 고음을 깎아 어둡게
 out *= np.clip((DUR - T) / .5, 0, 1); out /= np.abs(out).max()
 out = np.tanh(out * 2.2) / np.tanh(2.2) / 1.1
