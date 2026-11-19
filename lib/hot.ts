@@ -1,5 +1,4 @@
 import { buildPosterIndex, findPoster } from "./poster";
-import { isMurder } from "./kind";
 import { brandOf } from "./cafe";
 
 // "요즘 많이 다녀온 방": 공개 후기(글 공개)를 테마별로 세어 순위를 낸다. 순수 함수.
@@ -11,7 +10,6 @@ export type HotReview = {
   createdAt?: string;
   success: boolean;
   isSample?: boolean;
-  kind?: string;
 };
 export type HotTheme = { id: string; name: string; cafe: string; genre: string; poster_url?: string | null };
 export type HotRow = { key: string; theme: HotTheme | null; name: string; cafe: string; count: number; successRate: number };
@@ -23,7 +21,7 @@ function tally(reviews: HotReview[], themes: HotTheme[]): HotRow[] {
   const byId = new Map(themes.map((t) => [t.id, t]));
   const groups = new Map<string, { theme: HotTheme | null; name: string; cafe: string; n: number; ok: number }>();
   for (const r of reviews) {
-    if (r.isSample || !r.themeName.trim() || isMurder(r)) continue;
+    if (r.isSample || !r.themeName.trim()) continue;
     const hit = findPoster(index, r.themeName, r.cafeName);
     const theme = hit ? (byId.get(hit.id) ?? null) : null;
     const key = theme ? theme.id : `${norm(r.themeName)}|${norm(brandOf(r.cafeName))}`;

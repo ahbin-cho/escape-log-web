@@ -1,11 +1,9 @@
 import type { EscapeRecord } from "@/lib/store";
-import { escapeOnly } from "@/lib/kind";
 
 export default function Stats({ records }: { records: EscapeRecord[] }) {
   const total = records.length;
-  const escapes = escapeOnly(records); // 성공률은 방탈출 기록만(머더미스터리는 뺀다)
-  const successes = escapes.filter((r) => r.success).length;
-  const successRate = escapes.length ? Math.round((successes / escapes.length) * 100) : 0;
+  const successes = records.filter((r) => r.success).length;
+  const successRate = total ? Math.round((successes / total) * 100) : 0;
   const avgRating = total
     ? (records.reduce((s, r) => s + (Number(r.rating) || 0), 0) / total).toFixed(1)
     : "0.0";

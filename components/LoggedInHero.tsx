@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { escapeOnly } from "@/lib/kind";
 import Image from "next/image";
 import type { EscapeRecord } from "@/lib/store";
 import { nextMilestone } from "@/lib/diary";
@@ -20,9 +19,8 @@ function DoorIcon() {
 // 내 기록 요약 스탯을 보여주고 기록 추가를 유도한다. 기록이 없으면 첫 기록 유도로 전환.
 export default function LoggedInHero({ records }: { records: EscapeRecord[] }) {
   const total = records.length;
-  const escapes = escapeOnly(records); // 성공률은 방탈출 기록만
-  const successRate = escapes.length
-    ? Math.round((escapes.filter((r) => r.success).length / escapes.length) * 100)
+  const successRate = total
+    ? Math.round((records.filter((r) => r.success).length / total) * 100)
     : 0;
   const avgRating = total
     ? (

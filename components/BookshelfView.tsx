@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { isMurder, resultWord } from "@/lib/kind";
 import Link from "next/link";
 import type { EscapeRecord } from "@/lib/store";
 import { RATING_LABELS } from "@/lib/terms";
@@ -108,8 +107,8 @@ function RecordSheet({ book: b, posters, onClose }: { book: Book; posters: Poste
 
         <dl className="mt-4 grid grid-cols-3 divide-x divide-line border-y border-line text-center">
           <Cell label="평가" value={RATING_LABELS[b.rating - 1]} />
-          <Cell label="결과" value={resultWord(r)} />
-          {isMurder(r) ? <Cell label="종류" value="머더미스터리" /> : <Cell label="힌트" value={hint} />}
+          <Cell label="결과" value={r.success ? "탈출" : "실패"} />
+          <Cell label="힌트" value={hint} />
         </dl>
 
         {r.oneLiner && <p className="mt-4 text-[15px] leading-relaxed text-cream/85 [word-break:keep-all]">“{r.oneLiner}”</p>}

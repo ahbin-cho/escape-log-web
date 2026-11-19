@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { isMurder, kindOf, KIND_EMOJI, KIND_LABEL } from "@/lib/kind";
 import { useRouter } from "next/navigation";
 import {
   GENRES,
@@ -343,7 +342,7 @@ export default function RecordForm({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!form.themeName.trim()) {
-      alert(murder ? "시나리오 이름을 입력해 주세요." : "테마명을 입력해 주세요.");
+      alert("테마명을 입력해 주세요.");
       return;
     }
     setSaving(true);
@@ -354,13 +353,11 @@ export default function RecordForm({
       rating: Number(form.rating),
       hintCount: hintUnlimited ? -1 : hintCount,
     };
-    // 머더미스터리는 방탈출 유형 화면 대신 내 기록으로 보낸다
-    const next = isMurder(record) ? "/records" : "/taste?saved=1";
     if (guest && mode === "new") {
       // 비회원: 이 기기에 먼저 저장하고, 가입하면 계정으로 옮긴다
       saveGuestRecord(record);
       if (mode === "new") trackAttributionEvent("record_saved");
-      router.push(next);
+      router.push("/taste?saved=1");
       return;
     }
     try {
@@ -370,13 +367,13 @@ export default function RecordForm({
       deleteRecordPhotos(initialPhotos.current.filter((u) => !kept.includes(u)));
       if (mode === "new") trackAttributionEvent("record_saved");
       // 새 기록은 저장하자마자 '기록으로 본 내 유형·다음 방 추천'으로
-      router.push(mode === "new" ? next : "/");
+      router.push(mode === "new" ? "/taste?saved=1" : "/");
       router.refresh();
     } catch (err) {
       setSaving(false);
       if (err instanceof Error && err.message.includes("로그인")) {
         saveGuestRecord(record);
-        router.push(next);
+        router.push("/taste?saved=1");
         return;
       }
       alert(err instanceof Error ? err.message : "저장에 실패했어요.");
@@ -396,8 +393,7 @@ export default function RecordForm({
     }
   }
 
-  const murder = isMurder(form); // 머더미스터리: 테마 목록에서 고르지 않고, 남은 시간·힌트·공포도·테마 유형이 없다
-  const showManual = murder || manual || !picked || catalog.length === 0;
+  const showManual = manual || !picked || catalog.length === 0;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 pb-28">
@@ -408,35 +404,11 @@ export default function RecordForm({
         </p>
       )}
 
-      {/* 00 종류: 방탈출 / 머더미스터리(크라임씬) */}
-      <div className="grid grid-cols-2 gap-2" role="group" aria-label="기록 종류">
-        {(["escape", "murder"] as const).map((k) => (
-          <button
-            key={k}
-            type="button"
-            aria-pressed={kindOf(form) === k}
-            onClick={() => {
-              set("kind", k);
-              if (k === "murder") {
-                setPicked(null);
-                if (form.genre === "공포") set("genre", "추리");
-              }
-            }}
-            className={`rounded-xl border-2 py-3 text-sm font-extrabold transition active:scale-[0.97] ${
-              kindOf(form) === k ? "border-edge bg-candy text-edge shadow-cute" : "border-edge/15 text-cream/45"
-            }`}
-          >
-            {KIND_EMOJI[k]} {KIND_LABEL[k]}
-            {k === "murder" && <span className="ml-1 text-[11px] font-bold opacity-70">· 크라임씬</span>}
-          </button>
-        ))}
-      </div>
-
       {/* 01 어떤 방 */}
       <section className={card}>
-        <SectionTitle icon={murder ? "🔪" : "🗝️"} title={murder ? "어떤 사건이었어요?" : "어떤 방이었어요?"} />
+        <SectionTitle icon="🗝️" title="어떤 방이었어요?" />
 
-        {mode === "new" && catalog.length > 0 && !picked && !murder && (
+        {mode === "new" && catalog.length > 0 && !picked && (
           <div className="space-y-2.5">
             <div className="relative">
               <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-cream/35">⌕</span>
@@ -522,7 +494,7 @@ export default function RecordForm({
 
         {showManual ? (
           <>
-          {mode === "new" && catalog.length > 0 && !picked && !murder && (
+          {mode === "new" && catalog.length > 0 && !picked && (
             <div className="mt-5 flex items-center gap-3 text-[11px] font-bold text-cream/35">
               <span className="h-px flex-1 bg-edge/10" />
               목록에 없으면 직접 적기
@@ -531,12 +503,12 @@ export default function RecordForm({
           )}
           <div className={`grid gap-3 sm:grid-cols-2 ${picked || (mode === "new" && catalog.length > 0) ? "mt-4" : ""}`}>
             <div className="sm:col-span-2">
-              <label className={labelCls}>{murder ? "시나리오 이름 *" : "테마명 *"}</label>
-              <input className={field} value={form.themeName} onChange={(e) => set("themeName", e.target.value)} placeholder={murder ? "예: 저택의 마지막 만찬" : "예: 어느 폐가의 기록"} />
+              <label className={labelCls}>테마명 *</label>
+              <input className={field} value={form.themeName} onChange={(e) => set("themeName", e.target.value)} placeholder="예: 어느 폐가의 기록" />
             </div>
             <div>
               <label className={labelCls}>매장명</label>
-              <input className={field} value={form.cafeName} onChange={(e) => set("cafeName", e.target.value)} placeholder={murder ? "예: 홍대 머더미스터리 카페" : "예: 강남 방탈출"} />
+              <input className={field} value={form.cafeName} onChange={(e) => set("cafeName", e.target.value)} placeholder="예: 강남 방탈출" />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
@@ -571,8 +543,8 @@ export default function RecordForm({
         <SectionTitle icon="🏁" title="결과는요?" />
         <div className="grid grid-cols-2 gap-2">
           {[
-            { v: true, t: murder ? "🎉 내 목표 달성" : "🎉 탈출 성공" },
-            { v: false, t: murder ? "😵 목표 실패" : "😵 아쉽게 실패" },
+            { v: true, t: "🎉 탈출 성공" },
+            { v: false, t: "😵 아쉽게 실패" },
           ].map((o) => (
             <button
               key={o.t}
@@ -597,15 +569,6 @@ export default function RecordForm({
             <label className={labelCls}>다녀온 날</label>
             <input type="date" className={field} value={form.playedAt} onChange={(e) => set("playedAt", e.target.value)} />
           </div>
-          {murder ? (
-            <div>
-              <label className={labelCls}>
-                맡은 역할 <span className="font-normal text-cream/40">나만 보기 · 스포 OK</span>
-              </label>
-              <input className={field} value={form.role ?? ""} maxLength={40} onChange={(e) => set("role", e.target.value)} placeholder="예: 집사, 탐정, (범인이었다…)" />
-            </div>
-          ) : (
-            <>
           <div>
             <label className={labelCls}>남은 시간</label>
             <input className={field} value={form.remainingTime} onChange={(e) => set("remainingTime", e.target.value)} placeholder={form.success ? "예: 3분 12초" : "실패면 비워 둬도 돼요"} />
@@ -625,8 +588,6 @@ export default function RecordForm({
               )}
             </div>
           </div>
-            </>
-          )}
           <div>
             <span className={labelCls}>함께한 인원</span>
             <div className="rounded-xl border-2 border-edge/15 px-2 py-1.5">
@@ -639,7 +600,7 @@ export default function RecordForm({
       {/* 03 평가 */}
       <section className={card}>
         <SectionTitle icon="⭐" title="어땠어요?" />
-        <p className="mb-2 text-[13px] font-bold text-cream/60">{murder ? "이 시나리오는 어떤 길이었나요?" : "이 방은 어떤 길이었나요?"}</p>
+        <p className="mb-2 text-[13px] font-bold text-cream/60">이 방은 어떤 길이었나요?</p>
         <RatingPicker value={form.rating} onChange={(v) => set("rating", v)} />
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <IconMeter
@@ -650,7 +611,6 @@ export default function RecordForm({
             onChange={(v) => set("difficulty", v)}
             caption={form.difficulty ? `${DIFFICULTY_WORDS[form.difficulty - 1]} · ${form.difficulty}/5` : ""}
           />
-          {!murder && (
           <IconMeter
             label="공포도"
             icon="👻"
@@ -659,9 +619,7 @@ export default function RecordForm({
             onChange={(v) => set("fearLevel", v)}
             caption={fearLabel(form.fearLevel)}
           />
-          )}
         </div>
-        {!murder && (
         <div className="mt-4">
           <span className={labelCls}>
             테마 유형 <span className="font-normal text-cream/40">선택</span>
@@ -682,7 +640,6 @@ export default function RecordForm({
             ))}
           </div>
         </div>
-        )}
       </section>
 
       {/* 04 남기기 */}
@@ -826,7 +783,7 @@ export default function RecordForm({
             disabled={saving}
             className="rough flex-1 rounded-xl border-2 border-edge bg-candy py-3.5 text-[15px] font-extrabold text-edge shadow-cute transition active:scale-[0.98] disabled:opacity-50"
           >
-            {saving ? "저장 중…" : mode === "new" ? (murder ? "기록 저장" : "저장하고 내 유형 보기") : "기록 저장"}
+            {saving ? "저장 중…" : mode === "new" ? "저장하고 내 유형 보기" : "기록 저장"}
           </button>
         </div>
       </div>

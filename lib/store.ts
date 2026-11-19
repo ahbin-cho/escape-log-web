@@ -11,7 +11,6 @@ import { CATALOG as LOCAL_CATALOG } from "./catalog";
 import type { QuizValues } from "./quiz/slots";
 import { normalizeGenre } from "./genre";
 import { compressImage, normalizePhotos, storagePath } from "./photos";
-import { isMurder, kindOf, type RecordKind } from "./kind";
 
 export type Genre =
   | "공포"
@@ -47,8 +46,6 @@ export interface EscapeRecord {
   isPublic: boolean; // 한 줄 후기(글)를 다른 사람에게 보일지
   photoPublic?: boolean; // 사진도 보일지(기본 꺼짐). isPublic 이 켜져 있을 때만 의미가 있다
   spoiler?: boolean; // 한 줄에 스포일러가 있음 → 가려서 보여 준다
-  kind?: RecordKind; // 기록 종류(없으면 방탈출). lib/kind.ts
-  role?: string; // 머더미스터리에서 맡은 역할(나만 보기, 공개 뷰에 없음)
   hidden: boolean; // 관리자 숨김
   createdAt: string; // ISO
 }
@@ -156,8 +153,6 @@ type RecordRow = {
   is_public: boolean;
   photo_public?: boolean | null; // docs/sql/2026-11-17_review_visibility.sql 실행 전엔 없음
   spoiler?: boolean | null;
-  kind?: string | null; // docs/sql/2026-11-19_record_kind.sql 실행 전엔 없음
-  role?: string | null;
   hidden: boolean;
   created_at: string;
 };
@@ -185,8 +180,6 @@ function fromRow(r: RecordRow): EscapeRecord {
     isPublic: !!r.is_public,
     photoPublic: !!r.photo_public,
     spoiler: !!r.spoiler,
-    kind: kindOf(r),
-    role: r.role ?? "",
     hidden: !!r.hidden,
     createdAt: r.created_at ?? "",
   };
@@ -209,20 +202,18 @@ function toRow(r: EscapeRecord, userId: string) {
     fear_level: r.fearLevel,
     rating: r.rating,
     success: r.success,
-    remaining_time: isMurder(r) ? "" : r.remainingTime,
-    hint_count: isMurder(r) ? -1 : r.hintCount, // 머더미스터리는 힌트 개념이 없다 → -1(노힌트로 세지 않게)
+    remaining_time: r.remainingTime,
+    hint_count: r.hintCount,
     one_liner: r.oneLiner,
     memo: r.memo,
     region: r.region || "", // NOT NULL 컬럼 → null 금지, 빈 문자열로
     photo_url: photos[0] ?? "", // NOT NULL 컬럼 → null 금지, 빈 문자열로
     photo_urls: photos,
     party_size: Number(r.partySize) || 0,
-    theme_type: isMurder(r) ? "" : r.themeType || "",
+    theme_type: r.themeType || "",
     is_public: r.isPublic,
     photo_public: !!r.isPublic && !!r.photoPublic,
     spoiler: !!r.spoiler,
-    kind: kindOf(r),
-    role: isMurder(r) ? (r.role ?? "").trim() : "",
     hidden: r.hidden,
   };
 }
@@ -284,15 +275,6 @@ export async function saveRecord(record: EscapeRecord): Promise<EscapeRecord | n
     void _s;
     const safe = (old.photo_url && !full.photo_public) || full.spoiler ? { ...old, is_public: false } : old;
     ({ data, error } = await write(safe));
-  }
-  // kind·role 칸을 만드는 SQL 을 아직 안 돌린 DB: 방탈출 기록은 그 칸 없이 저장하고,
-  // 머더미스터리는 방탈출로 잘못 섞이면 통계가 틀어지므로 저장하지 않고 알려 준다.
-  if (error && /\bkind\b|\brole\b/.test(error.message)) {
-    if (isMurder(record)) throw new Error("머더미스터리 기록은 아직 준비 중이에요. 잠시 뒤 다시 시도해 주세요.");
-    const { kind: _k, role: _r, ...old } = full;
-    void _k;
-    void _r;
-    ({ data, error } = await write(old));
   }
   if (error) throw error;
   return fromRow(data as RecordRow);

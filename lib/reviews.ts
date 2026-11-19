@@ -1,5 +1,4 @@
 import type { EscapeRecord } from "./store";
-import { isMurder } from "./kind";
 import { brandOf } from "./cafe";
 
 // ─────────────────────────────────────────────────────────────
@@ -11,10 +10,9 @@ import { brandOf } from "./cafe";
 const norm = (s: string) => (s || "").replace(/\s+/g, "").toLowerCase();
 
 export function isSameTheme(
-  r: Pick<EscapeRecord, "themeName" | "cafeName" | "kind">,
+  r: Pick<EscapeRecord, "themeName" | "cafeName">,
   theme: { name: string; cafe: string }
 ): boolean {
-  if (isMurder(r)) return false; // 테마 상세는 방탈출 후기만(같은 이름의 머더미스터리 시나리오가 섞이지 않게)
   if (norm(r.themeName) !== norm(theme.name)) return false;
   if (!r.cafeName.trim()) return true;
   return norm(brandOf(r.cafeName)) === norm(brandOf(theme.cafe));

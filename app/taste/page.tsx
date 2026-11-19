@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { escapeOnly } from "@/lib/kind";
 import Link from "next/link";
 import {
   getRecords,
@@ -42,7 +41,7 @@ export default function TastePage() {
       }
       const [r, c] = await Promise.all([loggedIn ? getRecords() : Promise.resolve(getLegacyLocalRecords()), getCatalog()]);
       setGuest(!loggedIn);
-      setRecords(escapeOnly(r)); // 취향·졸업·노힌트는 방탈출 기록만
+      setRecords(r);
       setCatalog(c);
       setReady(true);
     })();

@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { isMurder, resultWord } from "@/lib/kind";
 import type { EscapeRecord } from "@/lib/store";
 import { ratingLabel } from "@/lib/terms";
 import { groupByMonth, reachedMilestone, recordDate } from "@/lib/diary";
@@ -54,8 +53,8 @@ export default function DiaryView({
               const label = ratingLabel(r.rating);
               const legend = Math.round(r.rating) >= 5;
               const facts = [
-                isMurder(r) ? `🔪 머더미스터리 · ${resultWord(r)}` : r.success ? `탈출${r.remainingTime ? ` · ${r.remainingTime} 남김` : ""}` : "실패",
-                isMurder(r) ? "" : hintText(r.hintCount),
+                r.success ? `탈출${r.remainingTime ? ` · ${r.remainingTime} 남김` : ""}` : "실패",
+                hintText(r.hintCount),
                 legend ? "" : label,
               ].filter(Boolean);
               return (
