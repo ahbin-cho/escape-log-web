@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { faqLd, regionFaq } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ThemeList from "@/components/ThemeList";
@@ -91,6 +92,9 @@ export default async function RegionThemesPage({ params }: Props) {
   const price = priceRange(themes);
   const firstOf = (b: string) => themes.find((t) => brandOf(t.cafe) === b);
 
+  // 숫자로 바로 답하는 문답(검색·AI 답변용). 화면에도 같은 내용을 보여 준다
+  const faq = regionFaq(region, themes);
+
   const jsonLd = [
     {
       "@context": "https://schema.org",
@@ -118,6 +122,7 @@ export default async function RegionThemesPage({ params }: Props) {
         url: `${SITE_URL}/theme/${t.id}`,
       })),
     },
+    ...(faq.length ? [faqLd(faq)] : []),
   ];
 
   return (
@@ -252,6 +257,20 @@ export default async function RegionThemesPage({ params }: Props) {
             ))}
         </ul>
       </nav>
+
+      {faq.length > 0 && (
+        <section className="space-y-3">
+          <h2 className="text-lg font-extrabold">자주 묻는 질문</h2>
+          <dl className="divide-y divide-line border-y border-line">
+            {faq.map((f) => (
+              <div key={f.q} className="py-3.5">
+                <dt className="text-[15px] font-extrabold">{f.q}</dt>
+                <dd className="mt-1 text-sm leading-relaxed text-cream/70">{f.a}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )}
 
       <QuizRow title="어떤 테마가 내 취향일까?" sub="질문 몇 개로 방탈출 취향을 진단하고 맞는 방을 추천받아요" />
     </article>

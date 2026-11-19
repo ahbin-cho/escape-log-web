@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { themeEntityLd } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cleanTeaser, teaserPreview } from "@/lib/home-picks";
@@ -247,6 +248,21 @@ export default async function ThemePage({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
         />
       )}
+      {/* 이 테마 자체를 가리키는 구조화 데이터(이름·장르·인원·시간·매장). 검색·AI 답변이 테마를 하나의 대상으로 알아보게 */}
+      <script
+        hidden type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            themeEntityLd(t, {
+              url: `${SITE_URL}/theme/${t.id}`,
+              genre,
+              region,
+              image: posterSrc(t.poster_url) || null,
+              description: cleanTeaser(t.teaser ?? "").slice(0, 300) || undefined,
+            })
+          ),
+        }}
+      />
 
       {/* 빵부스러기 내비 (내부 링크 + 사용자 경로) */}
       <nav aria-label="경로" className={CRUMB}>
