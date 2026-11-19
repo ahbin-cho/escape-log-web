@@ -55,8 +55,8 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // 정적 자원 제외 전 경로에서 세션 갱신.
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:png|jpg|jpeg|svg|gif|webp)$).*)",
-  ],
+  // 서버에서 로그인 세션을 읽는 곳은 관리자 화면과 로그인 콜백뿐이다(나머지 화면은 브라우저의 Supabase 가 직접 갱신).
+  // 전 경로에서 돌리면 검색 봇·미리 불러오기 요청까지 함수를 거쳐 Vercel 무료 CPU 를 쓴다 → 두 경로로 좁혔다(2026-11-19).
+  // 예전 주소 301 은 next.config 의 redirects 가 맡는다(위 LEGACY_HOSTS 분기는 이 두 경로에 예전 주소로 들어온 경우만 탄다).
+  matcher: ["/admin/:path*", "/auth/:path*"],
 };
