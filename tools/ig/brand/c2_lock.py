@@ -50,6 +50,6 @@ m = Image.open('/home/user/escape-log-web/public/mascot.png').convert('RGBA').re
 im.alpha_composite(m, (520, 250))
 d = ImageDraw.Draw(im)
 F = lambda p, s: ImageFont.truetype(p, s)
-d.text((540, 1180), '탈깍노트', font=F('/home/user/escape-log-web/assets/fonts/SBAggroB.woff', 110), fill=(29, 29, 29), anchor='ms')
+d.text((540, 1180), '방탈깍노트', font=F('/home/user/escape-log-web/assets/fonts/SBAggroB.woff', 110), fill=(29, 29, 29), anchor='ms')
 d.text((540, 1244), '방탈출 다녀온 날, 탈깍 한 줄', font=F('/home/user/escape-log-web/assets/fonts/Pretendard-Medium.woff', 32), fill=(110, 96, 78), anchor='ms')
 im.convert('RGB').save(out, quality=92)

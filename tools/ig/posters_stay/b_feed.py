@@ -15,7 +15,7 @@ def km(t, x, y, f, anchor='ls', sp=0):
     return np.asarray(im, np.float32) / 255
 L, R = 90, 990
 lp.border(40, 40, W - 40, H - 40, weight=5)
-lp.lock(km('탈깍노트 이머시브 소식  ·  STAY ALIVE IN MUSEUM 앵콜', 540, 100, F(PB, 24), 'ms', 2), BLACK)
+lp.lock(km('방탈깍노트 이머시브 소식  ·  STAY ALIVE IN MUSEUM 앵콜', 540, 100, F(PB, 24), 'ms', 2), BLACK)
 lp.rule(L, R, 120, 'thick_thin')
 lp.lock(km('긴 급 구 인', 540, 182, F(AG, 50), 'ms', 6), RED)
 lp.lock(km('신입 캐스트', 540, 330, F(AG, 140), 'ms', 2), BLACK)
@@ -55,7 +55,7 @@ lp.lock(km('앵콜 마지막 2주', 600, 1180, F(AG, 40)), BLACK)
 lp.lock(km('살아남아야 끝나요', 600, 1224, F(PB, 32)), BLACK)
 lp.rule(L, R, 1238, 'single')
 lp.lock(km('롯데월드 홈페이지 예매  ·  보도자료 기준, 예매처에서 다시 확인', 540, 1264, F(PM, 21), 'ms'), BLACK)
-lp.lock(km('※ 탈깍노트가 만든 소개 카드예요(공식 공고 아님) · @talkkak.note', 540, 1290, F(PM, 19), 'ms'), RED)
+lp.lock(km('※ 방탈깍노트가 만든 소개 카드예요(공식 공고 아님) · @bangtalkkak.note', 540, 1290, F(PM, 19), 'ms'), RED)
 lp.press(RED); lp.press(BLACK)
 lp.fold('h', 675, depth=0.6); lp.tone_edges(0.8); lp.foxing(90); lp.tack(60, 60); lp.tack(W - 60, 60)
 lp.save(out)

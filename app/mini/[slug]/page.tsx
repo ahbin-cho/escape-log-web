@@ -33,7 +33,7 @@ export function generateMetadata({ params, searchParams }: Props): Metadata {
     // 결과 주소는 시작 주소 하나로 모아 검색에 올린다.
     alternates: { canonical: `/mini/${quiz.slug}` },
     openGraph: {
-      title: `${title} | 탈깍노트`,
+      title: `${title} | 방탈깍노트`,
       description,
       url: `/mini/${quiz.slug}`,
       images: [DEFAULT_OG_IMAGE],

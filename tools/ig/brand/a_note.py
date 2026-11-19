@@ -63,6 +63,6 @@ sh = sh.rotate(-9, resample=Image.BICUBIC, expand=True)
 im.paste(sh, (700 + 6, 330 + 8), sh); im.paste(pad, (700, 330), pad)
 # brand line on desk
 d = ImageDraw.Draw(im)
-d.text((540, 1238), '탈깍노트', font=F(AG, 92), fill=(29, 29, 29), anchor='ms')
+d.text((540, 1238), '방탈깍노트', font=F(AG, 92), fill=(29, 29, 29), anchor='ms')
 d.text((540, 1296), '방탈출 다녀온 날, 탈깍 한 줄', font=F(PR, 30), fill=(90, 80, 66), anchor='ms')
 im.save(out, quality=92)

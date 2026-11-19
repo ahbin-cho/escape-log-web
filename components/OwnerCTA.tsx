@@ -2,7 +2,7 @@ import { CONTACT_EMAIL } from "@/lib/site";
 
 // 매장 운영자용 안내: 정보 수정·제휴 문의 창구.
 export default function OwnerCTA({ cafe }: { cafe: string }) {
-  const subject = encodeURIComponent(`[탈깍노트] ${cafe} 매장 문의`);
+  const subject = encodeURIComponent(`[방탈깍노트] ${cafe} 매장 문의`);
   const body = encodeURIComponent(
     `매장명: ${cafe}\n문의 내용(정보 수정 / 제휴 / 삭제 요청 등):\n`
   );

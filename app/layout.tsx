@@ -9,15 +9,15 @@ import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/site";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "탈깍노트 — 방탈출 기록장·달력 다이어리, 취향 진단·추천",
-    template: "%s · 탈깍노트"
+    default: "방탈깍노트 — 방탈출 기록장·달력 다이어리, 취향 진단·추천",
+    template: "%s · 방탈깍노트"
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
   alternates: {
     canonical: "/",
     // 새로 들어온 테마 RSS (브라우저·수집기가 찾을 수 있게 모든 페이지에 표시)
-    types: { "application/rss+xml": [{ url: "/rss.xml", title: "탈깍노트 새로 들어온 테마" }] }
+    types: { "application/rss+xml": [{ url: "/rss.xml", title: "방탈깍노트 새로 들어온 테마" }] }
   },
   keywords: [
     "방탈출",
@@ -33,6 +33,7 @@ export const metadata: Metadata = {
     "방탈출 취향 진단",
     "방탈출 후기",
     "이스케이프룸",
+    "방탈깍노트",
     "탈깍노트",
     "방탈출 궁합",
     "방탈출 지도"
@@ -72,13 +73,13 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     locale: "ko_KR",
     url: SITE_URL,
-    title: "탈깍노트 — 나만의 방탈출 아카이브",
+    title: "방탈깍노트 — 나만의 방탈출 아카이브",
     description:
       "기록·취향 진단·추천·친구 궁합까지. 방탈러를 위한 올인원 서비스."
   },
   twitter: {
     card: "summary_large_image",
-    title: "탈깍노트 — 나만의 방탈출 아카이브",
+    title: "방탈깍노트 — 나만의 방탈출 아카이브",
     description: "기록·취향 진단·추천·친구 궁합까지. 방탈러를 위한 올인원."
   }
 };
@@ -96,14 +97,15 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: SITE_NAME,
-  alternateName: "Escape Log",
+  alternateName: ["탈깍노트", "방탈로그", "Escape Log"], // 예전 이름으로 찾아도 같은 곳으로 묶이게
   url: SITE_URL,
   description: SITE_DESCRIPTION,
   inLanguage: "ko-KR",
   publisher: {
     "@type": "Organization",
     name: SITE_NAME,
-    url: SITE_URL
+    url: SITE_URL,
+    sameAs: ["https://www.instagram.com/bangtalkkak.note/"] // 공식 인스타(검색엔진이 같은 곳으로 묶게)
   }
 };
 

@@ -38,7 +38,7 @@ h1{{position:absolute;left:76px;right:76px;top:222px;font-family:A;font-weight:4
 .foot{{position:absolute;left:80px;right:80px;bottom:52px;display:flex;justify-content:space-between;align-items:center;font-size:22px;color:#5A5148}}
 .url{{font-family:A;font-size:26px;color:#1D1D1D}}
 </style></head><body><div class="dots"></div>
-<div class="top"><span class="brand">탈깍노트</span><span class="badge">가오픈 소식</span></div>
+<div class="top"><span class="brand">방탈깍노트</span><span class="badge">가오픈 소식</span></div>
 <div class="store">{e("store")}</div>
 <h1>{e("theme")}</h1>
 <div class="period"><small>가오픈 기간</small><b>{e("period")}</b></div>

@@ -67,7 +67,7 @@ export async function shareReviewImage(r: ReviewCardData, byline?: string): Prom
       blob = await makeReviewImage({ ...r, chips: reviewChips(r), byline, tone });
     }
     const file = new File([blob], "talkkak-review.jpg", { type: "image/jpeg" });
-    const text = `${r.themeName}${r.oneLiner ? ` — “${r.oneLiner}”` : ""} · 탈깍노트`;
+    const text = `${r.themeName}${r.oneLiner ? ` — “${r.oneLiner}”` : ""} · 방탈깍노트`;
     await shareOrDownload(file, { text });
   } catch (err) {
     // 공유 창을 닫은 경우는 조용히 넘어간다

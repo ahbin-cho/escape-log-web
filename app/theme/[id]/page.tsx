@@ -124,7 +124,7 @@ export async function generateMetadata({
     ? `${t.cafe} · ${facts.join(" · ")}. ${story}`
     : `${t.cafe}의 방탈출 테마 '${t.name}'. ${bits.join(
         " · "
-      )}. 탈깍노트에서 취향 진단과 맞춤 추천을 받아보세요.`;
+      )}. 방탈깍노트에서 취향 진단과 맞춤 추천을 받아보세요.`;
 
   return {
     title: `${t.name} — ${t.cafe} 방탈출${region ? ` (${region})` : ""}`,
@@ -251,7 +251,7 @@ export default async function ThemePage({
       {/* 빵부스러기 내비 (내부 링크 + 사용자 경로) */}
       <nav aria-label="경로" className={CRUMB}>
         <Link href="/" className="hover:text-cream">
-          탈깍노트
+          방탈깍노트
         </Link>
         <span aria-hidden>·</span>
         <Link href={regionHref} className="hover:text-cream">

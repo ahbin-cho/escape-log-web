@@ -26,7 +26,7 @@ export default async function HotThemes() {
           🔥 {recent ? "요즘 많이 다녀온 방" : "많이 다녀온 방"}
         </h2>
         <p className="mt-0.5 text-[13px] text-cream/60">
-          {recent ? "최근 30일 동안" : "지금까지"} 탈깍노트에 기록이 많이 쌓인 순서예요.
+          {recent ? "최근 30일 동안" : "지금까지"} 방탈깍노트에 기록이 많이 쌓인 순서예요.
         </p>
       </div>
       <ol className="divide-y divide-line rounded-xl border-2 border-edge bg-panel px-3 shadow-cute">
