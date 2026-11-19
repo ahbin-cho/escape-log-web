@@ -16,12 +16,12 @@ export default function robots(): MetadataRoute.Robots {
       },
       // AI 검색·답변 봇은 이름을 적어 분명히 허용한다(GEO). 페이지는 미리 만들어 둔 캐시라 봇이 와도 서버 CPU 를 거의 안 쓴다.
       {
-        userAgent: ["GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-SearchBot", "Claude-User", "PerplexityBot", "Perplexity-User", "Google-Extended", "Applebot-Extended", "CCBot", "meta-externalagent", "Amazonbot"],
+        userAgent: ["GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-SearchBot", "Claude-User", "PerplexityBot", "Perplexity-User", "Google-Extended", "Applebot-Extended"],
         allow: "/",
         disallow: ["/admin", "/api/", "/auth/", "/search"],
       },
-      // 검색 유입도 AI 답변 노출도 없는 수집 봇만 막는다.
-      { userAgent: ["Bytespider", "PetalBot", "SemrushBot", "AhrefsBot", "MJ12bot", "DotBot"], disallow: "/" },
+      // 대량 수집 봇은 계속 막는다. CCBot·meta-externalagent·Amazonbot 도 막아 둔다(운영자 결정 2026-11-19: 다시 열지 않는다).
+      { userAgent: ["Bytespider", "CCBot", "meta-externalagent", "Amazonbot", "PetalBot", "SemrushBot", "AhrefsBot", "MJ12bot", "DotBot"], disallow: "/" },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
     host: SITE_URL,
