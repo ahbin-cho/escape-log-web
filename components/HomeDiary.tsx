@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { escapeOnly } from "@/lib/kind";
 import { useMemo } from "react";
 import DiaryView from "@/components/DiaryView";
 import type { EscapeRecord } from "@/lib/store";
@@ -58,8 +59,9 @@ export default function HomeDiary({
     );
   }
 
-  const success = records.filter((r) => r.success).length;
-  const rate = Math.round((success / records.length) * 100);
+  const escapes = escapeOnly(records); // 성공률은 방탈출 기록만
+  const success = escapes.filter((r) => r.success).length;
+  const rate = escapes.length ? Math.round((success / escapes.length) * 100) : 0;
   const milestone = nextMilestone(records.length);
 
   return (

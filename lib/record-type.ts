@@ -1,4 +1,5 @@
 import type { EscapeRecord, Genre } from "./store";
+import { escapeOnly } from "./kind";
 import { DRAWS, PLAYS, type Draw, type Play, type TypeId } from "./quiz/slots";
 
 // ─────────────────────────────────────────────────────────────
@@ -39,7 +40,8 @@ function top<T extends string>(order: readonly T[], scores: Record<T, number>): 
   return order.find((k) => scores[k] === max)!;
 }
 
-export function typeFromRecords(records: EscapeRecord[]): RecordType | null {
+export function typeFromRecords(all: EscapeRecord[]): RecordType | null {
+  const records = escapeOnly(all); // 방탈출 유형이라 머더미스터리 기록은 뺀다
   if (records.length < TYPE_MIN_RECORDS) return null;
   const n = records.length;
 

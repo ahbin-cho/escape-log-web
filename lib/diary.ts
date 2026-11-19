@@ -1,4 +1,5 @@
 import type { EscapeRecord, Genre } from "./store";
+import { escapeOnly } from "./kind";
 import { inferRegion } from "./region";
 
 // ─────────────────────────────────────────────────────────────
@@ -44,7 +45,7 @@ export function groupByMonth(records: EscapeRecord[]): MonthGroup[] {
         key,
         label: key ? `${y}년 ${Number(m)}월` : "날짜 없음",
         records: list.sort((a, b) => chronoKey(b).localeCompare(chronoKey(a))),
-        success: list.filter((r) => r.success).length,
+        success: escapeOnly(list).filter((r) => r.success).length,
       };
     });
 }
@@ -76,7 +77,7 @@ export type YearRecap = {
 };
 
 export function yearRecap(records: EscapeRecord[], year: number): YearRecap {
-  const list = records.filter((r) => recordDate(r).startsWith(`${year}-`));
+  const list = escapeOnly(records).filter((r) => recordDate(r).startsWith(`${year}-`)); // 방탈출 결산이라 머더미스터리는 뺀다
   const count = list.length;
   const success = list.filter((r) => r.success).length;
 

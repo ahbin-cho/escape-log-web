@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { isMurder, resultWord } from "@/lib/kind";
 import Link from "next/link";
 import type { EscapeRecord } from "@/lib/store";
 import { fearLabel } from "@/lib/terms";
@@ -60,14 +61,25 @@ export default function RecordCard({ record, number }: { record: EscapeRecord; n
         className="mt-2.5 flex min-h-[32px] w-full items-center justify-between gap-2 border-t border-line pt-2.5 text-left text-xs text-cream/70"
       >
         <span className="truncate">
-          난이도 {record.difficulty} · 공포 {record.fearLevel}
-          {fear ? ` (${fear})` : ""} · 힌트 {record.hintCount < 0 ? "무제한" : `${record.hintCount}회`}
+          {isMurder(record) ? (
+            <>🔪 머더미스터리 · 난이도 {record.difficulty} · {resultWord(record)}</>
+          ) : (
+            <>
+              난이도 {record.difficulty} · 공포 {record.fearLevel}
+              {fear ? ` (${fear})` : ""} · 힌트 {record.hintCount < 0 ? "무제한" : `${record.hintCount}회`}
+            </>
+          )}
         </span>
         <span className="shrink-0 font-extrabold text-cream">{expanded ? "접기" : "자세히"}</span>
       </button>
 
       {expanded && (
         <div className="mt-2 space-y-3 text-sm">
+          {isMurder(record) && record.role && (
+            <p className="text-[13px] text-cream/70">
+              맡은 역할 <b className="text-cream">{record.role}</b> <span className="text-cream/50">(나만 보여요)</span>
+            </p>
+          )}
           {(record.remainingTime || record.partySize > 0 || record.themeType) && (
             <p className="flex flex-wrap gap-x-3 gap-y-1 text-[13px] text-cream/70">
               {record.remainingTime && <span>남은 시간 {record.remainingTime}</span>}

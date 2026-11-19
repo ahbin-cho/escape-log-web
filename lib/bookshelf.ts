@@ -1,4 +1,5 @@
 import type { EscapeRecord } from "./store";
+import { escapeOnly } from "./kind";
 
 // ─────────────────────────────────────────────────────────────
 // 내 서재: 기록 하나 = 포스터 표지 한 장. 순수 함수만 둔다(테스트 대상).
@@ -64,7 +65,7 @@ export function coverDate(playedAt: string): string {
 
 export function shelfStats(records: EscapeRecord[]) {
   const legends = records.filter((r) => Math.round(r.rating) >= 5).length;
-  const escaped = records.filter((r) => r.success).length;
+  const escaped = escapeOnly(records).filter((r) => r.success).length;
   const genreCount = new Map<string, number>();
   for (const r of records) genreCount.set(r.genre, (genreCount.get(r.genre) ?? 0) + 1);
   const topGenre = [...genreCount.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;

@@ -1,5 +1,6 @@
 "use client";
 import { shortDate } from "@/lib/ui";
+import { isMurder, resultWord } from "@/lib/kind";
 
 import { useState } from "react";
 import { shareOrDownload } from "@/lib/share-file";
@@ -27,6 +28,7 @@ export type ReviewCardData = {
   playedAt: string;
   difficulty?: number; // 난이도·공포도가 있으면(내 기록) 리뷰 시트로 그린다
   fearLevel?: number;
+  kind?: string; // 없으면 방탈출
 };
 
 let posterIndex: Promise<PosterIndex> | null = null;
@@ -37,9 +39,10 @@ function loadPosterIndex(): Promise<PosterIndex> {
 
 export function reviewChips(r: ReviewCardData): string[] {
   return [
-    r.success ? "탈출 성공" : "탈출 실패",
-    r.success && r.remainingTime ? `${r.remainingTime} 남김` : "",
-    ...achievements(r),
+    isMurder(r) ? "🔪 머더미스터리" : "",
+    resultWord(r, true),
+    !isMurder(r) && r.success && r.remainingTime ? `${r.remainingTime} 남김` : "",
+    ...(isMurder(r) ? [] : achievements(r)),
     ratingLabel(r.rating),
     r.partySize > 0 ? `${r.partySize}명` : "",
   ].filter(Boolean);

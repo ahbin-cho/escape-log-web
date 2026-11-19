@@ -1,4 +1,5 @@
 import { SITE_HOST } from "./site";
+import { escapeOnly } from "./kind";
 import type { EscapeRecord } from "./store";
 import { monthCells, recordsByDay } from "./calendar";
 import { wrapText } from "./review-image";
@@ -41,7 +42,7 @@ export interface MonthCardLayout {
 export function monthStats(records: EscapeRecord[]): MonthStats {
   return {
     total: records.length,
-    escaped: records.filter((r) => r.success).length,
+    escaped: escapeOnly(records).filter((r) => r.success).length,
     lifeThemes: records.filter((r) => Math.round(r.rating) >= 5).length,
   };
 }
