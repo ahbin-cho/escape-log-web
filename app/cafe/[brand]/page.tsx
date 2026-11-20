@@ -6,7 +6,7 @@ import ThemeList from "@/components/ThemeList";
 import CompareTable from "@/components/CompareTable";
 import OwnerCTA from "@/components/OwnerCTA";
 import QuizRow from "@/components/QuizRow";
-import { CHIP, CRUMB } from "@/lib/ui";
+import { CHIP, CRUMB, posterFirst } from "@/lib/ui";
 import { branchOf } from "@/lib/cafe";
 import {
   decodeParam,
@@ -100,7 +100,7 @@ export default async function BrandPage({ params }: Props) {
       "@type": "ItemList",
       name: `${brand} 방탈출 테마`,
       numberOfItems: themes.length,
-      itemListElement: themes.map((t, i) => ({
+      itemListElement: themes.slice(0, 100).map((t, i) => ({ // 앞의 100개만 싣는다(전체 개수는 numberOfItems)
         "@type": "ListItem",
         position: i + 1,
         name: t.name,
@@ -162,7 +162,7 @@ export default async function BrandPage({ params }: Props) {
                 )}
               </div>
             )}
-            <ThemeList themes={list} />
+            <ThemeList themes={posterFirst(list)} limit={10} />
           </section>
         );
       })}

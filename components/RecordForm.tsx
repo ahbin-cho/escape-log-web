@@ -207,6 +207,22 @@ export default function RecordForm({
     setForm((f) => ({ ...f, photoUrls: list, photoUrl: list[0] ?? "" }));
   }
 
+  // 글자 입력 칸에 커서가 있는 동안 = 휴대폰에서 키보드가 열려 있는 동안
+  const [typing, setTyping] = useState(false);
+  useEffect(() => {
+    const isText = (el: EventTarget | null) =>
+      el instanceof HTMLTextAreaElement ||
+      (el instanceof HTMLInputElement && !["checkbox", "radio", "button", "submit", "file", "range", "date"].includes(el.type));
+    const on = (e: FocusEvent) => isText(e.target) && setTyping(true);
+    const off = () => setTimeout(() => setTyping(isText(document.activeElement)), 50); // 다음 칸으로 옮겨 가는 사이엔 깜빡이지 않게
+    document.addEventListener("focusin", on);
+    document.addEventListener("focusout", off);
+    return () => {
+      document.removeEventListener("focusin", on);
+      document.removeEventListener("focusout", off);
+    };
+  }, []);
+
   function set<K extends keyof EscapeRecord>(name: K, value: EscapeRecord[K]) {
     setForm((f) => ({ ...f, [name]: value }));
   }
@@ -565,9 +581,15 @@ export default function RecordForm({
         </div>
 
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          <div>
+          <div className="min-w-0">
             <label className={labelCls}>다녀온 날</label>
-            <input type="date" className={field} value={form.playedAt} onChange={(e) => set("playedAt", e.target.value)} />
+            {/* 아이폰 사파리의 날짜 칸은 기본 모양 그대로 두면 자기 너비를 고집해서 카드 밖으로 넘친다 → 기본 모양을 끄고 너비를 칸에 맞춘다 */}
+            <input
+              type="date"
+              className={`${field} block min-w-0 max-w-full appearance-none text-left [&::-webkit-date-and-time-value]:text-left`}
+              value={form.playedAt}
+              onChange={(e) => set("playedAt", e.target.value)}
+            />
           </div>
           <div>
             <label className={labelCls}>남은 시간</label>
@@ -768,8 +790,11 @@ export default function RecordForm({
         </button>
       )}
 
-      {/* 저장 바: 화면 아래에 붙어 있다 */}
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t-2 border-edge bg-ink/95 px-4 pb-[max(12px,env(safe-area-inset-bottom))] pt-3 backdrop-blur">
+      {/* 저장 바: 화면 아래에 붙어 있다. 글자를 치는 동안(키보드가 열려 있을 때)은 숨긴다:
+          인스타 앱 안 브라우저에서 바가 화면 가운데에 떠서 아래 내용이 비쳐 보였다(운영자 제보 11/19). 바탕도 불투명하게. */}
+      <div
+        className={`fixed inset-x-0 bottom-0 z-30 border-t-2 border-edge bg-ink px-4 pb-[max(12px,env(safe-area-inset-bottom))] pt-3 ${typing ? "hidden" : ""}`}
+      >
         <div className="mx-auto flex max-w-2xl gap-2">
           <button
             type="button"

@@ -20,6 +20,26 @@ export function posterSrc(url: string | null | undefined): string | null {
   return /^https?:\/\//.test(u) ? u : null;
 }
 
+// 포스터가 있는 테마를 앞으로(순서는 그대로 유지). 포스터를 못 구한 테마가 위에 몰려 있으면 목록이 비어 보인다(운영자 요청 2026-11-20).
+export function posterFirst<T extends { poster_url?: string | null }>(list: T[]): T[] {
+  return [...list.filter((t) => posterSrc(t.poster_url)), ...list.filter((t) => !posterSrc(t.poster_url))];
+}
+
+/** 묶음(브랜드·지점 등) 정렬: 포스터가 절반도 안 되는 묶음(룸즈에이처럼 대부분 못 구한 곳)은 아래로.
+ *  위쪽은 테마 많은 순, 아래쪽은 포스터가 그나마 있는 순 → 테마 많은 순. 묶음 안 테마도 포스터 있는 것 먼저. */
+export function sortGroupsPosterFirst<K, T extends { poster_url?: string | null }>(groups: [K, T[]][]): [K, T[]][] {
+  const withPoster = (list: T[]) => list.filter((t) => posterSrc(t.poster_url)).length;
+  const full = (list: T[]) => (withPoster(list) * 2 >= list.length ? 1 : 0);
+  return groups
+    .map(([k, list]) => [k, posterFirst(list)] as [K, T[]])
+    .sort(
+      (a, b) =>
+        full(b[1]) - full(a[1]) ||
+        (full(a[1]) ? 0 : withPoster(b[1]) - withPoster(a[1])) ||
+        b[1].length - a[1].length
+    );
+}
+
 // 공개 화면 날짜: 연도 없이 "MM.DD" (운영자 결정 2026-11-17). "2024-10-13" → "10.13"
 export function shortDate(d: string | null | undefined): string {
   const m = (d ?? "").match(/^\d{4}-(\d{2})-(\d{2})/);

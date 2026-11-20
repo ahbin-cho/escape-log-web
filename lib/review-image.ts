@@ -9,6 +9,8 @@ export type ReviewImageInput = {
   playedAt?: string;
   oneLiner?: string;
   photoUrl?: string;
+  posterUrl?: string; // 사진이 없을 때 깔 공식 포스터(/api/poster-img?id=…)
+  posterCredit?: string; // 예: "상상의문" → "포스터: 상상의문 공식"
   chips: string[]; // 예: ["탈출 성공", "8분 남김", "노힌트", "꽃밭길"]
   byline?: string; // 예: "— 닉네임" 또는 "47번째 방"
   tone: { bg: string; accent: string };
@@ -69,12 +71,14 @@ export async function makeReviewImage(r: ReviewImageInput): Promise<Blob> {
   c.fillStyle = r.tone.bg;
   c.fillRect(0, 0, W, H);
 
-  const img = r.photoUrl ? await loadImage(r.photoUrl) : null;
+  const photo = r.photoUrl ? await loadImage(r.photoUrl) : null;
+  const poster = !photo && r.posterUrl ? await loadImage(r.posterUrl) : null;
+  const img = photo ?? poster;
   if (img) {
     const s = Math.max(W / img.width, H / img.height);
     const w = img.width * s;
     const h = img.height * s;
-    c.globalAlpha = 0.72; // 사진을 살짝 눌러 글자가 읽히게
+    c.globalAlpha = poster ? 0.6 : 0.72; // 사진을 살짝 눌러 글자가 읽히게(포스터는 글자가 많아 조금 더)
     c.drawImage(img, (W - w) / 2, (H - h) / 2, w, h);
     c.globalAlpha = 1;
   } else {
@@ -107,6 +111,12 @@ export async function makeReviewImage(r: ReviewImageInput): Promise<Blob> {
   c.fillStyle = "rgba(255,255,255,0.6)";
   c.fillText(SITE_HOST, PAD, y);
   if (r.byline) c.fillText(r.byline, W - PAD - c.measureText(r.byline).width, y);
+  if (poster && r.posterCredit) {
+    const t = `포스터: ${r.posterCredit} 공식`;
+    c.font = `500 22px ${BODY}`;
+    c.fillText(t, W - PAD - c.measureText(t).width, y + 34);
+    c.font = `800 26px ${BODY}`;
+  }
   y -= 64;
 
   // 칩

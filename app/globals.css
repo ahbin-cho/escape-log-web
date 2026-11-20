@@ -147,3 +147,12 @@ input[type="range"].candy-range::-moz-range-thumb {
 .stage-bob{animation:stage-bob 2.4s ease-in-out infinite}
 @keyframes stage-bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
 @media (prefers-reduced-motion:reduce){.stage-spot,.stage-bob{animation:none}}
+
+/* 목록 페이지 "나머지 N개 더 보기"(components/ThemeList.tsx): 수백 줄이 되풀이돼서 줄마다 class 를 달지 않고 여기 한 번만 적는다 */
+@layer components {
+  .tl-more { @apply border-t border-line px-4; }
+  .tl-more li + li { @apply border-t border-line; }
+  .tl-more a { @apply block py-2.5; }
+  .tl-more h3 { @apply truncate text-sm font-extrabold; }
+  .tl-more span { @apply block truncate text-xs text-cream/60; }
+}

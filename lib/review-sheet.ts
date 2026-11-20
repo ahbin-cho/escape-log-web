@@ -95,7 +95,10 @@ export async function makeReviewSheet(r: ReviewSheetInput): Promise<Blob> {
   box(PX, PY, PW, PH, r.tone.bg);
   // 내가 올린 사진 → 공식 포스터 → 장르 색 표지
   const photo = r.photoUrl ? await loadImage(r.photoUrl) : null;
-  const poster = !photo && r.posterUrl ? await loadImage(r.posterUrl) : null;
+  // 포스터는 사진이 있어도 받아 둔다: 사진이 없으면 큰 칸에, 있으면 사진 오른쪽 아래에 작게 같이 넣는다(운영자 요청 11/19)
+  const posterImg = r.posterUrl ? await loadImage(r.posterUrl) : null;
+  const poster = photo ? null : posterImg;
+  const inset = photo ? posterImg : null;
   const img = poster ?? photo;
   c.save();
   c.beginPath(); c.roundRect(PX + 2, PY + 2, PW - 4, PH - 4, 20); c.clip();
@@ -117,6 +120,17 @@ export async function makeReviewSheet(r: ReviewSheetInput): Promise<Blob> {
     lines.forEach((l, i) => c.fillText(l, PX + (PW - c.measureText(l).width) / 2, PY + PH / 2 + 20 + (i - (lines.length - 1) / 2) * 58));
   }
   c.restore();
+  if (inset) {
+    // 사진 오른쪽 아래에 공식 포스터를 작게(자르지 않고 비율 그대로), 먹색 테두리
+    const iw = 132, ih = Math.min(198, Math.round((iw * inset.height) / inset.width));
+    const ix = PX + PW - iw - 14, iy = PY + PH - ih - 14;
+    c.save();
+    c.beginPath(); c.roundRect(ix, iy, iw, ih, 10); c.clip();
+    c.fillStyle = "#141414"; c.fillRect(ix, iy, iw, ih);
+    c.drawImage(inset, ix, iy, iw, ih);
+    c.restore();
+    c.lineWidth = 4; c.strokeStyle = INK; c.beginPath(); c.roundRect(ix, iy, iw, ih, 10); c.stroke();
+  }
 
   // 제목 + 기본 정보(오른쪽)
   const RX = 492, RW = W - 56 - RX;
@@ -210,7 +224,7 @@ export async function makeReviewSheet(r: ReviewSheetInput): Promise<Blob> {
 
   // 바닥
   c.fillStyle = INK; c.font = `800 26px ${BODY}`; c.fillText(SITE_HOST, 56, H - 34);
-  if (poster && r.posterCredit) {
+  if ((poster || inset) && r.posterCredit) {
     const t = `포스터: ${r.posterCredit} 공식`;
     c.fillStyle = MUTE; c.font = `500 22px ${BODY}`; c.fillText(t, W - 56 - c.measureText(t).width, H - 34);
   }

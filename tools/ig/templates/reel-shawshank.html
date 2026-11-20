@@ -1,0 +1,72 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* 쇼생크탈출(미스터리룸이스케이프 홍대2호점) 릴스 13.5초: 감옥 복도 → 감방(망치) → 철컹·암전 → 망치가 사라진 빈 감방 → 열린 철문 → 제목·후기.
+   글: 줄거리는 예약 페이지의 공식 시놉시스, 탈출 장면 문구는 공식 포스터 문구 그대로. 후기 세 줄은 네이버 블로그 후기 5편에서 간추림(출처 표기).
+   그림: 운영자가 제미나이로 뽑은 4장(assets/shaw-*.jpg, 공식 포스터의 흑백 톤 참고·새 장면). 소리: drawings/shawshank_sfx.py */
+@font-face{font-family:A;src:url(../../../assets/fonts/SBAggroB.woff)}
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-Medium.woff);font-weight:500}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;background:#000;overflow:hidden;font-family:P;color:#F5F0E6}
+.stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000}
+@keyframes in{to{opacity:1}} @keyframes out{to{opacity:0}}
+.cam{position:absolute;inset:0;animation:shake .45s 5.3s steps(7)}
+@keyframes shake{0%{translate:0 0}20%{translate:-16px 10px}40%{translate:14px -12px}60%{translate:-10px -6px}80%{translate:6px 6px}100%{translate:0 0}}
+.sc{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0}
+.hall{background-image:url(../assets/shaw-hall.jpg);opacity:1;transform-origin:50% 44%;animation:z1 2.7s linear forwards,out .01s 2.6s forwards}
+@keyframes z1{from{transform:scale(1.02)}to{transform:scale(1.32)}}
+.cell{background-image:url(../assets/shaw-cell.jpg);transform-origin:30% 68%;animation:in .01s 2.6s forwards,z2 2.8s 2.6s linear forwards,out .01s 5.4s forwards}
+@keyframes z2{from{transform:scale(1.02)}to{transform:scale(1.2)}}
+.empty{background-image:url(../assets/shaw-empty.jpg);transform-origin:30% 68%;transform:scale(1.2);animation:in .01s 5.4s forwards,z3 1.7s 5.9s cubic-bezier(.3,0,.2,1) forwards,out .01s 7.6s forwards}
+@keyframes z3{to{transform:scale(1.12) translateX(-60px)}}
+.exit{background-image:url(../assets/shaw-exit.jpg);transform-origin:50% 55%;animation:in .01s 7.7s forwards,z4 6s 7.7s cubic-bezier(.1,.6,.3,1) forwards}
+@keyframes z4{from{transform:scale(1.35)}to{transform:scale(1.04)}}
+/* 창살 사이 빛이 살짝 일렁인다 */
+.ray{position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.10) 45%,transparent 60%);mix-blend-mode:screen;animation:rf 2.3s steps(8) infinite}
+@keyframes rf{0%{opacity:.9}25%{opacity:.5}50%{opacity:1}75%{opacity:.6}100%{opacity:.9}}
+.white{position:absolute;inset:0;background:#fff;opacity:0;z-index:18;animation:wf .9s 7.7s}
+@keyframes wf{0%{opacity:.95}100%{opacity:0}}
+/* 암전: 복도→감방(2.5), 철컹(5.3~5.9), 탈출 직전(7.55), 끝 화면 어둡게(9.6~) */
+.black{position:absolute;inset:0;background:#000;opacity:0;z-index:20;animation:b2 .12s 2.5s,bo .6s 5.3s,b2 .15s 7.55s,endd .6s 9.6s forwards}
+@keyframes bo{0%{opacity:0}15%,85%{opacity:1}100%{opacity:0}} @keyframes b2{0%,100%{opacity:1}} @keyframes endd{to{opacity:.84}}
+.grain{position:absolute;inset:-50%;background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1.4px);background-size:7px 9px;animation:gr .18s steps(3) infinite;mix-blend-mode:screen;z-index:15}
+@keyframes gr{0%{transform:translate(0,0)}33%{transform:translate(-11px,7px)}66%{transform:translate(9px,-5px)}}
+.vig{position:absolute;inset:0;background:linear-gradient(#000c 0,transparent 26%,transparent 70%,#000d 100%);z-index:5}
+/* 글자: 우리 글꼴(SB어그로) */
+.t{position:absolute;left:0;right:0;text-align:center;font-family:A;z-index:25;opacity:0;text-shadow:0 4px 18px #000,0 0 6px #000}
+.acc{color:#FF4048}
+.h1{top:250px;font-size:74px;line-height:1.25;animation:pop .4s .25s forwards,out .2s 2.45s forwards}
+.h2{top:250px;font-size:70px;line-height:1.3;animation:pop .4s 2.9s forwards,out .1s 5.3s forwards}
+.h3{top:1290px;padding:46px 0 56px;background:radial-gradient(ellipse at 50% 50%,rgba(0,0,0,.86),rgba(0,0,0,.6) 45%,transparent 72%);font-size:84px;line-height:1.25;animation:pop .35s 8.0s forwards,out .4s 9.5s forwards}
+@keyframes pop{from{opacity:0;transform:translateY(24px) scale(1.06)}to{opacity:1;transform:none}}
+.rv{position:absolute;left:84px;right:84px;top:300px;z-index:25}
+.rv .h{font:800 30px P;color:#B9B3AA;letter-spacing:.08em;opacity:0;animation:in .4s 10.0s forwards}
+.rv .q{font:400 56px/1.3 A;margin-top:26px;opacity:0;transform:translateY(16px);animation:card .5s var(--t) forwards;text-shadow:0 3px 14px #000}
+.rv .src{font:500 22px P;color:#8F897F;margin-top:26px;opacity:0;animation:in .4s 11.6s forwards}
+@keyframes card{to{opacity:1;transform:none}}
+.meta{position:absolute;left:84px;top:1010px;z-index:25}
+.meta>div{opacity:0;animation:in .6s 10.3s forwards}
+.meta .tt{font:400 122px/1 A;color:#F5F0E6;opacity:0;animation:pop .5s 9.8s forwards}
+.meta .tt b{color:#FF4048;font-weight:400}
+.meta .k{font:800 38px P;margin-top:26px}
+.meta .c{font:800 32px P;color:#B9B3AA;margin-top:10px}
+.post{position:absolute;right:84px;top:1000px;width:214px;opacity:0;animation:in .7s 10.4s forwards;z-index:25}
+.post img{display:block;width:214px;border:2px solid rgba(237,230,218,.35)}
+.post div{font:500 19px P;color:#9F998F;margin-top:8px;text-align:right}
+.cta{position:absolute;left:72px;right:72px;top:1560px;display:flex;align-items:center;gap:24px;background:#F5F0E6;border:5px solid #1D1D1D;border-radius:30px;padding:22px 30px;box-shadow:8px 9px 0 #1D1D1D;opacity:0;transform:translateY(50px);animation:card .6s 11.9s cubic-bezier(.22,1,.36,1) forwards;z-index:40}
+.cta .x{color:#1D1D1D;font-weight:800;font-size:44px;letter-spacing:-.03em}.cta .x b{color:#E0782A}
+.cta .s{color:#6B665D;font-weight:500;font-size:28px;margin-top:6px}
+</style></head><body><div class="stage">
+<div class="cam"><div class="sc hall"></div><div class="sc cell"></div><div class="sc empty"></div><div class="sc exit"></div><div class="ray"></div></div>
+<div class="vig"></div><div class="grain"></div><div class="white"></div><div class="black"></div>
+<div class="t h1">억울한 누명,<br><span class="acc">교도소장의 비리.</span></div>
+<div class="t h2">“교도소로 잠입해<br>이 모든 진실을 밝혀 달라”</div>
+<div class="t h3 acc">쇼생크 감옥을<br>탈출하라!!</div>
+<div class="rv"><div class="h">다녀온 사람 후기</div>
+<div class="q" style="--t:10.2s">“공포는 <span class="acc">0</span>, 대신 꽤 움직여요”</div>
+<div class="q" style="--t:10.7s">“<span class="acc">편한 옷</span> 입고 가세요”</div>
+<div class="q" style="--t:11.2s">“후기 5편 중 <span class="acc">3편이 탈출 실패</span>”</div>
+<div class="src">네이버 블로그 방탈출 후기 5편에서 간추림</div></div>
+<div class="meta"><div class="tt">쇼생크<b>탈출</b></div><div class="k">미스터리룸이스케이프 홍대2호점</div><div class="c">난이도 중간 · 활동성 높음 · 공포도 없음 · 2~6명</div></div>
+<div class="post"><img src="../assets/poster-shawshank-official.jpg"><div>포스터: 미스터리룸이스케이프 공식</div></div>
+<div class="cta"><img src="../../../public/mascot.png" width="110" height="110"><div><div class="x">다녀왔다면 <b>후기 남기기</b></div><div class="s">줄거리·후기는 프로필 링크 · talkkaknote.com</div></div></div>
+</div></body></html>

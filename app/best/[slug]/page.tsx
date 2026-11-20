@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ThemeList from "@/components/ThemeList";
 import QuizRow from "@/components/QuizRow";
-import { CHIP, CRUMB } from "@/lib/ui";
+import { CHIP, CRUMB, posterFirst } from "@/lib/ui";
 import {
   conditionBySlug,
   listedConditions,
@@ -111,7 +111,7 @@ export default async function BestConditionPage({ params }: Props) {
       "@type": "ItemList",
       name: condition.title,
       numberOfItems: themes.length,
-      itemListElement: themes.map((t, i) => ({
+      itemListElement: themes.slice(0, 100).map((t, i) => ({ // 앞의 100개만 싣는다(전체 개수는 numberOfItems)
         "@type": "ListItem",
         position: i + 1,
         name: t.name,
@@ -187,7 +187,7 @@ export default async function BestConditionPage({ params }: Props) {
             )}{" "}
             <span className="text-sm font-normal text-cream/60">{list.length}개</span>
           </h2>
-          <ThemeList themes={list} />
+          <ThemeList themes={posterFirst(list)} limit={8} />
         </section>
       ))}
 
