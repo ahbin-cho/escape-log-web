@@ -1,4 +1,5 @@
--- 더코드 경주점(경상북도 경주시 원효로 122, 2층 · 황오동 340) 테마 4개 추가/갱신
+-- 경북: ① 더코드 경주점 테마 4개 추가/갱신  ② 룸즈에이 포항점 4개에 인원 채우기
+-- ① 더코드 경주점(경상북도 경주시 원효로 122, 2층 · 황오동 340)
 -- Supabase → SQL Editor 에 붙여 넣고 Run. 여러 번 실행해도 안전(있으면 고치고, 없으면 넣는다).
 -- 출처: 공식 사이트 http://thecode02.kr/ 테마 목록·하단 매장 정보 (2026-11-20 운영자 캡처.
 --   이 사이트는 http 로만 열려서 이 환경에서는 직접 열어 보지 못했다 → 화면에 보이는 값만 옮겼다)
@@ -31,4 +32,13 @@ upd as (
 insert into public.catalog (name, cafe, genre, difficulty, fear_level, tags, teaser, time_limit, players, price, reservation_url, poster_url, booking_open)
 select v.* from v where not exists (select 1 from public.catalog c where c.name=v.name and c.cafe=v.cafe);
 
-select name, cafe, genre, difficulty, fear_level, players from public.catalog where cafe like '더코드%';
+-- ② 룸즈에이 포항점: 인원이 비어 있었다 → 공식 테마 상세 화면의 "인원 2–6명"(2026-11-20 운영자 캡처, 네 테마 모두 같음).
+--   줄거리·장르·난이도·시간은 이미 들어 있는 값이 화면과 같아서 그대로 둔다.
+--   (줄거리 앞의 "장르 - … 시간 - … 난이도 - …" 는 화면에 보여 줄 때 코드가 떼어 낸다: lib/home-picks.ts cleanTeaser)
+--   가격은 인원별 정가만 있어(1명 35,000 · 2명 44,000 · 3명 60,000 · 4명 76,000 · 5명 90,000 · 6명 102,000원) 1인 가격 칸에는 넣지 않았다.
+--   포스터는 이미지 주소를 몰라 아직 비어 있다.
+update public.catalog set players = '2~6'
+where cafe = '룸즈에이 포항점' and name in ('낭랑카페', '너와 나의 이야기', '안개꽃', '시크릿 에이전트');
+
+select name, cafe, genre, difficulty, fear_level, players from public.catalog
+where cafe like '더코드%' or cafe = '룸즈에이 포항점' order by cafe, name;
