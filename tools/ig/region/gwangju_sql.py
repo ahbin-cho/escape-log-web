@@ -1,5 +1,5 @@
 """광주 매장·테마를 공식 페이지 캡처(gwangju_raw.md) 기준으로 catalog 에 넣고 고치는 SQL 을 만든다.
-python3 tools/ig/region/gwangju_sql.py > docs/sql/catalog_gwangju.sql
+python3 tools/ig/region/gwangju_sql.py > <작업용 폴더>/catalog_gwangju.sql   # SQL 은 저장소에 두지 않는다
 - 새 매장(브레인·러시아워 로드맨션·숨바꼭질 동구점): 이름+매장 기준으로 없으면 넣고, 있으면 고친다.
 - 기존 매장(룸즈에이 3곳·상상의문 광주점): 공식 장르·시간·인원·난이도·소개로 고친다. 공포도는 공식 표기가 있을 때만 바꾼다.
 """

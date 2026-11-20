@@ -147,11 +147,11 @@ type RecordRow = {
   memo: string;
   region: string | null;
   photo_url: string | null;
-  photo_urls?: string[] | null; // docs/sql/records_multi_photos.sql 실행 전엔 없음
+  photo_urls?: string[] | null; // 여러 장 사진 칸을 만들기 전 DB 엔 없음(supabase/schema.sql)
   party_size: number | null;
   theme_type: string | null;
   is_public: boolean;
-  photo_public?: boolean | null; // docs/sql/2026-11-17_review_visibility.sql 실행 전엔 없음
+  photo_public?: boolean | null; // 후기 공개 범위 칸을 만들기 전 DB 엔 없음(supabase/schema.sql)
   spoiler?: boolean | null;
   hidden: boolean;
   created_at: string;
