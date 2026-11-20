@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ThemeList from "@/components/ThemeList";
 import QuizRow from "@/components/QuizRow";
-import { CHIP, CRUMB } from "@/lib/ui";
+import { CHIP, CRUMB, posterFirst } from "@/lib/ui";
 import {
   conditionBySlug,
   listedConditions,
@@ -187,7 +187,7 @@ export default async function BestConditionPage({ params }: Props) {
             )}{" "}
             <span className="text-sm font-normal text-cream/60">{list.length}개</span>
           </h2>
-          <ThemeList themes={list} limit={8} />
+          <ThemeList themes={posterFirst(list)} limit={8} />
         </section>
       ))}
 

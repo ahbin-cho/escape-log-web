@@ -6,7 +6,7 @@ import ThemeList from "@/components/ThemeList";
 import CompareTable from "@/components/CompareTable";
 import OwnerCTA from "@/components/OwnerCTA";
 import QuizRow from "@/components/QuizRow";
-import { CHIP, CRUMB } from "@/lib/ui";
+import { CHIP, CRUMB, posterFirst } from "@/lib/ui";
 import { branchOf } from "@/lib/cafe";
 import {
   decodeParam,
@@ -162,7 +162,7 @@ export default async function BrandPage({ params }: Props) {
                 )}
               </div>
             )}
-            <ThemeList themes={list} limit={10} />
+            <ThemeList themes={posterFirst(list)} limit={10} />
           </section>
         );
       })}

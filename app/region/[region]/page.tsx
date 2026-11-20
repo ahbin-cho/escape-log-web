@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { sortGroupsPosterFirst } from "@/lib/ui";
 import { faqLd, regionFaq } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -43,9 +44,8 @@ async function load(param: string) {
     const brand = brandOf(t.cafe);
     byBrand.set(brand, [...(byBrand.get(brand) ?? []), t]);
   }
-  const sections = [...byBrand.entries()].sort(
-    (a, b) => b[1].length - a[1].length
-  );
+  // 포스터가 하나도 없는 브랜드(룸즈에이 등)는 맨 아래로, 나머지는 테마 많은 순
+  const sections = sortGroupsPosterFirst([...byBrand.entries()]);
   return { region, themes, sections };
 }
 
@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const data = await load(params.region);
   if (!data) return { title: "지역을 찾을 수 없어요", robots: { index: false } };
   const { region, themes, sections } = data;
-  const brands = sections.slice(0, 4).map(([b]) => b).join(", ");
+  const brands = [...sections].sort((a, b) => b[1].length - a[1].length).slice(0, 4).map(([b]) => b).join(", "); // 설명 문구는 테마 많은 순 그대로
   const title = `${region} 방탈출 추천 테마 ${themes.length}개`;
   const description = `${region} 지역 방탈출 테마 ${themes.length}개를 브랜드별로 정리했어요. ${brands} 등 매장별 장르·난이도·플레이 시간을 한눈에 비교해 보세요.`;
 
