@@ -381,6 +381,12 @@ POSTS = [
 4. 하이라이트 📍대구 를 새로 만들어 넣어 두면 좋아요
 (날짜는 바꿔도 돼요. 금요일 저녁이 주말 계획 세우는 사람한테 잘 닿아요)""",
   },
+  {"dir": "08d_11-20_스토리_대구_한장요약", "pages": [f"{T}/dgs-one.html"], "size": STORY,
+   "how": """5장짜리(08c) 대신 이 한 장만 올려도 돼요.
+1. [+] → [스토리] → 1.jpg
+2. 위쪽 [스티커] → [링크] → https://talkkaknote.com/region/대구?utm_source=instagram&utm_medium=story&utm_campaign=daegu
+   → 링크 스티커를 아래 점선 네모 안에 놓기
+3. [스티커] → [@멘션] @seoulescape_official (서울이스케이프룸 테마가 들어 있어요) → [내 스토리]"""},
   {
     "dir": "08c_11-20_피드직후_스토리_대구모음",
     "pages": [f"{T}/dgs{i}.html" for i in range(1, 6)], "size": STORY,
