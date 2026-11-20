@@ -44,7 +44,7 @@ async function load(param: string) {
     const brand = brandOf(t.cafe);
     byBrand.set(brand, [...(byBrand.get(brand) ?? []), t]);
   }
-  // 포스터가 하나도 없는 브랜드(룸즈에이 등)는 맨 아래로, 나머지는 테마 많은 순
+  // 포스터를 대부분 못 구한 브랜드(룸즈에이 등)는 아래로, 나머지는 테마 많은 순
   const sections = sortGroupsPosterFirst([...byBrand.entries()]);
   return { region, themes, sections };
 }
