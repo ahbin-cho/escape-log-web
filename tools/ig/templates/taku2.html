@@ -15,14 +15,19 @@ h1{position:absolute;left:64px;right:64px;top:146px;font:400 84px/1.14 A;z-index
 h1 em{font-style:normal;color:#FF5A52}
 .sub{position:absolute;left:64px;right:64px;top:350px;font:500 31px/1.4 P;color:#E6DCCD;z-index:3;text-shadow:0 2px 12px #000}
 .list{position:absolute;left:56px;right:56px;top:566px;bottom:100px;display:flex;flex-direction:column;justify-content:space-between;z-index:3}
-.q{background:#F5F0E6;color:#1D1D1D;border:5px solid #1D1D1D;border-radius:24px;box-shadow:8px 8px 0 #E2342D;padding:22px 30px}
+.q{position:relative;isolation:isolate;color:#1D1D1D;padding:22px 34px}
+.q:before{content:"";position:absolute;inset:0;z-index:-1;filter:url(#worn) drop-shadow(5px 7px 0 rgba(0,0,0,.55));
+ background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 0.25  0 0 0 0 0.15  0 0 0 0 0.08  0 0 0 0.55 -0.12'/></filter><rect width='300' height='300' filter='url(%23g)'/></svg>"),radial-gradient(ellipse 40% 90% at 8% 20%,rgba(120,70,30,.28),transparent 70%),radial-gradient(ellipse 30% 80% at 92% 85%,rgba(110,40,25,.3),transparent 70%),radial-gradient(ellipse 18% 50% at 62% 8%,rgba(120,80,40,.18),transparent 70%),#E4D8BE;
+ box-shadow:inset 0 0 34px rgba(95,50,20,.5),inset 0 0 4px rgba(60,30,10,.6)}
+.q:nth-child(odd){transform:rotate(-.7deg)}.q:nth-child(even){transform:rotate(.6deg)}
+.q.y:before{background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 0.25  0 0 0 0 0.15  0 0 0 0 0.08  0 0 0 0.55 -0.12'/></filter><rect width='300' height='300' filter='url(%23g)'/></svg>"),radial-gradient(ellipse 40% 90% at 90% 30%,rgba(140,70,20,.3),transparent 70%),#E9BE5A}
 .q b{display:block;font:800 41px/1.3 P;letter-spacing:-.02em}
 .q b i{font-style:normal;color:#D02A24}
-.q span{display:block;font:500 26px P;color:#6B6258;margin-top:8px}
+.q span{display:block;font:500 26px P;color:#5a4d3e;margin-top:8px}
 .kv{display:flex;align-items:center;gap:22px}
 .kv .k{flex:none;width:170px;font:400 34px A;color:#D02A24}
-.kv .v{font:800 40px/1.25 P}.kv .v small{display:block;font:500 26px P;color:#6B6258;margin-top:4px}
+.kv .v{font:800 40px/1.25 P}.kv .v small{display:block;font:500 26px P;color:#5a4d3e;margin-top:4px}
 .ft{position:absolute;left:64px;right:64px;bottom:34px;display:flex;justify-content:space-between;align-items:baseline;font:500 21px P;color:#A99C8E;z-index:3}
 .ft b{font:400 27px A;color:#F5F0E6}
-</style></head><body><div class="dim"></div>
+</style></head><body><svg width="0" height="0" style="position:absolute"><filter id="worn" x="-5%" y="-15%" width="110%" height="130%"><feTurbulence type="fractalNoise" baseFrequency="0.035 0.06" numOctaves="3" seed="11" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="16" xChannelSelector="R" yChannelSelector="G"/></filter></svg><div class="dim"></div>
 <div class="top"><span class="air">ON AIR</span><span class="pg">2 / 5</span></div><h1>그래서 <em>얼마나</em><br>무서운데?</h1><div class="sub">후기 쓴 사람들 체감 공포도 4~4.5 / 5</div><div class="list"><div class="q"><b>“올해 나온 공테 중에 <i>제일 무서웠다</i>”</b><span>오픈 첫날 다녀온 3인 팟의 후기</span></div><div class="q"><b style="font-size:38px;white-space:nowrap">“세 명 모두 다 같이 <i>소리를 꽥</i> 지른 포인트도”</b><span>극쫄 1 · 쫄 1 · 쫄탱 1 후기</span></div><div class="q"><b>“극극쫄이라면 <i>진행이 어려울</i> 것 같음”</b><span>그래도 같이 간 극쫄은 끝까지 해냈다고</span></div><div class="q"><b>“공포 반 <i>감성 반</i> 느낌이었어요”</b><span>무섭기만 한 방은 아니라는 후기도</span></div></div><div class="ft"><span>후기: 네이버 블로그 방탈출 후기 8편에서 인용·간추림</span><b>방탈깍노트</b></div></body></html>
