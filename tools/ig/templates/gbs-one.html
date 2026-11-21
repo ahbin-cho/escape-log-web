@@ -1,0 +1,43 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* 경북(경주·포항) 방탈출 스토리 한 장 — 가볍게(운영자 요청 11/20). 배경 그림 없이 노을 그라데이션 + 탈출귀.
+   테마: 더코드 경주점 4개(공식 사이트 캡처) · 룸즈에이 포항점 4개(공식 테마 상세 캡처). 난이도·장르는 그 화면 값. 링크 스티커 자리는 아래 점선 칸.
+   제미나이 배경(첨성대·영일대)이 오면 .sky 를 그 그림으로 바꾼다. */
+@font-face{font-family:A;src:url(../../../assets/fonts/SBAggroB.woff)}
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-Medium.woff);font-weight:500}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;font-family:P;color:#1D1D1D;background:#2a1f45}
+.sky{position:absolute;left:0;right:0;top:0;height:780px;background:linear-gradient(#1b1238 0,#4a2a6a 34%,#c8527a 62%,#ffb45c 86%,#2a1f45 100%)}
+.sun{position:absolute;left:50%;top:470px;width:420px;height:420px;margin-left:-210px;border-radius:50%;background:radial-gradient(circle,#fff3c4 0,#ffd36e 45%,#ffb45c00 72%)}
+.hill{position:absolute;left:-80px;right:-80px;top:640px;height:240px;border-radius:50% 50% 0 0/100% 100% 0 0;background:#2a1f45}
+.hill.b{left:420px;right:-260px;top:600px;height:300px;background:#3a2a5c}
+.pin{position:absolute;left:64px;top:236px;background:#F5F0E6;border:4px solid #1D1D1D;border-radius:999px;padding:8px 22px;font:800 30px P;box-shadow:5px 5px 0 #1D1D1D}
+h1{position:absolute;left:64px;top:312px;font:400 104px/1.1 A;color:#F5F0E6;text-shadow:7px 7px 0 #1D1D1D}
+h1 em{font-style:normal;color:#FFD36E}
+.ghost{position:absolute;right:70px;top:500px;width:230px;transform:rotate(8deg);filter:drop-shadow(7px 8px 0 #1D1D1D)}
+.box{position:absolute;left:56px;right:56px;background:#F5F0E6;border:5px solid #1D1D1D;border-radius:28px;box-shadow:8px 8px 0 #1D1D1D;padding:22px 28px 24px}
+.box h2{font:400 44px A;display:flex;align-items:baseline;gap:14px}
+.box h2 small{font:800 26px P;color:#6B6258}
+.box ul{list-style:none;margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.box li{background:#fff;border:4px solid #1D1D1D;border-radius:16px;padding:12px 16px}
+.box li b{display:block;font:400 34px/1.15 A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.box li span{display:block;font:800 23px P;color:#B5601B;margin-top:4px}
+.go{position:absolute;left:0;right:0;top:1500px;text-align:center;font:400 42px A;color:#F5F0E6;text-shadow:4px 4px 0 #1D1D1D}
+.link{position:absolute;left:150px;right:150px;top:1568px;height:112px;border:5px dashed #F5F0E688;border-radius:28px}
+.ft{position:absolute;left:64px;right:64px;bottom:186px;display:flex;justify-content:space-between;font:800 22px P;color:#cfc3e6}
+.ft b{font:400 26px A;color:#F5F0E6}
+</style></head><body>
+<div class="sky"></div><div class="sun"></div><div class="hill b"></div><div class="hill"></div>
+<div class="pin">📍 경북 · 경주 · 포항</div>
+<h1>경주·포항<br><em>방탈출</em> 어데 가노?</h1>
+<img class="ghost" src="../../../public/mascot.png">
+<div class="box" style="top:786px"><h2>경주 <small>더코드 경주점 · 황오동</small></h2>
+<ul><li><b>몽타주 : 강력1반 #2</b><span>난이도 5/5</span></li><li><b>최부장의 비밀</b><span>난이도 4/5</span></li>
+<li><b>박물관 : 도둑들 #3</b><span>난이도 3/5</span></li><li><b>도박꾼 : 마지막 베팅</b><span>난이도 4/5</span></li></ul></div>
+<div class="box" style="top:1146px"><h2>포항 <small>룸즈에이 포항점</small></h2>
+<ul><li><b>낭랑카페</b><span>힐링/판타지 · 난이도 3/5</span></li><li><b>너와 나의 이야기</b><span>감성/스토리 · 난이도 4/5</span></li>
+<li><b>안개꽃</b><span>감성/로맨스 · 난이도 4/5</span></li><li><b>시크릿 에이전트</b><span>잠입/수사 · 난이도 4/5</span></li></ul></div>
+<div class="go">👇 경북 테마 다 보기</div>
+<div class="link"></div>
+<div class="ft"><span>정보: 각 매장 공식 사이트 기준 · 전부 2~6명</span><b>방탈깍노트</b></div>
+</body></html>

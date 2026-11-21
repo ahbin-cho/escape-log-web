@@ -156,7 +156,7 @@ export default function AdminSpotlights() {
       <div className="rounded-2xl border-2 border-dashed border-candy/60 bg-candy/5 p-5 text-sm leading-relaxed">
         <p className="font-extrabold">화제의 방 표가 아직 없어요.</p>
         <p className="mt-1 text-cream/70">
-          저장소의 <code>docs/sql/spotlights.sql</code> 을 Supabase SQL Editor 에서 한 번 실행하면 이 화면을 쓸 수 있어요.
+          저장소 <code>supabase/schema.sql</code> 의 spotlights 부분을 Supabase SQL Editor 에서 한 번 실행하면 이 화면을 쓸 수 있어요.
         </p>
       </div>
     );
