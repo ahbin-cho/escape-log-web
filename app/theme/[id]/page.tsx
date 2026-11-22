@@ -257,7 +257,7 @@ export default async function ThemePage({
               url: `${SITE_URL}/theme/${t.id}`,
               genre,
               region,
-              image: posterSrc(t.poster_url) || null,
+              image: ((p) => (p && p.startsWith("/") ? `${SITE_URL}${p}` : p))(posterSrc(t.poster_url)),
               description: cleanTeaser(t.teaser ?? "").slice(0, 300) || undefined,
             })
           ),

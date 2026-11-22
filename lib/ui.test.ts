@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { posterFirst, sortGroupsPosterFirst } from "./ui";
+import { posterFirst, posterSrc, sortGroupsPosterFirst } from "./ui";
 
 const t = (id: string, poster = "") => ({ id, poster_url: poster });
 const P = "https://example.com/p.jpg";
@@ -18,5 +18,16 @@ describe("포스터 있는 것 먼저", () => {
     const out = sortGroupsPosterFirst(groups);
     expect(out.map(([k]) => k)).toEqual(["제로월드", "상상의문", "룸즈에이", "황금열쇠"]);
     expect(out[0][1].map((x) => x.id)).toEqual(["6", "5"]);
+  });
+});
+
+describe("posterSrc", () => {
+  it("https 는 그대로, http 는 우리 서버를 거친다, 빈 값은 없음", () => {
+    expect(posterSrc(" https://a.com/p.jpg ")).toBe("https://a.com/p.jpg");
+    expect(posterSrc("http://xn--sm2bu7i08gwyd91o.com/uploads/p.png")).toBe(
+      "/api/poster-img?u=" + encodeURIComponent("http://xn--sm2bu7i08gwyd91o.com/uploads/p.png")
+    );
+    expect(posterSrc("  ")).toBeNull();
+    expect(posterSrc(null)).toBeNull();
   });
 });
