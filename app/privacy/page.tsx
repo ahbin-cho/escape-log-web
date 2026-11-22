@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CONTACT_EMAIL, SITE_NAME } from "@/lib/site";
 
 // 개인정보처리방침(개인정보 보호법 제30조). 실제 코드가 수집·저장하는 것만 적는다.
+// Supabase 프로젝트 리전: ap-northeast-2(서울), 운영자 확인 2026-11-22.
 // 바뀌면 여기와 시행일을 같이 고친다: 가입(이메일·비밀번호·닉네임), 기록(records), 방문 통계(attribution_events·
 // reservation_clicks·quiz_completions — 이름·이메일 없음), 브라우저 저장소(lib/track.ts·lib/store.ts), 로그인 쿠키(sb-*).
 export const metadata: Metadata = {
@@ -73,7 +74,10 @@ export default function PrivacyPage() {
       </p>
 
       <H>4. 맡겨서 처리하는 곳(위탁·국외 이전)</H>
-      <p className="mt-2">서비스를 운영하려고 아래 클라우드 회사에 저장·처리를 맡깁니다.</p>
+      <p className="mt-2">
+        서비스를 운영하려고 아래 클라우드 회사에 저장·처리를 맡깁니다. 회원 정보와 기록은 <b>서울에 있는 서버</b>에
+        저장됩니다.
+      </p>
       <div className="mt-3 overflow-x-auto">
         <table className="w-full min-w-[520px] border-collapse text-sm">
           <thead>
@@ -85,7 +89,7 @@ export default function PrivacyPage() {
           </thead>
           <tbody className="align-top">
             <tr className="border-b border-edge/20">
-              <td className="py-2 pr-3">Supabase Inc.(미국)</td>
+              <td className="py-2 pr-3">Supabase Inc.(미국 회사 · 저장 서버는 서울 리전)</td>
               <td className="py-2 pr-3">회원 인증, 기록·사진 저장, 로그인 메일 발송</td>
               <td className="py-2">1번의 회원·기록 정보, 이용 통계</td>
             </tr>
@@ -98,8 +102,8 @@ export default function PrivacyPage() {
         </table>
       </div>
       <p className="mt-2 text-sm text-cream/60">
-        가입·이용할 때 인터넷으로 수시로 옮겨지며, 보관 기간은 2번과 같습니다. 국외 이전을 원하지 않으면 가입하지 않거나
-        탈퇴할 수 있고, 이 경우 기록 동기화 등 회원 기능을 쓸 수 없습니다.
+        사이트를 이용할 때 웹사이트 운영 서버(Vercel)를 거치며, 저장된 정보의 보관 기간은 2번과 같습니다. 국외 이전을
+        원하지 않으면 가입하지 않거나 탈퇴할 수 있고, 이 경우 기록 동기화 등 회원 기능을 쓸 수 없습니다.
       </p>
 
       <H>5. 이용자의 권리</H>
