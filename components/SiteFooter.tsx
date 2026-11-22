@@ -51,6 +51,11 @@ export default function SiteFooter() {
         </div>
 
         <div className="mt-6 space-y-1 border-t border-edge/15 pt-4 text-xs text-cream/45">
+          <p>
+            <Link href="/privacy" className="font-extrabold text-cream/80 hover:text-candy">
+              개인정보처리방침
+            </Link>
+          </p>
           <p>© {year} 방탈깍노트. 개인 방탈출 아카이브 서비스.</p>
           <p>
             테마·매장 정보는 각 방탈출 브랜드의 공식 정보를 참고했으며, 실제와

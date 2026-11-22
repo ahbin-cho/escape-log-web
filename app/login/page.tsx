@@ -248,6 +248,15 @@ export default function LoginPage() {
                 ? "가입하고 시작하기"
                 : "재설정 메일 받기"}
         </button>
+        {mode === "signup" && (
+          <p className="text-center text-xs text-cream/60">
+            가입하면{" "}
+            <Link href="/privacy" className="font-bold underline underline-offset-2">
+              개인정보처리방침
+            </Link>
+            에 따라 이메일·닉네임과 내 기록을 저장해요.
+          </p>
+        )}
         {mode === "signin" && (
           <button
             type="button"
