@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* 자물쇠 좋아하는 사람 겨냥: 상상락원 테이블 방탈출 소개 캐러셀. 정보는 상상락원 공식 예약 화면(운영자 캡처 11/22)에 적힌 것만.
+   자물쇠 그림은 SVG 로 직접 그림(매장 사진·포스터 아님). */
+@font-face{font-family:A;src:url(../../../assets/fonts/SBAggroB.woff)}
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-Medium.woff);font-weight:500}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1350px;overflow:hidden;font-family:P;color:#1D1D1D;background:#F5F0E6}
+body:before{content:"";position:absolute;inset:0;background-image:radial-gradient(#1D1D1D18 1.6px,transparent 1.8px);background-size:26px 26px}
+svg.bg{position:absolute;inset:0}
+.top{position:absolute;left:60px;right:60px;top:56px;display:flex;justify-content:space-between;align-items:center;z-index:3}
+.chip{background:#E49A4A;border:5px solid #1D1D1D;border-radius:999px;padding:6px 22px;font:800 28px P;box-shadow:5px 5px 0 #1D1D1D}
+.pg{background:#fff;border:4px solid #1D1D1D;border-radius:999px;padding:5px 18px;font:800 24px P}
+h1{position:absolute;left:60px;right:60px;top:140px;font:400 92px/1.12 A;z-index:3}
+h1 em{font-style:normal;color:#D9822B}
+.sub{position:absolute;left:62px;right:60px;top:368px;font:500 32px/1.45 P;color:#4a4339;z-index:3}
+.card{background:#fff;border:6px solid #1D1D1D;border-radius:26px;box-shadow:9px 9px 0 #1D1D1D;padding:24px 30px}
+.card b{display:block;font:400 42px/1.2 A}.card b i{font-style:normal;color:#D9822B}
+.card span{display:block;font:500 27px/1.4 P;color:#5a5248;margin-top:8px}
+.list{position:absolute;left:56px;right:56px;display:flex;flex-direction:column;gap:22px;z-index:3}
+.ft{position:absolute;left:60px;right:60px;bottom:36px;display:flex;justify-content:space-between;align-items:baseline;font:500 21px P;color:#7a7065;z-index:3}
+.ft b{font:400 28px A;color:#1D1D1D}
+
+/* 사이트(app/globals.css .rough)처럼 테두리·그림자만 손그림 필터, 글자는 또렷하게 */
+.card,.chip,.pg{position:relative;isolation:isolate;background:transparent!important;border-color:transparent!important;box-shadow:none!important}
+.card::before,.chip::before,.pg::before{content:"";position:absolute;inset:-6px;border:6px solid #1D1D1D;border-radius:inherit;background:var(--fill,#fff);filter:url(#rough);z-index:-1}
+.card::after,.chip::after{content:"";position:absolute;inset:-6px;border-radius:inherit;background:#1D1D1D;transform:translate(9px,9px);filter:url(#rough);z-index:-2}
+.chip::after{transform:translate(5px,5px)}
+.chip{--fill:#E49A4A}.chip::before{border-width:5px;inset:-5px}.pg::before{border-width:4px;inset:-4px}
+</style></head><body><svg width="0" height="0" style="position:absolute"><filter id="rough" x="-5%" y="-10%" width="110%" height="120%"><feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="4" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="5" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
+<div class="top"><span class="chip">난이도 골라 담기</span><span class="pg">5 / 5</span></div>
+<h1>입문부터<br><em>4.5</em>까지</h1>
+<div class="list" style="top:400px">
+<div class="card" style="display:flex;gap:22px;align-items:center"><img src="../../../public/posters/sslone/ver38-hanok.jpg" style="width:92px;height:118px;object-fit:cover;border:4px solid #1D1D1D;border-radius:10px;flex:none"><div><b>🔓 가볍게 <i>2</i></b><span>잠실 Table ver.08 · 전주 한옥마을 ver.38 동물</span></div></div>
+<div class="card" style="display:flex;gap:22px;align-items:center"><img src="../../../public/posters/sslone/ver43-byeolbit-geumgo.jpg" style="width:92px;height:118px;object-fit:cover;border:4px solid #1D1D1D;border-radius:10px;flex:none"><div><b>🔐 꽉 찬 <i>4</i></b><span>잠실 ver.43 별빛금고 · 익산 Ver.24 Radio · 전주 ver.41 우주</span></div></div>
+<div class="card" style="--fill:#FFE7C4;display:flex;gap:22px;align-items:center"><img src="../../../public/posters/sslone/ver40-hanok.jpg" style="width:92px;height:118px;object-fit:cover;border:4px solid #1D1D1D;border-radius:10px;flex:none"><div><b>🗝️ 최고 <i>4.5</i></b><span>전주 한옥마을 ver.40 학교</span></div></div>
+<div class="card" style="display:flex;align-items:center;gap:20px;--fill:#FFD36E"><img src="../../../public/mascot.png" width="96" height="96"><div><b style="font-size:36px">📌 저장해 두고 자물쇠 땡길 때</b><span style="color:#1D1D1D">예약 전 공식 페이지에서 시간 확인</span></div></div>
+</div><div class="ft"><span>포스터: 상상락원 공식 · 난이도는 공식 표기(5점 만점)</span><b>방탈깍노트</b></div></body></html>

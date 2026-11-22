@@ -13,11 +13,21 @@ function sniffImage(b: Uint8Array): string | null {
 }
 
 export async function GET(request: Request) {
-  const id = new URL(request.url).searchParams.get("id") ?? "";
-  if (!/^[0-9a-f-]{8,40}$/i.test(id)) return new Response("bad id", { status: 400 });
-  const theme = (await getAllThemes()).find((t) => t.id === id);
-  const url = theme?.poster_url ?? "";
-  if (!/^https:\/\//.test(url)) return new Response("no poster", { status: 404 });
+  const params = new URL(request.url).searchParams;
+  const id = params.get("id") ?? "";
+  const u = params.get("u") ?? "";
+  let url = "";
+  if (id) {
+    // 리뷰 시트: 테마 id 로
+    if (!/^[0-9a-f-]{8,40}$/i.test(id)) return new Response("bad id", { status: 400 });
+    url = ((await getAllThemes()).find((t) => t.id === id)?.poster_url ?? "").trim();
+  } else if (u) {
+    // http 포스터(posterSrc): 주소로 받되, 우리 테마 목록에 실제로 있는 포스터 주소만 받는다(아무 주소나 받는 통로 방지)
+    url = (await getAllThemes()).some((t) => (t.poster_url ?? "").trim() === u) ? u : "";
+  } else {
+    return new Response("bad request", { status: 400 });
+  }
+  if (!/^https?:\/\//.test(url)) return new Response("no poster", { status: 404 });
   try {
     const res = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0 (talkkak poster)" }, signal: AbortSignal.timeout(8000) });
     if (!res.ok) return new Response("fetch failed", { status: 502 });

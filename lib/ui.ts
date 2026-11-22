@@ -15,9 +15,12 @@ export const CRUMB = "flex flex-wrap items-center gap-1 text-[13px] text-cream/6
 export const H2 = "text-xl";
 
 // 포스터 주소 다듬기: 빈칸·줄바꿈만 들어 있는 값은 없는 것으로 본다(깨진 그림 방지).
+// http 주소(오렌지티비 등 https 가 없는 매장)는 https 페이지에서 그림이 막히므로 우리 서버를 거쳐 받는다(/api/poster-img).
 export function posterSrc(url: string | null | undefined): string | null {
   const u = (url ?? "").trim();
-  return /^https?:\/\//.test(u) ? u : null;
+  if (/^https:\/\//.test(u)) return u;
+  if (/^http:\/\//.test(u)) return `/api/poster-img?u=${encodeURIComponent(u)}`;
+  return null;
 }
 
 // 포스터가 있는 테마를 앞으로(순서는 그대로 유지). 포스터를 못 구한 테마가 위에 몰려 있으면 목록이 비어 보인다(운영자 요청 2026-11-20).

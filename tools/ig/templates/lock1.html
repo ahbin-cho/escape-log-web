@@ -1,0 +1,34 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* 자물쇠 좋아하는 사람 겨냥: 상상락원 테이블 방탈출 소개 캐러셀. 정보는 상상락원 공식 예약 화면(운영자 캡처 11/22)에 적힌 것만.
+   1장은 상상락원 공식 포스터를 작게(출처 표기). 2·4·5장도 공식 포스터 일부. */
+@font-face{font-family:A;src:url(../../../assets/fonts/SBAggroB.woff)}
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-Medium.woff);font-weight:500}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1350px;overflow:hidden;font-family:P;color:#1D1D1D;background:#F5F0E6}
+body:before{content:"";position:absolute;inset:0;background-image:radial-gradient(#1D1D1D18 1.6px,transparent 1.8px);background-size:26px 26px}
+svg.bg{position:absolute;inset:0}
+.top{position:absolute;left:60px;right:60px;top:56px;display:flex;justify-content:space-between;align-items:center;z-index:3}
+.chip{background:#E49A4A;border:5px solid #1D1D1D;border-radius:999px;padding:6px 22px;font:800 28px P;box-shadow:5px 5px 0 #1D1D1D}
+.pg{background:#fff;border:4px solid #1D1D1D;border-radius:999px;padding:5px 18px;font:800 24px P}
+h1{position:absolute;left:60px;right:60px;top:140px;font:400 92px/1.12 A;z-index:3}
+h1 em{font-style:normal;color:#D9822B}
+.sub{position:absolute;left:62px;right:60px;top:368px;font:500 32px/1.45 P;color:#4a4339;z-index:3}
+.card{background:#fff;border:6px solid #1D1D1D;border-radius:26px;box-shadow:9px 9px 0 #1D1D1D;padding:24px 30px}
+.card b{display:block;font:400 42px/1.2 A}.card b i{font-style:normal;color:#D9822B}
+.card span{display:block;font:500 27px/1.4 P;color:#5a5248;margin-top:8px}
+.list{position:absolute;left:56px;right:56px;display:flex;flex-direction:column;gap:22px;z-index:3}
+.ft{position:absolute;left:60px;right:60px;bottom:36px;display:flex;justify-content:space-between;align-items:baseline;font:500 21px P;color:#7a7065;z-index:3}
+.ft b{font:400 28px A;color:#1D1D1D}
+
+/* 사이트(app/globals.css .rough)처럼 테두리·그림자만 손그림 필터, 글자는 또렷하게 */
+.card,.chip,.pg{position:relative;isolation:isolate;background:transparent!important;border-color:transparent!important;box-shadow:none!important}
+.card::before,.chip::before,.pg::before{content:"";position:absolute;inset:-6px;border:6px solid #1D1D1D;border-radius:inherit;background:var(--fill,#fff);filter:url(#rough);z-index:-1}
+.card::after,.chip::after{content:"";position:absolute;inset:-6px;border-radius:inherit;background:#1D1D1D;transform:translate(9px,9px);filter:url(#rough);z-index:-2}
+.chip::after{transform:translate(5px,5px)}
+.chip{--fill:#E49A4A}.chip::before{border-width:5px;inset:-5px}.pg::before{border-width:4px;inset:-4px}
+</style></head><body><svg width="0" height="0" style="position:absolute"><filter id="rough" x="-5%" y="-10%" width="110%" height="120%"><feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="4" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="5" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
+<img src="../../../public/posters/sslone/ver37-hanok.jpg" style="position:absolute;left:40px;top:640px;width:300px;transform:rotate(-9deg);border:6px solid #1D1D1D;border-radius:14px;box-shadow:10px 10px 0 #1D1D1D;z-index:2"><img src="../../../public/posters/sslone/ver41-hanok.jpg" style="position:absolute;left:740px;top:640px;width:300px;transform:rotate(8deg);border:6px solid #1D1D1D;border-radius:14px;box-shadow:10px 10px 0 #1D1D1D;z-index:2"><img src="../../../public/posters/sslone/ver42-kkomamanyeo.jpg" style="position:absolute;left:210px;top:580px;width:300px;transform:rotate(-4deg);border:6px solid #1D1D1D;border-radius:14px;box-shadow:10px 10px 0 #1D1D1D;z-index:3"><img src="../../../public/posters/sslone/ver44-yojeong-maeul.jpg" style="position:absolute;left:570px;top:580px;width:300px;transform:rotate(5deg);border:6px solid #1D1D1D;border-radius:14px;box-shadow:10px 10px 0 #1D1D1D;z-index:3"><img src="../../../public/posters/sslone/ver43-byeolbit-geumgo.jpg" style="position:absolute;left:390px;top:560px;width:300px;transform:rotate(0deg);border:6px solid #1D1D1D;border-radius:14px;box-shadow:10px 10px 0 #1D1D1D;z-index:4"><div class="top"><span class="chip">자물쇠파 모여라 🔐</span><span class="pg">1 / 5</span></div>
+<h1>자물쇠 푸는 맛에<br>방탈출 하는 <em>사람?</em></h1>
+<div class="sub">방에 갇히는 대신, 자물쇠 잔뜩 달린 <b style="font-weight:800;color:#1D1D1D">테이블</b>에 앉아서 푼다.<br>상상락원 테이블 방탈출 👉</div>
+<div class="ft"><span>포스터: 상상락원 공식 · 정보: 상상락원 공식 예약 페이지 기준</span><b>방탈깍노트</b></div></body></html>
