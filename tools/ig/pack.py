@@ -494,6 +494,12 @@ POSTS = [
 1. [+] → [게시물] → [여러 항목 선택] → 1~5.jpg 순서대로 → 캡션.txt 붙여 넣기
 2. [사람 태그] → 상상락원·오렌지티비 공식 계정이 검색되면 포스터가 있는 1장에 태그(확인된 계정만) → [공유]
 3. [스토리에 추가] → 링크 스티커 talkkaknote.com/best/테이블-방탈출?utm_source=instagram&utm_medium=story&utm_campaign=table"""},
+  {"dir": "43s_아무때나_스토리_테이블방탈출_검색링크", "pages": [f"{T}/tbl-story.html"], "size": STORY,
+   "how": """스토리 1장. 지금 바로 올려도 돼요(검색 결과 화면은 이미 사이트에 있어요. 11/23 '테이블 방탈출' 검색 60개 확인).
+1. 스토리 [+] → 1.jpg 선택
+2. 위쪽 [스티커] 버튼(네모 웃는 얼굴) → [링크] → 아래 주소 붙여 넣기 → 스티커 텍스트는 '테이블 방탈출 60개'
+   https://talkkaknote.com/search?q=%ED%85%8C%EC%9D%B4%EB%B8%94%20%EB%B0%A9%ED%83%88%EC%B6%9C&utm_source=instagram&utm_medium=story&utm_campaign=table
+3. 스티커를 점선 칸 위에 올려놓기 → [스토리] 공유"""},
   {"dir": "41_아무때나_피드_자물쇠파_상상락원테이블", "pages": [f"{T}/lock{i}.html" for i in range(1, 6)], "size": FEED, "tags_max": 15,
    "caption": """자물쇠 푸는 맛에 방탈출 하는 사람? 🔐
 방에 갇히는 대신, 자물쇠 잔뜩 달린 테이블에 앉아서 푸는 방탈출이 있어요.
