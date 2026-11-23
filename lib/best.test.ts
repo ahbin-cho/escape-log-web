@@ -93,3 +93,18 @@ describe("정렬과 페이지 생성", () => {
     ).toBe(MIN_BEST_THEMES);
   });
 });
+
+describe("테이블 방탈출", () => {
+  it("태그 '테이블방탈출'이 있는 테마만, 쉬운 순으로", () => {
+    const c = must("테이블-방탈출");
+    expect(c.match(theme({ tags: ["테이블방탈출"] }))).toBe(true);
+    expect(c.match(theme({ tags: ["공포"] }))).toBe(false);
+    expect(c.match(theme({ tags: null }))).toBe(false);
+    const list = themesForCondition(c, [
+      theme({ name: "어려움", difficulty: 4, tags: ["테이블방탈출"] }),
+      theme({ name: "쉬움", difficulty: 1, tags: ["테이블방탈출"] }),
+      theme({ name: "일반방", difficulty: 1 }),
+    ]);
+    expect(list.map((t) => t.name)).toEqual(["쉬움", "어려움"]);
+  });
+});
