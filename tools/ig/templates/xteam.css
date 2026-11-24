@@ -1,0 +1,29 @@
+/* 크리스마스 예약 × 우리 사이트 소개 캐러셀(xteam1~6) 공통. 크리스마스 모음(xmas*)과 같은 초록·눈·전구 바탕,
+   상자 테두리는 사이트(app/globals.css .rough)처럼 손그림 필터. 숫자는 우리 catalog 2026-11-23 기준. */
+@font-face{font-family:A;src:url(../../../assets/fonts/SBAggroB.woff)}
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
+@font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-Medium.woff);font-weight:500}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1350px;overflow:hidden;font-family:P;color:#1D1D1D;background:#1F4A38;position:relative}
+.snow{position:absolute;inset:0;background-image:radial-gradient(#fff 3px,transparent 4px),radial-gradient(#ffffffaa 2px,transparent 3px),radial-gradient(#ffffff77 4px,transparent 5px);background-size:190px 210px,130px 150px,310px 270px;background-position:20px 30px,80px 110px,150px 60px;opacity:.45}
+.lights{position:absolute;left:0;right:0;top:0;height:70px;background:radial-gradient(circle at 50% 0,#E2483F 0 14px,transparent 15px) 0 26px/120px 60px repeat-x,radial-gradient(circle at 50% 0,#F2C14E 0 14px,transparent 15px) 60px 34px/120px 60px repeat-x;border-top:6px solid #12301f}
+.top{position:absolute;left:64px;right:64px;top:92px;display:flex;justify-content:space-between;align-items:center;z-index:5}
+.chip{--fill:#E2483F;color:#fff;padding:6px 22px;font:800 27px P}
+.pg{--fill:#F5F0E6;padding:5px 18px;font:800 24px P}
+h1{position:absolute;left:64px;right:64px;top:170px;font:400 80px/1.13 A;color:#F5F0E6;word-break:keep-all;z-index:5}
+h1 em{font-style:normal;color:#F2C14E}
+.sub{position:absolute;left:66px;right:64px;font:500 31px/1.5 P;color:#D9E8DD;word-break:keep-all;z-index:5}
+.sub b{font-weight:800;color:#fff}
+.card{--fill:#F5F0E6;position:absolute;left:56px;right:56px;padding:30px 36px;z-index:4}
+.ft{position:absolute;left:64px;right:64px;bottom:40px;display:flex;justify-content:space-between;align-items:baseline;font:800 20px P;color:#B9D0C1;z-index:5}
+.ft b{font:400 27px A;color:#F5F0E6}
+.ex{display:inline-block;background:#1D1D1D;color:#F2C14E;border-radius:8px;padding:2px 12px;font:800 22px P;vertical-align:middle}
+
+/* 손그림 테두리: 상자 자체는 투명, ::before 가 테두리+바탕, ::after 가 오프셋 그림자 */
+.chip,.pg,.card,.rb{position:relative;isolation:isolate;border-radius:26px}
+.chip,.pg{border-radius:999px}
+.card{position:absolute}
+.chip::before,.pg::before,.card::before,.rb::before{content:"";position:absolute;inset:-5px;border:5px solid #1D1D1D;border-radius:inherit;background:var(--fill,#fff);filter:url(#rough);z-index:-1}
+.card::before{inset:-6px;border-width:6px}
+.chip::after,.card::after,.rb::after{content:"";position:absolute;inset:-6px;border-radius:inherit;background:#12301f;transform:translate(10px,10px);filter:url(#rough);z-index:-2}
+.chip::after{background:#1D1D1D;transform:translate(5px,5px)}
