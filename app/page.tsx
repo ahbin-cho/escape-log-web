@@ -3,7 +3,6 @@ import HomeDiscover from "@/components/HomeDiscover";
 import { HomeMystery, HomeNewAndHot } from "@/components/HomeFresh";
 import HomeSpotlight from "@/components/HomeSpotlight";
 import HomeNewStrip from "@/components/HomeNewStrip";
-import HotThemes from "@/components/HotThemes";
 
 // 홈: 서버에서 그리는 영역(미스터리 방 · 조건별 · 인기/신규) + 브라우저 쪽 홈 화면.
 // "오늘의" 방과 새 테마·인기 순위가 배포 없이도 바뀌도록 1시간마다 다시 만든다.
@@ -14,11 +13,11 @@ export default function HomePage() {
     <HomeClient
       discover={
         <>
+          {/* "많이 다녀온 방"(기록 수)은 숫자가 작아 빼고, 예약 페이지 이동 기준 "많이 찾는 방"을 포스터로 맨 위에(운영자 결정 2026-11-26) */}
+          <HomeNewAndHot />
           <HomeNewStrip />
           <HomeDiscover />
-          <HotThemes />
           <HomeSpotlight />
-          <HomeNewAndHot />
           <HomeMystery />
         </>
       }

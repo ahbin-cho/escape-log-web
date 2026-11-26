@@ -29,38 +29,38 @@ export default function LoggedOutCTA() {
   if (loggedIn === true) return null;
 
   return (
-    <section className="flex flex-col-reverse items-start gap-4 pb-2 sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:py-2">
+    <section className="flex items-center justify-between gap-4 sm:gap-8">
       <div className="max-w-xl">
-        <p className="mb-2 text-sm font-extrabold text-candy">
+        <p className="mb-1.5 text-xs font-extrabold text-candy sm:text-sm">
           방탈출 기록장 · 취향 진단 · 맞춤 추천
         </p>
-        <h1 className="text-3xl leading-[1.15] sm:text-5xl sm:leading-[1.1]">
+        <h1 className="text-2xl leading-[1.15] sm:text-4xl sm:leading-[1.1]">
           방 좀 깨봤어?
           <br />
           취향 딱 짚어줄게
         </h1>
-        <p className="mt-3 max-w-md leading-relaxed text-cream/70 [word-break:keep-all]">
+        <p className="mt-2 max-w-md text-sm leading-relaxed text-cream/70 [word-break:keep-all]">
           {MASCOT.name}가 방탈출 취향을 진단하고 딱 맞는 방까지 추천해줘.
           다녀온 방은 기록하면 달력이 포스터로 채워지고, 몇 번째 방인지, 올해
           결산까지 자동으로.{" "}
           <b className="font-extrabold text-cream">1분이면 기록 끝.</b>
         </p>
-        <div className="mt-6 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-4">
+        <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1">
           <Link
             href="/quiz"
-            className="rough rounded-xl border-2 border-edge bg-candy px-6 py-3 text-center text-sm font-extrabold text-white shadow-cute transition hover:-translate-y-0.5 active:scale-[0.97]"
+            className="rough rounded-xl border-2 border-edge bg-candy px-4 py-2 text-center text-sm font-extrabold text-white shadow-cute transition hover:-translate-y-0.5 active:scale-[0.97]"
           >
             취향 찾기 시작
           </Link>
           <Link
             href="/new"
-            className="rounded-xl px-2 py-3 text-center text-sm font-extrabold underline decoration-2 underline-offset-4 transition hover:text-candy"
+            className="rounded-xl px-1 py-2 text-center text-sm font-extrabold underline decoration-2 underline-offset-4 transition hover:text-candy"
           >
             먼저 써 보고 기록하기
           </Link>
           <Link
             href="/diary"
-            className="rounded-xl px-2 py-3 text-center text-sm font-bold text-cream/60 transition hover:text-candy"
+            className="hidden rounded-xl px-1 py-2 text-center text-sm font-bold text-cream/60 sm:inline-block transition hover:text-candy"
           >
             기록장 둘러보기 →
           </Link>
@@ -68,7 +68,7 @@ export default function LoggedOutCTA() {
       </div>
       <div
         aria-hidden="true"
-        className="flex h-20 w-20 shrink-0 -rotate-6 items-center justify-center rounded-full bg-candy/15 sm:h-44 sm:w-44"
+        className="flex h-16 w-16 shrink-0 -rotate-6 items-center justify-center self-start rounded-full bg-candy/15 sm:h-28 sm:w-28 sm:self-center"
       >
         <Mascot className="h-full w-full scale-110" />
       </div>

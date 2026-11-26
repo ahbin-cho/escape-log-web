@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { getPublicFeed } from "@/lib/store";
 import ReviewCard from "@/components/ReviewCard";
-import HotThemes from "@/components/HotThemes";
 import { publicClient } from "@/lib/supabase/public";
 import { buildPosterIndex, findPoster } from "@/lib/poster";
 import { posterSrc } from "@/lib/ui";
@@ -41,8 +40,6 @@ export default async function FeedPage() {
           카드 오른쪽 위 “공유”를 누르면 이미지로 저장하거나 보낼 수 있어요.
         </p>
       </header>
-
-      <HotThemes />
 
       {reviews.length === 0 ? (
         <div className="rounded-2xl border-2 border-dashed border-edge/40 bg-panel py-16 text-center">

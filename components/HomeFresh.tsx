@@ -2,7 +2,8 @@ import Link from "next/link";
 import { getAllThemes, popularThemes } from "@/lib/catalog-server";
 import { cleanTeaser, dailyMystery, teaserPreview } from "@/lib/home-picks";
 import { regionFromText } from "@/lib/region";
-import { genreEmoji } from "@/lib/store";
+import Poster from "@/components/Poster";
+import { posterSrc } from "@/lib/ui";
 
 // 홈의 "궁금증" 영역(서버 컴포넌트, 검색엔진 HTML 에도 실림).
 // - 오늘의 미스터리 방: 줄거리만 보여 주고 이름은 가려 둔다
@@ -65,61 +66,45 @@ export async function HomeMystery() {
 }
 
 export async function HomeNewAndHot() {
-  const now = new Date();
-  const [themes, hot] = await Promise.all([getAllThemes(), popularThemes(7, 10)]);
+  const [themes, hot] = await Promise.all([getAllThemes(), popularThemes(7, 12)]);
   const byId = new Map(themes.map((t) => [t.id, t]));
 
   const hotList = hot
     .filter((h) => h.clicks >= 2 && byId.has(h.themeId))
-    .slice(0, 5)
+    .slice(0, 8)
     .map((h) => ({ theme: byId.get(h.themeId)!, clicks: h.clicks }));
-  const showHot = hotList.length >= HOT_MIN_THEMES;
+  if (hotList.length < HOT_MIN_THEMES) return null;
 
-  // 새로 들어온 테마는 홈 맨 위 HomeNewStrip 으로 옮겼다(2026-11-14)
-  if (!showHot) return null;
-
+  // 포스터 가로 줄(운영자 요청 2026-11-26: 포스터와 함께, 홈 위쪽으로)
   return (
-    <div className="space-y-8">
-      {showHot && (
-        <section aria-labelledby="home-hot" className="space-y-3">
-          <div className="flex items-baseline justify-between">
-            <h2 id="home-hot" className="text-xl">
-              🔥 이번 주 많이 찾는 방
-            </h2>
-            <span className="text-xs font-bold text-cream/50">
-              최근 7일 예약 페이지 이동 기준
-            </span>
-          </div>
-          <ol className="space-y-2">
-            {hotList.map(({ theme: t, clicks }, i) => (
-              <li key={t.id}>
-                <Link
-                  href={`/theme/${t.id}?from=home`}
-                  className="flex items-center gap-3 rounded-2xl border-2 border-edge bg-panel px-4 py-3 transition hover:border-candy active:scale-[0.99]"
+    <section aria-labelledby="home-hot" className="space-y-3">
+      <div>
+        <h2 id="home-hot" className="text-xl">
+          🔥 이번 주 많이 찾는 방
+        </h2>
+        <p className="mt-0.5 text-xs font-bold text-cream/50">최근 7일 예약 페이지 이동 기준</p>
+      </div>
+      <ol className="no-scrollbar -mx-1 flex gap-3 overflow-x-auto px-1 pb-1">
+        {hotList.map(({ theme: t, clicks }, i) => (
+          <li key={t.id} className="w-[118px] shrink-0 sm:w-[136px]">
+            <Link href={`/theme/${t.id}?from=home-hot`} className="group block">
+              <span className="relative block transition duration-300 group-hover:-translate-y-0.5">
+                <Poster src={posterSrc(t.poster_url)} name={t.name} genre={t.genre} rounded="rounded-lg" />
+                <span
+                  className={`absolute left-1.5 top-1.5 flex h-7 w-7 items-center justify-center rounded-full border-2 border-edge font-display text-sm ${
+                    i < 3 ? "bg-candy text-white" : "bg-panel text-cream"
+                  }`}
                 >
-                  <span
-                    className={`w-6 shrink-0 text-center text-lg font-extrabold ${
-                      i === 0 ? "text-candy" : "text-cream/50"
-                    }`}
-                  >
-                    {i + 1}
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate font-extrabold">
-                      {genreEmoji(t.genre)} {t.name}
-                    </span>
-                    <span className="block truncate text-xs text-cream/60">{t.cafe}</span>
-                  </span>
-                  <span className="shrink-0 text-xs font-bold text-cream/55">
-                    {clicks}회
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ol>
-        </section>
-      )}
-
-    </div>
+                  {i + 1}
+                </span>
+              </span>
+              <span className="mt-2 block truncate text-[13px] font-extrabold">{t.name}</span>
+              <span className="block truncate text-[11px] font-bold text-cream/55">{t.cafe}</span>
+              <span className="block text-[11px] font-extrabold text-[#D9772B]">{clicks}회 찾음</span>
+            </Link>
+          </li>
+        ))}
+      </ol>
+    </section>
   );
 }
