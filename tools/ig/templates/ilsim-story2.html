@@ -1,49 +1,29 @@
 <!doctype html><html><head><meta charset="utf-8"><style>
-/* 플레이33 티켓투점 '일심여관' 예약 오픈 스토리. 정보는 @play33_official 인스타 공지(2026-11-27)만. 매장 이미지는 쓰지 않고 새로 그림. */
+/* 플레이33 티켓투점 '일심여관' 예약 오픈 스토리. 정보는 @play33_official 인스타 공지(2026-11-27)만. 배경은 운영자가 준 제미나이 그림(assets/ilsim-bg.jpg). */
 @font-face{font-family:A;src:url(../../../assets/fonts/SBAggroB.woff)}
 @font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-ExtraBold.woff);font-weight:800}
 @font-face{font-family:P;src:url(../../../assets/fonts/Pretendard-Medium.woff);font-weight:500}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{width:1080px;height:1920px;overflow:hidden;font-family:P;color:#EDE6D6;background:#121212;position:relative}
-.rain{position:absolute;inset:0;background-image:repeating-linear-gradient(105deg,transparent 0 22px,#ffffff10 22px 24px);opacity:.7}
-.glow{position:absolute;left:140px;right:140px;top:330px;height:520px;background:radial-gradient(ellipse at 50% 40%,#8a1f1f55,transparent 70%)}
-.bld{position:absolute;left:160px;right:160px;top:470px;height:560px;background:#1d1b19;border:5px solid #000;filter:url(#rough)}
-.win{position:absolute;width:120px;height:150px;background:#0d0c0b;border:5px solid #000}
-.win.on{background:linear-gradient(#e0a54a,#8a4a1a);box-shadow:0 0 60px #e0a54a66}
-.sign{position:absolute;left:250px;right:250px;top:360px;padding:26px 0;text-align:center;font:400 120px/1 A;color:#C93A2E;background:#efe2c4;border:7px solid #000;filter:url(#rough);letter-spacing:.08em;text-shadow:0 0 18px #c93a2e55}
-.chip{position:absolute;left:70px;top:250px;background:#C93A2E;color:#fff;border:4px solid #000;border-radius:999px;padding:8px 26px;font:800 32px P;filter:url(#rough)}
-.store{position:absolute;left:0;right:0;top:1110px;text-align:center;font:800 38px P;color:#cfc6b4}
-h1{position:absolute;left:60px;right:60px;top:1170px;text-align:center;font:400 104px/1.12 A;color:#fff}
+html,body{width:1080px;height:1920px;overflow:hidden;font-family:P;color:#EDE6D6;background:#151819;position:relative}
+.bg{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover}
+.shade{position:absolute;inset:0;background:linear-gradient(#0d1112cc 0%,#0d111266 22%,#0d111200 33%,#0d111200 64%,#0d1112aa 72%,#0d1112ee 100%)}
+.title{position:absolute;left:0;right:0;top:190px;text-align:center}
+.title b{display:block;font:400 190px/1 A;color:#C42B22;filter:url(#worn);text-shadow:0 6px 30px #00000088}
+.title i{display:block;font-style:normal;font:800 38px P;color:#e9d9c8;letter-spacing:.9em;padding-left:.9em;margin-top:12px;text-shadow:0 2px 10px #000}
+h1{position:absolute;left:60px;right:60px;top:440px;text-align:center;font:400 68px/1.12 A;color:#fff;text-shadow:0 4px 18px #000c}
 h1 em{font-style:normal;color:#F2C14E}
-.box{position:absolute;left:90px;right:90px;top:1400px;background:#efe2c4;color:#1D1D1D;border:6px solid #000;border-radius:22px;padding:26px 34px;filter:url(#rough)}
+.store{position:absolute;left:0;right:0;top:1330px;text-align:center;font:800 34px P;color:#e9e1d0;text-shadow:0 2px 10px #000}
+.box{position:absolute;left:90px;right:90px;top:1395px;background:#efe2c4ee;color:#1D1D1D;border:6px solid #000;border-radius:22px;padding:22px 34px;filter:url(#rough)}
 .r{display:flex;justify-content:space-between;gap:20px;padding:9px 0;font:800 32px P;border-top:3px dashed #1d1d1d33}.r:first-child{border-top:0}
 .r span{font-weight:500;color:#5a5248}
-.ft{position:absolute;left:70px;right:70px;bottom:90px;display:flex;justify-content:space-between;align-items:baseline;font:500 22px P;color:#9a907e}
+.stk{position:absolute;left:220px;right:220px;top:1650px;height:110px;border:4px dashed #EDE6D6bb;border-radius:28px;display:grid;place-items:center;font:800 26px P;color:#EDE6D6bb}
+.ft{position:absolute;left:70px;right:70px;bottom:80px;display:flex;justify-content:space-between;align-items:baseline;font:500 22px P;color:#b5ab98}
 .ft b{font:400 30px A;color:#EDE6D6}
-.stk{position:absolute;left:220px;right:220px;top:1640px;height:110px;border:4px dashed #EDE6D6aa;border-radius:28px;display:grid;place-items:center;font:800 26px P;color:#EDE6D6aa}
-
-html,body{background:#1a1d1e}
-.sky{position:absolute;left:0;right:0;top:0;height:1180px;background:linear-gradient(#9fb0ad 0%,#7f8f8d 55%,#4b5452 100%)}
-.sky:after{content:"";position:absolute;inset:0;background-image:radial-gradient(#00000010 1px,transparent 1.5px);background-size:5px 5px;mix-blend-mode:multiply}
-.rain{position:absolute;inset:0;background-image:repeating-linear-gradient(100deg,transparent 0 26px,#ffffff16 26px 27px);z-index:3}
-.road{position:absolute;left:0;right:0;top:1060px;height:140px;background:linear-gradient(#3a403f,#1a1d1e)}
-.b{position:absolute;left:170px;width:740px;top:520px;height:560px;background:#8e8c86;border:4px solid #2b2a27;filter:url(#rough);z-index:1}
-.b:before{content:"";position:absolute;left:-10px;right:-10px;top:-26px;height:30px;background:#7c7a74;border:4px solid #2b2a27}
-.stain{position:absolute;left:640px;top:520px;width:80px;height:420px;background:linear-gradient(#2b2a2700,#2b2a2788 30%,#2b2a2733);filter:blur(6px);z-index:2}
-.brick{position:absolute;height:120px;background:repeating-linear-gradient(#6b4a3e 0 14px,#55392f 14px 16px),#6b4a3e;border:3px solid #2b2a27;z-index:2}
-.w{position:absolute;width:120px;height:90px;background:#1b1c1c;border:4px solid #d9d6cc;z-index:3}
-.w.on{background:linear-gradient(#e7b35a,#9c5a22);box-shadow:0 0 50px #e7b35a88}
-.can{position:absolute;left:430px;top:960px;width:250px;height:24px;background:#bdb9ae;border:3px solid #2b2a27;z-index:4}
-.door{position:absolute;left:470px;top:986px;width:170px;height:94px;background:#121313;border:4px solid #bdb9ae;z-index:4}
-.mini{position:absolute;left:452px;top:928px;width:206px;height:34px;background:#efe6d2;border:3px solid #2b2a27;font:800 22px/28px P;color:#b3261e;text-align:center;letter-spacing:.3em;z-index:4}
-.title{position:absolute;left:0;right:0;top:215px;text-align:center;z-index:5}
-.title b{display:block;font:400 190px/1 A;color:#B3261E;letter-spacing:.02em;filter:url(#worn)}
-.title i{display:block;font-style:normal;font:800 40px P;color:#B3261E;letter-spacing:.9em;margin-top:14px;padding-left:.9em}
-.chip{z-index:6}
 </style></head><body><svg width="0" height="0" style="position:absolute"><filter id="rough" x="-5%" y="-10%" width="110%" height="120%"><feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="4" xChannelSelector="R" yChannelSelector="G"/></filter><filter id="worn"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="t"/><feColorMatrix in="t" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.1 1.5" result="m"/><feComposite in="SourceGraphic" in2="m" operator="in" result="c"/><feTurbulence type="turbulence" baseFrequency="0.03" numOctaves="2" result="n2"/><feDisplacementMap in="c" in2="n2" scale="6"/></filter></svg>
-<div class="sky"></div><div class="road"></div><div class="b"></div><div class="brick" style="left:200px;width:680px;top:665px;height:30px"></div><div class="brick" style="left:200px;width:680px;top:805px;height:30px"></div><div class="brick" style="left:200px;width:680px;top:945px;height:30px"></div><div class="stain"></div><div class="w" style="left:230px;top:560px"></div><div class="w" style="left:480px;top:560px"></div><div class="w" style="left:730px;top:560px"></div><div class="w" style="left:230px;top:700px"></div><div class="w" style="left:480px;top:700px"></div><div class="w on" style="left:730px;top:700px"></div><div class="w" style="left:230px;top:840px"></div><div class="w" style="left:730px;top:840px"></div><div class="can"></div><div class="mini">♨일심여관</div><div class="door"></div><div class="rain"></div>
+<img class="bg" src="../assets/ilsim-bg.jpg"><div class="shade"></div>
 <div class="title"><b>일심여관</b><i>一心旅館</i></div>
-<div class="store">플레이33 티켓투점 · 새 테마</div>
 <h1><em>오늘 밤 8시</em><br>예약 오픈!</h1>
+<div class="store">플레이33 티켓투점 · 새 테마</div>
 <div class="box"><div class="r">이용은<b>12/1(화)부터</b></div><div class="r">가오픈(12/1~12/13)<b>1인 3,000원 할인</b></div><div class="r">가격<b>1인 32,000원</b></div></div>
-<div class="stk">(여기에 링크 스티커 play33.kr)</div><div class="ft"><span>정보: @play33_official 공지(11/27) · 특정 시간대는 막혀 있을 수 있대요</span><b>방탈깍노트</b></div></body></html>
+<div class="stk">(여기에 링크 스티커 play33.kr)</div>
+<div class="ft"><span>정보: @play33_official 공지(11/27) · 특정 시간대는 막혀 있을 수 있대요</span><b>방탈깍노트</b></div></body></html>
