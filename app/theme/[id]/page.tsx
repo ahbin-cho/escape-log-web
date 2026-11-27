@@ -131,7 +131,12 @@ export async function generateMetadata({
   );
 
   return {
-    title: padTitle(`${t.name} — ${t.cafe} 방탈출${region ? ` (${region})` : ""}`, "난이도·예약 정보"),
+    // "○○ 예매 오픈 시간"으로 많이 찾는다(Bing 키워드 리포트 2026-11-27) → 오픈 규칙이 있는 테마는 그 말을 제목에
+    title: padTitle(
+      `${t.name} — ${t.cafe} 방탈출${region ? ` (${region})` : ""}`,
+      t.booking_open ? "예약 오픈 시간·난이도" : "난이도·예약 정보",
+      36
+    ),
     description,
     alternates: { canonical: `/theme/${t.id}` },
     openGraph: {

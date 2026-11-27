@@ -103,6 +103,18 @@ export function brandFaq(brand: string, themes: ThemeRow[]): Faq[] {
   ];
   const g = genreLine(themes);
   if (g) out.push({ q: `${brand}는 어떤 장르가 많나요?`, a: `장르가 적힌 테마 기준으로 ${g} 순이에요.` });
+  // "키이스케이프 예매 오픈 시간" 같은 검색(Bing 키워드 리포트 2026-11-27)에 답하도록 지점별 예약 오픈 규칙을 모은다
+  const rules = cafes
+    .map((c) => [c, themes.find((t) => t.cafe === c && t.booking_open?.trim())?.booking_open?.trim() ?? ""] as const)
+    .filter(([, r]) => r);
+  if (rules.length)
+    out.push({
+      q: `${brand} 예약은 언제 열리나요? (예약 오픈 시간)`,
+      a: `지점마다 달라요. ${rules
+        .slice(0, 6)
+        .map(([c, r]) => `${c.replace(brand, "").trim() || c} ${r}`)
+        .join(" · ")}${rules.length > 6 ? " 등" : ""}. 매장 공지 기준이라 바뀔 수 있어요. 테마 페이지에서 날짜별로 언제 열리는지 계산해 보여 줘요.`,
+    });
   out.push({
     q: `${brand} 예약은 어디서 하나요?`,
     a: `테마를 누르면 매장 공식 예약 페이지로 가는 링크가 있어요. 가격·예약 가능 시간은 매장 공식 페이지 기준이 정확해요.`,

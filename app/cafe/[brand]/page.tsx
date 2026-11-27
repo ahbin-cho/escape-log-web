@@ -51,11 +51,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const branches = sections.map(([b]) => b).filter(Boolean);
   const title =
     branches.length > 1
-      ? `${brand} 방탈출 테마 ${themes.length}개 · 지점별 정리`
+      ? `${brand} 방탈출 테마 ${themes.length}개 — 지점별 난이도·예약 오픈 시간`
       : `${brand} 방탈출 테마 ${themes.length}개 · 난이도·가격 비교`;
   const description = `${brand} 방탈출 테마 ${themes.length}개의 장르·난이도·플레이 시간을 정리했어요.${
     branches.length ? ` ${branches.slice(0, 5).join(", ")} 등 지점별로 비교해 보세요.` : ""
-  } 테마마다 공식 줄거리·예약 오픈일·인원도 확인할 수 있어요.`;
+  } 테마마다 공식 줄거리·예약 오픈 시간·인원도 확인할 수 있어요. ${themes
+    .slice(0, 4)
+    .map((t) => t.name)
+    .join(", ")} 등.`;
 
   return {
     title,

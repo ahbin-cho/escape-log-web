@@ -63,3 +63,18 @@ describe("짧은 제목·설명 늘리기", () => {
     expect(padTitle(long, "꼬리")).toBe(long);
   });
 });
+
+describe("브랜드 FAQ 예약 오픈", () => {
+  it("지점별 예약 오픈 규칙을 모아 답한다", () => {
+    const faq = brandFaq("키이스케이프", [
+      t({ cafe: "키이스케이프 강남점", booking_open: "6일 전 오전 10시 30분" } as Partial<ThemeRow>),
+      t({ cafe: "키이스케이프 홍대점", booking_open: "" } as Partial<ThemeRow>),
+    ]);
+    const q = faq.find((x) => x.q.includes("예약 오픈 시간"));
+    expect(q?.a).toContain("강남점 6일 전 오전 10시 30분");
+    expect(q?.a).not.toContain("홍대점");
+  });
+  it("오픈 규칙이 하나도 없으면 그 질문을 뺀다", () => {
+    expect(brandFaq("X", [t({ cafe: "X 강남점" })]).some((x) => x.q.includes("예약 오픈 시간"))).toBe(false);
+  });
+});
