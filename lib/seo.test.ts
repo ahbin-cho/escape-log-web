@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { ThemeRow } from "./catalog-server";
-import { brandFaq, parsePlayers, regionFaq, themeEntityLd } from "./seo";
+import { brandFaq, MIN_DESCRIPTION, MIN_TITLE, padDescription, padTitle, parsePlayers, regionFaq, themeEntityLd } from "./seo";
 
 const t = (p: Partial<ThemeRow>): ThemeRow => ({
   id: "1", name: "테마", cafe: "키이스케이프 강남점", genre: "추리", difficulty: 3, fear_level: 1,
@@ -48,5 +48,18 @@ describe("문답", () => {
     const faq = brandFaq("키이스케이프", list.slice(0, 3));
     expect(faq[0].a).toContain("3개");
     expect(faq[0].a).toContain("지점은 1곳");
+  });
+});
+
+describe("짧은 제목·설명 늘리기", () => {
+  it("짧은 설명에만 꼬리 문장을 붙인다", () => {
+    expect(padDescription("짧아요", "더 읽어 보세요.")).toBe("짧아요. 더 읽어 보세요.");
+    const long = "가".repeat(MIN_DESCRIPTION);
+    expect(padDescription(long, "꼬리")).toBe(long);
+  });
+  it("짧은 제목에만 설명을 붙인다", () => {
+    expect(padTitle("Carder — 셜록홈즈 방탈출", "난이도·예약 정보")).toBe("Carder — 셜록홈즈 방탈출 난이도·예약 정보");
+    const long = "가".repeat(MIN_TITLE);
+    expect(padTitle(long, "꼬리")).toBe(long);
   });
 });

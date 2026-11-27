@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { themeEntityLd } from "@/lib/seo";
+import { padDescription, padTitle, themeEntityLd } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cleanTeaser, teaserPreview } from "@/lib/home-picks";
@@ -121,14 +121,17 @@ export async function generateMetadata({
   ].filter(Boolean);
   // 크롤링 원문의 예약·이용 안내를 걷어낸 줄거리
   const story = teaserPreview(cleanTeaser(t.teaser || ""), 90);
-  const description = story
-    ? `${t.cafe} · ${facts.join(" · ")}. ${story}`
+  const description = padDescription(
+    story
+      ? `${t.cafe} · ${facts.join(" · ")}. ${story}`
     : `${t.cafe}의 방탈출 테마 '${t.name}'. ${bits.join(
         " · "
-      )}. 방탈깍노트에서 취향 진단과 맞춤 추천을 받아보세요.`;
+      )}. 방탈깍노트에서 취향 진단과 맞춤 추천을 받아보세요.`,
+    `${region ? `${region} ` : ""}방탈출 ${t.cafe}의 줄거리·난이도·예약 오픈일을 방탈깍노트에서 한눈에 확인하세요.`
+  );
 
   return {
-    title: `${t.name} — ${t.cafe} 방탈출${region ? ` (${region})` : ""}`,
+    title: padTitle(`${t.name} — ${t.cafe} 방탈출${region ? ` (${region})` : ""}`, "난이도·예약 정보"),
     description,
     alternates: { canonical: `/theme/${t.id}` },
     openGraph: {

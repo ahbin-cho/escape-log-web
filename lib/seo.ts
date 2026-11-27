@@ -117,3 +117,16 @@ export function faqLd(faq: Faq[]) {
     mainEntity: faq.map((x) => ({ "@type": "Question", name: x.q, acceptedAnswer: { "@type": "Answer", text: x.a } })),
   };
 }
+
+// 검색 결과 요약이 너무 짧으면(Bing 웹마스터 "Meta descriptions ... too short", 2026-11-27) 뒤에 안내 문장을 붙인다.
+export const MIN_DESCRIPTION = 90;
+export function padDescription(desc: string, tail: string, min = MIN_DESCRIPTION): string {
+  const d = desc.trim();
+  return d.length >= min ? d : `${d.replace(/[.\s]*$/, ".")} ${tail}`.trim();
+}
+
+// 제목이 너무 짧으면(같은 경고의 "page titles are too short") 뒤에 설명을 붙인다. 사이트 이름 꼬리표는 따로 붙는다.
+export const MIN_TITLE = 28;
+export function padTitle(title: string, tail: string, min = MIN_TITLE): string {
+  return title.length >= min ? title : `${title} ${tail}`;
+}

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { sortGroupsPosterFirst } from "@/lib/ui";
-import { faqLd, regionFaq } from "@/lib/seo";
+import { faqLd, padDescription, regionFaq } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ThemeList from "@/components/ThemeList";
@@ -54,8 +54,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!data) return { title: "지역을 찾을 수 없어요", robots: { index: false } };
   const { region, themes, sections } = data;
   const brands = [...sections].sort((a, b) => b[1].length - a[1].length).slice(0, 4).map(([b]) => b).join(", "); // 설명 문구는 테마 많은 순 그대로
-  const title = `${region} 방탈출 추천 테마 ${themes.length}개`;
-  const description = `${region} 지역 방탈출 테마 ${themes.length}개를 브랜드별로 정리했어요. ${brands} 등 매장별 장르·난이도·플레이 시간을 한눈에 비교해 보세요.`;
+  const title = `${region} 방탈출 추천 테마 ${themes.length}개 · 브랜드별 비교`;
+  const description = padDescription(
+    `${region} 지역 방탈출 테마 ${themes.length}개를 브랜드별로 정리했어요. ${brands} 등 매장별 장르·난이도·플레이 시간을 한눈에 비교해 보세요.`,
+    "테마마다 공식 줄거리·예약 오픈일·인원도 확인할 수 있어요."
+  );
 
   return {
     // region/layout 의 title 이 문자열이라 루트 템플릿("%s · 방탈깍노트")이 안 붙어 직접 붙인다

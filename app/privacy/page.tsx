@@ -7,8 +7,8 @@ import { CONTACT_EMAIL, SITE_NAME } from "@/lib/site";
 // 바뀌면 여기와 시행일을 같이 고친다: 가입(이메일·비밀번호·닉네임), 기록(records), 방문 통계(attribution_events·
 // reservation_clicks·quiz_completions — 이름·이메일 없음), 브라우저 저장소(lib/track.ts·lib/store.ts), 로그인 쿠키(sb-*).
 export const metadata: Metadata = {
-  title: `개인정보처리방침 — ${SITE_NAME}`,
-  description: `${SITE_NAME}가 어떤 개인정보를 왜 모으고, 얼마나 보관하고, 어떻게 지우는지 안내합니다.`,
+  title: "개인정보처리방침 — 모으는 정보·보관 기간·지우는 방법",
+  description: `${SITE_NAME}가 어떤 개인정보를 왜 모으고, 얼마나 보관하고, 어떻게 지우는지 안내합니다. 회원가입·기록·이용 통계와 맡겨서 처리하는 곳, 이용자의 권리를 적었어요.`,
   alternates: { canonical: "/privacy" },
 };
 
