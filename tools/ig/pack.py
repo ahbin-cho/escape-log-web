@@ -503,6 +503,18 @@ POSTS = [
 2. 위쪽 [스티커] 버튼(네모 웃는 얼굴) → [링크] → 아래 주소 붙여 넣기 → 스티커 텍스트는 '테이블 방탈출 60개'
    https://talkkaknote.com/search?q=%ED%85%8C%EC%9D%B4%EB%B8%94%20%EB%B0%A9%ED%83%88%EC%B6%9C&utm_source=instagram&utm_medium=story&utm_campaign=table
 3. 스티커를 점선 칸 위에 올려놓기 → [스토리] 공유"""},
+  {"dir": "44a_11-27_스토리_일심여관_내일오픈", "pages": [f"{T}/ilsim-story1.html"], "size": STORY,
+   # 정보는 @play33_official 인스타 공지(2026-11-27)만. 공식 사이트(play33.kr) 티켓투점 테마 목록은 아직 비어 있음(11/27 확인).
+   "how": """오늘(11/27) 아무 때나. 스토리 1장.
+1. 스토리 [+] → 1.jpg
+2. [스티커] → [멘션] → @play33_official (화면 아래 빈 곳에)
+3. [스티커] → [링크] → https://play33.kr/reservation?branch=8 → 스티커 글자 '일심여관 예약'
+4. [스토리] 공유"""},
+  {"dir": "44b_11-28_19시_스토리_일심여관_오늘오픈", "pages": [f"{T}/ilsim-story2.html"], "size": STORY,
+   "how": """11/28(토) 저녁 7시쯤(오픈 1시간 전). 스토리 1장.
+1. 스토리 [+] → 1.jpg
+2. [스티커] → [링크] → https://play33.kr/reservation?branch=8 → 스티커 글자 '일심여관 예약' → 점선 칸 위에
+3. [스티커] → [멘션] → @play33_official → [스토리] 공유"""},
   {"dir": "41_아무때나_피드_자물쇠파_상상락원테이블", "pages": [f"{T}/lock{i}.html" for i in range(1, 6)], "size": FEED, "tags_max": 15,
    "caption": """자물쇠 푸는 맛에 방탈출 하는 사람? 🔐
 방에 갇히는 대신, 자물쇠 잔뜩 달린 테이블에 앉아서 푸는 방탈출이 있어요.
